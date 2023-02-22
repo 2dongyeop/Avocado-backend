@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 public class Staff {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "staff_id")
     private Long id;
 

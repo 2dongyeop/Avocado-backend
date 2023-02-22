@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 public class BoardReply {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_reply_id")
     private Long id;
 
