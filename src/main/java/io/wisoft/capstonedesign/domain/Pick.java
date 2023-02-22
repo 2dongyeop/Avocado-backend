@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 public class Pick {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pick_id")
     private Long id;
 

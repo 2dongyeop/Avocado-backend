@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class BusInfo {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bus_info_id")
     private Long id;
 

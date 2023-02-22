@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 public class Board {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
     private Long id;
 
@@ -24,11 +24,11 @@ public class Board {
     private String body;
 
     @CreatedDate
-    @Column(name = "board_createAt", nullable = false)
+    @Column(name = "board_create_at", nullable = false)
     private LocalDateTime createAt;
 
     @LastModifiedDate
-    @Column(name = "board_updateAt", nullable = false)
+    @Column(name = "board_update_at", nullable = false)
     private LocalDateTime updateAt;
 
     @Column(name = "board_photo_path", nullable = false)

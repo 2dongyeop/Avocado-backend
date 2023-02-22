@@ -11,7 +11,7 @@ import java.util.List;
 @Getter @Setter
 public class Hospital {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hosp_id")
     private Long id;
 

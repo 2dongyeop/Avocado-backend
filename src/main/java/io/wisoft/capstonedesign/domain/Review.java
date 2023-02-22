@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 public class Review {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
     private Long id;
 
@@ -24,11 +24,11 @@ public class Review {
     private String body;
 
     @CreatedDate
-    @Column(name = "review_createAt", nullable = false)
+    @Column(name = "review_create_at", nullable = false)
     private LocalDateTime createAt;
 
     @LastModifiedDate
-    @Column(name = "review_updateAt", nullable = false)
+    @Column(name = "review_update_at", nullable = false)
     private LocalDateTime updateAt;
 
     @Column(name = "review_photo_path", nullable = false)

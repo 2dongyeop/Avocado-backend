@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 public class ReviewReply {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_reply_id")
     private Long id;
 
