@@ -9,7 +9,7 @@ import lombok.Setter;
 @Table(name = "health_info")
 public class HealthInfo {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue()
     @Column(name = "health_info_id")
     private Long id;
 
