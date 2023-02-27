@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 public class Review {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue()
     @Column(name = "review_id")
     private Long id;
 
@@ -46,4 +46,27 @@ public class Review {
 
     @OneToMany(mappedBy = "review")
     private List<ReviewReply> reviewReplyList = new ArrayList<>();
+
+    /* 연관관계 편의 메서드 */
+    public void setMember(Member member) {
+        //comment: 기존 관계 제거
+        if (this.member != null) {
+            this.member.getReviewList().remove(this);
+        }
+
+        this.member = member;
+
+        //comment: 무한루프 방지
+        if (!member.getReviewList().contains(this)) {
+            member.getReviewList().add(this);
+        }
+    }
+
+    public void addReviewReply(ReviewReply reviewReply) {
+        this.reviewReplyList.add(reviewReply);
+
+        if (reviewReply.getReview() != this) {
+            reviewReply.setReview(this);
+        }
+    }
 }

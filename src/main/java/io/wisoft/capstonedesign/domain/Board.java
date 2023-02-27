@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 public class Board {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue()
     @Column(name = "board_id")
     private Long id;
 
@@ -40,4 +40,26 @@ public class Board {
 
     @OneToMany(mappedBy = "board")
     private final List<BoardReply> boardReplyList = new ArrayList<>();
+
+    /* 연관관계 편의 메서드 */
+    public void addBoardReply(BoardReply boardReply) {
+        this.boardReplyList.add(boardReply);
+        if (boardReply.getBoard() != this) { //무한루프에 빠지지 않도록 체크
+            boardReply.setBoard(this);
+        }
+    }
+
+    public void setMember(Member member) {
+        //comment: 기존 관계 제거
+        if (this.member != null) {
+            this.member.getBoardList().remove(this);
+        }
+
+        this.member = member;
+
+        //comment: 무한루프 방지
+        if (!member.getBoardList().contains(this)) {
+            member.getBoardList().add(this);
+        }
+    }
 }
