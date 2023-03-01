@@ -1,7 +1,9 @@
 package io.wisoft.capstonedesign.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id
@@ -78,5 +81,15 @@ public class Member {
         if (reviewReply.getMember() != this) {
             reviewReply.setMember(this);
         }
+    }
+
+    /* 생성 메서드 */
+    public static Member newInstance(String email, String password, String phoneNumber) {
+        Member member = new Member();
+        member.email = email;
+        member.password = password;
+        member.phoneNumber = phoneNumber;
+
+        return member;
     }
 }
