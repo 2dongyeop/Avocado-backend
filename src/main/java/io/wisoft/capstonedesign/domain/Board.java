@@ -20,6 +20,8 @@ public class Board {
     @Column(name = "board_title", nullable = false)
     private String title;
 
+    //pg 사용시 @Lob 지우고, @Collumn(nullable = false, columnDefinition="TEXT")로 바꾸기
+    @Lob
     @Column(name = "board_body", nullable = false)
     private String body;
 
