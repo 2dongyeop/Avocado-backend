@@ -33,7 +33,7 @@ public class Hospital {
     @OneToMany(mappedBy = "hospital")
     private final List<Staff> staffList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "hospital")
     private final List<Pick> pickList = new ArrayList<>();
 
     /* 연관관계 편의 메서드 */
