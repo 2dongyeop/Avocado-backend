@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.exception;
+package io.wisoft.capstonedesign.exception.duplicate;
 
 public class DuplicateMemberException extends RuntimeException {
     public DuplicateMemberException() {

@@ -1,7 +1,7 @@
 package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Member;
-import io.wisoft.capstonedesign.exception.DuplicateMemberException;
+import io.wisoft.capstonedesign.exception.duplicate.DuplicateMemberException;
 import io.wisoft.capstonedesign.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
