@@ -30,10 +30,10 @@ public class Review {
     private LocalDateTime createAt;
 
     @LastModifiedDate
-    @Column(name = "review_update_at", nullable = false)
+    @Column(name = "review_update_at")
     private LocalDateTime updateAt;
 
-    @Column(name = "review_photo_path", nullable = false)
+    @Column(name = "review_photo_path")
     private String reviewPhotoPath;
 
     @Column(name = "star_point", nullable = false)
@@ -42,6 +42,7 @@ public class Review {
     @Column(name = "target_hospital", nullable = false)
     private String target_hospital;
 
+    @Column(name = "review_status")
     @Enumerated(EnumType.STRING)
     private ReviewStatus status;
 
