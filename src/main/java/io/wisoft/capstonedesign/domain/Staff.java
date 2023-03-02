@@ -1,23 +1,27 @@
 package io.wisoft.capstonedesign.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Staff {
 
-    @Id @GeneratedValue()
+    @Id
+    @GeneratedValue()
     @Column(name = "staff_id")
     private Long id;
 
     @Column(name = "staff_name", nullable = false)
     private String name;
 
-    @Column(name = "staff_email" , unique = true, nullable = false)
+    @Column(name = "staff_email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "staff_password", nullable = false)
@@ -59,5 +63,23 @@ public class Staff {
         if (boardReply.getStaff() != this) { //무한루프에 빠지지 않도록 체크
             boardReply.setStaff(this);
         }
+    }
+
+    public static Staff newInstance(
+            final String name,
+            final String email,
+            final String password,
+            final String phoneNumber,
+            final String license_path,
+            final String dept) {
+        Staff staff = new Staff();
+        staff.name = name;
+        staff.email = email;
+        staff.password = password;
+        staff.phoneNumber = phoneNumber;
+        staff.license_path = license_path;
+        staff.dept = dept;
+
+        return staff;
     }
 }
