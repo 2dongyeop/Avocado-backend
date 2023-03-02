@@ -30,12 +30,13 @@ public class Board {
     private LocalDateTime createAt;
 
     @LastModifiedDate
-    @Column(name = "board_update_at", nullable = false)
+    @Column(name = "board_update_at")
     private LocalDateTime updateAt;
 
-    @Column(name = "board_photo_path", nullable = false)
+    @Column(name = "board_photo_path")
     private String boardPhotoPath;
 
+    @Column(name = "board_status")
     @Enumerated(EnumType.STRING)
     private BoardStatus status;
 
