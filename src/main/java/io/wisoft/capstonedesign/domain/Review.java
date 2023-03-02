@@ -42,6 +42,9 @@ public class Review {
     @Column(name = "target_hospital", nullable = false)
     private String target_hospital;
 
+    @Enumerated(EnumType.STRING)
+    private ReviewStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
