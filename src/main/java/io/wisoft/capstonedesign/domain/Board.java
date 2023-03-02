@@ -36,6 +36,9 @@ public class Board {
     @Column(name = "board_photo_path", nullable = false)
     private String boardPhotoPath;
 
+    @Enumerated(EnumType.STRING)
+    private BoardStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
