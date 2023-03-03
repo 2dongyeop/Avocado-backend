@@ -16,7 +16,7 @@ public class StaffRepository {
     private final EntityManager em;
 
     /**
-     * 사용자 회원 가입
+     * 의료진 가입
      */
     public void signUp(Staff staff) { em.persist(staff); }
 
