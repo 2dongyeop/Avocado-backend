@@ -1,7 +1,9 @@
 package io.wisoft.capstonedesign.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board {
 
     @Id @GeneratedValue()
@@ -67,5 +70,41 @@ public class Board {
         if (!member.getBoardList().contains(this)) {
             member.getBoardList().add(this);
         }
+    }
+
+    /* 정적 생성 메서드 */
+    public static Board createBoard(Member member, String title, String body) {
+        Board board = getBoard(member, title, body);
+
+        return board;
+    }
+
+    public static Board createBoard(Member member, String title, String body, String boardPhotoPath) {
+        Board board = getBoard(member, title, body);
+        board.boardPhotoPath = boardPhotoPath;
+
+        return board;
+    }
+
+    private static Board getBoard(Member member, String title, String body) {
+        Board board = new Board();
+        board.setMember(member);
+        board.title = title;
+        board.body = body;
+        board.status = BoardStatus.WRITE;
+        board.createAt = LocalDateTime.now();
+        return board;
+    }
+
+    /**
+     * 게시글 삭제
+     */
+    public void delete() {
+
+        if (this.status == BoardStatus.DELETE) {
+            throw new IllegalStateException("이미 삭제된 게시글입니다.");
+        }
+
+        this.status = BoardStatus.DELETE;
     }
 }
