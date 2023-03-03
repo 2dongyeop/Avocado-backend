@@ -22,7 +22,7 @@ public class StaffServiceTest {
     @Autowired StaffRepository staffRepository;
 
     @Test
-    public void 의료진회원가입() throws Exception {
+    public void 의료진가입() throws Exception {
         //given -- 조건
         Staff staff = Staff.newInstance("lee", "ldy_1204@naver.com", "1111", "0000", "hhhh", "안과");
 
