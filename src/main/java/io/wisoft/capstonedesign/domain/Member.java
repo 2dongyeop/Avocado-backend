@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +17,9 @@ public class Member {
     @GeneratedValue()
     @Column(name = "member_id")
     private Long id;
+
+    @Column(name = "member_nickname", unique = true, nullable = false)
+    private String nickname;
 
     @Column(name = "member_email", unique = true, nullable = false)
     private String email;
@@ -84,8 +86,9 @@ public class Member {
     }
 
     /* 생성 메서드 */
-    public static Member newInstance(String email, String password, String phoneNumber) {
+    public static Member newInstance(String nickname, String email, String password, String phoneNumber) {
         Member member = new Member();
+        member.nickname = nickname;
         member.email = email;
         member.password = password;
         member.phoneNumber = phoneNumber;
