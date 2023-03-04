@@ -45,4 +45,12 @@ public class MemberService {
     public List<Member> findAll() {
         return memberRepository.findAll();
     }
+
+    public List<Member> findByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname);
+    }
+
+    public List<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
 }

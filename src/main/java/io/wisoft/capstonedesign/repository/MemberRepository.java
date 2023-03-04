@@ -39,6 +39,12 @@ public class MemberRepository {
                 .getResultList();
     }
 
+    public List<Member> findByNickname(String nickname) {
+        return em.createQuery("select m from Member m where m.nickname = :nickname", Member.class)
+                .setParameter("nickname", nickname)
+                .getResultList();
+    }
+
     public List<Member> findByEmail(String email) {
         return em.createQuery("select m from Member m where m.email = :email", Member.class)
                 .setParameter("email", email)

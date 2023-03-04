@@ -27,9 +27,6 @@ public class Staff {
     @Column(name = "staff_password", nullable = false)
     private String password;
 
-    @Column(name = "staff_phonenumber", nullable = false)
-    private String phoneNumber;
-
     @Column(name = "staff_license_path", nullable = false)
     private String license_path;
 
@@ -69,14 +66,12 @@ public class Staff {
             final String name,
             final String email,
             final String password,
-            final String phoneNumber,
             final String license_path,
             final String dept) {
         Staff staff = new Staff();
         staff.name = name;
         staff.email = email;
         staff.password = password;
-        staff.phoneNumber = phoneNumber;
         staff.license_path = license_path;
         staff.dept = dept;
 

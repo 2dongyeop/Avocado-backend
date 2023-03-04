@@ -24,7 +24,7 @@ public class MemberServiceTest {
     @Test
     public void 회원가입() throws Exception {
         //given -- 조건
-        Member member = Member.newInstance("ldy_1204@naver.com", "1111", "0000");
+        Member member = Member.newInstance("test", "ldy_1204@naver.com", "1111", "0000");
 
         //when -- 동작
         Long signUpId = memberService.signUp(member);
@@ -37,8 +37,8 @@ public class MemberServiceTest {
     @Test(expected = DuplicateMemberException.class)
     public void 회원중복검증() throws Exception {
         //given -- 조건
-        Member member1 = Member.newInstance("ldy_1204@naver.com", "1111", "0000");
-        Member member2 = Member.newInstance("ldy_1204@naver.com", "2222", "0000");
+        Member member1 = Member.newInstance("test", "ldy_1204@naver.com", "1111", "0000");
+        Member member2 = Member.newInstance("test", "ldy_1204@naver.com", "2222", "0000");
 
         //when -- 동작
         memberService.signUp(member1);

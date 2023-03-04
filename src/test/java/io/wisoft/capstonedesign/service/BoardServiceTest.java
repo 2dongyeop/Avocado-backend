@@ -28,7 +28,7 @@ public class BoardServiceTest {
         //given -- 조건
 
         //게시글을 작성할 회원 생성
-        Member member = Member.newInstance("ldy_1204@naver.com", "1111", "0000");
+        Member member = Member.newInstance("test", "ldy_1204@naver.com", "1111", "0000");
         //게시글 생성
         Board board = Board.createBoard(member, "test code!", "I write test code!");
 
@@ -48,7 +48,7 @@ public class BoardServiceTest {
         //given -- 조건
 
         //게시글을 작성할 회원 생성
-        Member member = Member.newInstance("ldy_1204@naver.com", "1111", "0000");
+        Member member = Member.newInstance("test", "ldy_1204@naver.com", "1111", "0000");
         //게시글 생성
         Board board = Board.createBoard(member, "test code!", "I write test code!");
         //게시글 저장
@@ -67,7 +67,7 @@ public class BoardServiceTest {
     public void 게시물_중복_삭제요청() throws Exception {
         //given -- 조건
         //게시글을 작성할 회원 생성
-        Member member = Member.newInstance("ldy_1204@naver.com", "1111", "0000");
+        Member member = Member.newInstance("test","ldy_1204@naver.com", "1111", "0000");
         //게시글 생성
         Board board = Board.createBoard(member, "test code!", "I write test code!");
         //게시글 저장
