@@ -2,7 +2,6 @@ package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.repository.BoardRepository;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +34,7 @@ public class BoardService {
     }
 
     /* 조회 로직 */
-    public List<Board> findByMember(Long memberId) { return boardRepository.findByMember(memberId); }
+    public List<Board> findByMemberId(Long memberId) { return boardRepository.findByMemberId(memberId); }
 
     public Board findOne(Long boardId) { return boardRepository.findOne(boardId); }
 

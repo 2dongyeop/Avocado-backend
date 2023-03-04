@@ -1,7 +1,10 @@
 package io.wisoft.capstonedesign.domain;
 
+import io.wisoft.capstonedesign.exception.IllegalValueException;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -11,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review {
 
     @Id @GeneratedValue()
@@ -74,5 +78,59 @@ public class Review {
         if (reviewReply.getReview() != this) {
             reviewReply.setReview(this);
         }
+    }
+
+    /* 정적 생성 메서드 */
+    public static Review createReview (
+            Member member,
+            String title,
+            String body,
+            int starPoint,
+            String target_hospital
+    ) {
+        Review review = getReview(member, title, body, starPoint, target_hospital);
+
+        return review;
+    }
+
+    public static Review createReview (
+            Member member,
+            String title,
+            String body,
+            String reviewPhotoPath,
+            int starPoint,
+            String target_hospital
+    ) {
+        Review review = getReview(member, title, body, starPoint, target_hospital);
+        review.reviewPhotoPath = reviewPhotoPath;
+        return review;
+    }
+
+    private static Review getReview(Member member, String title, String body, int starPoint, String target_hospital) {
+        if (starPoint <= 0 || starPoint > 5) {
+            throw new IllegalValueException("별점은 1점부터 5점까지만 작성 가능합니다.");
+        }
+
+        Review review = new Review();
+        review.setMember(member);
+        review.title = title;
+        review.body = body;
+        review.status = ReviewStatus.WRITE;
+        review.createAt = LocalDateTime.now();
+        review.target_hospital = target_hospital;
+        review.starPoint = starPoint;
+        return review;
+    }
+
+    /**
+     * 리뷰 삭제
+     */
+    public void delete() {
+
+        if (this.status == ReviewStatus.DELETE) {
+            throw new IllegalStateException("이미 삭제된 리뷰입니다.");
+        }
+
+        this.status = ReviewStatus.DELETE;
     }
 }
