@@ -33,6 +33,9 @@ public class Staff {
     @Column(name = "dept", nullable = false)
     private String dept;
 
+    @Column(name = "staff_photo_path")
+    private String staffPhotoPath;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hosp_id")
     private Hospital hospital;
@@ -62,19 +65,27 @@ public class Staff {
         }
     }
 
-    public static Staff newInstance(
-            final String name,
-            final String email,
-            final String password,
-            final String license_path,
-            final String dept) {
+    /* 정적 생성 메서드 */
+    public static Staff newInstance(final String name, final String email, final String password, final String license_path, final String dept) {
+        Staff staff = getStaff(name, email, password, license_path, dept);
+
+        return staff;
+    }
+
+    public static Staff newInstance(final String name, final String email, final String password, final String license_path, final String dept, final String staffPhotoPath) {
+        Staff staff = getStaff(name, email, password, license_path, dept);
+        staff.staffPhotoPath = staffPhotoPath;
+
+        return staff;
+    }
+
+    private static Staff getStaff(String name, String email, String password, String license_path, String dept) {
         Staff staff = new Staff();
         staff.name = name;
         staff.email = email;
         staff.password = password;
         staff.license_path = license_path;
         staff.dept = dept;
-
         return staff;
     }
 }
