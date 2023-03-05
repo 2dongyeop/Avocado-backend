@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.domain;
 
+import io.wisoft.capstonedesign.domain.enumeration.ReviewStatus;
 import io.wisoft.capstonedesign.exception.IllegalValueException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.domain;
 
+import io.wisoft.capstonedesign.domain.enumeration.BoardStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
