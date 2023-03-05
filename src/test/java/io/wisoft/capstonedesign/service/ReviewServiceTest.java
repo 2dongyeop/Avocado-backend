@@ -3,7 +3,7 @@ package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.Review;
-import io.wisoft.capstonedesign.domain.ReviewStatus;
+import io.wisoft.capstonedesign.domain.enumeration.ReviewStatus;
 import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.repository.ReviewRepository;
 import org.assertj.core.api.Assertions;

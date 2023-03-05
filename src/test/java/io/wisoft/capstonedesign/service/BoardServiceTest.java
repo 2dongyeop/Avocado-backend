@@ -1,7 +1,7 @@
 package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Board;
-import io.wisoft.capstonedesign.domain.BoardStatus;
+import io.wisoft.capstonedesign.domain.enumeration.BoardStatus;
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.repository.BoardRepository;
 import org.assertj.core.api.Assertions;
