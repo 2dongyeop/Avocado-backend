@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.domain;
 
+import io.wisoft.capstonedesign.domain.enumeration.AppointmentStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
@@ -23,6 +24,16 @@ public class Appointment {
 
     @Column(name = "appt_comment", nullable = false)
     private String comment;
+
+    @Column(name = "appt_status")
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status;
+
+    @Column(name = "appt_name")
+    private String appointName;
+
+    @Column(name = "appt_phonenumber")
+    private String appointPhonenumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
