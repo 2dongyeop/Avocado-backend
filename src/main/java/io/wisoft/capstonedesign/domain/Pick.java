@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.domain;
 
+import io.wisoft.capstonedesign.domain.enumeration.PickStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -15,6 +16,10 @@ public class Pick {
 
     @Column(name = "pick_date_time")
     private LocalDateTime pickedAt;
+
+    @Column(name = "pick_status")
+    @Enumerated(EnumType.STRING)
+    private PickStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
