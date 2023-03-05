@@ -30,6 +30,9 @@ public class Member {
     @Column(name = "member_phonenumber", nullable = false)
     private String phoneNumber;
 
+    @Column(name = "member_image_path")
+    private String memberImagePath;
+
     @OneToMany(mappedBy = "member")
     private final List<Board> boardList = new ArrayList<>();
 
@@ -87,12 +90,24 @@ public class Member {
 
     /* 생성 메서드 */
     public static Member newInstance(String nickname, String email, String password, String phoneNumber) {
+        Member member = getMember(nickname, email, password, phoneNumber);
+
+        return member;
+    }
+
+    public static Member newInstance(String nickname, String email, String password, String phoneNumber, String memberImagePath) {
+        Member member = getMember(nickname, email, password, phoneNumber);
+        member.memberImagePath = memberImagePath;
+
+        return member;
+    }
+
+    private static Member getMember(String nickname, String email, String password, String phoneNumber) {
         Member member = new Member();
         member.nickname = nickname;
         member.email = email;
         member.password = password;
         member.phoneNumber = phoneNumber;
-
         return member;
     }
 }
