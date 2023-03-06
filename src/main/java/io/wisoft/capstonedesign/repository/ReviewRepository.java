@@ -20,12 +20,12 @@ public class ReviewRepository {
     public void save(Review review) { em.persist(review); }
 
     /**
-     * 게시글 단건 조회
+     * 리뷰 단건 조회
      */
     public Review findOne(Long reviewId) { return em.find(Review.class, reviewId); }
 
     /**
-     * 게시글 전체 조회
+     * 리뷰 전체 조회
      */
     public List<Review> findAll() {
         return em.createQuery("select r from Review r", Review.class)

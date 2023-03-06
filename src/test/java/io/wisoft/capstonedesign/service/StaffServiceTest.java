@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.service;
 
+import io.wisoft.capstonedesign.domain.Hospital;
 import io.wisoft.capstonedesign.domain.Staff;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.repository.StaffRepository;
@@ -24,7 +25,9 @@ public class StaffServiceTest {
     @Test
     public void 의료진가입() throws Exception {
         //given -- 조건
-        Staff staff = Staff.newInstance("lee", "ldy_1204@naver.com", "1111", "hhhh", "안과");
+        Hospital hospital = Hospital.createHospital("아보카도병원", "04200000000", "대전 유성구", "365일 연중무휴");
+
+        Staff staff = Staff.newInstance(hospital, "lee", "ldy_1204@naver.com", "1111", "hhhh", "안과");
 
         //when -- 동작
         Long signUpId = staffService.signUp(staff);
@@ -36,8 +39,10 @@ public class StaffServiceTest {
     @Test(expected = DuplicateStaffException.class)
     public void 의료진중복검증() throws Exception {
         //given -- 조건
-        Staff staff1 = Staff.newInstance("lee", "ldy_1204@naver.com", "1111", "hhhh", "안과");
-        Staff staff2 = Staff.newInstance("dong", "ldy_1204@naver.com", "1111", "hhhh", "안과");
+        Hospital hospital = Hospital.createHospital("아보카도병원", "04200000000", "대전 유성구", "365일 연중무휴");
+
+        Staff staff1 = Staff.newInstance(hospital, "lee", "ldy_1204@naver.com", "1111", "hhhh", "안과");
+        Staff staff2 = Staff.newInstance(hospital, "dong", "ldy_1204@naver.com", "1111", "hhhh", "안과");
 
         //when -- 동작
         staffService.signUp(staff1);

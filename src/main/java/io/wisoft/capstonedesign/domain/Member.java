@@ -30,8 +30,8 @@ public class Member {
     @Column(name = "member_phonenumber", nullable = false)
     private String phoneNumber;
 
-    @Column(name = "member_image_path")
-    private String memberImagePath;
+    @Column(name = "member_photo_path")
+    private String memberPhotoPath;
 
     @OneToMany(mappedBy = "member")
     private final List<Board> boardList = new ArrayList<>();
@@ -97,7 +97,7 @@ public class Member {
 
     public static Member newInstance(String nickname, String email, String password, String phoneNumber, String memberImagePath) {
         Member member = getMember(nickname, email, password, phoneNumber);
-        member.memberImagePath = memberImagePath;
+        member.memberPhotoPath = memberImagePath;
 
         return member;
     }

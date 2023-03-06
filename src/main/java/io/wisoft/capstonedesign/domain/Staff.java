@@ -66,21 +66,22 @@ public class Staff {
     }
 
     /* 정적 생성 메서드 */
-    public static Staff newInstance(final String name, final String email, final String password, final String license_path, final String dept) {
-        Staff staff = getStaff(name, email, password, license_path, dept);
+    public static Staff newInstance(final Hospital hospital, final String name, final String email, final String password, final String license_path, final String dept) {
+        Staff staff = getStaff(hospital, name, email, password, license_path, dept);
 
         return staff;
     }
 
-    public static Staff newInstance(final String name, final String email, final String password, final String license_path, final String dept, final String staffPhotoPath) {
-        Staff staff = getStaff(name, email, password, license_path, dept);
+    public static Staff newInstance(final Hospital hospital, final String name, final String email, final String password, final String license_path, final String dept, final String staffPhotoPath) {
+        Staff staff = getStaff(hospital, name, email, password, license_path, dept);
         staff.staffPhotoPath = staffPhotoPath;
 
         return staff;
     }
 
-    private static Staff getStaff(String name, String email, String password, String license_path, String dept) {
+    private static Staff getStaff(Hospital hospital, String name, String email, String password, String license_path, String dept) {
         Staff staff = new Staff();
+        staff.setHospital(hospital);
         staff.name = name;
         staff.email = email;
         staff.password = password;

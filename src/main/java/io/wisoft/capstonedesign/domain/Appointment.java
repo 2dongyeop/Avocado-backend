@@ -2,13 +2,16 @@ package io.wisoft.capstonedesign.domain;
 
 import io.wisoft.capstonedesign.domain.enumeration.AppointmentStatus;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Appointment {
 
     @Id @GeneratedValue()
@@ -22,6 +25,8 @@ public class Appointment {
     @Column(name = "appt_dept", nullable = false)
     private String dept;
 
+    //pg 사용시 @Lob 지우고, @Column(nullable = false, columnDefinition="TEXT")로 바꾸기
+    @Lob
     @Column(name = "appt_comment", nullable = false)
     private String comment;
 
@@ -29,10 +34,10 @@ public class Appointment {
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status;
 
-    @Column(name = "appt_name")
+    @Column(name = "appt_name", nullable = false)
     private String appointName;
 
-    @Column(name = "appt_phonenumber")
+    @Column(name = "appt_phonenumber", nullable = false)
     private String appointPhonenumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -70,5 +75,34 @@ public class Appointment {
         if (!member.getAppointmentList().contains(this)) {
             member.getAppointmentList().add(this);
         }
+    }
+
+    /* 정적 생성 메서드 */
+    public static Appointment createAppointment(Member member, Hospital hospital, String dept, String comment, String appointName, String appointPhonenumber) {
+        Appointment appointment = new Appointment();
+        appointment.setMember(member);
+        appointment.setHospital(hospital);
+        appointment.dept = dept;
+        appointment.comment = comment;
+        appointment.appointName = appointName;
+        appointment.appointPhonenumber = appointPhonenumber;
+
+        appointment.appointedAt = LocalDateTime.now();
+        appointment.status = AppointmentStatus.COMPLETE;
+
+        return appointment;
+    }
+
+
+    /**
+     * 예약 취소
+     */
+    public void cancel() {
+
+        if (this.status == AppointmentStatus.CANCEL) {
+            throw new IllegalStateException("이미 취소된 예약입니다.");
+        }
+
+        this.status = AppointmentStatus.CANCEL;
     }
 }
