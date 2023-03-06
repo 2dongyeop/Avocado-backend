@@ -30,7 +30,8 @@ public class MemberService {
 
     private void validateDuplicateMember(Member member) {
         List<Member> findMembersByEmail = memberRepository.findByEmail(member.getEmail());
-        if (findMembersByEmail.size() != 0) {
+        List<Member> findMembersByNickname = memberRepository.findByNickname(member.getNickname());
+        if (findMembersByEmail.size() != 0 || findMembersByNickname.size() != 0) {
             throw new DuplicateMemberException("중복 회원 발생 : 이미 존재하는 회원입니다.");
         }
     }

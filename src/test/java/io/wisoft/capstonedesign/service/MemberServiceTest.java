@@ -22,7 +22,8 @@ public class MemberServiceTest {
     @Autowired MemberRepository memberRepository;
 
     @Test
-    public void 회원가입() throws Exception {
+    public void 회원_가입() throws Exception {
+
         //given -- 조건
         Member member = Member.newInstance("test", "ldy_1204@naver.com", "1111", "0000");
 
@@ -35,10 +36,11 @@ public class MemberServiceTest {
     }
 
     @Test(expected = DuplicateMemberException.class)
-    public void 회원중복검증() throws Exception {
+    public void 회원_이메일_중복_검증() throws Exception {
+
         //given -- 조건
-        Member member1 = Member.newInstance("test", "ldy_1204@naver.com", "1111", "0000");
-        Member member2 = Member.newInstance("test", "ldy_1204@naver.com", "2222", "0000");
+        Member member1 = Member.newInstance("test1", "ldy_1204@naver.com", "1111", "0000");
+        Member member2 = Member.newInstance("test2", "ldy_1204@naver.com", "2222", "0000");
 
         //when -- 동작
         memberService.signUp(member1);
@@ -46,5 +48,20 @@ public class MemberServiceTest {
 
         //then -- 검증
         fail("회원의 이메일이 중복되어 예외가 발생해야 한다.");
+    }
+
+    @Test(expected = DuplicateMemberException.class)
+    public void 회원_닉네임_중복_검증() throws Exception {
+
+        //given -- 조건
+        Member member1 = Member.newInstance("test1", "111@naver.com", "1111", "0000");
+        Member member2 = Member.newInstance("test1", "222naver.com", "2222", "0000");
+
+        //when -- 동작
+        memberService.signUp(member1);
+        memberService.signUp(member2);
+
+        //then -- 검증
+        fail("회원의 닉네임이 중복되어 예외가 발생해야 한다.");
     }
 }
