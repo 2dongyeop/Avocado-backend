@@ -25,7 +25,7 @@ public class Review {
     @Column(name = "review_title", nullable = false)
     private String title;
 
-    //pg 사용시 @Lob 지우고, @Collumn(nullable = false, columnDefinition="TEXT")로 바꾸기
+    //pg 사용시 @Lob 지우고, @Column(nullable = false, columnDefinition="TEXT")로 바꾸기
     @Lob
     @Column(name = "review_body", nullable = false)
     private String body;
