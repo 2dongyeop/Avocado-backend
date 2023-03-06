@@ -1,7 +1,9 @@
 package io.wisoft.capstonedesign.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Hospital {
 
     @Id @GeneratedValue()
@@ -59,5 +62,17 @@ public class Hospital {
         if (staff.getHospital() != this) {
             staff.setHospital(this);
         }
+    }
+
+    /* 정적 생성 메서드 */
+    public static Hospital createHospital(String name, String number, String address, String operatingTime) {
+        Hospital hospital = new Hospital();
+
+        hospital.name = name;
+        hospital.number = number;
+        hospital.address = address;
+        hospital.operatingTime = operatingTime;
+
+        return hospital;
     }
 }
