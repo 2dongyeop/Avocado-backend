@@ -1,8 +1,11 @@
 package io.wisoft.capstonedesign.service;
 
+import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.Hospital;
 import io.wisoft.capstonedesign.domain.Staff;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateStaffException;
+import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
+import io.wisoft.capstonedesign.exception.nullcheck.NullStaffException;
 import io.wisoft.capstonedesign.repository.StaffRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -50,5 +53,16 @@ public class StaffServiceTest {
 
         //then -- 검증
         fail("의료진의 이메일이 중복되어 예외가 발생해야 한다.");
+    }
+
+    @Test(expected = NullStaffException.class)
+    public void 의료진_단건_조회_실패() throws Exception {
+        //given -- 조건
+
+        //when -- 동작
+        Staff staff = staffRepository.findOne(2L);
+
+        //then -- 검증
+        fail("해당 staffId에 일치하는 의료진 정보가 없어 예외가 발생해야 한다.");
     }
 }

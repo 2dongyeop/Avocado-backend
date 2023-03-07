@@ -4,6 +4,7 @@ import io.wisoft.capstonedesign.domain.Appointment;
 import io.wisoft.capstonedesign.domain.Hospital;
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.enumeration.AppointmentStatus;
+import io.wisoft.capstonedesign.exception.nullcheck.NullAppointmentException;
 import io.wisoft.capstonedesign.repository.AppointmentRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -82,5 +83,16 @@ public class AppointmentServiceTest {
 
         //then -- 검증
         fail("중복 예약 취소 요청으로 인한 예외가 발생해야 한다.");
+    }
+
+    @Test(expected = NullAppointmentException.class)
+    public void 예약_단건_조회_실패() throws Exception {
+        //given -- 조건
+
+        //when -- 동작
+        Appointment appointment = appointmentRepository.findOne(2L);
+
+        //then -- 검증
+        fail("해당 appointmentId에 일치하는 예약 정보가 없어 예외가 발생해야 한다.");
     }
 }

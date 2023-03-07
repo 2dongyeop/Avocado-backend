@@ -1,7 +1,10 @@
 package io.wisoft.capstonedesign.service;
 
+import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateMemberException;
+import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
+import io.wisoft.capstonedesign.exception.nullcheck.NullMemberException;
 import io.wisoft.capstonedesign.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -63,5 +66,16 @@ public class MemberServiceTest {
 
         //then -- 검증
         fail("회원의 닉네임이 중복되어 예외가 발생해야 한다.");
+    }
+
+    @Test(expected = NullMemberException.class)
+    public void 회원_단건_조회_실패() throws Exception {
+        //given -- 조건
+
+        //when -- 동작
+        Member member = memberRepository.findOne(2L);
+
+        //then -- 검증
+        fail("해당 memberId에 일치하는 회원 정보가 없어 예외가 발생해야 한다.");
     }
 }
