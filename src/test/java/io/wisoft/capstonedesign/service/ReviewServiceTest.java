@@ -1,10 +1,13 @@
 package io.wisoft.capstonedesign.service;
 
 
+import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.Review;
 import io.wisoft.capstonedesign.domain.enumeration.ReviewStatus;
 import io.wisoft.capstonedesign.exception.IllegalValueException;
+import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
+import io.wisoft.capstonedesign.exception.nullcheck.NullReviewException;
 import io.wisoft.capstonedesign.repository.ReviewRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -105,4 +108,14 @@ public class ReviewServiceTest {
         fail("리뷰의 별점이 1~5 사이의 범위가 아니므로 예외가 발생해야 한다.");
     }
 
+    @Test(expected = NullReviewException.class)
+    public void 리뷰_단건_조회_실패() throws Exception {
+        //given -- 조건
+
+        //when -- 동작
+        Review review = reviewRepository.findOne(2L);
+
+        //then -- 검증
+        fail("해당 reviewId에 일치하는 리뷰 정보가 없어 예외가 발생해야 한다.");
+    }
 }

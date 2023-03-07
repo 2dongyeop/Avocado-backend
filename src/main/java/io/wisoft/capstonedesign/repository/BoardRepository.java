@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.repository;
 
 import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.Member;
+import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,13 @@ public class BoardRepository {
      * 게시글 단건 조회
      */
     public Board findOne(Long boardId) {
-        return em.find(Board.class, boardId);
+        Board getBoard = em.find(Board.class, boardId);
+
+        if (getBoard == null) {
+            throw new NullBoardException("해당 게시글 정보가 존재하지 않습니다.");
+        }
+
+        return getBoard;
     }
 
     /**

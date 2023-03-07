@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.repository;
 
 import io.wisoft.capstonedesign.domain.Appointment;
 import io.wisoft.capstonedesign.domain.Member;
+import io.wisoft.capstonedesign.exception.nullcheck.NullAppointmentException;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -23,7 +24,12 @@ public class AppointmentRepository {
      * 예약 단건 조회
      */
     public Appointment findOne(Long appointmentId) {
-        return em.find(Appointment.class, appointmentId);
+        Appointment getAppointment = em.find(Appointment.class, appointmentId);
+
+        if (getAppointment == null) {
+            throw new NullAppointmentException("해당 예약 정보가 존재하지 않습니다.");
+        }
+        return getAppointment;
     }
 
     /**

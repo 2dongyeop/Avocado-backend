@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.service;
 import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.enumeration.BoardStatus;
 import io.wisoft.capstonedesign.domain.Member;
+import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.repository.BoardRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -80,5 +81,16 @@ public class BoardServiceTest {
 
         //then -- 검증
         fail("중복 삭제 요청으로 인한 예외가 발생해야 한다.");
+    }
+
+    @Test(expected = NullBoardException.class)
+    public void 게시글_단건_조회_실패() throws Exception {
+        //given -- 조건
+
+        //when -- 동작
+        Board board = boardRepository.findOne(2L);
+
+        //then -- 검증
+        fail("해당 boardId에 일치하는 게시글 정보가 없어 예외가 발생해야 한다.");
     }
 }
