@@ -2,12 +2,15 @@ package io.wisoft.capstonedesign.domain;
 
 import io.wisoft.capstonedesign.domain.enumeration.PickStatus;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Pick {
 
     @Id @GeneratedValue()
@@ -55,5 +58,28 @@ public class Pick {
         if (!member.getPickList().contains(this)) {
             member.getPickList().add(this);
         }
+    }
+
+    /* 정적 생성 메서드 */
+    public static Pick createPick(Member member, Hospital hospital) {
+        Pick pick = new Pick();
+        pick.setMember(member);
+        pick.setHospital(hospital);
+        pick.pickedAt = LocalDateTime.now();
+        pick.status = PickStatus.COMPLETE;
+
+        return pick;
+    }
+
+    /**
+     * 찜하기 취소
+     */
+    public void cancel() {
+
+        if (this.status == PickStatus.CANCEL) {
+            throw new IllegalStateException("이미 취소된 찜하기입니다.");
+        }
+
+        this.status = PickStatus.CANCEL;
     }
 }
