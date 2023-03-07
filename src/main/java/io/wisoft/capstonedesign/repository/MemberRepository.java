@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.repository;
 
 import io.wisoft.capstonedesign.domain.Member;
+import io.wisoft.capstonedesign.exception.nullcheck.NullMemberException;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -31,7 +32,12 @@ public class MemberRepository {
      * 회원조회
      */
     public Member findOne(Long id) {
-        return em.find(Member.class, id);
+        Member getMember = em.find(Member.class, id);
+
+        if (getMember == null) {
+            throw new NullMemberException("해당 회원 정보가 존재하지 않습니다.");
+        }
+        return getMember;
     }
 
     public List<Member> findAll() {
