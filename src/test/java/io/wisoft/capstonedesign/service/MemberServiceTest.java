@@ -1,9 +1,7 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateMemberException;
-import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullMemberException;
 import io.wisoft.capstonedesign.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
@@ -73,7 +71,7 @@ public class MemberServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Member member = memberRepository.findOne(2L);
+        Member member = memberService.findOne(2L);
 
         //then -- 검증
         fail("해당 memberId에 일치하는 회원 정보가 없어 예외가 발생해야 한다.");

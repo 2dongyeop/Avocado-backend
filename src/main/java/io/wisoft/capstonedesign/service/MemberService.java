@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateMemberException;
+import io.wisoft.capstonedesign.exception.nullcheck.NullMemberException;
 import io.wisoft.capstonedesign.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,12 @@ public class MemberService {
      * 회원 조회
      */
     public Member findOne(Long memberId) {
-        return memberRepository.findOne(memberId);
+
+        Member getMember = memberRepository.findOne(memberId);
+        if (getMember == null) {
+            throw new NullMemberException("해당 회원 정보가 존재하지 않습니다.");
+        }
+        return getMember;
     }
 
     public List<Member> findAll() {
