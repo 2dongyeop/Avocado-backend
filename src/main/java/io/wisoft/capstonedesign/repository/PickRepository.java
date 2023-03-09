@@ -2,14 +2,12 @@ package io.wisoft.capstonedesign.repository;
 
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.Pick;
-import io.wisoft.capstonedesign.exception.nullcheck.NullPickException;
 import io.wisoft.capstonedesign.util.comparator.PickComparator;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Repository
@@ -27,12 +25,7 @@ public class PickRepository {
      * 찜하기 단건 조회
      */
     public Pick findOne(Long pickId) {
-        Pick getPick = em.find(Pick.class, pickId);
-
-        if (getPick == null) {
-            throw new NullPickException("해당 찜하기 정보가 존재하지 않습니다.");
-        }
-        return getPick;
+        return em.find(Pick.class, pickId);
     }
 
     /**
