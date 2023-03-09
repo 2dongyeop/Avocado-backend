@@ -26,13 +26,7 @@ public class BoardRepository {
      * 게시글 단건 조회
      */
     public Board findOne(Long boardId) {
-        Board getBoard = em.find(Board.class, boardId);
-
-        if (getBoard == null) {
-            throw new NullBoardException("해당 게시글 정보가 존재하지 않습니다.");
-        }
-
-        return getBoard;
+        return em.find(Board.class, boardId);
     }
 
     /**

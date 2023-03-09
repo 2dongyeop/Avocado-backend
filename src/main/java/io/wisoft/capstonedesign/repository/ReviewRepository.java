@@ -2,7 +2,6 @@ package io.wisoft.capstonedesign.repository;
 
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.Review;
-import io.wisoft.capstonedesign.exception.nullcheck.NullReviewException;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -24,12 +23,7 @@ public class ReviewRepository {
      * 리뷰 단건 조회
      */
     public Review findOne(Long reviewId) {
-        Review getReview = em.find(Review.class, reviewId);
-
-        if (getReview == null) {
-            throw new NullReviewException("해당 리뷰 정보가 존재하지 않습니다.");
-        }
-        return getReview;
+        return em.find(Review.class, reviewId);
     }
 
     /**

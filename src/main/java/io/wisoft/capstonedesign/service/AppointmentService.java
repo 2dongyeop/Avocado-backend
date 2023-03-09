@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Appointment;
+import io.wisoft.capstonedesign.exception.nullcheck.NullAppointmentException;
 import io.wisoft.capstonedesign.repository.AppointmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,15 @@ public class AppointmentService {
     /* 조회 로직 */
     public List<Appointment> findByMemberId(Long memberId) { return appointmentRepository.findByMemberId(memberId); }
 
-    public Appointment findOne(Long appointmentId) { return appointmentRepository.findOne(appointmentId); }
+    public Appointment findOne(Long appointmentId) {
+        Appointment getAppointment = appointmentRepository.findOne(appointmentId);
+
+        if (getAppointment == null) {
+            throw new NullAppointmentException("해당 예약 정보가 존재하지 않습니다.");
+        }
+
+        return getAppointment;
+    }
 
     public List<Appointment> findByMemberIdASC(Long memberId) { return appointmentRepository.findByMemberIdASC(memberId); }
 

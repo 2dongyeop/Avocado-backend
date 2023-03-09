@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Review;
+import io.wisoft.capstonedesign.exception.nullcheck.NullReviewException;
 import io.wisoft.capstonedesign.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,14 @@ public class ReviewService {
     /* 조회 로직 */
     public List<Review> findByMemberId(Long memberId) { return reviewRepository.findByMemberId(memberId); }
 
-    public Review findOne(Long reviewId) { return reviewRepository.findOne(reviewId); }
+    public Review findOne(Long reviewId) {
+
+        Review getReview = reviewRepository.findOne(reviewId);
+        if (getReview == null) {
+            throw new NullReviewException("해당 리뷰 정보가 존재하지 않습니다.");
+        }
+        return getReview;
+    }
 
     public List<Review> findAll() { return reviewRepository.findAll(); }
 }

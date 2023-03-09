@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Pick;
+import io.wisoft.capstonedesign.exception.nullcheck.NullPickException;
 import io.wisoft.capstonedesign.repository.PickRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,14 @@ public class PickService {
     }
 
     /* 조회 로직 */
-    public Pick findOne(Long pickId) { return pickRepository.findOne(pickId); }
+    public Pick findOne(Long pickId) {
+
+        Pick getPick = pickRepository.findOne(pickId);
+        if (getPick == null) {
+            throw new NullPickException("해당 찜하기 정보가 존재하지 않습니다.");
+        }
+        return getPick;
+    }
 
     public List<Pick> findByMemberIdASC(Long memberId) {
         return pickRepository.findByMemberIdASC(memberId);

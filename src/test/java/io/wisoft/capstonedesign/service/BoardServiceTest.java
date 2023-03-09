@@ -88,7 +88,7 @@ public class BoardServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Board board = boardRepository.findOne(2L);
+        Board board = boardService.findOne(2L);
 
         //then -- 검증
         fail("해당 boardId에 일치하는 게시글 정보가 없어 예외가 발생해야 한다.");

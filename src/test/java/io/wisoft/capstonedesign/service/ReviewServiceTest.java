@@ -1,12 +1,10 @@
 package io.wisoft.capstonedesign.service;
 
 
-import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.Review;
 import io.wisoft.capstonedesign.domain.enumeration.ReviewStatus;
 import io.wisoft.capstonedesign.exception.IllegalValueException;
-import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullReviewException;
 import io.wisoft.capstonedesign.repository.ReviewRepository;
 import org.assertj.core.api.Assertions;
@@ -113,7 +111,7 @@ public class ReviewServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Review review = reviewRepository.findOne(2L);
+        Review review = reviewService.findOne(2L);
 
         //then -- 검증
         fail("해당 reviewId에 일치하는 리뷰 정보가 없어 예외가 발생해야 한다.");

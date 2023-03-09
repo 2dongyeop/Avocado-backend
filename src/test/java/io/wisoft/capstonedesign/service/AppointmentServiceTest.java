@@ -90,7 +90,7 @@ public class AppointmentServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Appointment appointment = appointmentRepository.findOne(2L);
+        Appointment appointment = appointmentService.findOne(2L);
 
         //then -- 검증
         fail("해당 appointmentId에 일치하는 예약 정보가 없어 예외가 발생해야 한다.");
