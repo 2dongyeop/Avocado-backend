@@ -6,6 +6,7 @@ import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.enumeration.AppointmentStatus;
 import io.wisoft.capstonedesign.exception.nullcheck.NullAppointmentException;
 import io.wisoft.capstonedesign.repository.AppointmentRepository;
+import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import static org.junit.Assert.*;
 @Transactional
 public class AppointmentServiceTest {
 
+    @Autowired EntityManager em;
     @Autowired AppointmentService appointmentService;
     @Autowired AppointmentRepository appointmentRepository;
 
@@ -28,19 +30,19 @@ public class AppointmentServiceTest {
     @Test
     public void 예약_저장() throws Exception {
         //given -- 조건
-
         //회원 생성
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
         //병원 생성
         Hospital hospital = Hospital.createHospital("아보카도병원", "0420000000", "대전 유성구", "365일 연중 무휴");
-        //예약 생성
-        Appointment appointment = Appointment.createAppointment(member, hospital, "안과", "눈이 건조해요", "이동엽", "01012345678");
+        em.persist(hospital);
 
         //when -- 동작
-        Long saveId = appointmentService.save(appointment);
+        Long saveId = appointmentService.save(member.getId(), hospital.getId(), "안과", "눈이 건조해요", "이동엽", "01012345678");
 
         //then -- 검증
-        Assertions.assertThat(appointment).isEqualTo(appointmentRepository.findOne(saveId));
+        Appointment appointment = appointmentService.findOne(saveId);
+        Assertions.assertThat(appointment.getStatus()).isEqualTo(AppointmentStatus.COMPLETE);
     }
 
     //예약 취소
@@ -50,11 +52,12 @@ public class AppointmentServiceTest {
 
         //회원 생성
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
         //병원 생성
         Hospital hospital = Hospital.createHospital("아보카도병원", "0420000000", "대전 유성구", "365일 연중 무휴");
+        em.persist(hospital);
         //예약 생성 후 저장
-        Appointment appointment = Appointment.createAppointment(member, hospital, "안과", "눈이 건조해요", "이동엽", "01012345678");
-        Long saveId = appointmentService.save(appointment);
+        Long saveId = appointmentService.save(member.getId(), hospital.getId(), "안과", "눈이 건조해요", "이동엽", "01012345678");
 
         //when -- 동작
         Appointment getAppointment = appointmentRepository.findOne(saveId);
@@ -71,11 +74,12 @@ public class AppointmentServiceTest {
 
         //회원 생성
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
         //병원 생성
         Hospital hospital = Hospital.createHospital("아보카도병원", "0420000000", "대전 유성구", "365일 연중 무휴");
+        em.persist(hospital);
         //예약 생성 후 저장
-        Appointment appointment = Appointment.createAppointment(member, hospital, "안과", "눈이 건조해요", "이동엽", "01012345678");
-        Long saveId = appointmentService.save(appointment);
+        Long saveId = appointmentService.save(member.getId(), hospital.getId(), "안과", "눈이 건조해요", "이동엽", "01012345678");
 
         //when -- 동작
         appointmentService.cancelAppointment(saveId);

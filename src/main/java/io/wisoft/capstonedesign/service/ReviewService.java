@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.service;
 
+import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.Review;
 import io.wisoft.capstonedesign.exception.nullcheck.NullReviewException;
 import io.wisoft.capstonedesign.repository.ReviewRepository;
@@ -15,15 +16,33 @@ import java.util.List;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final MemberService memberService;
 
     /**
      * 리뷰 작성
      */
     @Transactional
-    public Long save(Review review) {
+    public Long save(Long memberId, String title, String body, int starPoint, String target_hospital) {
+
+        //엔티티 조회
+        Member member = memberService.findOne(memberId);
+
+        Review review = Review.createReview(member, title, body, starPoint, target_hospital);
         reviewRepository.save(review);
         return review.getId();
     }
+
+    @Transactional
+    public Long save(Long memberId, String title, String body, String reviewPhotoPath, int starPoint, String target_hospital) {
+
+        //엔티티 조회
+        Member member = memberService.findOne(memberId);
+
+        Review review = Review.createReview(member, title, body, reviewPhotoPath, starPoint, target_hospital);
+        reviewRepository.save(review);
+        return review.getId();
+    }
+
 
     /**
      * 리뷰 삭제
@@ -35,7 +54,9 @@ public class ReviewService {
     }
 
     /* 조회 로직 */
-    public List<Review> findByMemberId(Long memberId) { return reviewRepository.findByMemberId(memberId); }
+    public List<Review> findByMemberId(Long memberId) {
+        return reviewRepository.findByMemberId(memberId);
+    }
 
     public Review findOne(Long reviewId) {
 
@@ -46,5 +67,7 @@ public class ReviewService {
         return getReview;
     }
 
-    public List<Review> findAll() { return reviewRepository.findAll(); }
+    public List<Review> findAll() {
+        return reviewRepository.findAll();
+    }
 }

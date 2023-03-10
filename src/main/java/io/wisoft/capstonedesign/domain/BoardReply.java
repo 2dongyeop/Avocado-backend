@@ -73,6 +73,7 @@ public class BoardReply {
         boardReply.setStaff(staff);
         boardReply.reply = reply;
         boardReply.createAt = LocalDateTime.now();
+        boardReply.status = BoardReplyStatus.WRITE;
 
         return boardReply;
     }

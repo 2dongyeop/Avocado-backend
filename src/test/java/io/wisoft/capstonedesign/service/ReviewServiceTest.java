@@ -7,6 +7,7 @@ import io.wisoft.capstonedesign.domain.enumeration.ReviewStatus;
 import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullReviewException;
 import io.wisoft.capstonedesign.repository.ReviewRepository;
+import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +23,7 @@ import static org.junit.Assert.*;
 @Transactional
 public class ReviewServiceTest {
 
+    @Autowired EntityManager em;
     @Autowired ReviewService reviewService;
     @Autowired ReviewRepository reviewRepository;
 
@@ -31,17 +33,14 @@ public class ReviewServiceTest {
 
         //리뷰를 작성할 회원 생성
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
-        //리뷰 생성
-        Review review = Review.createReview(member, "친절해요", "자세히 진료해줘요", "사진_링크", 5, "아보카도 병원");
+        em.persist(member);
 
         //when -- 동작
-        Long saveId = reviewService.save(review);
+        Long saveId = reviewService.save(member.getId(), "친절해요", "자세히 진료해줘요", "사진_링크", 5, "아보카도 병원");
 
         //then -- 검증
         Review getReview = reviewRepository.findOne(saveId); //저장된 리뷰
 
-        Assertions.assertThat(getReview).isEqualTo(review);
-        Assertions.assertThat(getReview.getId()).isEqualTo(review.getId());
         Assertions.assertThat(getReview.getStatus()).isEqualTo(ReviewStatus.WRITE);
     }
 
@@ -52,10 +51,10 @@ public class ReviewServiceTest {
 
         //리뷰를 작성할 회원 생성
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
+
         //리뷰 생성
-        Review review = Review.createReview(member, "친절해요", "자세히 진료해줘요", "사진_링크", 5, "아보카도 병원");
-        //리뷰 저장
-        Long saveId = reviewService.save(review);
+        Long saveId = reviewService.save(member.getId(), "친절해요", "자세히 진료해줘요", "사진_링크", 5, "아보카도 병원");
 
         //when -- 동작
         reviewService.deleteReview(saveId);
@@ -73,10 +72,10 @@ public class ReviewServiceTest {
 
         //리뷰를 작성할 회원 생성
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
+
         //리뷰 생성
-        Review review = Review.createReview(member, "친절해요", "자세히 진료해줘요", "사진_링크", 5, "아보카도 병원");
-        //리뷰 저장
-        Long saveId = reviewService.save(review);
+        Long saveId = reviewService.save(member.getId(), "친절해요", "자세히 진료해줘요", "사진_링크", 5, "아보카도 병원");
 
         //when -- 동작
         reviewService.deleteReview(saveId);
@@ -92,15 +91,12 @@ public class ReviewServiceTest {
         //given -- 조건
         //리뷰를 작성할 회원 생성
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
 
         int starPoint = 6;
-        //리뷰 생성
-        Review review = Review.createReview(member, "친절해요",
-                "자세히 진료해줘요", "사진_링크",
-                starPoint, "아보카도 병원");
 
         //when -- 동작
-        Long saveId = reviewService.save(review);
+        Long saveId = reviewService.save(member.getId(), "친절해요", "자세히 진료해줘요", "사진_링크", starPoint, "아보카도 병원");
 
         //then -- 검증
         fail("리뷰의 별점이 1~5 사이의 범위가 아니므로 예외가 발생해야 한다.");
