@@ -1,6 +1,8 @@
 package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Appointment;
+import io.wisoft.capstonedesign.domain.Hospital;
+import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.exception.nullcheck.NullAppointmentException;
 import io.wisoft.capstonedesign.repository.AppointmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +17,22 @@ import java.util.List;
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
+    private final MemberService memberService;
+    private final HospitalService hospitalService;
 
     /**
      * 예약 정보 작성
      */
     @Transactional
-    public Long save(Appointment appointment) {
+    public Long save(Long memberId, Long hospitalId, String dept, String comment, String appointName, String appointPhonenumber) {
+
+        //엔티티 조회
+        Member member = memberService.findOne(memberId);
+        Hospital hospital = hospitalService.findOne(hospitalId);
+
+        //예약 정보 생성
+        Appointment appointment = Appointment.createAppointment(member, hospital, dept, comment, appointName, appointPhonenumber);
+
         appointmentRepository.save(appointment);
         return appointment.getId();
     }

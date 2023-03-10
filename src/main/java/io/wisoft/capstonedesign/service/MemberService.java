@@ -21,7 +21,20 @@ public class MemberService {
      * 회원가입
      */
     @Transactional
-    public Long signUp(Member member) {
+    public Long signUp(String nickname, String email, String password, String phoneNumber) {
+
+        Member member = Member.newInstance(nickname, email, password, phoneNumber);
+
+        //comment: 회원 중복 검증
+        validateDuplicateMember(member);
+        memberRepository.signUp(member);
+        return member.getId();
+    }
+
+    @Transactional
+    public Long signUp(String nickname, String email, String password, String phoneNumber, String memberImagePath) {
+
+        Member member = Member.newInstance(nickname, email, password, phoneNumber, memberImagePath);
 
         //comment: 회원 중복 검증
         validateDuplicateMember(member);

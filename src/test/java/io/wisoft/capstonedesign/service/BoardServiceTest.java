@@ -5,6 +5,7 @@ import io.wisoft.capstonedesign.domain.enumeration.BoardStatus;
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.repository.BoardRepository;
+import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import static org.junit.Assert.*;
 @Transactional
 public class BoardServiceTest {
 
+    @Autowired EntityManager em;
     @Autowired BoardService boardService;
     @Autowired BoardRepository boardRepository;
 
@@ -30,17 +32,15 @@ public class BoardServiceTest {
 
         //게시글을 작성할 회원 생성
         Member member = Member.newInstance("test", "ldy_1204@naver.com", "1111", "0000");
-        //게시글 생성
-        Board board = Board.createBoard(member, "test code!", "I write test code!");
+        em.persist(member);
 
         //when -- 동작
-        Long saveId = boardService.save(board);
+        Long saveId = boardService.save(member.getId(), "test code!", "I write test code!");
 
         //then -- 검증
         Board getBoard = boardRepository.findOne(saveId);
 
-        Assertions.assertThat(board).isEqualTo(getBoard);
-        Assertions.assertThat(board.getStatus()).isEqualTo(BoardStatus.WRITE);
+        Assertions.assertThat(getBoard.getStatus()).isEqualTo(BoardStatus.WRITE);
     }
 
     //게시글 삭제
@@ -50,10 +50,10 @@ public class BoardServiceTest {
 
         //게시글을 작성할 회원 생성
         Member member = Member.newInstance("test", "ldy_1204@naver.com", "1111", "0000");
-        //게시글 생성
-        Board board = Board.createBoard(member, "test code!", "I write test code!");
-        //게시글 저장
-        Long saveId = boardService.save(board);
+        em.persist(member);
+
+        //게시글 생성 및 저장
+        Long saveId = boardService.save(member.getId(), "test code!", "I write test code!");
 
         //when -- 동작
         boardService.deleteBoard(saveId);
@@ -67,13 +67,13 @@ public class BoardServiceTest {
     @Test(expected = IllegalStateException.class)
     public void 게시물_중복_삭제요청() throws Exception {
         //given -- 조건
+
         //게시글을 작성할 회원 생성
         Member member = Member.newInstance("test","ldy_1204@naver.com", "1111", "0000");
-        //게시글 생성
-        Board board = Board.createBoard(member, "test code!", "I write test code!");
-        //게시글 저장
-        Long saveId = boardService.save(board);
+        em.persist(member);
 
+        //게시글 생성 및 저장
+        Long saveId = boardService.save(member.getId(), "test code!", "I write test code!");
 
         //when -- 동작
         boardService.deleteBoard(saveId);

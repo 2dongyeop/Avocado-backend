@@ -1,5 +1,7 @@
 package io.wisoft.capstonedesign.service;
 
+import io.wisoft.capstonedesign.domain.Hospital;
+import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.Pick;
 import io.wisoft.capstonedesign.exception.nullcheck.NullPickException;
 import io.wisoft.capstonedesign.repository.PickRepository;
@@ -15,12 +17,21 @@ import java.util.List;
 public class PickService {
 
     private final PickRepository pickRepository;
+    private final MemberService memberService;
+    private final HospitalService hospitalService;
 
     /**
      * 찜하기 생성
      */
     @Transactional
-    public Long save(Pick pick) {
+    public Long save(Long memberId, Long hospitalId) {
+
+        //엔티티 조회
+        Member member = memberService.findOne(memberId);
+        Hospital hospital = hospitalService.findOne(hospitalId);
+
+        Pick pick = Pick.createPick(member, hospital);
+
         pickRepository.save(pick);
         return pick.getId();
     }

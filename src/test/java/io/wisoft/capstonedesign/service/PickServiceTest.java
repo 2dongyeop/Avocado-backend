@@ -6,6 +6,7 @@ import io.wisoft.capstonedesign.domain.Pick;
 import io.wisoft.capstonedesign.domain.enumeration.PickStatus;
 import io.wisoft.capstonedesign.exception.nullcheck.NullPickException;
 import io.wisoft.capstonedesign.repository.PickRepository;
+import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import static org.junit.Assert.*;
 @Transactional
 public class PickServiceTest {
 
+    @Autowired EntityManager em;
     @Autowired PickService pickService;
     @Autowired PickRepository pickRepository;
     
@@ -31,16 +33,17 @@ public class PickServiceTest {
 
         //회원 생성
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
         //병원 생성
         Hospital hospital = Hospital.createHospital("아보카도병원", "04212345678", "대전시 유성구", "365일 연중무휴");
-
-        Pick pick = Pick.createPick(member, hospital);
+        em.persist(hospital);
 
         //when -- 동작
-        Long saveId = pickService.save(pick);
+        Long saveId = pickService.save(member.getId(), hospital.getId());
 
         //then -- 검증
-        Assertions.assertThat(pick).isEqualTo(pickRepository.findOne(saveId));
+        Pick pick = pickRepository.findOne(saveId);
+        Assertions.assertThat(pick.getStatus()).isEqualTo(PickStatus.COMPLETE);
     }
     
     //찜하기 취소
@@ -50,11 +53,12 @@ public class PickServiceTest {
 
         //회원 생성
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
         //병원 생성
         Hospital hospital = Hospital.createHospital("아보카도병원", "04212345678", "대전시 유성구", "365일 연중무휴");
+        em.persist(hospital);
 
-        Pick pick = Pick.createPick(member, hospital);
-        Long saveId = pickService.save(pick);
+        Long saveId = pickService.save(member.getId(), hospital.getId());
 
         //when -- 동작
         pickService.cancelPick(saveId);
@@ -71,11 +75,12 @@ public class PickServiceTest {
 
         //회원 생성
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
         //병원 생성
         Hospital hospital = Hospital.createHospital("아보카도병원", "04212345678", "대전시 유성구", "365일 연중무휴");
+        em.persist(hospital);
 
-        Pick pick = Pick.createPick(member, hospital);
-        Long saveId = pickService.save(pick);
+        Long saveId = pickService.save(member.getId(), hospital.getId());
 
         //when -- 동작
         pickService.cancelPick(saveId);

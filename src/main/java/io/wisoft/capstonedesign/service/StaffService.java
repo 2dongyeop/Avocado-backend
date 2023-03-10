@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.service;
 
 
+import io.wisoft.capstonedesign.domain.Hospital;
 import io.wisoft.capstonedesign.domain.Staff;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.repository.StaffRepository;
@@ -16,12 +17,31 @@ import java.util.List;
 public class StaffService {
 
     private final StaffRepository staffRepository;
+    private final HospitalService hospitalService;
 
     /**
      * 회원가입
      */
     @Transactional
-    public Long signUp(Staff staff) {
+    public Long signUp(Long hospitalId, String name, String email, String password, String license_path, String dept) {
+
+        //엔티티 조회
+        Hospital hospital = hospitalService.findOne(hospitalId);
+
+        Staff staff = Staff.newInstance(hospital, name, email, password, license_path, dept);
+
+        validateDuplicateStaff(staff);
+        staffRepository.signUp(staff);
+        return staff.getId();
+    }
+
+    @Transactional
+    public Long signUp(Long hospitalId, String name, String email, String password, String license_path, String dept, String staffPhotoPath) {
+
+        //엔티티 조회
+        Hospital hospital = hospitalService.findOne(hospitalId);
+
+        Staff staff = Staff.newInstance(hospital, name, email, password, license_path, dept, staffPhotoPath);
 
         validateDuplicateStaff(staff);
         staffRepository.signUp(staff);

@@ -4,6 +4,7 @@ import io.wisoft.capstonedesign.domain.*;
 import io.wisoft.capstonedesign.domain.enumeration.BoardReplyStatus;
 import io.wisoft.capstonedesign.exception.nullcheck.NullBoardReplyException;
 import io.wisoft.capstonedesign.repository.BoardReplyRepository;
+import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,7 @@ import static org.junit.Assert.*;
 @Transactional
 public class BoardReplyServiceTest {
 
+    @Autowired EntityManager em;
     @Autowired BoardReplyService boardReplyService;
     @Autowired BoardReplyRepository boardReplyRepository;
 
@@ -29,21 +31,22 @@ public class BoardReplyServiceTest {
         //comment: test를 위한 세팅
         //게시글을 작성할 회원 생성
         Member member = Member.newInstance("lee", "lee@naver.com", "1111", "0000");
+        em.persist(member);
         //게시글 생성
         Board board = Board.createBoard(member, "title1", "body1");
+        em.persist(board);
         //회원이 다닐 병원 생성
         Hospital hospital = Hospital.createHospital("avocado", "04212345678", "대전시 유성구", "연중무휴");
+        em.persist(hospital);
         //댓글을 생성할 의료진 생성
         Staff staff = Staff.newInstance(hospital, "lim", "lsn@naver.com", "1111", "license", "안과");
-
-        //게시글 댓글 생성
-        BoardReply boardReply = BoardReply.createBoardReply(board, staff, "안과가세요.");
+        em.persist(staff);
 
         //when -- 동작
-        Long saveId = boardReplyService.save(boardReply);
+        Long saveId = boardReplyService.save(board.getId(), staff.getId(), "안과가세요.");
 
         //then -- 검증
-        Assertions.assertThat(boardReply).isEqualTo(boardReplyRepository.findOne(saveId));
+        Assertions.assertThat(boardReplyRepository.findOne(saveId).getStatus()).isEqualTo(BoardReplyStatus.WRITE);
     }
 
     @Test
@@ -53,16 +56,20 @@ public class BoardReplyServiceTest {
         //comment: test를 위한 세팅
         //게시글을 작성할 회원 생성
         Member member = Member.newInstance("lee", "lee@naver.com", "1111", "0000");
+        em.persist(member);
         //게시글 생성
         Board board = Board.createBoard(member, "title1", "body1");
+        em.persist(board);
         //회원이 다닐 병원 생성
         Hospital hospital = Hospital.createHospital("avocado", "04212345678", "대전시 유성구", "연중무휴");
+        em.persist(hospital);
         //댓글을 생성할 의료진 생성
         Staff staff = Staff.newInstance(hospital, "lim", "lsn@naver.com", "1111", "license", "안과");
+        em.persist(staff);
+
 
         //게시글 댓글 생성
-        BoardReply boardReply = BoardReply.createBoardReply(board, staff, "안과가세요.");
-        Long saveId = boardReplyService.save(boardReply);
+        Long saveId = boardReplyService.save(board.getId(), staff.getId(), "안과가세요.");
 
         //when -- 동작
         boardReplyService.deleteBoardReply(saveId);
@@ -90,16 +97,19 @@ public class BoardReplyServiceTest {
         //comment: test를 위한 세팅
         //게시글을 작성할 회원 생성
         Member member = Member.newInstance("lee", "lee@naver.com", "1111", "0000");
+        em.persist(member);
         //게시글 생성
         Board board = Board.createBoard(member, "title1", "body1");
+        em.persist(board);
         //회원이 다닐 병원 생성
         Hospital hospital = Hospital.createHospital("avocado", "04212345678", "대전시 유성구", "연중무휴");
+        em.persist(hospital);
         //댓글을 생성할 의료진 생성
         Staff staff = Staff.newInstance(hospital, "lim", "lsn@naver.com", "1111", "license", "안과");
+        em.persist(staff);
 
         //게시글 댓글 생성
-        BoardReply boardReply = BoardReply.createBoardReply(board, staff, "안과가세요.");
-        Long saveId = boardReplyService.save(boardReply);
+        Long saveId = boardReplyService.save(board.getId(), staff.getId(), "안과가세요.");
 
         //when -- 동작
         boardReplyService.deleteBoardReply(saveId);

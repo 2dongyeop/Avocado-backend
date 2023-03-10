@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Board;
+import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +16,31 @@ import java.util.List;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final MemberService memberService;
 
     /**
      * 게시글 작성
      */
     @Transactional
-    public Long save(Board board) {
+    public Long save(Long memberId, String title, String body) {
+
+        //엔티티 조회
+        Member member = memberService.findOne(memberId);
+
+        Board board = Board.createBoard(member, title, body);
+
+        boardRepository.save(board);
+        return board.getId();
+    }
+
+    @Transactional
+    public Long save(Long memberId, String title, String body, String boardPhotoPath) {
+
+        //엔티티 조회
+        Member member = memberService.findOne(memberId);
+
+        Board board = Board.createBoard(member, title, body, boardPhotoPath);
+
         boardRepository.save(board);
         return board.getId();
     }

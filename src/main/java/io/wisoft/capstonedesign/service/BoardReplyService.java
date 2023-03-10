@@ -1,23 +1,37 @@
 package io.wisoft.capstonedesign.service;
 
+import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.BoardReply;
+import io.wisoft.capstonedesign.domain.Staff;
 import io.wisoft.capstonedesign.exception.nullcheck.NullBoardReplyException;
 import io.wisoft.capstonedesign.repository.BoardReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BoardReplyService {
 
     private final BoardReplyRepository boardReplyRepository;
+    private final BoardService boardService;
+    private final StaffService staffService;
 
     /**
      * 게시글댓글 저장
      */
-    public Long save(BoardReply boardReply) {
+    @Transactional
+    public Long save(Long boardId, Long staffId, String reply) {
+
+        //엔티티 조회
+        Board board = boardService.findOne(boardId);
+        Staff staff = staffService.findOne(staffId);
+
+        BoardReply boardReply = BoardReply.createBoardReply(board, staff, reply);
+
         boardReplyRepository.save(boardReply);
         return boardReply.getId();
     }
@@ -26,6 +40,7 @@ public class BoardReplyService {
     /**
      * 게시글댓글 삭제
      */
+    @Transactional
     public void deleteBoardReply(Long boardReplyId) {
         BoardReply boardReply = boardReplyRepository.findOne(boardReplyId);
         boardReply.delete();

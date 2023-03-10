@@ -5,10 +5,12 @@ import io.wisoft.capstonedesign.exception.nullcheck.NullHospitalException;
 import io.wisoft.capstonedesign.repository.HospitalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class HospitalService {
 
@@ -17,7 +19,11 @@ public class HospitalService {
     /**
      * 병원 저장
      */
-    public Long save(Hospital hospital) {
+    @Transactional
+    public Long save(String name, String number, String address, String operatingTime) {
+
+        Hospital hospital = Hospital.createHospital(name, number, address, operatingTime);
+
         hospitalRepository.save(hospital);
         return hospital.getId();
     }
