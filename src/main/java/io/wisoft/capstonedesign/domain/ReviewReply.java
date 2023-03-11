@@ -1,7 +1,11 @@
 package io.wisoft.capstonedesign.domain;
 
+import io.wisoft.capstonedesign.domain.enumeration.ReviewReplyStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 /**
  * 리뷰댓글
@@ -9,6 +13,7 @@ import lombok.Getter;
  */
 @Entity
 @Getter
+@NoArgsConstructor
 public class ReviewReply {
 
     @Id @GeneratedValue()
@@ -17,6 +22,15 @@ public class ReviewReply {
 
     @Column(name = "reply", nullable = false)
     private String reply;
+
+    @Column(name = "reviewreply_create_at")
+    private LocalDateTime createAt;
+
+    @Column(name = "reviewreply_update_at")
+    private LocalDateTime updateAt;
+
+    @Column(name = "reviewreply_status")
+    private ReviewReplyStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
@@ -53,5 +67,31 @@ public class ReviewReply {
         if (!review.getReviewReplyList().contains(this)) {
             review.getReviewReplyList().add(this);
         }
+    }
+
+    /* 정적 생성 메서드 */
+    public static ReviewReply createReviewReply(Member member, Review review, String reply) {
+
+        ReviewReply reviewReply = new ReviewReply();
+
+        reviewReply.setMember(member);
+        reviewReply.setReview(review);
+        reviewReply.reply = reply;
+        reviewReply.createAt = LocalDateTime.now();
+        reviewReply.status = ReviewReplyStatus.WRITE.WRITE;
+
+        return reviewReply;
+    }
+
+    /**
+     * 리뷰댓글 삭제
+     */
+    public void delete() {
+
+        if (this.status == ReviewReplyStatus.DELETE.DELETE) {
+            throw new IllegalStateException("이미 삭제된 댓글입니다.");
+        }
+
+        this.status = ReviewReplyStatus.DELETE.DELETE;
     }
 }
