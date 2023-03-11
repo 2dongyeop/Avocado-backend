@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Hospital;
 import io.wisoft.capstonedesign.domain.Staff;
+import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullStaffException;
 import io.wisoft.capstonedesign.repository.StaffRepository;
@@ -30,12 +31,11 @@ public class StaffServiceTest {
         Hospital hospital = Hospital.createHospital("아보카도병원", "04200000000", "대전 유성구", "365일 연중무휴");
         em.persist(hospital);
 
-        Staff staff1 = Staff.newInstance(hospital, "lee", "ldy_1204@naver.com", "1111", "hhhh", "안과");
-        Staff staff2 = Staff.newInstance(hospital, "dong", "ldy_1204@naver.com", "1111", "hhhh", "안과");
+        HospitalDept hospitalDept = HospitalDept.OBSTETRICS;
 
         //when -- 동작
-        staffService.signUp(hospital.getId(), "lee", "ldy_1204@naver.com", "1111", "hhhh", "안과");
-        staffService.signUp(hospital.getId(), "dong", "ldy_1204@naver.com", "1111", "hhhh", "안과");
+        staffService.signUp(hospital.getId(), "lee", "ldy_1204@naver.com", "1111", "hhhh", hospitalDept);
+        staffService.signUp(hospital.getId(), "dong", "ldy_1204@naver.com", "1111", "hhhh", hospitalDept);
 
         //then -- 검증
         fail("의료진의 이메일이 중복되어 예외가 발생해야 한다.");

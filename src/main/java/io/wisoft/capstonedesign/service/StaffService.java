@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Hospital;
 import io.wisoft.capstonedesign.domain.Staff;
+import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.repository.StaffRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class StaffService {
      * 회원가입
      */
     @Transactional
-    public Long signUp(Long hospitalId, String name, String email, String password, String license_path, String dept) {
+    public Long signUp(Long hospitalId, String name, String email, String password, String license_path, HospitalDept dept) {
 
         //엔티티 조회
         Hospital hospital = hospitalService.findOne(hospitalId);
@@ -36,7 +37,7 @@ public class StaffService {
     }
 
     @Transactional
-    public Long signUp(Long hospitalId, String name, String email, String password, String license_path, String dept, String staffPhotoPath) {
+    public Long signUp(Long hospitalId, String name, String email, String password, String license_path, HospitalDept dept, String staffPhotoPath) {
 
         //엔티티 조회
         Hospital hospital = hospitalService.findOne(hospitalId);
