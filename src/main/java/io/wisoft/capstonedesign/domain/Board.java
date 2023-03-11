@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.domain;
 
 import io.wisoft.capstonedesign.domain.enumeration.BoardStatus;
+import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -44,6 +45,10 @@ public class Board {
     @Enumerated(EnumType.STRING)
     private BoardStatus status;
 
+    @Column(name = "dept")
+    @Enumerated(EnumType.STRING)
+    private HospitalDept dept;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -74,24 +79,26 @@ public class Board {
     }
 
     /* 정적 생성 메서드 */
-    public static Board createBoard(Member member, String title, String body) {
-        Board board = getBoard(member, title, body);
+    public static Board createBoard(Member member, String title, String body, HospitalDept dept) {
+        Board board = getBoard(member, title, body, dept);
 
         return board;
     }
 
-    public static Board createBoard(Member member, String title, String body, String boardPhotoPath) {
-        Board board = getBoard(member, title, body);
+    public static Board createBoard(Member member, String title, String body, HospitalDept dept ,String boardPhotoPath) {
+        Board board = getBoard(member, title, body, dept);
         board.boardPhotoPath = boardPhotoPath;
 
         return board;
     }
 
-    private static Board getBoard(Member member, String title, String body) {
+    private static Board getBoard(Member member, String title, String body, HospitalDept dept) {
         Board board = new Board();
         board.setMember(member);
         board.title = title;
         board.body = body;
+        board.dept = dept;
+
         board.status = BoardStatus.WRITE;
         board.createAt = LocalDateTime.now();
         return board;

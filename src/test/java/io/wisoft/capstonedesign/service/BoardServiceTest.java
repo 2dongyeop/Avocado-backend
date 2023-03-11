@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.service;
 import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.enumeration.BoardStatus;
 import io.wisoft.capstonedesign.domain.Member;
+import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.repository.BoardRepository;
 import jakarta.persistence.EntityManager;
@@ -35,7 +36,8 @@ public class BoardServiceTest {
         em.persist(member);
 
         //when -- 동작
-        Long saveId = boardService.save(member.getId(), "test code!", "I write test code!");
+        HospitalDept dept = HospitalDept.OBSTETRICS;
+        Long saveId = boardService.save(member.getId(), "test code!", "I write test code!", dept);
 
         //then -- 검증
         Board getBoard = boardRepository.findOne(saveId);
@@ -53,7 +55,8 @@ public class BoardServiceTest {
         em.persist(member);
 
         //게시글 생성 및 저장
-        Long saveId = boardService.save(member.getId(), "test code!", "I write test code!");
+        HospitalDept dept = HospitalDept.OBSTETRICS;
+        Long saveId = boardService.save(member.getId(), "test code!", "I write test code!", dept);
 
         //when -- 동작
         boardService.deleteBoard(saveId);
@@ -73,7 +76,8 @@ public class BoardServiceTest {
         em.persist(member);
 
         //게시글 생성 및 저장
-        Long saveId = boardService.save(member.getId(), "test code!", "I write test code!");
+        HospitalDept dept = HospitalDept.OBSTETRICS;
+        Long saveId = boardService.save(member.getId(), "test code!", "I write test code!", dept);
 
         //when -- 동작
         boardService.deleteBoard(saveId);

@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.domain;
 
+import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,8 +31,9 @@ public class Staff {
     @Column(name = "staff_license_path", nullable = false)
     private String license_path;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "dept", nullable = false)
-    private String dept;
+    private HospitalDept dept;
 
     @Column(name = "staff_photo_path")
     private String staffPhotoPath;
@@ -66,20 +68,20 @@ public class Staff {
     }
 
     /* 정적 생성 메서드 */
-    public static Staff newInstance(final Hospital hospital, final String name, final String email, final String password, final String license_path, final String dept) {
+    public static Staff newInstance(final Hospital hospital, final String name, final String email, final String password, final String license_path, final HospitalDept dept) {
         Staff staff = getStaff(hospital, name, email, password, license_path, dept);
 
         return staff;
     }
 
-    public static Staff newInstance(final Hospital hospital, final String name, final String email, final String password, final String license_path, final String dept, final String staffPhotoPath) {
+    public static Staff newInstance(final Hospital hospital, final String name, final String email, final String password, final String license_path, final HospitalDept dept, final String staffPhotoPath) {
         Staff staff = getStaff(hospital, name, email, password, license_path, dept);
         staff.staffPhotoPath = staffPhotoPath;
 
         return staff;
     }
 
-    private static Staff getStaff(Hospital hospital, String name, String email, String password, String license_path, String dept) {
+    private static Staff getStaff(Hospital hospital, String name, String email, String password, String license_path, HospitalDept dept) {
         Staff staff = new Staff();
         staff.setHospital(hospital);
         staff.name = name;
