@@ -1,18 +1,20 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.domain.Hospital;
-import io.wisoft.capstonedesign.domain.Staff;
+import io.wisoft.capstonedesign.domain.*;
 import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullStaffException;
 import io.wisoft.capstonedesign.repository.StaffRepository;
 import jakarta.persistence.EntityManager;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -46,9 +48,58 @@ public class StaffServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Staff staff = staffRepository.findOne(2L);
+        Staff staff = staffService.findOne(2L);
 
         //then -- 검증
         fail("해당 staffId에 일치하는 의료진 정보가 없어 예외가 발생해야 한다.");
+    }
+
+    @Test
+    public void 자신이_속한_병원의_리뷰_목록_조회() throws Exception {
+        //given -- 조건
+
+        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+        em.persist(hospital);
+
+        Member member = Member.newInstance("lee", "ldy@naver.com", "1111", "0000");
+        em.persist(member);
+
+        Review review = Review.createReview(member, "good", "good hospital", 5, "아보카도");
+        em.persist(review);
+
+        Staff staff = Staff.newInstance(hospital, "lee", "1204@naver.com", "1111", "license", HospitalDept.OBSTETRICS);
+        em.persist(staff);
+
+        //when -- 동작
+        List<Review> reviewListByHospitalName = staffService.findReviewByStaffHospitalName(staff.getId());
+
+        //then -- 검증
+        Assertions.assertThat(reviewListByHospitalName.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void 자신이_댓글을_작성한_게시글_목록_조회() throws Exception {
+        //given -- 조건
+
+        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+        em.persist(hospital);
+
+        Member member = Member.newInstance("lee", "ldy@naver.com", "1111", "0000");
+        em.persist(member);
+
+        Staff staff = Staff.newInstance(hospital, "lee", "1204@naver.com", "1111", "license", HospitalDept.OBSTETRICS);
+        em.persist(staff);
+
+        Board board = Board.createBoard(member, "이가 아파요", "치과추천좀", HospitalDept.DENTAL);
+        em.persist(board);
+
+        BoardReply boardReply = BoardReply.createBoardReply(board, staff, "세계최고치과로 가세요.");
+        em.persist(boardReply);
+
+        //when -- 동작
+        List<Board> boardList = staffService.findBoardListByStaffId(staff.getId());
+
+        //then -- 검증
+        Assertions.assertThat(boardList.size()).isEqualTo(1);
     }
 }

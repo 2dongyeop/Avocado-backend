@@ -1,5 +1,8 @@
 package io.wisoft.capstonedesign.repository;
 
+import io.wisoft.capstonedesign.domain.Board;
+import io.wisoft.capstonedesign.domain.BoardReply;
+import io.wisoft.capstonedesign.domain.Review;
 import io.wisoft.capstonedesign.domain.Staff;
 import io.wisoft.capstonedesign.exception.nullcheck.NullStaffException;
 import jakarta.persistence.EntityManager;
@@ -8,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,7 +23,9 @@ public class StaffRepository {
     /**
      * 의료진 가입
      */
-    public void signUp(Staff staff) { em.persist(staff); }
+    public void signUp(Staff staff) {
+        em.persist(staff);
+    }
 
     /**
      * 로그인
@@ -30,15 +36,34 @@ public class StaffRepository {
     }
 
     /**
+     * 자신이 속한 병원의 리뷰 목록 조회하기
+     */
+    public List<Review> findReviewListByStaffHospitalName(String targetHospital) {
+
+        return em.createQuery("select r from Review r where r.target_hospital = :targetHospital", Review.class)
+                .setParameter("targetHospital", targetHospital)
+                .getResultList();
+    }
+
+    /**
+     * 자신이 댓글 단 게시글 목록 조회
+     */
+    public List<Board> findBoardListByStaffId(Staff staff) {
+
+        List<BoardReply> boardReplyList = em.createQuery("select br from BoardReply br where br.staff = :staff", BoardReply.class)
+                .setParameter("staff", staff)
+                .getResultList();
+
+        return boardReplyList.stream()
+                .map(BoardReply::getBoard)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * 의료진 조회
      */
     public Staff findOne(Long id) {
-        Staff getStaff = em.find(Staff.class, id);
-
-        if (getStaff == null) {
-            throw new NullStaffException("해당 의료진 정보가 존재하지 않습니다.");
-        }
-        return getStaff;
+        return em.find(Staff.class, id);
     }
 
     public List<Staff> findAll() {
