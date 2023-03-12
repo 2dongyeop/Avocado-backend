@@ -20,9 +20,7 @@ public class HospitalService {
      * 병원 저장
      */
     @Transactional
-    public Long save(String name, String number, String address, String operatingTime) {
-
-        Hospital hospital = Hospital.createHospital(name, number, address, operatingTime);
+    public Long save(Hospital hospital) {
 
         hospitalRepository.save(hospital);
         return hospital.getId();
