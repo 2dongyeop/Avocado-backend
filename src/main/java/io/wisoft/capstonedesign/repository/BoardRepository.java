@@ -41,10 +41,9 @@ public class BoardRepository {
      * 특정 작성자의 게시글 조회
      */
     public List<Board> findByMemberId(Long memberId) {
-        Member targetMember = em.find(Member.class, memberId);
 
-        return em.createQuery("select b from Board b where b.member = :targetMember", Board.class)
-                .setParameter("targetMember", targetMember)
+        return em.createQuery("select b from Board b join b.member m where m.id = :id", Board.class)
+                .setParameter("id", memberId)
                 .getResultList();
     }
 }

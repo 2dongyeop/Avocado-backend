@@ -32,10 +32,9 @@ public class PickRepository {
      * 특정 작성자의 찜한 목록 조회
      */
     public List<Pick> findByMemberId(Long memberId) {
-        Member targetMember = em.find(Member.class, memberId);
 
-        return em.createQuery("select p from Pick p where p.member = :targetMember", Pick.class)
-                .setParameter("targetMember", targetMember)
+        return em.createQuery("select p from Pick p join p.member m where m.id = :id", Pick.class)
+                .setParameter("id", memberId)
                 .getResultList();
     }
 
@@ -49,12 +48,6 @@ public class PickRepository {
         Collections.sort(pickList, new PickComparator());
         return pickList;
     }
-//        Member targetMember = em.find(Member.class, memberId);
-//
-//        return em.createQuery("select p from Pick p where p.member = :targetMember order by p.pickedAt desc", Pick.class)
-//                .setParameter("targetMember", targetMember)
-//                .getResultList();
-//    }
 
     /**
      * 특정 작성자의 찜한 목록 오름차순 조회 - 기본 세팅!
@@ -62,8 +55,8 @@ public class PickRepository {
     public List<Pick> findByMemberIdASC(Long memberId) {
         Member targetMember = em.find(Member.class, memberId);
 
-        return em.createQuery("select p from Pick p where p.member = :targetMember order by p.pickedAt asc", Pick.class)
-                .setParameter("targetMember", targetMember)
+        return em.createQuery("select p from Pick p join p.member m where m.id = :id order by p.pickedAt asc", Pick.class)
+                .setParameter("id", memberId)
                 .getResultList();
     }
 }
