@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div class="jumbotron">
+        <h1>Avocado</h1>
+        <p class="lead">회원 기능</p>
+        <p>
+            <a class="btn btn-lg btn-secondary" href="/members/new">회원 가입</a>
+            <a class="btn btn-lg btn-secondary" href="/members">회원 목록</a></p>
+        <p class="lead">Q&A 게시판</p>
+        <p>
+            <a class="btn btn-lg btn-dark" href="/items/new">게시글 작성</a>
+            <a class="btn btn-lg btn-dark" href="/items">게시글 목록</a></p>
+        <p class="lead">리뷰 게시판</p>
+        <p>
+            <a class="btn btn-lg btn-info" href="/order">리뷰 작성</a>
+            <a class="btn btn-lg btn-info" href="/orders">리뷰 목록</a></p>
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>
