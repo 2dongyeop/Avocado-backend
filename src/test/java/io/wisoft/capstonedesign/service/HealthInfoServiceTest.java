@@ -26,42 +26,46 @@ public class HealthInfoServiceTest {
     @Test
     public void 건강정보_저장() throws Exception {
         //given -- 조건
+        HealthInfo healthInfo = HealthInfo.createHealthInfo("칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
 
         //when -- 동작
-        Long saveId = healthInfoService.save("칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
+        Long saveId = healthInfoService.save(healthInfo);
 
         //then -- 검증
-        HealthInfo healthInfo = healthInfoService.findOne(saveId);
+        HealthInfo getHealthInfo = healthInfoService.findOne(saveId);
 
-        Assertions.assertThat(healthInfo.getStatus()).isEqualTo(HealthInfoStatus.WRITE);
-        Assertions.assertThat(healthInfo.getTitle()).isEqualTo("안경 제대로 쓰기");
-        Assertions.assertThat(healthInfo.getDept()).isEqualTo(HospitalDept.OPHTHALMOLOGY);
+        Assertions.assertThat(getHealthInfo).isEqualTo(healthInfo);
+        Assertions.assertThat(getHealthInfo.getStatus()).isEqualTo(HealthInfoStatus.WRITE);
+        Assertions.assertThat(getHealthInfo.getTitle()).isEqualTo("안경 제대로 쓰기");
+        Assertions.assertThat(getHealthInfo.getDept()).isEqualTo(HospitalDept.OPHTHALMOLOGY);
     }
 
     @Test
     public void 건강정보_삭제() throws Exception {
         //given -- 조건
+        HealthInfo healthInfo = HealthInfo.createHealthInfo("칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
 
-        Long saveId = healthInfoService.save("칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
+        Long saveId = healthInfoService.save(healthInfo);
 
         //when -- 동작
-        HealthInfo healthInfo = healthInfoService.findOne(saveId);
-        healthInfo.delete();
+        HealthInfo getHealthInfo = healthInfoService.findOne(saveId);
+        getHealthInfo.delete();
 
         //then -- 검증
-        Assertions.assertThat(healthInfo.getStatus()).isEqualTo(HealthInfoStatus.DELETE);
+        Assertions.assertThat(getHealthInfo.getStatus()).isEqualTo(HealthInfoStatus.DELETE);
     }
 
     @Test(expected = IllegalStateException.class)
     public void 건강정보_삭제요청_중복() throws Exception {
         //given -- 조건
+        HealthInfo healthInfo = HealthInfo.createHealthInfo("칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
 
-        Long saveId = healthInfoService.save("칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
+        Long saveId = healthInfoService.save(healthInfo);
 
         //when -- 동작
-        HealthInfo healthInfo = healthInfoService.findOne(saveId);
-        healthInfo.delete();
-        healthInfo.delete();
+        HealthInfo getHealthInfo = healthInfoService.findOne(saveId);
+        getHealthInfo.delete();
+        getHealthInfo.delete();
 
         //then -- 검증
         fail("중복 삭제 요청으로 인해 예외가 발생해야 한다.");

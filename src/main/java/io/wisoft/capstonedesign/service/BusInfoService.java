@@ -21,9 +21,7 @@ public class BusInfoService {
      * 버스정보 등록
      */
     @Transactional
-    public Long save(String busInfoPath, BusArea area) {
-
-        BusInfo busInfo = BusInfo.createBusInfo(busInfoPath, area);
+    public Long save(BusInfo busInfo) {
 
         busInfoRepository.save(busInfo);
         return busInfo.getId();

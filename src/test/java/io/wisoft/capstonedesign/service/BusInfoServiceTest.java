@@ -24,27 +24,32 @@ public class BusInfoServiceTest {
     @Test
     public void 버스정보_등록() throws Exception {
         //given -- 조건
+        BusInfo busInfo = BusInfo.createBusInfo("버스정보경로", BusArea.DAEJEON);
 
         //when -- 동작
-        Long saveId = busInfoService.save("버스정보경로", BusArea.DAEJEON);
+        Long saveId = busInfoService.save(busInfo);
 
         //then -- 검증
-        BusInfo busInfo = busInfoService.findOne(saveId);
-        Assertions.assertThat(busInfo.getStatus()).isEqualTo(BusInfoStatus.WRITE);
+        BusInfo getBusInfo = busInfoService.findOne(saveId);
+
+        Assertions.assertThat(getBusInfo).isEqualTo(busInfo);
+        Assertions.assertThat(getBusInfo.getStatus()).isEqualTo(BusInfoStatus.WRITE);
     }
 
     @Test
     public void 버스정보_삭제() throws Exception {
         //given -- 조건
-        Long saveId = busInfoService.save("버스정보경로", BusArea.DAEJEON);
+        BusInfo busInfo = BusInfo.createBusInfo("버스정보경로", BusArea.DAEJEON);
+        Long saveId = busInfoService.save(busInfo);
 
-        BusInfo busInfo = busInfoService.findOne(saveId);
+        BusInfo getBusInfo = busInfoService.findOne(saveId);
 
         //when -- 동작
-        busInfo.delete();
+        getBusInfo.delete();
 
         //then -- 검증
-        Assertions.assertThat(busInfo.getStatus()).isEqualTo(BusInfoStatus.DELETE);
+        Assertions.assertThat(getBusInfo).isEqualTo(busInfo);
+        Assertions.assertThat(getBusInfo.getStatus()).isEqualTo(BusInfoStatus.DELETE);
     }
 
     @Test(expected = NullBusInfoException.class)
@@ -61,13 +66,14 @@ public class BusInfoServiceTest {
     @Test(expected = IllegalStateException.class)
     public void 버스정보_삭제요청_중복() throws Exception {
         //given -- 조건
-        Long saveId = busInfoService.save("버스정보경로", BusArea.DAEJEON);
+        BusInfo busInfo = BusInfo.createBusInfo("버스정보경로", BusArea.DAEJEON);
+        Long saveId = busInfoService.save(busInfo);
 
-        BusInfo busInfo = busInfoService.findOne(saveId);
+        BusInfo getBusInfo = busInfoService.findOne(saveId);
 
         //when -- 동작
-        busInfo.delete();
-        busInfo.delete();
+        getBusInfo.delete();
+        getBusInfo.delete();
 
         //then -- 검증
         fail("중복 삭제 요청으로 인해 예외가 발생해야 한다.");

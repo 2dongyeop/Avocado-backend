@@ -21,9 +21,7 @@ public class HealthInfoService {
      * 건강정보 저장
      */
     @Transactional
-    public Long save(String healthInfoPath, String title, HospitalDept dept) {
-
-        HealthInfo healthInfo = HealthInfo.createHealthInfo(healthInfoPath, title, dept);
+    public Long save(HealthInfo healthInfo) {
 
         healthInfoRepository.save(healthInfo);
         return healthInfo.getId();
