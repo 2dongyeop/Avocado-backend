@@ -48,10 +48,10 @@ public class StaffRepository {
     /**
      * 자신이 댓글 단 게시글 목록 조회
      */
-    public List<Board> findBoardListByStaffId(Staff staff) {
+    public List<Board> findBoardListByStaffId(Long staffId) {
 
-        List<BoardReply> boardReplyList = em.createQuery("select br from BoardReply br where br.staff = :staff", BoardReply.class)
-                .setParameter("staff", staff)
+        List<BoardReply> boardReplyList = em.createQuery("select br from BoardReply br join br.staff s where s.id = :id", BoardReply.class)
+                .setParameter("id", staffId)
                 .getResultList();
 
         return boardReplyList.stream()

@@ -30,10 +30,9 @@ public class AppointmentRepository {
      * 특정 회원의 예약 정보 조회
      */
     public List<Appointment> findByMemberId(Long memberId) {
-        Member targetMember = em.find(Member.class, memberId);
 
-        return em.createQuery("select a from Appointment a where a.member = :targetMember", Appointment.class)
-                .setParameter("targetMember", targetMember)
+        return em.createQuery("select a from Appointment a join a.member m where m.id = :id", Appointment.class)
+                .setParameter("id", memberId)
                 .getResultList();
     }
 
@@ -41,10 +40,9 @@ public class AppointmentRepository {
      * 특정 회원의 예약 정보 시간을 오름차순으로 정렬하여 조회
      */
     public List<Appointment> findByMemberIdASC(Long memberId) {
-        Member targetMember = em.find(Member.class, memberId);
 
-        return em.createQuery("select a from Appointment a where a.member = :targetMember order by a.appointedAt ASC", Appointment.class)
-                .setParameter("targetMember", targetMember)
+        return em.createQuery("select a from Appointment a join a.member m where m.id = :id order by a.appointedAt ASC", Appointment.class)
+                .setParameter("id", memberId)
                 .getResultList();
     }
 
@@ -52,10 +50,9 @@ public class AppointmentRepository {
      * 특정 회원의 예약 정보 시간을 내림차순으로 정렬하여 조회
      */
     public List<Appointment> findByMemberIdDESC(Long memberId) {
-        Member targetMember = em.find(Member.class, memberId);
 
-        return em.createQuery("select a from Appointment a where a.member = :targetMember order by a.appointedAt DESC", Appointment.class)
-                .setParameter("targetMember", targetMember)
+        return em.createQuery("select a from Appointment a join a.member m where m.id = :id order by a.appointedAt DESC", Appointment.class)
+                .setParameter("id", memberId)
                 .getResultList();
     }
 }

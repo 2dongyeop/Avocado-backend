@@ -33,10 +33,8 @@ public class ReviewReplyRepository {
      */
     public List<ReviewReply> findByReviewId(Long reviewId) {
 
-        Review targetReview = em.find(Review.class, reviewId);
-
-        return em.createQuery("select rr from ReviewReply rr where rr.review = :targetReview", ReviewReply.class)
-                .setParameter("targetReview", targetReview)
+        return em.createQuery("select rr from ReviewReply rr join rr.review r where r.id = :id", ReviewReply.class)
+                .setParameter("id", reviewId)
                 .getResultList();
     }
 }

@@ -74,10 +74,7 @@ public class StaffService {
      * 자신이 댓글 단 게시글 목록 조회
      */
     public List<Board> findBoardListByStaffId(Long staffId) {
-
-        Staff staff = findOne(staffId);
-
-        return staffRepository.findBoardListByStaffId(staff);
+        return staffRepository.findBoardListByStaffId(staffId);
     }
 
 

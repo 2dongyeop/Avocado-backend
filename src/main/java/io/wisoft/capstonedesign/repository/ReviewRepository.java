@@ -38,10 +38,9 @@ public class ReviewRepository {
      * 특정 작성자의 리뷰 조회
      */
     public List<Review> findByMemberId(Long memberId) {
-        Member targetMember = em.find(Member.class, memberId);
 
-        return em.createQuery("select r from Review r where r.member =:targetMember", Review.class)
-                .setParameter("targetMember", targetMember)
+        return em.createQuery("select r from Review r join r.member m where m.id =:id", Review.class)
+                .setParameter("id", memberId)
                 .getResultList();
     }
 }

@@ -30,10 +30,9 @@ public class BoardReplyRepository {
      * 특정게시글의 댓글 목록 조회
      */
     public List<BoardReply> findByBoardId(Long boardId) {
-        Board targetBoard = em.find(Board.class, boardId);
 
-        return em.createQuery("select br from BoardReply br where br.board = :targetBoard", BoardReply.class)
-                .setParameter("targetBoard", targetBoard)
+        return em.createQuery("select br from BoardReply br join br.board b where b.id = :id", BoardReply.class)
+                .setParameter("id", boardId)
                 .getResultList();
     }
 }
