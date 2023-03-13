@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.service;
 import io.wisoft.capstonedesign.domain.*;
 import io.wisoft.capstonedesign.domain.enumeration.BoardReplyStatus;
 import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullBoardReplyException;
 import io.wisoft.capstonedesign.repository.BoardReplyRepository;
 import jakarta.persistence.EntityManager;
@@ -100,7 +101,7 @@ public class BoardReplyServiceTest {
 
     //게시글 중복 삭제 요청
     @Test(expected = IllegalStateException.class)
-    public void 게시글_삭제_중복_요청() throws Exception {
+    public void 게시글_댓글_삭제_중복_요청() throws Exception {
         //given -- 조건
 
         //게시글을 작성할 회원 생성
@@ -130,5 +131,59 @@ public class BoardReplyServiceTest {
 
         //then -- 검증
         fail("삭제 요청 중복으로 인해 오류가 발생해야 한다.");
+    }
+
+    @Test
+    public void 게시글_댓글_수정() throws Exception {
+        //given -- 조건
+
+        Member member = Member.newInstance("lee", "ldy@naver", "1111", "0000");
+        em.persist(member);
+
+        Board board = Board.createBoard(member, "title1", "body1", HospitalDept.OBSTETRICS);
+        em.persist(board);
+
+        Hospital hospital = Hospital.createHospital("avocado", "042", "대전", "always");
+        em.persist(hospital);
+
+        Staff staff = Staff.newInstance(hospital, "dong", "ldd@naver", "2222", "license_photo", HospitalDept.SURGICAL);
+        em.persist(staff);
+
+        BoardReply boardReply = BoardReply.createBoardReply(board, staff, "걱정말아요");
+        em.persist(boardReply);
+
+        //when -- 동작
+        boardReplyService.update(boardReply.getId(), "걱정말긴 뭘 말아요!");
+
+        //then -- 검증
+        BoardReply getBoardReply = boardReplyService.findOne(boardReply.getId());
+        Assertions.assertThat(getBoardReply.getReply()).isEqualTo("걱정말긴 뭘 말아요!");
+        Assertions.assertThat(getBoardReply.getUpdateAt()).isNotNull();
+    }
+
+    @Test(expected = IllegalValueException.class)
+    public void 게시글댓글_수정_실패() throws Exception {
+        //given -- 조건
+
+        Member member = Member.newInstance("lee", "ldy@naver", "1111", "0000");
+        em.persist(member);
+
+        Board board = Board.createBoard(member, "title1", "body1", HospitalDept.OBSTETRICS);
+        em.persist(board);
+
+        Hospital hospital = Hospital.createHospital("avocado", "042", "대전", "always");
+        em.persist(hospital);
+
+        Staff staff = Staff.newInstance(hospital, "dong", "ldd@naver", "2222", "license_photo", HospitalDept.SURGICAL);
+        em.persist(staff);
+
+        BoardReply boardReply = BoardReply.createBoardReply(board, staff, "걱정말아요");
+        em.persist(boardReply);
+
+        //when -- 동작
+        boardReplyService.update(boardReply.getId(), null);
+
+        //then -- 검증
+        fail("댓글이 비어있어 예외가 발생해야 한다.");
     }
 }
