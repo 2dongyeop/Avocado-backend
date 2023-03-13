@@ -110,4 +110,15 @@ public class Member {
         member.phoneNumber = phoneNumber;
         return member;
     }
+
+    /**
+     * 수정 로직
+     */
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    public void updatePhotoPath(String newPhotoPath) {
+        this.memberPhotoPath = newPhotoPath;
+    }
 }
