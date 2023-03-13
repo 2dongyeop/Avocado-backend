@@ -115,4 +115,14 @@ public class Board {
 
         this.status = BoardStatus.DELETE;
     }
+
+    /**
+     * 게시글 제목 및 본문 수정
+     */
+    public void updateTitleBody(String newTitle, String newBody) {
+
+        this.title = newTitle;
+        this.body = newBody;
+        this.updateAt = LocalDateTime.now();
+    }
 }

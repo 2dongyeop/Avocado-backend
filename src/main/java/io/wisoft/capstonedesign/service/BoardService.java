@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.service;
 import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,23 @@ public class BoardService {
     public void deleteBoard(Long boardId) {
         Board board = boardRepository.findOne(boardId);
         board.delete();
+    }
+
+    /**
+     * 게시글 제목 및 본문 수정
+     */
+    public void updateTitleBody(Long boardId, String newTitle, String newBody) {
+
+        Board board = findOne(boardId);
+        validateTitleBody(newTitle, newBody);
+
+        board.updateTitleBody(newTitle, newBody);
+    }
+
+    private void validateTitleBody(String newTitle, String newBody) {
+        if (newTitle == null || newBody == null) {
+            throw new IllegalValueException("게시글의 제목이나 본문이 비어있습니다.");
+        }
     }
 
     /* 조회 로직 */
