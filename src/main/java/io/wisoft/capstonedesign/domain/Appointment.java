@@ -1,11 +1,13 @@
 package io.wisoft.capstonedesign.domain;
 
 import io.wisoft.capstonedesign.domain.enumeration.AppointmentStatus;
+import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -19,11 +21,16 @@ public class Appointment {
     private Long id;
 
     @CreatedDate
-    @Column(name = "appt_date_time", nullable = false)
-    private LocalDateTime appointedAt;
+    @Column(name = "appt_create_at", nullable = false)
+    private LocalDateTime createAt;
+
+    @LastModifiedDate
+    @Column(name = "appt_update_at")
+    private LocalDateTime updateAt;
 
     @Column(name = "appt_dept", nullable = false)
-    private String dept;
+    @Enumerated(EnumType.STRING)
+    private HospitalDept dept;
 
     //pg 사용시 @Lob 지우고, @Column(nullable = false, columnDefinition="TEXT")로 바꾸기
     @Lob
@@ -78,7 +85,7 @@ public class Appointment {
     }
 
     /* 정적 생성 메서드 */
-    public static Appointment createAppointment(Member member, Hospital hospital, String dept, String comment, String appointName, String appointPhonenumber) {
+    public static Appointment createAppointment(Member member, Hospital hospital, HospitalDept dept, String comment, String appointName, String appointPhonenumber) {
         Appointment appointment = new Appointment();
         appointment.setMember(member);
         appointment.setHospital(hospital);
@@ -87,12 +94,11 @@ public class Appointment {
         appointment.appointName = appointName;
         appointment.appointPhonenumber = appointPhonenumber;
 
-        appointment.appointedAt = LocalDateTime.now();
+        appointment.updateAt = LocalDateTime.now();
         appointment.status = AppointmentStatus.COMPLETE;
 
         return appointment;
     }
-
 
     /**
      * 예약 취소
@@ -104,5 +110,17 @@ public class Appointment {
         }
 
         this.status = AppointmentStatus.CANCEL;
+    }
+
+    /**
+     * 예약 수정
+     */
+    public void update(HospitalDept dept, String comment, String appointName, String appointPhonenumber) {
+        this.dept = dept;
+        this.comment = comment;
+        this.appointName = appointName;
+        this.appointPhonenumber = appointPhonenumber;
+
+        this.updateAt = LocalDateTime.now();
     }
 }
