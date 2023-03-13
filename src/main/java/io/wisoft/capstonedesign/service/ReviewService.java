@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.Review;
+import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullReviewException;
 import io.wisoft.capstonedesign.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +53,26 @@ public class ReviewService {
         Review review = reviewRepository.findOne(reviewId);
         review.delete();
     }
+
+    /**
+     * 리뷰 제목 및 본문 수정
+     */
+    @Transactional
+    public void updateTitleBody(Long reviewId, String newTitle, String newBody) {
+
+        Review review = findOne(reviewId);
+        validateTitleBody(newTitle, newBody);
+
+        review.updateTitleBody(newTitle, newBody);
+    }
+
+    private void validateTitleBody(String newTitle, String newBody) {
+
+        if (newTitle == null || newBody == null) {
+            throw new IllegalValueException("제목이나 본문이 비어있습니다.");
+        }
+    }
+
 
     /* 조회 로직 */
     public List<Review> findByMemberId(Long memberId) {

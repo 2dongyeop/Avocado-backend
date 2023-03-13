@@ -59,6 +59,7 @@ public class BoardService {
     /**
      * 게시글 제목 및 본문 수정
      */
+    @Transactional
     public void updateTitleBody(Long boardId, String newTitle, String newBody) {
 
         Board board = findOne(boardId);
