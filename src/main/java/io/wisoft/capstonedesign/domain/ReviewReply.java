@@ -94,4 +94,14 @@ public class ReviewReply {
 
         this.status = ReviewReplyStatus.DELETE.DELETE;
     }
+
+
+    /**
+     * 리뷰댓글 수정
+     */
+    public void updateReply(String reply) {
+
+        this.reply = reply;
+        this.updateAt = LocalDateTime.now();
+    }
 }

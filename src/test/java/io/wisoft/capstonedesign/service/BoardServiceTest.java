@@ -4,6 +4,7 @@ import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.enumeration.BoardStatus;
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.repository.BoardRepository;
 import jakarta.persistence.EntityManager;
@@ -96,5 +97,41 @@ public class BoardServiceTest {
 
         //then -- 검증
         fail("해당 boardId에 일치하는 게시글 정보가 없어 예외가 발생해야 한다.");
+    }
+
+    @Test
+    public void 게시글_수정() throws Exception {
+
+        //given -- 조건
+        Member member = Member.newInstance("test","ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
+
+        Board board = Board.createBoard(member, "제목1", "본문1", HospitalDept.OBSTETRICS);
+        em.persist(board);
+
+        //when -- 동작
+        boardService.updateTitleBody(board.getId(), "제목2", "본문2");
+
+        //then -- 검증
+        Assertions.assertThat(board.getTitle()).isEqualTo("제목2");
+        Assertions.assertThat(board.getBody()).isEqualTo("본문2");
+        Assertions.assertThat(board.getUpdateAt()).isNotNull();
+    }
+
+    @Test(expected = IllegalValueException.class)
+    public void 게시글_수정_실패() throws Exception {
+
+        //given -- 조건
+        Member member = Member.newInstance("test","ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
+
+        Board board = Board.createBoard(member, "제목1", "본문1", HospitalDept.OBSTETRICS);
+        em.persist(board);
+
+        //when -- 동작
+        boardService.updateTitleBody(board.getId(), null, "본문2");
+
+        //then - 검증
+        fail("제목이 비어있어 예외가 발생해야 한다.");
     }
 }

@@ -89,4 +89,13 @@ public class BoardReply {
 
         this.status = BoardReplyStatus.DELETE;
     }
+
+    /**
+     * 게시글댓글 수정
+     */
+    public void update(String reply) {
+
+        this.reply = reply;
+        this.updateAt = LocalDateTime.now();
+    }
 }

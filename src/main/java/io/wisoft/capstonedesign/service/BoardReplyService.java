@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.service;
 import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.BoardReply;
 import io.wisoft.capstonedesign.domain.Staff;
+import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullBoardReplyException;
 import io.wisoft.capstonedesign.repository.BoardReplyRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,24 @@ public class BoardReplyService {
         boardReply.delete();
     }
 
+    /**
+     * 게시글 댓글 수정
+     */
+    @Transactional
+    public void update(Long boardReplyId, String reply) {
+
+        BoardReply boardReply = findOne(boardReplyId);
+
+        validateParameter(reply);
+        boardReply.update(reply);
+    }
+
+    private void validateParameter(String reply) {
+
+        if (reply == null) {
+            throw new IllegalValueException("댓글이 비어있습니다.");
+        }
+    }
 
     /**
      * 게시글댓글 단건 조회

@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.Member;
+import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateMemberException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullMemberException;
 import io.wisoft.capstonedesign.repository.MemberRepository;
@@ -36,6 +37,36 @@ public class MemberService {
             throw new DuplicateMemberException("중복 회원 발생 : 이미 존재하는 회원입니다.");
         }
     }
+
+    /**
+     * 회원 비밀번호 수정
+     */
+    @Transactional
+    public void updatePassword(Long memberId, String oldPassword ,String newPassword) {
+
+        Member member = findOne(memberId);
+        validateMemberPassword(member, oldPassword);
+
+        member.updatePassword(newPassword);
+    }
+
+    private void validateMemberPassword(Member member, String oldPassword) {
+
+        if (!member.getPassword().equals(oldPassword)) {
+            throw new IllegalValueException("비밀번호가 일치하지 않아 변경할 수 없습니다.");
+        }
+    }
+
+    /**
+     * 회원 프로필사진 수정
+     */
+    @Transactional
+    public void updatePhotoPath(Long memberId, String newPhotoPath) {
+
+        Member member = findOne(memberId);
+        member.updatePhotoPath(newPhotoPath);
+    }
+
 
     /**
      * 회원 조회

@@ -112,4 +112,39 @@ public class ReviewServiceTest {
         //then -- 검증
         fail("해당 reviewId에 일치하는 리뷰 정보가 없어 예외가 발생해야 한다.");
     }
+
+    @Test
+    public void 리뷰_수정() throws Exception {
+
+        //given -- 조건
+        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
+
+        Review review = Review.createReview(member, "제목1", "본문1", 4, "avocado");
+        em.persist(review);
+
+        //when -- 동작
+        reviewService.updateTitleBody(review.getId(), "제목2", "본문1");
+
+        //then -- 검증
+        Assertions.assertThat(review.getTitle()).isEqualTo("제목2");
+        Assertions.assertThat(review.getUpdateAt()).isNotNull();
+    }
+
+    @Test(expected = IllegalValueException.class)
+    public void 리뷰_수정_실패() throws Exception {
+
+        //given -- 조건
+        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
+
+        Review review = Review.createReview(member, "제목1", "본문1", 4, "avocado");
+        em.persist(review);
+
+        //when -- 동작
+        reviewService.updateTitleBody(review.getId(), null, "본문1");
+
+        //then -- 검증
+        fail("제목이 없어 예외가 발생해야 한다.");
+    }
 }

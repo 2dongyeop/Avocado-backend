@@ -134,4 +134,14 @@ public class Review {
 
         this.status = ReviewStatus.DELETE;
     }
+
+    /**
+     * 리뷰 제목 및 본문 수정
+     */
+    public void updateTitleBody(String newTitle, String newBody) {
+
+        this.title = newTitle;
+        this.body = newBody;
+        this.updateAt = LocalDateTime.now();
+    }
 }

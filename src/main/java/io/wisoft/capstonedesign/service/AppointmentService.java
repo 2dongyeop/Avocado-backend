@@ -3,6 +3,8 @@ package io.wisoft.capstonedesign.service;
 import io.wisoft.capstonedesign.domain.Appointment;
 import io.wisoft.capstonedesign.domain.Hospital;
 import io.wisoft.capstonedesign.domain.Member;
+import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullAppointmentException;
 import io.wisoft.capstonedesign.repository.AppointmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,7 @@ public class AppointmentService {
      * 예약 정보 작성
      */
     @Transactional
-    public Long save(Long memberId, Long hospitalId, String dept, String comment, String appointName, String appointPhonenumber) {
+    public Long save(Long memberId, Long hospitalId, HospitalDept dept, String comment, String appointName, String appointPhonenumber) {
 
         //엔티티 조회
         Member member = memberService.findOne(memberId);
@@ -45,6 +47,26 @@ public class AppointmentService {
         Appointment appointment = appointmentRepository.findOne(appointmentId);
         appointment.cancel();
     }
+
+    /**
+     * 예약 정보 수정
+     */
+    @Transactional
+    public void update(Long appointmentId, HospitalDept dept, String comment, String appointName, String appointPhonenumber) {
+
+        Appointment appointment = findOne(appointmentId);
+        validateParameter(dept, comment, appointName, appointPhonenumber);
+
+        appointment.update(dept, comment, appointName, appointPhonenumber);
+    }
+
+    private void validateParameter(HospitalDept dept, String comment, String appointName, String appointPhonenumber) {
+
+        if (dept == null || comment == null || appointName == null || appointPhonenumber == null) {
+            throw new IllegalValueException("파라미터가 비어있어 업데이트할 수 없습니다.");
+        }
+    }
+
 
     /* 조회 로직 */
     public List<Appointment> findByMemberId(Long memberId) { return appointmentRepository.findByMemberId(memberId); }

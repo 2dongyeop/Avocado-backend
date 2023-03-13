@@ -4,7 +4,6 @@ import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.BoardReply;
 import io.wisoft.capstonedesign.domain.Review;
 import io.wisoft.capstonedesign.domain.Staff;
-import io.wisoft.capstonedesign.exception.nullcheck.NullStaffException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
