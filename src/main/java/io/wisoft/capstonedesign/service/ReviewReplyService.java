@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.service;
 import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.Review;
 import io.wisoft.capstonedesign.domain.ReviewReply;
+import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullReviewReplyException;
 import io.wisoft.capstonedesign.repository.ReviewReplyRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,25 @@ public class ReviewReplyService {
 
         ReviewReply reviewReply = reviewReplyRepository.findOne(reviewReplyId);
         reviewReply.delete();
+    }
+
+    /**
+     * 리뷰댓글 수정
+     */
+    @Transactional
+    public void updateReply(Long reviewReplyId, String reply) {
+
+        ReviewReply reviewReply = findOne(reviewReplyId);
+
+        validateParameter(reply);
+        reviewReply.updateReply(reply);
+    }
+
+    private void validateParameter(String reply) {
+
+        if (reply == null) {
+            throw new IllegalValueException("reply가 비어있어 수정할 수 없습니다.");
+        }
     }
 
 

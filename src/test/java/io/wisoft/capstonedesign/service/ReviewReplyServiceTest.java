@@ -99,4 +99,47 @@ public class ReviewReplyServiceTest {
         //then -- 검증
         fail("일치하는 리뷰댓글이 존재하지 않아 예외가 발생해야 한다.");
     }
+    
+    @Test
+    public void 리뷰_댓글_수정() throws Exception {
+        //given -- 조건
+
+        Member member = Member.newInstance("lee", "ldy", "1111", "0000");
+        em.persist(member);
+
+        Review review = Review.createReview(member, "title1", "body1", 5, "avocado");
+        em.persist(review);
+
+        ReviewReply reviewReply = ReviewReply.createReviewReply(member, review, "멋져요");
+        em.persist(reviewReply);
+
+        //when -- 동작
+        ReviewReply getReviewReply = reviewReplyService.findOne(reviewReply.getId());
+        reviewReplyService.updateReply(getReviewReply.getId(), "짱 멋져요");
+
+        //then -- 검증
+        Assertions.assertThat(getReviewReply.getReply()).isEqualTo("짱 멋져요");
+        Assertions.assertThat(getReviewReply.getUpdateAt()).isNotNull();
+    }
+
+    @Test
+    public void 리뷰_댓글_수정_실패() throws Exception {
+        //given -- 조건
+
+        Member member = Member.newInstance("lee", "ldy", "1111", "0000");
+        em.persist(member);
+
+        Review review = Review.createReview(member, "title1", "body1", 5, "avocado");
+        em.persist(review);
+
+        ReviewReply reviewReply = ReviewReply.createReviewReply(member, review, "멋져요");
+        em.persist(reviewReply);
+
+        //when -- 동작
+        ReviewReply getReviewReply = reviewReplyService.findOne(reviewReply.getId());
+        reviewReplyService.updateReply(getReviewReply.getId(), null);
+
+        //then -- 검증
+        fail("reply가 비어있어 예외가 발생해야 한다.");
+    }
 }
