@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.*;
 import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullStaffException;
 import io.wisoft.capstonedesign.repository.StaffRepository;
@@ -101,5 +102,57 @@ public class StaffServiceTest {
 
         //then -- 검증
         Assertions.assertThat(boardList.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void 의료진_비밀번호_수정() throws Exception {
+
+        //given -- 조건
+        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+        em.persist(hospital);
+
+        Staff staff = Staff.newInstance(hospital, "lee", "1204@naver.com", "1111", "license", HospitalDept.OBSTETRICS);
+        em.persist(staff);
+
+        //when -- 동작
+        staffService.updatePassword(staff.getId(), "1111", "2222");
+
+        //then -- 검증
+        Assertions.assertThat(staff.getPassword()).isEqualTo("2222");
+    }
+
+    @Test(expected = IllegalValueException.class)
+    public void 의료진_비밀번호_수정_실패() throws Exception {
+
+        //given -- 조건
+        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+        em.persist(hospital);
+
+        Staff staff = Staff.newInstance(hospital, "lee", "1204@naver.com", "1111", "license", HospitalDept.OBSTETRICS);
+        em.persist(staff);
+
+        //when -- 동작
+        staffService.updatePassword(staff.getId(), "1133", "2222");
+
+        //then -- 검증
+        fail("기존 의료진 비밀번호가 일치하지 않아 예외가 발생해야 한다.");
+    }
+    
+    @Test
+    public void 의료진_프로필사진_수정() throws Exception {
+
+        //given -- 조건
+        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+        em.persist(hospital);
+
+        Staff staff = Staff.newInstance(hospital, "lee", "1204@naver.com", "1111", "license", HospitalDept.OBSTETRICS);
+        em.persist(staff);
+
+        //when -- 동작
+        String newPhotoPath = "새로운사진경로";
+        staffService.updatePhotoPath(staff.getId(), newPhotoPath);
+
+        //then -- 검증
+        Assertions.assertThat(staff.getStaffPhotoPath()).isEqualTo(newPhotoPath);
     }
 }

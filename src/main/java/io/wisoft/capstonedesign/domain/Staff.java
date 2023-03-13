@@ -91,4 +91,19 @@ public class Staff {
         staff.dept = dept;
         return staff;
     }
+
+    /**
+     * 의료진 비밀번호 수정
+     * */
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+
+    /**
+     * 의료진 프로필사진 수정
+     */
+    public void updatePhotoPath(String newPhotoPath) {
+        this.staffPhotoPath = newPhotoPath;
+    }
 }

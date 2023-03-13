@@ -6,6 +6,7 @@ import io.wisoft.capstonedesign.domain.Hospital;
 import io.wisoft.capstonedesign.domain.Review;
 import io.wisoft.capstonedesign.domain.Staff;
 import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullStaffException;
 import io.wisoft.capstonedesign.repository.StaffRepository;
@@ -58,6 +59,35 @@ public class StaffService {
             throw new DuplicateStaffException("중복 의료진 발생 : 이미 존재하는 의료진입니다.");
         }
     }
+
+
+    /**
+     * 의료진 비밀번호 수정
+     */
+    public void updatePassword(Long staffId, String oldPassword, String newPassword) {
+
+        Staff staff = findOne(staffId);
+        validateStaffPassword(staff, oldPassword);
+
+        staff.updatePassword(newPassword);
+    }
+
+    private void validateStaffPassword(Staff staff, String oldPassword) {
+
+        if (!staff.getPassword().equals(oldPassword)) {
+            throw new IllegalValueException("의료진 비밀번호가 일치하지 않아 변경할 수 없습니다.");
+        }
+    }
+
+    /**
+     * 의료진 프로필사진 수정
+     */
+    public void updatePhotoPath(Long staffId, String newPhotoPath) {
+
+        Staff staff = findOne(staffId);
+        staff.updatePhotoPath(newPhotoPath);
+    }
+
 
     /**
      * 자신이 속한 병원의 리뷰 목록 조회
