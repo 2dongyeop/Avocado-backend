@@ -94,7 +94,7 @@ public class Appointment {
         appointment.appointName = appointName;
         appointment.appointPhonenumber = appointPhonenumber;
 
-        appointment.updateAt = LocalDateTime.now();
+        appointment.createAt = LocalDateTime.now();
         appointment.status = AppointmentStatus.COMPLETE;
 
         return appointment;
