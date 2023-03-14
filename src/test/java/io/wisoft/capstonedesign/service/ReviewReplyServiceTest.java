@@ -4,6 +4,7 @@ import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.Review;
 import io.wisoft.capstonedesign.domain.ReviewReply;
 import io.wisoft.capstonedesign.domain.enumeration.ReviewReplyStatus;
+import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullReviewReplyException;
 import io.wisoft.capstonedesign.repository.ReviewReplyRepository;
 import jakarta.persistence.EntityManager;
@@ -12,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,11 +61,11 @@ public class ReviewReplyServiceTest {
         Long saveId = reviewReplyService.save(member.getId(), review.getId(), "저도 가봐야겠네요");
 
         //when -- 동작
-        ReviewReply reviewReply = reviewReplyService.findOne(saveId);
-        reviewReply.delete();
+        reviewReplyService.deleteReviewReply(saveId);
 
         //then -- 검증
-        Assertions.assertThat(reviewReply.getStatus()).isEqualTo(ReviewReplyStatus.DELETE);
+        ReviewReply getReviewReply = reviewReplyService.findOne(saveId);
+        Assertions.assertThat(getReviewReply.getStatus()).isEqualTo(ReviewReplyStatus.DELETE);
     }
 
     @Test(expected = IllegalStateException.class)
@@ -82,8 +84,8 @@ public class ReviewReplyServiceTest {
         ReviewReply reviewReply = reviewReplyService.findOne(saveId);
 
         //when -- 동작
-        reviewReply.delete();
-        reviewReply.delete();
+        reviewReplyService.deleteReviewReply(saveId);
+        reviewReplyService.deleteReviewReply(saveId);
 
         //then -- 검증
         fail("삭제요청 중복으로 인해 예외가 발생해야 한다.");
@@ -122,7 +124,7 @@ public class ReviewReplyServiceTest {
         Assertions.assertThat(getReviewReply.getUpdateAt()).isNotNull();
     }
 
-    @Test
+    @Test(expected = IllegalValueException.class)
     public void 리뷰_댓글_수정_실패() throws Exception {
         //given -- 조건
 

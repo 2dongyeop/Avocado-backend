@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Getter
 @RequiredArgsConstructor
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum HospitalDept {
-    치과("DENTAL"),
     DENTAL("치과"),
     OPHTHALMOLOGY("안과"),
     DERMATOLOGY("피부과"),
@@ -30,4 +33,9 @@ public enum HospitalDept {
     public String getCode() {
         return name();
     }
+
+    public static List<HospitalDept> toList() {
+
+        return Arrays.stream(HospitalDept.values()).toList();
     }
+}

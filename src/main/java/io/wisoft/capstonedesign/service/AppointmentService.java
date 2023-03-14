@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.service;
 
+import io.wisoft.capstonedesign.controller.AppointmentSearch;
 import io.wisoft.capstonedesign.domain.Appointment;
 import io.wisoft.capstonedesign.domain.Hospital;
 import io.wisoft.capstonedesign.domain.Member;
@@ -84,4 +85,8 @@ public class AppointmentService {
     public List<Appointment> findByMemberIdASC(Long memberId) { return appointmentRepository.findByMemberIdASC(memberId); }
 
     public List<Appointment> findByMemberIdDESC(Long memberId) { return appointmentRepository.findByMemberIdDESC(memberId); }
+
+    public List<Appointment> findAllByCriteria(AppointmentSearch appointmentSearch) {
+        return appointmentRepository.findAllByCriteria(appointmentSearch);
+    }
 }
