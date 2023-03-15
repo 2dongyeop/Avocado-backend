@@ -37,4 +37,26 @@ public class ReviewReplyRepository {
                 .setParameter("id", reviewId)
                 .getResultList();
     }
+
+    /**
+     * 특정 리뷰의 댓글 목록 오름차순 조회
+     */
+    public List<ReviewReply> findAllcreateAtASC() {
+
+        String jpql = "select rr from ReviewReply rr  order by rr.createAt asc";
+
+        return em.createQuery(jpql, ReviewReply.class)
+                .getResultList();
+    }
+
+    /**
+     * 특정 리뷰의 댓글 목록 내림차순 조회
+     */
+    public List<ReviewReply> findAllcreateAtDESC() {
+
+        String jpql = "select rr from ReviewReply rr  order by rr.createAt desc";
+
+        return em.createQuery(jpql, ReviewReply.class)
+                .getResultList();
+    }
 }

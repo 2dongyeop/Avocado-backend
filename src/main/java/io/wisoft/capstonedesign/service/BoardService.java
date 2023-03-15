@@ -75,7 +75,9 @@ public class BoardService {
     }
 
     /* 조회 로직 */
-    public List<Board> findByMemberId(Long memberId) { return boardRepository.findByMemberId(memberId); }
+    public List<Board> findByMemberId(Long memberId) {
+        return boardRepository.findByMemberId(memberId);
+    }
 
     public Board findOne(Long boardId) {
         Board getBoard = boardRepository.findOne(boardId);
@@ -86,5 +88,15 @@ public class BoardService {
         return getBoard;
     }
 
-    public List<Board> findAll() { return boardRepository.findAll(); }
+    public List<Board> findAll() {
+        return boardRepository.findAll();
+    }
+
+    public List<Board> findAllcreateAtASC() {
+        return boardRepository.findAllcreateAtASC();
+    }
+
+    public List<Board> findAllcreateAtDESC() {
+        return boardRepository.findAllcreateAtDESC();
+    }
 }

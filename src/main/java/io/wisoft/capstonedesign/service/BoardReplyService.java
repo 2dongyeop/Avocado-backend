@@ -81,4 +81,18 @@ public class BoardReplyService {
      * 특정 게시글의 게시글댓글 목록 조회
      */
     public List<BoardReply> findByBoardId(Long boardId) { return boardReplyRepository.findByBoardId(boardId); }
+
+    /**
+     * 특정게시글의 댓글 목록 오름차순 조회
+     */
+    public List<BoardReply> findByBoardIdcreateAtASC() {
+        return boardReplyRepository.findByBoardIdcreateAtASC();
+    }
+
+    /**
+     * 특정게시글의 댓글 목록 내림차순 조회
+     */
+    public List<BoardReply> findByBoardIdcreateAtDESC() {
+        return boardReplyRepository.findByBoardIdcreateAtDESC();
+    }
 }

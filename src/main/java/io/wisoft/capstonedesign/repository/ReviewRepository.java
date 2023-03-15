@@ -35,12 +35,39 @@ public class ReviewRepository {
     }
 
     /**
+     * 리뷰 목록 오름차순 조회
+     */
+    public List<Review> findAllbyCreateAtASC() {
+        return em.createQuery("select r from Review r order by r.createAt asc", Review.class)
+                .getResultList();
+    }
+
+    /**
+     * 리뷰 목록 내림차순 조회
+     */
+    public List<Review> findAllbyCreateAtDESC() {
+        return em.createQuery("select r from Review r order by r.createAt desc", Review.class)
+                .getResultList();
+    }
+
+
+    /**
      * 특정 작성자의 리뷰 조회
      */
     public List<Review> findByMemberId(Long memberId) {
 
         return em.createQuery("select r from Review r join r.member m where m.id =:id", Review.class)
                 .setParameter("id", memberId)
+                .getResultList();
+    }
+
+    /**
+     * 특정 병원의 리뷰 조회
+     */
+    public List<Review> findByTargetHospital(String targetHospital) {
+
+        return em.createQuery("select r from Review r where r.target_hospital = :targetHospital", Review.class)
+                .setParameter("targetHospital", targetHospital)
                 .getResultList();
     }
 }

@@ -48,7 +48,7 @@ public class AppointmentRepository {
      */
     public List<Appointment> findByMemberIdASC(Long memberId) {
 
-        return em.createQuery("select a from Appointment a join a.member m where m.id = :id order by a.appointedAt ASC", Appointment.class)
+        return em.createQuery("select a from Appointment a join a.member m where m.id = :id order by a.createAt ASC", Appointment.class)
                 .setParameter("id", memberId)
                 .getResultList();
     }
@@ -58,7 +58,7 @@ public class AppointmentRepository {
      */
     public List<Appointment> findByMemberIdDESC(Long memberId) {
 
-        return em.createQuery("select a from Appointment a join a.member m where m.id = :id order by a.appointedAt DESC", Appointment.class)
+        return em.createQuery("select a from Appointment a join a.member m where m.id = :id order by a.createAt DESC", Appointment.class)
                 .setParameter("id", memberId)
                 .getResultList();
     }

@@ -33,7 +33,7 @@ public class BusInfoRepository {
      */
     public List<BusInfo> findAll() {
 
-        return em.createQuery("select bi from BusInfo bi", BusInfo.class)
+        return em.createQuery("select bi from BusInfo bi order by bi.createAt", BusInfo.class)
                 .getResultList();
     }
 }

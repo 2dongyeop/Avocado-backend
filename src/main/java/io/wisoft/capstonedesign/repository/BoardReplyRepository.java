@@ -35,4 +35,22 @@ public class BoardReplyRepository {
                 .setParameter("id", boardId)
                 .getResultList();
     }
+
+    /**
+     * 특정게시글의 댓글 목록 오름차순 조회
+     */
+    public List<BoardReply> findByBoardIdcreateAtASC() {
+
+        return em.createQuery("select br from BoardReply br order by br.createAt", BoardReply.class)
+                .getResultList();
+    }
+
+    /**
+     * 특정게시글의 댓글 목록 내림차순 조회
+     */
+    public List<BoardReply> findByBoardIdcreateAtDESC() {
+
+        return em.createQuery("select br from BoardReply br order by br.createAt desc ", BoardReply.class)
+                .getResultList();
+    }
 }
