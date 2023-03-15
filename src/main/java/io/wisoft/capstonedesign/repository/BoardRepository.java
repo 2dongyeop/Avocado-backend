@@ -46,4 +46,20 @@ public class BoardRepository {
                 .setParameter("id", memberId)
                 .getResultList();
     }
+
+    /**
+     * 게시글 목록 오름차순 조회
+     */
+    public List<Board> findAllcreateAtASC() {
+        return em.createQuery("select b from Board b order by b.createAt", Board.class)
+                .getResultList();
+    }
+
+    /**
+     * 게시글 목록 내림차순 조회
+     */
+    public List<Board> findAllcreateAtDESC() {
+        return em.createQuery("select b from Board b order by b.createAt desc", Board.class)
+                .getResultList();
+    }
 }

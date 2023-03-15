@@ -32,7 +32,7 @@ public class HealthInfoRepository {
      */
     public List<HealthInfo> findAll() {
 
-        return em.createQuery("select hi from HealthInfo hi", HealthInfo.class)
+        return em.createQuery("select hi from HealthInfo hi order by hi.createAt", HealthInfo.class)
                 .getResultList();
     }
 }

@@ -86,4 +86,18 @@ public class ReviewReplyService {
     public List<ReviewReply> findByReviewId(Long reviewId) {
         return reviewReplyRepository.findByReviewId(reviewId);
     }
+
+    /**
+     * 특정 리뷰의 댓글 목록 오름차순 조회
+     */
+    public List<ReviewReply> findAllcreateAtASC() {
+        return reviewReplyRepository.findAllcreateAtASC();
+    }
+
+    /**
+     * 특정 리뷰의 댓글 목록 내림차순 조회
+     */
+    public List<ReviewReply> findAllcreateAtDESC() {
+        return reviewReplyRepository.findAllcreateAtDESC();
+    }
 }
