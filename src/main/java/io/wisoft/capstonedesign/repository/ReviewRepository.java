@@ -43,4 +43,14 @@ public class ReviewRepository {
                 .setParameter("id", memberId)
                 .getResultList();
     }
+
+    /**
+     * 특정 병원의 리뷰 조회
+     */
+    public List<Review> findByTargetHospital(String targetHospital) {
+
+        return em.createQuery("select r from Review r where r.target_hospital = :targetHospital", Review.class)
+                .setParameter("targetHospital", targetHospital)
+                .getResultList();
+    }
 }

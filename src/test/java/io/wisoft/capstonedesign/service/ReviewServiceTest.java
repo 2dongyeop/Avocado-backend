@@ -147,4 +147,23 @@ public class ReviewServiceTest {
         //then -- 검증
         fail("제목이 없어 예외가 발생해야 한다.");
     }
+
+    @Test(expected = IllegalValueException.class)
+    public void 특정_병원의_리뷰_조회_실패() throws Exception {
+
+        //given -- 조건
+
+        //리뷰를 작성할 회원 생성
+        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        em.persist(member);
+
+        //리뷰생성
+        Long saveId = reviewService.save(member.getId(), "친절해요", "자세히 진료해줘요", "사진_링크", 5, "아보카도 병원");
+
+        //when -- 동작
+        reviewService.findByTargetHospital("아보카두두병원");
+
+        //then -- 검증
+        fail("해당 이름을 가진 병원 리뷰가 존재하지 않아 예외가 발생해야 한다.");
+    }
 }

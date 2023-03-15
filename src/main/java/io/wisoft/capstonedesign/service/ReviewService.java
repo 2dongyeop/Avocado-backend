@@ -91,4 +91,14 @@ public class ReviewService {
     public List<Review> findAll() {
         return reviewRepository.findAll();
     }
+
+    public List<Review> findByTargetHospital(String targetHospital) {
+
+        List<Review> reviewListByTargetHospital = reviewRepository.findByTargetHospital(targetHospital);
+
+        if (reviewListByTargetHospital.size() == 0) {
+            throw new IllegalValueException("해당 병원에 대한 리뷰는 존재하지 않습니다.");
+        }
+        return reviewListByTargetHospital;
+    }
 }
