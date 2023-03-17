@@ -32,13 +32,7 @@ public class MemberController {
             return "members/createMemberForm";
         }
 
-        Member member;
-        if (form.getMemberPhotoPath() == null) {
-            member = Member.newInstance(form.getNickname(), form.getEmail(), form.getPassword(), form.getPhoneNumber());
-        } else {
-            member = Member.newInstance(form.getNickname(), form.getEmail(), form.getPassword(), form.getPhoneNumber(), form.getMemberPhotoPath());
-        }
-
+        Member member = Member.newInstance(form.getNickname(), form.getEmail(), form.getPassword(), form.getPhoneNumber());
         memberService.signUp(member);
         return "redirect:/";
     }

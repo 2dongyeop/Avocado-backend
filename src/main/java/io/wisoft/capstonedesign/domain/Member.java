@@ -90,24 +90,13 @@ public class Member {
 
     /* 생성 메서드 */
     public static Member newInstance(String nickname, String email, String password, String phoneNumber) {
-        Member member = getMember(nickname, email, password, phoneNumber);
 
-        return member;
-    }
-
-    public static Member newInstance(String nickname, String email, String password, String phoneNumber, String memberImagePath) {
-        Member member = getMember(nickname, email, password, phoneNumber);
-        member.memberPhotoPath = memberImagePath;
-
-        return member;
-    }
-
-    private static Member getMember(String nickname, String email, String password, String phoneNumber) {
         Member member = new Member();
         member.nickname = nickname;
         member.email = email;
         member.password = password;
         member.phoneNumber = phoneNumber;
+
         return member;
     }
 
@@ -118,7 +107,8 @@ public class Member {
         this.password = newPassword;
     }
 
-    public void updatePhotoPath(String newPhotoPath) {
+    public void uploadPhotoPath(String newPhotoPath) {
         this.memberPhotoPath = newPhotoPath;
     }
+
 }

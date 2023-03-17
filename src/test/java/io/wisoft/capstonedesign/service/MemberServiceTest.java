@@ -113,7 +113,7 @@ public class MemberServiceTest {
         Long signUpId = memberService.signUp(member);
 
         //when -- 동작
-        memberService.updatePhotoPath(signUpId, "새로운 사진 경로");
+        memberService.uploadPhotoPath(signUpId, "새로운 사진 경로");
 
         //then -- 검증
         Member getMember = memberService.findOne(signUpId);

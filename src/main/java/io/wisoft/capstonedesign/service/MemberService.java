@@ -18,7 +18,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    /**
+    /*
      * 회원가입
      */
     @Transactional
@@ -38,7 +38,7 @@ public class MemberService {
         }
     }
 
-    /**
+    /*
      * 회원 비밀번호 수정
      */
     @Transactional
@@ -57,18 +57,19 @@ public class MemberService {
         }
     }
 
-    /**
-     * 회원 프로필사진 수정
+
+    /*
+     * 회원 프로필사진 업로드 혹은 수정
      */
     @Transactional
-    public void updatePhotoPath(Long memberId, String newPhotoPath) {
+    public void uploadPhotoPath(Long memberId, String newPhotoPath) {
 
         Member member = findOne(memberId);
-        member.updatePhotoPath(newPhotoPath);
+        member.uploadPhotoPath(newPhotoPath);
     }
 
 
-    /**
+    /*
      * 회원 조회
      */
     public Member findOne(Long memberId) {
