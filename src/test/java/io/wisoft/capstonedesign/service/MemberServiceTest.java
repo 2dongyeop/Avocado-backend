@@ -71,7 +71,7 @@ public class MemberServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Member member = memberService.findOne(2L);
+        Member member = memberService.findOne(100L);
 
         //then -- 검증
         fail("해당 memberId에 일치하는 회원 정보가 없어 예외가 발생해야 한다.");

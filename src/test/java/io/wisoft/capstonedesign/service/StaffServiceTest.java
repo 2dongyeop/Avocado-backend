@@ -49,7 +49,7 @@ public class StaffServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Staff staff = staffService.findOne(2L);
+        Staff staff = staffService.findOne(100L);
 
         //then -- 검증
         fail("해당 staffId에 일치하는 의료진 정보가 없어 예외가 발생해야 한다.");
@@ -150,7 +150,7 @@ public class StaffServiceTest {
 
         //when -- 동작
         String newPhotoPath = "새로운사진경로";
-        staffService.updatePhotoPath(staff.getId(), newPhotoPath);
+        staffService.uploadPhotoPath(staff.getId(), newPhotoPath);
 
         //then -- 검증
         Assertions.assertThat(staff.getStaffPhotoPath()).isEqualTo(newPhotoPath);

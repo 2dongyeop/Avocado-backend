@@ -107,7 +107,7 @@ public class ReviewServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Review review = reviewService.findOne(2L);
+        Review review = reviewService.findOne(100L);
 
         //then -- 검증
         fail("해당 reviewId에 일치하는 리뷰 정보가 없어 예외가 발생해야 한다.");

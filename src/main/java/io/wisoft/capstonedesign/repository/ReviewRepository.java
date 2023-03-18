@@ -17,12 +17,12 @@ public class ReviewRepository {
     /**
      * 리뷰 작성
      */
-    public void save(Review review) { em.persist(review); }
+    public void save(final Review review) { em.persist(review); }
 
     /**
      * 리뷰 단건 조회
      */
-    public Review findOne(Long reviewId) {
+    public Review findOne(final Long reviewId) {
         return em.find(Review.class, reviewId);
     }
 
@@ -54,7 +54,7 @@ public class ReviewRepository {
     /**
      * 특정 작성자의 리뷰 조회
      */
-    public List<Review> findByMemberId(Long memberId) {
+    public List<Review> findByMemberId(final Long memberId) {
 
         return em.createQuery("select r from Review r join r.member m where m.id =:id", Review.class)
                 .setParameter("id", memberId)
@@ -64,10 +64,16 @@ public class ReviewRepository {
     /**
      * 특정 병원의 리뷰 조회
      */
-    public List<Review> findByTargetHospital(String targetHospital) {
+    public List<Review> findByTargetHospital(final String targetHospital) {
 
-        return em.createQuery("select r from Review r where r.target_hospital = :targetHospital", Review.class)
+        return em.createQuery("select r from Review r where r.targetHospital = :targetHospital", Review.class)
                 .setParameter("targetHospital", targetHospital)
+                .getResultList();
+    }
+
+    public List<Review> findAllByMember() {
+
+        return em.createQuery("select r from Review r join fetch r.member m", Review.class)
                 .getResultList();
     }
 }

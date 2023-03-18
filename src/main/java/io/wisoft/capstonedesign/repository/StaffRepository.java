@@ -22,7 +22,7 @@ public class StaffRepository {
     /**
      * 의료진 가입
      */
-    public void signUp(Staff staff) {
+    public void signUp(final Staff staff) {
         em.persist(staff);
     }
 
@@ -37,9 +37,9 @@ public class StaffRepository {
     /**
      * 자신이 속한 병원의 리뷰 목록 조회하기
      */
-    public List<Review> findReviewListByStaffHospitalName(String targetHospital) {
+    public List<Review> findReviewListByStaffHospitalName(final String targetHospital) {
 
-        return em.createQuery("select r from Review r where r.target_hospital = :targetHospital", Review.class)
+        return em.createQuery("select r from Review r where r.targetHospital = :targetHospital", Review.class)
                 .setParameter("targetHospital", targetHospital)
                 .getResultList();
     }
@@ -47,7 +47,7 @@ public class StaffRepository {
     /**
      * 자신이 댓글 단 게시글 목록 조회
      */
-    public List<Board> findBoardListByStaffId(Long staffId) {
+    public List<Board> findBoardListByStaffId(final Long staffId) {
 
         List<BoardReply> boardReplyList = em.createQuery("select br from BoardReply br join br.staff s where s.id = :id", BoardReply.class)
                 .setParameter("id", staffId)
@@ -61,7 +61,7 @@ public class StaffRepository {
     /**
      * 의료진 조회
      */
-    public Staff findOne(Long id) {
+    public Staff findOne(final Long id) {
         return em.find(Staff.class, id);
     }
 
@@ -70,9 +70,15 @@ public class StaffRepository {
                 .getResultList();
     }
 
-    public List<Staff> findByEmail(String email) {
+    public List<Staff> findByEmail(final String email) {
         return em.createQuery("select s from Staff s where s.email = :email", Staff.class)
                 .setParameter("email", email)
+                .getResultList();
+    }
+
+    public List<Staff> findAllByHospital() {
+
+        return em.createQuery("select s from Staff s join fetch s.hospital h", Staff.class)
                 .getResultList();
     }
 }
