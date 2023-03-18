@@ -18,14 +18,14 @@ public class BoardRepository {
     /**
      * 게시글 작성(저장)
      */
-    public void save(Board board) {
+    public void save(final Board board) {
         em.persist(board);
     }
 
     /**
      * 게시글 단건 조회
      */
-    public Board findOne(Long boardId) {
+    public Board findOne(final Long boardId) {
         return em.find(Board.class, boardId);
     }
 
@@ -40,7 +40,7 @@ public class BoardRepository {
     /**
      * 특정 작성자의 게시글 조회
      */
-    public List<Board> findByMemberId(Long memberId) {
+    public List<Board> findByMemberId(final Long memberId) {
 
         return em.createQuery("select b from Board b join b.member m where m.id = :id", Board.class)
                 .setParameter("id", memberId)
@@ -60,6 +60,11 @@ public class BoardRepository {
      */
     public List<Board> findAllcreateAtDESC() {
         return em.createQuery("select b from Board b order by b.createAt desc", Board.class)
+                .getResultList();
+    }
+
+    public List<Board> findAllByMember() {
+        return em.createQuery("select b from Board b join fetch b.member m", Board.class)
                 .getResultList();
     }
 }

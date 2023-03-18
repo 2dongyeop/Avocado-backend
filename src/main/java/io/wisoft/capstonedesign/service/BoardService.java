@@ -24,7 +24,11 @@ public class BoardService {
      * 게시글 작성
      */
     @Transactional
-    public Long save(Long memberId, String title, String body, HospitalDept dept) {
+    public Long save(
+            final Long memberId,
+            final String title,
+            final String body,
+            final HospitalDept dept) {
 
         //엔티티 조회
         Member member = memberService.findOne(memberId);
@@ -36,7 +40,12 @@ public class BoardService {
     }
 
     @Transactional
-    public Long save(Long memberId, String title, String body, HospitalDept dept, String boardPhotoPath) {
+    public Long save(
+            final Long memberId,
+            final String title,
+            final String body,
+            final HospitalDept dept,
+            final String boardPhotoPath) {
 
         //엔티티 조회
         Member member = memberService.findOne(memberId);
@@ -51,7 +60,7 @@ public class BoardService {
      * 게시글 삭제
      */
     @Transactional
-    public void deleteBoard(Long boardId) {
+    public void deleteBoard(final Long boardId) {
         Board board = boardRepository.findOne(boardId);
         board.delete();
     }
@@ -60,7 +69,7 @@ public class BoardService {
      * 게시글 제목 및 본문 수정
      */
     @Transactional
-    public void updateTitleBody(Long boardId, String newTitle, String newBody) {
+    public void updateTitleBody(final Long boardId, final String newTitle, final String newBody) {
 
         Board board = findOne(boardId);
         validateTitleBody(newTitle, newBody);
@@ -68,18 +77,18 @@ public class BoardService {
         board.updateTitleBody(newTitle, newBody);
     }
 
-    private void validateTitleBody(String newTitle, String newBody) {
+    private void validateTitleBody(final String newTitle, final String newBody) {
         if (newTitle == null || newBody == null) {
             throw new IllegalValueException("게시글의 제목이나 본문이 비어있습니다.");
         }
     }
 
     /* 조회 로직 */
-    public List<Board> findByMemberId(Long memberId) {
+    public List<Board> findByMemberId(final Long memberId) {
         return boardRepository.findByMemberId(memberId);
     }
 
-    public Board findOne(Long boardId) {
+    public Board findOne(final Long boardId) {
         Board getBoard = boardRepository.findOne(boardId);
 
         if (getBoard == null) {
@@ -98,5 +107,9 @@ public class BoardService {
 
     public List<Board> findAllcreateAtDESC() {
         return boardRepository.findAllcreateAtDESC();
+    }
+
+    public List<Board> findAllByMemeber() {
+        return boardRepository.findAllByMember();
     }
 }
