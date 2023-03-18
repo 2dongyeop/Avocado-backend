@@ -46,7 +46,7 @@ public class Staff {
     private final List<BoardReply> boardReplyList = new ArrayList<>();
 
     /* 연관관계 메서드 */
-    public void setHospital(Hospital hospital) {
+    public void setHospital(final Hospital hospital) {
         //comment: 기존 관계 제거
         if (this.hospital != null) {
             this.hospital.getStaffList().remove(this);
@@ -60,7 +60,7 @@ public class Staff {
         }
     }
 
-    public void addBoardReply(BoardReply boardReply) {
+    public void addBoardReply(final BoardReply boardReply) {
         this.boardReplyList.add(boardReply);
         if (boardReply.getStaff() != this) { //무한루프에 빠지지 않도록 체크
             boardReply.setStaff(this);
@@ -68,20 +68,14 @@ public class Staff {
     }
 
     /* 정적 생성 메서드 */
-    public static Staff newInstance(final Hospital hospital, final String name, final String email, final String password, final String license_path, final HospitalDept dept) {
-        Staff staff = getStaff(hospital, name, email, password, license_path, dept);
+    public static Staff newInstance(
+            final Hospital hospital,
+            final String name,
+            final String email,
+            final String password,
+            final String license_path,
+            final HospitalDept dept) {
 
-        return staff;
-    }
-
-    public static Staff newInstance(final Hospital hospital, final String name, final String email, final String password, final String license_path, final HospitalDept dept, final String staffPhotoPath) {
-        Staff staff = getStaff(hospital, name, email, password, license_path, dept);
-        staff.staffPhotoPath = staffPhotoPath;
-
-        return staff;
-    }
-
-    private static Staff getStaff(Hospital hospital, String name, String email, String password, String license_path, HospitalDept dept) {
         Staff staff = new Staff();
         staff.setHospital(hospital);
         staff.name = name;
@@ -92,18 +86,19 @@ public class Staff {
         return staff;
     }
 
-    /**
+
+    /*
      * 의료진 비밀번호 수정
      * */
-    public void updatePassword(String newPassword) {
+    public void updatePassword(final String newPassword) {
         this.password = newPassword;
     }
 
 
-    /**
+    /*
      * 의료진 프로필사진 수정
      */
-    public void updatePhotoPath(String newPhotoPath) {
+    public void updatePhotoPath(final String newPhotoPath) {
         this.staffPhotoPath = newPhotoPath;
     }
 }

@@ -150,7 +150,7 @@ public class StaffServiceTest {
 
         //when -- 동작
         String newPhotoPath = "새로운사진경로";
-        staffService.updatePhotoPath(staff.getId(), newPhotoPath);
+        staffService.uploadPhotoPath(staff.getId(), newPhotoPath);
 
         //then -- 검증
         Assertions.assertThat(staff.getStaffPhotoPath()).isEqualTo(newPhotoPath);

@@ -25,7 +25,7 @@ public class MemberApiController {
         List<Member> memberList = memberService.findAll();
 
         List<MemberDto> memberDtoList = memberList.stream()
-                .map(member -> new MemberDto(member.getNickname(), member.getEmail()))
+                .map(member -> new MemberDto(member))
                 .collect(Collectors.toList());
 
         return new Result(memberDtoList);
@@ -35,7 +35,7 @@ public class MemberApiController {
     /* 회원가입 */
     @PostMapping("/api/members")
     public CreateMemberResponse saveMember(
-            @RequestBody @Valid CreateMemberRequest request) {
+            @RequestBody @Valid final CreateMemberRequest request) {
 
         Member member = Member.newInstance(request.nickname, request.email, request.password, request.phonenumber);
 
@@ -46,26 +46,26 @@ public class MemberApiController {
 
     /* 회원 비밀번호 수정 */
     @PatchMapping("/api/members/{id}")
-    public UpdateMemberRequest updateMemberPassword(
-            @PathVariable("id") Long id,
-            @RequestBody @Valid UpdateMemberPasswordRequest request) {
+    public UpdateMemberResponse updateMemberPassword(
+            @PathVariable("id") final Long id,
+            @RequestBody @Valid final UpdateMemberPasswordRequest request) {
 
         memberService.updatePassword(id, request.oldPassword, request.newPassword);
         Member member = memberService.findOne(id);
 
-        return new UpdateMemberRequest(member.getId());
+        return new UpdateMemberResponse(member.getId());
     }
 
     /* 회원 프로필사진 업로드 혹은 수정 */
     @PostMapping("/api/members/{id}")
-    public UpdateMemberRequest updateMemberPhotoPath(
-            @PathVariable("id") Long id,
-            @RequestBody @Valid UpdateMemberPhotoPathRequest request) {
+    public UpdateMemberResponse updateMemberPhotoPath(
+            @PathVariable("id") final Long id,
+            @RequestBody @Valid final UpdateMemberPhotoPathRequest request) {
 
         memberService.uploadPhotoPath(id, request.photoPath);
         Member member = memberService.findOne(id);
 
-        return new UpdateMemberRequest(member.getId());
+        return new UpdateMemberResponse(member.getId());
     }
 
 
@@ -80,6 +80,11 @@ public class MemberApiController {
     static class MemberDto {
         private String nickname;
         private String email;
+
+        public MemberDto(final Member member) {
+            nickname = member.getNickname();
+            email = member.getEmail();
+        }
     }
 
 
@@ -96,7 +101,7 @@ public class MemberApiController {
 
     @Data
     @AllArgsConstructor
-    static class UpdateMemberRequest {
+    static class UpdateMemberResponse {
         private Long id;
     }
 
