@@ -39,7 +39,7 @@ public class StaffRepository {
      */
     public List<Review> findReviewListByStaffHospitalName(final String targetHospital) {
 
-        return em.createQuery("select r from Review r where r.target_hospital = :targetHospital", Review.class)
+        return em.createQuery("select r from Review r where r.targetHospital = :targetHospital", Review.class)
                 .setParameter("targetHospital", targetHospital)
                 .getResultList();
     }

@@ -23,7 +23,12 @@ public class ReviewService {
      * 리뷰 작성
      */
     @Transactional
-    public Long save(Long memberId, String title, String body, int starPoint, String target_hospital) {
+    public Long save(
+            final Long memberId,
+            final String title,
+            final String body,
+            final int starPoint,
+            final String target_hospital) {
 
         //엔티티 조회
         Member member = memberService.findOne(memberId);
@@ -34,7 +39,13 @@ public class ReviewService {
     }
 
     @Transactional
-    public Long save(Long memberId, String title, String body, String reviewPhotoPath, int starPoint, String target_hospital) {
+    public Long save(
+            final Long memberId,
+            final String title,
+            final String body,
+            final String reviewPhotoPath,
+            final int starPoint,
+            final String target_hospital) {
 
         //엔티티 조회
         Member member = memberService.findOne(memberId);
@@ -49,7 +60,7 @@ public class ReviewService {
      * 리뷰 삭제
      */
     @Transactional
-    public void deleteReview(Long reviewId) {
+    public void deleteReview(final Long reviewId) {
         Review review = reviewRepository.findOne(reviewId);
         review.delete();
     }
@@ -58,7 +69,7 @@ public class ReviewService {
      * 리뷰 제목 및 본문 수정
      */
     @Transactional
-    public void updateTitleBody(Long reviewId, String newTitle, String newBody) {
+    public void updateTitleBody(final Long reviewId, final String newTitle, final String newBody) {
 
         Review review = findOne(reviewId);
         validateTitleBody(newTitle, newBody);
@@ -66,7 +77,7 @@ public class ReviewService {
         review.updateTitleBody(newTitle, newBody);
     }
 
-    private void validateTitleBody(String newTitle, String newBody) {
+    private void validateTitleBody(final String newTitle, final String newBody) {
 
         if (newTitle == null || newBody == null) {
             throw new IllegalValueException("제목이나 본문이 비어있습니다.");
@@ -75,11 +86,11 @@ public class ReviewService {
 
 
     /* 조회 로직 */
-    public List<Review> findByMemberId(Long memberId) {
+    public List<Review> findByMemberId(final Long memberId) {
         return reviewRepository.findByMemberId(memberId);
     }
 
-    public Review findOne(Long reviewId) {
+    public Review findOne(final Long reviewId) {
 
         Review getReview = reviewRepository.findOne(reviewId);
         if (getReview == null) {
@@ -96,7 +107,7 @@ public class ReviewService {
 
     public List<Review> findAllbyCreateAtDESC() { return reviewRepository.findAllbyCreateAtDESC(); }
 
-    public List<Review> findByTargetHospital(String targetHospital) {
+    public List<Review> findByTargetHospital(final String targetHospital) {
 
         List<Review> reviewListByTargetHospital = reviewRepository.findByTargetHospital(targetHospital);
 
@@ -104,5 +115,9 @@ public class ReviewService {
             throw new IllegalValueException("해당 병원에 대한 리뷰는 존재하지 않습니다.");
         }
         return reviewListByTargetHospital;
+    }
+
+    public List<Review> findAllByMember() {
+        return reviewRepository.findAllByMember();
     }
 }
