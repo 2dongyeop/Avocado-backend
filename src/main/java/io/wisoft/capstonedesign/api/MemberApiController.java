@@ -22,32 +22,26 @@ public class MemberApiController {
     @GetMapping("/api/members")
     public Result members() {
 
-        List<Member> memberList = memberService.findAll();
-
-        List<MemberDto> memberDtoList = memberList.stream()
-                .map(member -> new MemberDto(member))
+        List<MemberDto> memberDtoList = memberService.findAll().stream()
+                .map(MemberDto::new)
                 .collect(Collectors.toList());
 
         return new Result(memberDtoList);
     }
 
-
     /* 회원가입 */
-    @PostMapping("/api/members")
-    public CreateMemberResponse saveMember(
-            @RequestBody @Valid final CreateMemberRequest request) {
+    @PostMapping("/api/members/signup")
+    public CreateMemberResponse saveMember(@RequestBody @Valid final CreateMemberRequest request) {
 
         Member member = Member.newInstance(request.nickname, request.email, request.password, request.phonenumber);
-
         Long id = memberService.signUp(member);
         return new CreateMemberResponse(id);
     }
 
-
     /* 회원 비밀번호 수정 */
-    @PatchMapping("/api/members/{id}")
+    @PatchMapping("/api/members/{member_id}")
     public UpdateMemberResponse updateMemberPassword(
-            @PathVariable("id") final Long id,
+            @PathVariable("member_id") final Long id,
             @RequestBody @Valid final UpdateMemberPasswordRequest request) {
 
         memberService.updatePassword(id, request.oldPassword, request.newPassword);
@@ -56,8 +50,11 @@ public class MemberApiController {
         return new UpdateMemberResponse(member.getId());
     }
 
+    /* 회원 닉네임 수정 */
+    //TODO 만들기
+
     /* 회원 프로필사진 업로드 혹은 수정 */
-    @PostMapping("/api/members/{id}")
+    @PatchMapping("/api/members/{id}")
     public UpdateMemberResponse updateMemberPhotoPath(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateMemberPhotoPathRequest request) {

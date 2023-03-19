@@ -22,9 +22,7 @@ public class StaffApiController {
     @GetMapping("/api/staffs")
     public Result staffs() {
 
-        List<Staff> staffList = staffService.findAllByHospital();
-
-        List<StaffDto> staffDtoList = staffList.stream()
+        List<StaffDto> staffDtoList = staffService.findAllByHospital().stream()
                 .map(StaffDto::new)
                 .collect(Collectors.toList());
 

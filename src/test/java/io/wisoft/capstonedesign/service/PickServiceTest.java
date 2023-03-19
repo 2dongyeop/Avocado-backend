@@ -98,7 +98,7 @@ public class PickServiceTest {
         //given -- 조건
 
         //when -- 동작
-        pickService.findOne(2L);
+        pickService.findOne(100L);
 
         //then -- 검증
         fail("해당 pickId에 일치하는 찜하기 정보가 없어 예외가 발생해야 한다.");

@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign;
 
 import io.wisoft.capstonedesign.domain.*;
+import io.wisoft.capstonedesign.domain.enumeration.BusArea;
 import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
@@ -54,6 +55,12 @@ public class InitDb {
 
             ReviewReply reviewReply = ReviewReply.createReviewReply(member, review, "reply1");
             em.persist(reviewReply);
+
+            HealthInfo healthInfo = HealthInfo.createHealthInfo(staff, "path", "title1", HospitalDept.DENTAL);
+            em.persist(healthInfo);
+
+            BusInfo busInfo = BusInfo.createBusInfo("path", BusArea.DAEJEON);
+            em.persist(busInfo);
         }
 
         public void dbInit2() {
@@ -83,6 +90,12 @@ public class InitDb {
 
             ReviewReply reviewReply = ReviewReply.createReviewReply(member, review, "reply1");
             em.persist(reviewReply);
+
+            HealthInfo healthInfo = HealthInfo.createHealthInfo(staff, "path", "title2", HospitalDept.DENTAL);
+            em.persist(healthInfo);
+
+            BusInfo busInfo = BusInfo.createBusInfo("path", BusArea.DAEJEON);
+            em.persist(busInfo);
         }
     }
 }

@@ -1,10 +1,12 @@
 package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.HealthInfo;
+import io.wisoft.capstonedesign.domain.Staff;
 import io.wisoft.capstonedesign.domain.enumeration.HealthInfoStatus;
 import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.exception.nullcheck.NullHealthInfoException;
 import io.wisoft.capstonedesign.repository.HealthInfoRepository;
+import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,14 +21,16 @@ import static org.junit.Assert.*;
 @SpringBootTest
 @Transactional
 public class HealthInfoServiceTest {
-
+    @Autowired StaffService staffService;
     @Autowired HealthInfoService healthInfoService;
     @Autowired HealthInfoRepository healthInfoRepository;
 
     @Test
     public void 건강정보_저장() throws Exception {
         //given -- 조건
-        HealthInfo healthInfo = HealthInfo.createHealthInfo("칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
+        Staff staff = staffService.findOne(1L);
+
+        HealthInfo healthInfo = HealthInfo.createHealthInfo(staff, "칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
 
         //when -- 동작
         Long saveId = healthInfoService.save(healthInfo);
@@ -43,7 +47,9 @@ public class HealthInfoServiceTest {
     @Test
     public void 건강정보_삭제() throws Exception {
         //given -- 조건
-        HealthInfo healthInfo = HealthInfo.createHealthInfo("칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
+        Staff staff = staffService.findOne(1L);
+
+        HealthInfo healthInfo = HealthInfo.createHealthInfo(staff ,"칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
 
         Long saveId = healthInfoService.save(healthInfo);
 
@@ -58,7 +64,9 @@ public class HealthInfoServiceTest {
     @Test(expected = IllegalStateException.class)
     public void 건강정보_삭제요청_중복() throws Exception {
         //given -- 조건
-        HealthInfo healthInfo = HealthInfo.createHealthInfo("칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
+        Staff staff = staffService.findOne(1L);
+
+        HealthInfo healthInfo = HealthInfo.createHealthInfo(staff, "칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
 
         Long saveId = healthInfoService.save(healthInfo);
 

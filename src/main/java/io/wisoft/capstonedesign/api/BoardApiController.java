@@ -22,14 +22,12 @@ public class BoardApiController {
     @GetMapping("/api/boards")
     public Result boards() {
 
-        List<Board> boardList = boardService.findAllByMemeber();
-        List<BoardDto> boardDtoList = boardList.stream()
-                .map(board -> new BoardDto(board))
+        List<BoardDto> boardDtoList = boardService.findAllByMemeber().stream()
+                .map(BoardDto::new)
                 .collect(Collectors.toList());
 
         return new Result(boardDtoList);
     }
-
 
     /* 게시글 작성 */
     @PostMapping("/api/boards")
@@ -41,7 +39,6 @@ public class BoardApiController {
         Board board = boardService.findOne(id);
         return new CreateBoardResponse(board.getId());
     }
-
 
     /* 게시글 제목 및 본문 수정 */
     @PatchMapping("/api/boards/{id}")
@@ -58,8 +55,7 @@ public class BoardApiController {
 
     /* 게시글 삭제 */
     @DeleteMapping("/api/boards/{id}")
-    public DeleteBoardResponse deleteBoard(
-            @PathVariable("id") final Long id) {
+    public DeleteBoardResponse deleteBoard(@PathVariable("id") final Long id) {
 
         boardService.deleteBoard(id);
         Board board = boardService.findOne(id);

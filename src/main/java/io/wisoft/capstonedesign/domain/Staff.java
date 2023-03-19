@@ -45,6 +45,9 @@ public class Staff {
     @OneToMany(mappedBy = "staff")
     private final List<BoardReply> boardReplyList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "staff")
+    private final List<HealthInfo> healthInfoList = new ArrayList<>();
+
     /* 연관관계 메서드 */
     public void setHospital(final Hospital hospital) {
         //comment: 기존 관계 제거
@@ -64,6 +67,13 @@ public class Staff {
         this.boardReplyList.add(boardReply);
         if (boardReply.getStaff() != this) { //무한루프에 빠지지 않도록 체크
             boardReply.setStaff(this);
+        }
+    }
+
+    public void addHealthInfo(final HealthInfo healthInfo) {
+        this.healthInfoList.add(healthInfo);
+        if (healthInfo.getStaff() != this) {
+            healthInfo.setStaff(this);
         }
     }
 
