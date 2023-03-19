@@ -93,7 +93,7 @@ public class BoardReplyServiceTest {
         //given -- 조건
 
         //when -- 동작
-        boardReplyService.findOne(2L);
+        boardReplyService.findOne(100L);
 
         //then -- 검증
         fail("예외가 발생해야 한다.");

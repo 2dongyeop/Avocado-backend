@@ -96,7 +96,7 @@ public class ReviewReplyServiceTest {
         //given -- 조건
 
         //when -- 동작
-        reviewReplyService.findOne(2L);
+        reviewReplyService.findOne(100L);
 
         //then -- 검증
         fail("일치하는 리뷰댓글이 존재하지 않아 예외가 발생해야 한다.");

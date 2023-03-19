@@ -20,10 +20,9 @@ public class ReviewApiController {
     /* 리뷰 조회 */
     @GetMapping("/api/reviews")
     public Result reviews() {
-        List<Review> reviewList = reviewService.findAllByMember();
 
-        List<ReviewDto> reviewDtoList = reviewList.stream()
-                .map(review -> new ReviewDto(review))
+        List<ReviewDto> reviewDtoList = reviewService.findAllByMember().stream()
+                .map(ReviewDto::new)
                 .collect(Collectors.toList());
 
         return new Result(reviewDtoList);
@@ -57,8 +56,7 @@ public class ReviewApiController {
 
     /* 리뷰 삭제 */
     @DeleteMapping("/api/reviews/{id}")
-    public DeleteReviewResponse deleteReview(
-            @PathVariable("id") final Long id) {
+    public DeleteReviewResponse deleteReview(@PathVariable("id") final Long id) {
 
         reviewService.deleteReview(id);
         Review review = reviewService.findOne(id);

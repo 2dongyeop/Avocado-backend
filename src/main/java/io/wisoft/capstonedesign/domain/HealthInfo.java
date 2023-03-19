@@ -36,10 +36,31 @@ public class HealthInfo {
     @Column(name = "health_info_create_at")
     private LocalDateTime createAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "staff_id")
+    private Staff staff;
+
+    /* 연관관계 편의 메서드 */
+    public void setStaff(final Staff staff) {
+        if (this.staff != null) {
+            this.staff.getHealthInfoList().remove(this);
+        }
+
+        this.staff = staff;
+        if (!staff.getHealthInfoList().contains(this)) {
+            staff.getHealthInfoList().add(this);
+        }
+    }
+
     /* 정적 생성 메서드 */
-    public static HealthInfo createHealthInfo(String healthInfoPath, String title, HospitalDept dept) {
+    public static HealthInfo createHealthInfo(
+            final Staff staff,
+            final String healthInfoPath,
+            final String title,
+            final HospitalDept dept) {
 
         HealthInfo healthInfo = new HealthInfo();
+        healthInfo.setStaff(staff);
         healthInfo.healthInfoPath = healthInfoPath;
         healthInfo.title = title;
         healthInfo.dept = dept;
