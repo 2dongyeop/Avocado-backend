@@ -103,9 +103,9 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
 
-    public List<Review> findAllOrderByCreateAtASC() { return reviewRepository.findAllbyCreateAtASC(); }
+    public List<Review> findAllOrderByCreateAtASC() { return reviewRepository.findAllOrderByCreateAtASC(); }
 
-    public List<Review> findAllOrderByCreateAtDESC() { return reviewRepository.findAllbyCreateAtDESC(); }
+    public List<Review> findAllOrderByCreateAtDESC() { return reviewRepository.findAllOrderByCreateAtDESC(); }
 
     public List<Review> findByTargetHospital(final String targetHospital) {
 

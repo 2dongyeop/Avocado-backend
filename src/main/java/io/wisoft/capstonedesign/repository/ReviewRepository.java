@@ -1,6 +1,5 @@
 package io.wisoft.capstonedesign.repository;
 
-import io.wisoft.capstonedesign.domain.Member;
 import io.wisoft.capstonedesign.domain.Review;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,7 @@ public class ReviewRepository {
     /**
      * 리뷰 목록 오름차순 조회
      */
-    public List<Review> findAllbyCreateAtASC() {
+    public List<Review> findAllOrderByCreateAtASC() {
         return em.createQuery("select r from Review r order by r.createAt asc", Review.class)
                 .getResultList();
     }
@@ -45,7 +44,7 @@ public class ReviewRepository {
     /**
      * 리뷰 목록 내림차순 조회
      */
-    public List<Review> findAllbyCreateAtDESC() {
+    public List<Review> findAllOrderByCreateAtDESC() {
         return em.createQuery("select r from Review r order by r.createAt desc", Review.class)
                 .getResultList();
     }

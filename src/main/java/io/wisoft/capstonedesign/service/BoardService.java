@@ -101,12 +101,12 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-    public List<Board> findAllcreateAtASC() {
-        return boardRepository.findAllcreateAtASC();
+    public List<Board> findAllOrderByCreateAtAsc() {
+        return boardRepository.findAllOrderByCreateAtAsc();
     }
 
-    public List<Board> findAllcreateAtDESC() {
-        return boardRepository.findAllcreateAtDESC();
+    public List<Board> findAllOrderByCreateAtDesc() {
+        return boardRepository.findAllOrderByCreateAtDesc();
     }
 
     public List<Board> findAllByMemeber() {

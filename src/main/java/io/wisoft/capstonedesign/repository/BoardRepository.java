@@ -1,8 +1,6 @@
 package io.wisoft.capstonedesign.repository;
 
 import io.wisoft.capstonedesign.domain.Board;
-import io.wisoft.capstonedesign.domain.Member;
-import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -50,7 +48,7 @@ public class BoardRepository {
     /**
      * 게시글 목록 오름차순 조회
      */
-    public List<Board> findAllcreateAtASC() {
+    public List<Board> findAllOrderByCreateAtAsc() {
         return em.createQuery("select b from Board b order by b.createAt", Board.class)
                 .getResultList();
     }
@@ -58,7 +56,7 @@ public class BoardRepository {
     /**
      * 게시글 목록 내림차순 조회
      */
-    public List<Board> findAllcreateAtDESC() {
+    public List<Board> findAllOrderByCreateAtDesc() {
         return em.createQuery("select b from Board b order by b.createAt desc", Board.class)
                 .getResultList();
     }
