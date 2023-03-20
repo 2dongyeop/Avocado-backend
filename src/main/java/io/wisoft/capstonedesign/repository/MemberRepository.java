@@ -13,24 +13,29 @@ public class MemberRepository {
 
     private final EntityManager em;
 
-    /**
+    /*
      * 회원가입 : signUp
      */
-    public void signUp(Member member) {
+    public void signUp(final Member member) {
         em.persist(member);
     }
 
-    /**
+    /*
      * 로그인 : login
      */
-    public void login(Member member) {
+    public void login(final Member member) {
 
     }
 
-    /**
+    /* 회원 탈퇴 */
+    public void delete(final Member member) {
+        em.remove(member);
+    }
+
+    /*
      * 회원조회
      */
-    public Member findOne(Long id) {
+    public Member findOne(final Long id) {
         return em.find(Member.class, id);
     }
 
@@ -39,13 +44,13 @@ public class MemberRepository {
                 .getResultList();
     }
 
-    public List<Member> findByNickname(String nickname) {
+    public List<Member> findByNickname(final String nickname) {
         return em.createQuery("select m from Member m where m.nickname = :nickname", Member.class)
                 .setParameter("nickname", nickname)
                 .getResultList();
     }
 
-    public List<Member> findByEmail(String email) {
+    public List<Member> findByEmail(final String email) {
         return em.createQuery("select m from Member m where m.email = :email", Member.class)
                 .setParameter("email", email)
                 .getResultList();

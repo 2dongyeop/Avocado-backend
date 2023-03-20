@@ -22,7 +22,7 @@ public class MemberService {
      * 회원가입
      */
     @Transactional
-    public Long signUp(Member member) {
+    public Long signUp(final Member member) {
 
         //comment: 회원 중복 검증
         validateDuplicateMember(member);
@@ -30,7 +30,7 @@ public class MemberService {
         return member.getId();
     }
 
-    private void validateDuplicateMember(Member member) {
+    private void validateDuplicateMember(final Member member) {
         List<Member> findMembersByEmail = memberRepository.findByEmail(member.getEmail());
         List<Member> findMembersByNickname = memberRepository.findByNickname(member.getNickname());
         if (findMembersByEmail.size() != 0 || findMembersByNickname.size() != 0) {
@@ -42,7 +42,7 @@ public class MemberService {
      * 회원 비밀번호 수정
      */
     @Transactional
-    public void updatePassword(Long memberId, String oldPassword ,String newPassword) {
+    public void updatePassword(final Long memberId, final String oldPassword, final String newPassword) {
 
         Member member = findOne(memberId);
         validateMemberPassword(member, oldPassword);
@@ -50,11 +50,19 @@ public class MemberService {
         member.updatePassword(newPassword);
     }
 
-    private void validateMemberPassword(Member member, String oldPassword) {
+    private void validateMemberPassword(final Member member, final String oldPassword) {
 
         if (!member.getPassword().equals(oldPassword)) {
             throw new IllegalValueException("비밀번호가 일치하지 않아 변경할 수 없습니다.");
         }
+    }
+
+    /* 회원 닉네임 수정 */
+    @Transactional
+    public void updateMemberNickname(final Long memberId, final String newNickname) {
+
+        Member member = findOne(memberId);
+        member.updateNickname(newNickname);
     }
 
 
@@ -62,17 +70,25 @@ public class MemberService {
      * 회원 프로필사진 업로드 혹은 수정
      */
     @Transactional
-    public void uploadPhotoPath(Long memberId, String newPhotoPath) {
+    public void uploadPhotoPath(final Long memberId, final String newPhotoPath) {
 
         Member member = findOne(memberId);
         member.uploadPhotoPath(newPhotoPath);
+    }
+
+    /* 회원 탈퇴 */
+    @Transactional
+    public void deleteMember(final Long memberId) {
+
+        Member member = findOne(memberId);
+        memberRepository.delete(member);
     }
 
 
     /*
      * 회원 조회
      */
-    public Member findOne(Long memberId) {
+    public Member findOne(final Long memberId) {
 
         Member getMember = memberRepository.findOne(memberId);
         if (getMember == null) {

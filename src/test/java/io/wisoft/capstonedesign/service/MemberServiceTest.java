@@ -119,4 +119,19 @@ public class MemberServiceTest {
         Member getMember = memberService.findOne(signUpId);
         Assertions.assertThat(getMember.getMemberPhotoPath()).isEqualTo("새로운 사진 경로");
     }
+
+    @Test(expected = NullMemberException.class)
+    public void 회원_탈퇴() throws Exception {
+        //given -- 조건
+        Member member = Member.newInstance("test1", "ldy_2222@naver.com", "1111", "0000");
+        Long signUpId = memberService.signUp(member);
+
+        //when -- 동작
+        memberService.deleteMember(signUpId);
+
+        //then -- 검증
+        memberService.findOne(signUpId);
+        fail("탈퇴가 정상적으로 동작했다면, findOne의 결과가 없어 예외가 발생해야 한다.");
+
+    }
 }
