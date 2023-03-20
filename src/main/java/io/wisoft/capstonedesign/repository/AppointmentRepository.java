@@ -22,21 +22,21 @@ public class AppointmentRepository {
     /**
      * 예약 정보 저장
      */
-    public void save(Appointment appointment) {
+    public void save(final Appointment appointment) {
         em.persist(appointment);
     }
 
     /**
      * 예약 단건 조회
      */
-    public Appointment findOne(Long appointmentId) {
+    public Appointment findOne(final Long appointmentId) {
         return em.find(Appointment.class, appointmentId);
     }
 
     /**
      * 특정 회원의 예약 정보 조회
      */
-    public List<Appointment> findByMemberId(Long memberId) {
+    public List<Appointment> findByMemberId(final Long memberId) {
 
         return em.createQuery("select a from Appointment a join a.member m where m.id = :id", Appointment.class)
                 .setParameter("id", memberId)
@@ -46,7 +46,7 @@ public class AppointmentRepository {
     /**
      * 특정 회원의 예약 정보 시간을 오름차순으로 정렬하여 조회
      */
-    public List<Appointment> findByMemberIdASC(Long memberId) {
+    public List<Appointment> findByMemberIdASC(final Long memberId) {
 
         return em.createQuery("select a from Appointment a join a.member m where m.id = :id order by a.createAt ASC", Appointment.class)
                 .setParameter("id", memberId)
@@ -56,7 +56,7 @@ public class AppointmentRepository {
     /**
      * 특정 회원의 예약 정보 시간을 내림차순으로 정렬하여 조회
      */
-    public List<Appointment> findByMemberIdDESC(Long memberId) {
+    public List<Appointment> findByMemberIdDESC(final Long memberId) {
 
         return em.createQuery("select a from Appointment a join a.member m where m.id = :id order by a.createAt DESC", Appointment.class)
                 .setParameter("id", memberId)
@@ -66,7 +66,7 @@ public class AppointmentRepository {
     /**
      * 검색 조건에 동적으로 쿼리를 생성해서 예약 엔티티를 조회
      */
-    public List<Appointment> findAllByCriteria(AppointmentSearch appointmentSearch) {
+    public List<Appointment> findAllByCriteria(final AppointmentSearch appointmentSearch) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Appointment> cq = cb.createQuery(Appointment.class);
