@@ -58,6 +58,7 @@ public class StaffService {
     /**
      * 의료진 비밀번호 수정
      */
+    @Transactional
     public void updatePassword(final Long staffId, final String oldPassword, final String newPassword) {
 
         Staff staff = findOne(staffId);
@@ -76,10 +77,30 @@ public class StaffService {
     /**
      * 의료진 프로필사진 수정 및 업로드
      */
+    @Transactional
     public void uploadPhotoPath(final Long staffId, final String newPhotoPath) {
 
         Staff staff = findOne(staffId);
         staff.updatePhotoPath(newPhotoPath);
+    }
+
+
+    /* 의료진 병원 업로드 */
+    @Transactional
+    public void updateStaffHospital(final Long staffId, final String hospitalName) {
+
+        Staff staff = findOne(staffId);
+        Hospital hospital = hospitalService.findByHospitalName(hospitalName);
+
+        staff.updateHospital(hospital);
+    }
+
+    /* 의료진 탈퇴 */
+    @Transactional
+    public void deleteStaff(final Long staffId) {
+
+        Staff staff = findOne(staffId);
+        staffRepository.delete(staff);
     }
 
 

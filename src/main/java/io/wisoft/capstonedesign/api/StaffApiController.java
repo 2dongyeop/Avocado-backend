@@ -18,8 +18,17 @@ public class StaffApiController {
 
     private final StaffService staffService;
 
-    /* 의료진 조회 */
-    @GetMapping("/api/staffs")
+    /* 의료진 단건 상세 조회 */
+    @GetMapping("api/staff/{id}")
+    public Result staff(@PathVariable("id") final Long id) {
+
+        Staff staff = staffService.findOne(id);
+
+        return new Result(new StaffDto(staff.getName(), staff.getEmail(), staff.getDept().toString(), staff.getHospital().toString()));
+    }
+
+    /* 의료진 목록 조회 */
+    @GetMapping("/api/staff")
     public Result staffs() {
 
         List<StaffDto> staffDtoList = staffService.findAllByHospital().stream()
@@ -31,7 +40,7 @@ public class StaffApiController {
 
 
     /* 의료진 가입 */
-    @PostMapping("/api/staffs")
+    @PostMapping("/api/staff/signup")
     public CreateStaffResponse saveStaff(
             @RequestBody @Valid final CreateStaffRequest request) {
 
@@ -41,7 +50,7 @@ public class StaffApiController {
     }
 
     /* 의료진 비밀번호 수정 */
-    @PatchMapping("/api/staffs/{id}")
+    @PatchMapping("/api/staff/{id}/password")
     public UpdateStaffResponse updateStaffPassword(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateStaffPasswordRequest request) {
@@ -54,7 +63,7 @@ public class StaffApiController {
 
 
     /* 의료진 프로필사진 업로드 */
-    @PostMapping("/api/staffs/{id}")
+    @PatchMapping("/api/staff/{id}/photo")
     public UpdateStaffResponse uploadStaffPhotoPath(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateStaffPhotoPathRequest request) {
@@ -65,6 +74,39 @@ public class StaffApiController {
         return new UpdateStaffResponse(staff.getId());
     }
 
+
+    /* 의료진 병원 변경 */
+    @PatchMapping("/api/staff/{id}/hospital")
+    public UpdateStaffResponse updateStaffHospital(
+            @PathVariable("id") final Long id,
+            @RequestBody @Valid final UpdateStaffRequest request) {
+
+        staffService.updateStaffHospital(id, request.hospitalName);
+        Staff staff = staffService.findOne(id);
+
+        return new UpdateStaffResponse(staff.getId());
+    }
+
+
+    /* 의료진 탈퇴 */
+    @DeleteMapping("api/staff/{id}")
+    public DeleteStaffResponse deleteStaff(@PathVariable("id") final Long id) {
+
+        staffService.deleteStaff(id);
+        return new DeleteStaffResponse(id);
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    static class DeleteStaffResponse {
+        private Long id;
+    }
+
+    @Data
+    static class UpdateStaffRequest {
+        private String hospitalName;
+    }
 
     @Data
     @AllArgsConstructor
