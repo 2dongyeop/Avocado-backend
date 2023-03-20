@@ -21,8 +21,9 @@ public class ReviewApiController {
     @GetMapping("/api/reviews/{id}")
     public Result review(@PathVariable("id") final Long id) {
         Review review = reviewService.findOne(id);
+        ReviewDto reviewDto = new ReviewDto(review);
 
-        return new Result(new ReviewDto(review));
+        return new Result(reviewDto);
     }
 
     /* 리뷰 목록 조회 */
@@ -61,7 +62,7 @@ public class ReviewApiController {
 
 
     /* 특정 작성자의 리뷰 목록 조회 */
-    @GetMapping("/api/reviews/{member-id}")
+    @GetMapping("/api/reviews/member/{member-id}")
     public Result reviewsByMemberId(@PathVariable("member-id") final Long id) {
 
         List<ReviewDto> reviewDtoList = reviewService.findByMemberId(id).stream()
@@ -71,8 +72,9 @@ public class ReviewApiController {
         return new Result<>(reviewDtoList);
     }
 
+
     /* 특정 병원의 리뷰 목록 조회 */
-    @GetMapping("/api/reviews/{target-hospital}")
+    @GetMapping("/api/reviews/hospital/{target-hospital}")
     public Result reviewsByTargetHostpital(@PathVariable("target-hospital") String targetHospital) {
 
         List<ReviewDto> reviewDtoList = reviewService.findByTargetHospital(targetHospital)
@@ -84,7 +86,7 @@ public class ReviewApiController {
 
 
     /* 리뷰 저장 */
-    @PostMapping("/api/reviews")
+    @PostMapping("/api/reviews/new")
     public CreateReviewResponse createReview(
             @RequestBody @Valid final CreateReviewRequest request) {
 

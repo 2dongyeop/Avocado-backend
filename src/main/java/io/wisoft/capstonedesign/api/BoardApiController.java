@@ -64,7 +64,7 @@ public class BoardApiController {
 
 
     /* 특정 작성자의 게시글 목록 조회 */
-    @GetMapping("/api/boards/{member-id}")
+    @GetMapping("/api/boards/member/{member-id}")
     public Result boardsByMember(@PathVariable("member-id") Long id) {
         List<BoardDto> boardDtoList = boardService.findByMemberId(id)
                 .stream().map(BoardDto::new)
@@ -75,7 +75,7 @@ public class BoardApiController {
 
 
     /* 게시글 작성 */
-    @PostMapping("/api/boards")
+    @PostMapping("/api/boards/new")
     public CreateBoardResponse createBoard(
             @RequestBody @Valid final CreateBoardRequest request) {
 
@@ -107,7 +107,6 @@ public class BoardApiController {
         Board board = boardService.findOne(id);
         return new DeleteBoardResponse(board.getId(), board.getStatus().toString());
     }
-
 
 
     @Data

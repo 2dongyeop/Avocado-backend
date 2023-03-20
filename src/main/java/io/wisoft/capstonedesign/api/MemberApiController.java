@@ -94,7 +94,6 @@ public class MemberApiController {
     }
 
 
-
     @Data
     @AllArgsConstructor
     static class DeleteMemberResponse {
