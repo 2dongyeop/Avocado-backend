@@ -31,7 +31,7 @@ public class BoardApiController {
     @GetMapping("/api/boards")
     public Result boards() {
 
-        List<BoardDto> boardDtoList = boardService.findAllByMemeber().stream()
+        List<BoardDto> boardDtoList = boardService.findAllByMember().stream()
                 .map(BoardDto::new)
                 .collect(Collectors.toList());
 
@@ -65,8 +65,19 @@ public class BoardApiController {
 
     /* 특정 작성자의 게시글 목록 조회 */
     @GetMapping("/api/boards/member/{member-id}")
-    public Result boardsByMember(@PathVariable("member-id") Long id) {
+    public Result boardsByMember(@PathVariable("member-id") final Long id) {
         List<BoardDto> boardDtoList = boardService.findByMemberId(id)
+                .stream().map(BoardDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(boardDtoList);
+    }
+
+
+    /* 특정 의료진이 댓글을 단 게시글 목록 조회 */
+    @GetMapping("/api/boards/staff/{staff-id}")
+    public Result boardsByStaff(@PathVariable("staff-id") final Long id) {
+        List<BoardDto> boardDtoList = boardService.findByStaffReply(id)
                 .stream().map(BoardDto::new)
                 .collect(Collectors.toList());
 

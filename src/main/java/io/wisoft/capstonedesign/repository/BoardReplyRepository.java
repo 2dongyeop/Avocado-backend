@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.repository;
 
 import io.wisoft.capstonedesign.domain.Board;
 import io.wisoft.capstonedesign.domain.BoardReply;
+import io.wisoft.capstonedesign.domain.Staff;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,19 +18,19 @@ public class BoardReplyRepository {
     /**
      * 게시글댓글 저장
      */
-    public void save(BoardReply boardReply) { em.persist(boardReply); }
+    public void save(final BoardReply boardReply) { em.persist(boardReply); }
 
     /**
      * 게시글댓글 단건 조회
      */
-    public BoardReply findOne(Long boardReplyId) {
+    public BoardReply findOne(final Long boardReplyId) {
         return em.find(BoardReply.class, boardReplyId);
     }
 
     /**
      * 특정게시글의 댓글 목록 조회
      */
-    public List<BoardReply> findByBoardId(Long boardId) {
+    public List<BoardReply> findByBoardId(final Long boardId) {
 
         return em.createQuery("select br from BoardReply br join br.board b where b.id = :id", BoardReply.class)
                 .setParameter("id", boardId)
@@ -39,7 +40,7 @@ public class BoardReplyRepository {
     /**
      * 특정게시글의 댓글 목록 오름차순 조회
      */
-    public List<BoardReply> findByBoardIdcreateAtASC() {
+    public List<BoardReply> findByBoardIdOrderByCreateAsc() {
 
         return em.createQuery("select br from BoardReply br order by br.createAt", BoardReply.class)
                 .getResultList();
@@ -48,7 +49,7 @@ public class BoardReplyRepository {
     /**
      * 특정게시글의 댓글 목록 내림차순 조회
      */
-    public List<BoardReply> findByBoardIdcreateAtDESC() {
+    public List<BoardReply> findByBoardIdOrderByCreateDesc() {
 
         return em.createQuery("select br from BoardReply br order by br.createAt desc ", BoardReply.class)
                 .getResultList();
