@@ -21,7 +21,7 @@ public class HealthInfoService {
      * 건강정보 저장
      */
     @Transactional
-    public Long save(HealthInfo healthInfo) {
+    public Long save(final HealthInfo healthInfo) {
 
         healthInfoRepository.save(healthInfo);
         return healthInfo.getId();
@@ -31,14 +31,14 @@ public class HealthInfoService {
      * 건강정보 삭제
      */
     @Transactional
-    public void delete(Long healthInfoId) {
+    public void delete(final Long healthInfoId) {
 
         HealthInfo healthInfo = healthInfoRepository.findOne(healthInfoId);
         healthInfo.delete();
     }
 
     /* 조회 로직 */
-    public HealthInfo findOne(Long healthInfoId) {
+    public HealthInfo findOne(final Long healthInfoId) {
         HealthInfo getHealthInfo = healthInfoRepository.findOne(healthInfoId);
 
         if (getHealthInfo == null) {
@@ -50,5 +50,18 @@ public class HealthInfoService {
 
     public List<HealthInfo> findAll() {
         return healthInfoRepository.findAll();
+    }
+
+    public List<HealthInfo> findAllByDept(String dept) {
+
+        return healthInfoRepository.findAllByDept(HospitalDept.valueOf(dept));
+    }
+
+    public List<HealthInfo> findAllOrderByCreateAsc() {
+        return healthInfoRepository.findAllOrderByCreateAsc();
+    }
+
+    public List<HealthInfo> findAllOrderByCreateDesc() {
+        return healthInfoRepository.findAllOrderByCreateDesc();
     }
 }
