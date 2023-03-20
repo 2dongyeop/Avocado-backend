@@ -38,7 +38,7 @@ public class BoardReply {
     private Staff staff;
 
     /* 연관관계 편의메서드 */
-    public void setBoard(Board board) {
+    public void setBoard(final Board board) {
         //comment: 기존 관계 제거
         if (this.board != null) {
             this.board.getBoardReplyList().remove(this);
@@ -52,7 +52,7 @@ public class BoardReply {
         }
     }
 
-    public void setStaff(Staff staff) {
+    public void setStaff(final Staff staff) {
         //comment: 기존 관계 제거
         if (this.staff != null) {
             this.staff.getBoardReplyList().remove(this);
@@ -67,7 +67,10 @@ public class BoardReply {
     }
 
     /* 정적 생성 메서드 */
-    public static BoardReply createBoardReply(Board board, Staff staff, String reply) {
+    public static BoardReply createBoardReply(
+            final Board board,
+            final Staff staff,
+            final String reply) {
         BoardReply boardReply = new BoardReply();
         boardReply.setBoard(board);
         boardReply.setStaff(staff);
@@ -93,7 +96,7 @@ public class BoardReply {
     /**
      * 게시글댓글 수정
      */
-    public void update(String reply) {
+    public void update(final String reply) {
 
         this.reply = reply;
         this.updateAt = LocalDateTime.now();

@@ -33,7 +33,7 @@ public class Pick {
     private Hospital hospital;
 
     /* 연관관계 편의메서드 */
-    public void setHospital(Hospital hospital) {
+    public void setHospital(final Hospital hospital) {
         if (this.hospital != null) {
             this.hospital.getPickList().remove(this);
         }
@@ -46,7 +46,7 @@ public class Pick {
         }
     }
 
-    public void setMember(Member member) {
+    public void setMember(final Member member) {
         //comment: 기존 관계 제거
         if (this.member != null) {
             this.member.getPickList().remove(this);
@@ -61,7 +61,7 @@ public class Pick {
     }
 
     /* 정적 생성 메서드 */
-    public static Pick createPick(Member member, Hospital hospital) {
+    public static Pick createPick(final Member member, final Hospital hospital) {
         Pick pick = new Pick();
         pick.setMember(member);
         pick.setHospital(hospital);

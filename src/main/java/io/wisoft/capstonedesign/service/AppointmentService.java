@@ -27,7 +27,13 @@ public class AppointmentService {
      * 예약 정보 작성
      */
     @Transactional
-    public Long save(Long memberId, Long hospitalId, HospitalDept dept, String comment, String appointName, String appointPhonenumber) {
+    public Long save(
+            final Long memberId,
+            final Long hospitalId,
+            final HospitalDept dept,
+            final String comment,
+            final String appointName,
+            final String appointPhonenumber) {
 
         //엔티티 조회
         Member member = memberService.findOne(memberId);
@@ -44,7 +50,7 @@ public class AppointmentService {
      * 예약 정보 삭제
      */
     @Transactional
-    public void cancelAppointment(Long appointmentId) {
+    public void cancelAppointment(final Long appointmentId) {
         Appointment appointment = appointmentRepository.findOne(appointmentId);
         appointment.cancel();
     }
@@ -53,7 +59,12 @@ public class AppointmentService {
      * 예약 정보 수정
      */
     @Transactional
-    public void update(Long appointmentId, HospitalDept dept, String comment, String appointName, String appointPhonenumber) {
+    public void update(
+            final Long appointmentId,
+            final HospitalDept dept,
+            final String comment,
+            final String appointName,
+            final String appointPhonenumber) {
 
         Appointment appointment = findOne(appointmentId);
         validateParameter(dept, comment, appointName, appointPhonenumber);
@@ -61,7 +72,11 @@ public class AppointmentService {
         appointment.update(dept, comment, appointName, appointPhonenumber);
     }
 
-    private void validateParameter(HospitalDept dept, String comment, String appointName, String appointPhonenumber) {
+    private void validateParameter(
+            final HospitalDept dept,
+            final String comment,
+            final String appointName,
+            final String appointPhonenumber) {
 
         if (dept == null || comment == null || appointName == null || appointPhonenumber == null) {
             throw new IllegalValueException("파라미터가 비어있어 업데이트할 수 없습니다.");
@@ -70,9 +85,9 @@ public class AppointmentService {
 
 
     /* 조회 로직 */
-    public List<Appointment> findByMemberId(Long memberId) { return appointmentRepository.findByMemberId(memberId); }
+    public List<Appointment> findByMemberId(final Long memberId) { return appointmentRepository.findByMemberId(memberId); }
 
-    public Appointment findOne(Long appointmentId) {
+    public Appointment findOne(final Long appointmentId) {
         Appointment getAppointment = appointmentRepository.findOne(appointmentId);
 
         if (getAppointment == null) {
@@ -82,11 +97,11 @@ public class AppointmentService {
         return getAppointment;
     }
 
-    public List<Appointment> findByMemberIdASC(Long memberId) { return appointmentRepository.findByMemberIdASC(memberId); }
+    public List<Appointment> findByMemberIdASC(final Long memberId) { return appointmentRepository.findByMemberIdASC(memberId); }
 
-    public List<Appointment> findByMemberIdDESC(Long memberId) { return appointmentRepository.findByMemberIdDESC(memberId); }
+    public List<Appointment> findByMemberIdDESC(final Long memberId) { return appointmentRepository.findByMemberIdDESC(memberId); }
 
-    public List<Appointment> findAllByCriteria(AppointmentSearch appointmentSearch) {
+    public List<Appointment> findAllByCriteria(final AppointmentSearch appointmentSearch) {
         return appointmentRepository.findAllByCriteria(appointmentSearch);
     }
 }

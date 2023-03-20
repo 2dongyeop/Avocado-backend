@@ -109,7 +109,11 @@ public class BoardService {
         return boardRepository.findAllOrderByCreateAtDesc();
     }
 
-    public List<Board> findAllByMemeber() {
+    public List<Board> findAllByMember() {
         return boardRepository.findAllByMember();
+    }
+
+    public List<Board> findByStaffReply(final Long staffId) {
+        return boardRepository.findByStaffReply(staffId);
     }
 }

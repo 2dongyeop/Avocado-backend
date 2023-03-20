@@ -56,7 +56,7 @@ public class Appointment {
     private Hospital hospital;
 
     /* 연관관계 편의메서드 */
-    public void setHospital(Hospital hospital) {
+    public void setHospital(final Hospital hospital) {
         //comment: 기존 관계 제거
         if (this.hospital != null) {
             this.hospital.getAppointmentList().remove(this);
@@ -70,7 +70,7 @@ public class Appointment {
         }
     }
 
-    public void setMember(Member member) {
+    public void setMember(final Member member) {
         //comment: 기존 관계 제거
         if (this.member != null) {
             this.member.getAppointmentList().remove(this);
@@ -85,7 +85,13 @@ public class Appointment {
     }
 
     /* 정적 생성 메서드 */
-    public static Appointment createAppointment(Member member, Hospital hospital, HospitalDept dept, String comment, String appointName, String appointPhonenumber) {
+    public static Appointment createAppointment(
+            final Member member,
+            final Hospital hospital,
+            final HospitalDept dept,
+            final String comment,
+            final String appointName,
+            final String appointPhonenumber) {
         Appointment appointment = new Appointment();
         appointment.setMember(member);
         appointment.setHospital(hospital);
@@ -115,7 +121,11 @@ public class Appointment {
     /**
      * 예약 수정
      */
-    public void update(HospitalDept dept, String comment, String appointName, String appointPhonenumber) {
+    public void update(
+            final HospitalDept dept,
+            final String comment,
+            final String appointName,
+            final String appointPhonenumber) {
         this.dept = dept;
         this.comment = comment;
         this.appointName = appointName;

@@ -24,7 +24,7 @@ public class PickService {
      * 찜하기 생성
      */
     @Transactional
-    public Long save(Long memberId, Long hospitalId) {
+    public Long save(final Long memberId, final Long hospitalId) {
 
         //엔티티 조회
         Member member = memberService.findOne(memberId);
@@ -40,13 +40,13 @@ public class PickService {
      * 찜하기 취소
      */
     @Transactional
-    public void cancelPick(Long pickId) {
+    public void cancelPick(final Long pickId) {
         Pick pick = pickRepository.findOne(pickId);
         pick.cancel();
     }
 
     /* 조회 로직 */
-    public Pick findOne(Long pickId) {
+    public Pick findOne(final Long pickId) {
 
         Pick getPick = pickRepository.findOne(pickId);
         if (getPick == null) {
@@ -55,11 +55,15 @@ public class PickService {
         return getPick;
     }
 
-    public List<Pick> findByMemberIdASC(Long memberId) {
-        return pickRepository.findByMemberIdASC(memberId);
+    public List<Pick> findByMemberId(final Long memberId) {
+        return pickRepository.findByMemberId(memberId);
     }
 
-    public List<Pick> findByMemberIdDESC(Long memberId) {
-        return pickRepository.findByMemberIdDESC(memberId);
+    public List<Pick> findByMemberIdOrderByCreateAsc(final Long memberId) {
+        return pickRepository.findByMemberIdOrderByCreateAsc(memberId);
+    }
+
+    public List<Pick> findByMemberIdOrderByCreateDesc(final Long memberId) {
+        return pickRepository.findByMemberIdOrderByCreateDesc(memberId);
     }
 }

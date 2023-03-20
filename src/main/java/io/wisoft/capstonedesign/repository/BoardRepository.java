@@ -1,11 +1,13 @@
 package io.wisoft.capstonedesign.repository;
 
 import io.wisoft.capstonedesign.domain.Board;
+import io.wisoft.capstonedesign.domain.BoardReply;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -64,5 +66,16 @@ public class BoardRepository {
     public List<Board> findAllByMember() {
         return em.createQuery("select b from Board b join fetch b.member m", Board.class)
                 .getResultList();
+    }
+
+    /* 특정 의료진이 댓글을 단 게시글 목록 조회 */
+    public List<Board> findByStaffReply(final Long staffId) {
+        List<BoardReply> boardReplyList = em.createQuery("select br from BoardReply br join br.staff.id = :staffId", BoardReply.class)
+                .setParameter("staffId", staffId)
+                .getResultList();
+
+        return boardReplyList.stream()
+                .map(boardReply -> boardReply.getBoard())
+                .collect(Collectors.toList());
     }
 }
