@@ -16,12 +16,21 @@ public class HospitalRepository {
     /**
      * 병원 저장
      */
-    public void save(Hospital hospital) { em.persist(hospital); }
+    public void save(final Hospital hospital) { em.persist(hospital); }
 
     /**
      * 병원 단건 조회
      */
-    public Hospital findOne(Long hospitalId) { return em.find(Hospital.class, hospitalId); }
+    public Hospital findOne(final Long hospitalId) { return em.find(Hospital.class, hospitalId); }
+
+
+    /* 병원 이름으로 조회 */
+    public List<Hospital> findByHospitalName(final String name) {
+        return em.createQuery("select h from Hospital h where h.name = :name", Hospital.class)
+                .setParameter("name", name)
+                .getResultList();
+    }
+
 
     /**
      * 병원 목록 조회

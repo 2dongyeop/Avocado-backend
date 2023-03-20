@@ -57,7 +57,7 @@ public class BusInfoServiceTest {
         //given -- 조건
 
         //when -- 동작
-        busInfoService.findOne(2L);
+        busInfoService.findOne(100L);
 
         //then -- 검증
         fail("단건 조회 실패로 인해 예외가 발생해야 한다.");

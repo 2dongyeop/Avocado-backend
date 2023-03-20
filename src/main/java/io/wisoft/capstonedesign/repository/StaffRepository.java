@@ -81,4 +81,8 @@ public class StaffRepository {
         return em.createQuery("select s from Staff s join fetch s.hospital h", Staff.class)
                 .getResultList();
     }
+
+    public void delete(Staff staff) {
+        em.remove(staff);
+    }
 }

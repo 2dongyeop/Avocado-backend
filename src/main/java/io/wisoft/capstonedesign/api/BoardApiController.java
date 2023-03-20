@@ -18,6 +18,15 @@ public class BoardApiController {
 
     private final BoardService boardService;
 
+    /* 게시글 단건 조회 */
+    @GetMapping("/api/boards/{id}")
+    public Result board(@PathVariable Long id) {
+        Board board = boardService.findOne(id);
+
+        return new Result(new BoardDto(board));
+    }
+
+
     /* 게시글 조회 */
     @GetMapping("/api/boards")
     public Result boards() {
@@ -29,8 +38,44 @@ public class BoardApiController {
         return new Result(boardDtoList);
     }
 
+
+    /* 게시글 생성일자 기준 오름차순 조회 */
+    @GetMapping("/api/boards/create-asc")
+    public Result boardsOrderByCreateAsc() {
+
+        List<BoardDto> boardDtoList = boardService.findAllOrderByCreateAtAsc()
+                .stream().map(BoardDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(boardDtoList);
+    }
+
+
+    /* 게시글 생성일자 기준 내림차순 조회 */
+    @GetMapping("/api/boards/create-desc")
+    public Result boardsOrderByCreateDesc() {
+
+        List<BoardDto> boardDtoList = boardService.findAllOrderByCreateAtDesc()
+                .stream().map(BoardDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(boardDtoList);
+    }
+
+
+    /* 특정 작성자의 게시글 목록 조회 */
+    @GetMapping("/api/boards/member/{member-id}")
+    public Result boardsByMember(@PathVariable("member-id") Long id) {
+        List<BoardDto> boardDtoList = boardService.findByMemberId(id)
+                .stream().map(BoardDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(boardDtoList);
+    }
+
+
     /* 게시글 작성 */
-    @PostMapping("/api/boards")
+    @PostMapping("/api/boards/new")
     public CreateBoardResponse createBoard(
             @RequestBody @Valid final CreateBoardRequest request) {
 
@@ -39,6 +84,7 @@ public class BoardApiController {
         Board board = boardService.findOne(id);
         return new CreateBoardResponse(board.getId());
     }
+
 
     /* 게시글 제목 및 본문 수정 */
     @PatchMapping("/api/boards/{id}")
@@ -61,6 +107,7 @@ public class BoardApiController {
         Board board = boardService.findOne(id);
         return new DeleteBoardResponse(board.getId(), board.getStatus().toString());
     }
+
 
     @Data
     @AllArgsConstructor

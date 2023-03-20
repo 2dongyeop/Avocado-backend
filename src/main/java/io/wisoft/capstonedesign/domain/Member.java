@@ -107,6 +107,10 @@ public class Member {
         this.password = newPassword;
     }
 
+    public void updateNickname(String newNickname) {
+        this.nickname = newNickname;
+    }
+
     public void uploadPhotoPath(String newPhotoPath) {
         this.memberPhotoPath = newPhotoPath;
     }

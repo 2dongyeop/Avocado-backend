@@ -4,6 +4,7 @@ import io.wisoft.capstonedesign.domain.*;
 import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.exception.IllegalValueException;
 import io.wisoft.capstonedesign.exception.duplicate.DuplicateStaffException;
+import io.wisoft.capstonedesign.exception.nullcheck.NullHospitalException;
 import io.wisoft.capstonedesign.exception.nullcheck.NullStaffException;
 import io.wisoft.capstonedesign.repository.StaffRepository;
 import jakarta.persistence.EntityManager;
@@ -154,5 +155,58 @@ public class StaffServiceTest {
 
         //then -- 검증
         Assertions.assertThat(staff.getStaffPhotoPath()).isEqualTo(newPhotoPath);
+    }
+
+    @Test
+    public void 의료진_병원_수정() throws Exception {
+
+        //given -- 조건
+        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+        em.persist(hospital);
+
+        Staff staff = Staff.newInstance(hospital, "lee", "1204@naver.com", "1111", "license", HospitalDept.OBSTETRICS);
+        em.persist(staff);
+
+        //when -- 동작
+        staffService.updateStaffHospital(staff.getId(), "hospital1");
+
+        //then -- 검증
+        Staff getStaff = staffService.findOne(staff.getId());
+        Assertions.assertThat(getStaff.getHospital().getName()).isEqualTo("hospital1");
+    }
+
+    @Test(expected = NullHospitalException.class)
+    public void 의료진_병원_수정_실패() throws Exception {
+
+        //given -- 조건
+        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+        em.persist(hospital);
+
+        Staff staff = Staff.newInstance(hospital, "lee", "1204@naver.com", "1111", "license", HospitalDept.OBSTETRICS);
+        em.persist(staff);
+
+        //when -- 동작
+        staffService.updateStaffHospital(staff.getId(), "아보카도111111111");
+
+        //then -- 검증
+        fail("존재하지 않는 병원명을 입력해 예외가 발생해야 한다.");
+    }
+
+    @Test(expected = NullStaffException.class)
+    public void 의료진_탈퇴() throws Exception {
+
+        //given -- 조건
+        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+        em.persist(hospital);
+
+        Staff staff = Staff.newInstance(hospital, "lee", "1204@naver.com", "1111", "license", HospitalDept.OBSTETRICS);
+        em.persist(staff);
+
+        //when -- 동작
+        staffService.deleteStaff(staff.getId());
+
+        //then -- 검증
+        staffService.findOne(staff.getId());
+        fail("탈퇴한 회원의 id로 조회하려 하면 대상이없어 예외가 발생해야 한다.");
     }
 }

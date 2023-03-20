@@ -85,7 +85,7 @@ public class HealthInfoServiceTest {
         //given -- 조건
 
         //when -- 동작
-        healthInfoService.findOne(2L);
+        healthInfoService.findOne(100L);
 
         //then -- 검증
         fail("단건 조회 실패로 예외가 발생해야 한다.");

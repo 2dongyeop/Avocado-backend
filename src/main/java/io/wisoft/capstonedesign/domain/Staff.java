@@ -111,4 +111,10 @@ public class Staff {
     public void updatePhotoPath(final String newPhotoPath) {
         this.staffPhotoPath = newPhotoPath;
     }
+
+    /* 의료진 병원 수정 */
+    public void updateHospital(final Hospital hospital) {
+
+        setHospital(hospital);
+    }
 }

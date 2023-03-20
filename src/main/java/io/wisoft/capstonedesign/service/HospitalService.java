@@ -38,6 +38,16 @@ public class HospitalService {
         return getHospital;
     }
 
+    /* 병원 이름으로 조회 */
+    public Hospital findByHospitalName(final String hosptialName) {
+        List<Hospital> hospitals = hospitalRepository.findByHospitalName(hosptialName);
+
+        if (hospitals.size() == 0) {
+            throw new NullHospitalException("해당 병원은 존재하지 않습니다.");
+        }
+        return hospitals.get(0);
+    }
+
     /**
      * 병원 목록 조회
      */

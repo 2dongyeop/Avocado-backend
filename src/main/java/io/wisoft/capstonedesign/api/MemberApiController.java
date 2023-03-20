@@ -17,17 +17,26 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
+    /* 회원 단건 조회 */
+    @GetMapping("/api/members/{id}")
+    public Result member(@PathVariable("id") final Long id) {
 
-    /* 회원 조회 */
+        Member member = memberService.findOne(id);
+
+        return new Result(new MemberDto(member.getNickname(), member.getEmail(), member.getPhoneNumber()));
+    }
+
+    /* 회원 목록 조회 */
     @GetMapping("/api/members")
     public Result members() {
 
-        List<MemberDto> memberDtoList = memberService.findAll().stream()
-                .map(MemberDto::new)
+        List<MemberListDto> memberListDtoList = memberService.findAll().stream()
+                .map(MemberListDto::new)
                 .collect(Collectors.toList());
 
-        return new Result(memberDtoList);
+        return new Result(memberListDtoList);
     }
+
 
     /* 회원가입 */
     @PostMapping("/api/members/signup")
@@ -39,7 +48,7 @@ public class MemberApiController {
     }
 
     /* 회원 비밀번호 수정 */
-    @PatchMapping("/api/members/{member_id}")
+    @PatchMapping("/api/members/{id}/password")
     public UpdateMemberResponse updateMemberPassword(
             @PathVariable("member_id") final Long id,
             @RequestBody @Valid final UpdateMemberPasswordRequest request) {
@@ -51,10 +60,20 @@ public class MemberApiController {
     }
 
     /* 회원 닉네임 수정 */
-    //TODO 만들기
+    @PatchMapping("/api/members/{id}/nickname")
+    public UpdateMemberResponse updateMemberNickname(
+            @PathVariable("id") final Long id,
+            @RequestBody @Valid final UpdateMemberNicknameRequest request) {
+
+        memberService.updateMemberNickname(id, request.nickname);
+        Member member = memberService.findOne(id);
+
+        return new UpdateMemberResponse(member.getId());
+    }
+
 
     /* 회원 프로필사진 업로드 혹은 수정 */
-    @PatchMapping("/api/members/{id}")
+    @PatchMapping("/api/members/{id}/photo")
     public UpdateMemberResponse updateMemberPhotoPath(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateMemberPhotoPathRequest request) {
@@ -63,6 +82,22 @@ public class MemberApiController {
         Member member = memberService.findOne(id);
 
         return new UpdateMemberResponse(member.getId());
+    }
+
+
+    /* 회원 탈퇴 */
+    @DeleteMapping("/api/members/{id}")
+    public DeleteMemberResponse deleteMember(@PathVariable("id") final Long id) {
+
+        memberService.deleteMember(id);
+        return new DeleteMemberResponse(id);
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    static class DeleteMemberResponse {
+        private Long id;
     }
 
 
@@ -77,11 +112,24 @@ public class MemberApiController {
     static class MemberDto {
         private String nickname;
         private String email;
+        private String phoneNumber;
+    }
 
-        public MemberDto(final Member member) {
+    @Data
+    @AllArgsConstructor
+    static class MemberListDto {
+        private String nickname;
+        private String email;
+
+        public MemberListDto(final Member member) {
             nickname = member.getNickname();
             email = member.getEmail();
         }
+    }
+
+    @Data
+    static class UpdateMemberNicknameRequest {
+        private String nickname;
     }
 
 
