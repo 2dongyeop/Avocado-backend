@@ -17,12 +17,66 @@ public class ReviewApiController {
 
     private final ReviewService reviewService;
 
-    /* 리뷰 조회 */
+    /* 리뷰 단건 조회 */
+    @GetMapping("/api/reviews/{id}")
+    public Result review(@PathVariable("id") final Long id) {
+        Review review = reviewService.findOne(id);
+
+        return new Result(new ReviewDto(review));
+    }
+
+    /* 리뷰 목록 조회 */
     @GetMapping("/api/reviews")
     public Result reviews() {
 
         List<ReviewDto> reviewDtoList = reviewService.findAllByMember().stream()
                 .map(ReviewDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(reviewDtoList);
+    }
+
+    /* 리뷰 목록을 생성일자를 기준으로 오름차순 조회 */
+    @GetMapping("/api/reviews/create-asc")
+    public Result reviewsOrderByCreateAtASC() {
+
+        List<ReviewDto> reviewDtoList = reviewService.findAllOrderByCreateAtASC().stream()
+                .map(ReviewDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(reviewDtoList);
+    }
+
+
+    /* 리뷰 목록을 생성일자를 기준으로 내림차순 조회 */
+    @GetMapping("/api/reviews/create-desc")
+    public Result reviewsOrderByCreateAtDESC() {
+
+        List<ReviewDto> reviewDtoList = reviewService.findAllOrderByCreateAtDESC().stream()
+                .map(ReviewDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(reviewDtoList);
+    }
+
+
+    /* 특정 작성자의 리뷰 목록 조회 */
+    @GetMapping("/api/reviews/{member-id}")
+    public Result reviewsByMemberId(@PathVariable("member-id") final Long id) {
+
+        List<ReviewDto> reviewDtoList = reviewService.findByMemberId(id).stream()
+                .map(ReviewDto::new)
+                .collect(Collectors.toList());
+
+        return new Result<>(reviewDtoList);
+    }
+
+    /* 특정 병원의 리뷰 목록 조회 */
+    @GetMapping("/api/reviews/{target-hospital}")
+    public Result reviewsByTargetHostpital(@PathVariable("target-hospital") String targetHospital) {
+
+        List<ReviewDto> reviewDtoList = reviewService.findByTargetHospital(targetHospital)
+                .stream().map(ReviewDto::new)
                 .collect(Collectors.toList());
 
         return new Result(reviewDtoList);
