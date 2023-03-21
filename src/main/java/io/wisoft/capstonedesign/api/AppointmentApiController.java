@@ -4,9 +4,7 @@ import io.wisoft.capstonedesign.domain.Appointment;
 import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.service.AppointmentService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,7 +57,7 @@ public class AppointmentApiController {
 
     /* 특정 회원의 예약 정보 목록 조회 */
     @GetMapping("/api/appointments/member/{member-id}")
-    public Result appointments(@PathVariable("member-id") final Long id) {
+    public Result appointmentsByMember(@PathVariable("member-id") final Long id) {
         List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberId(id)
                 .stream().map(AppointmentDto::new)
                 .collect(Collectors.toList());
@@ -70,7 +68,7 @@ public class AppointmentApiController {
 
     /* 특정 회원의 예약 정보 목록 오름차순 조회 */
     @GetMapping("/api/appointments/member/{member-id}/create-asc")
-    public Result appointmentsOrderByCreateAsc(@PathVariable("member-id") final Long id) {
+    public Result appointmentsByMemberOrderByCreateAsc(@PathVariable("member-id") final Long id) {
         List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdASC(id)
                 .stream().map(AppointmentDto::new)
                 .collect(Collectors.toList());
@@ -81,7 +79,7 @@ public class AppointmentApiController {
 
     /* 특정 회원의 예약 정보 목록 내림차순 조회 */
     @GetMapping("/api/appointments/member/{member-id}/create-desc")
-    public Result appointmentsOrderByCreateDesc(@PathVariable("member-id") final Long id) {
+    public Result appointmentsByMemberOrderByCreateDesc(@PathVariable("member-id") final Long id) {
         List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdDESC(id)
                 .stream().map(AppointmentDto::new)
                 .collect(Collectors.toList());
@@ -140,6 +138,7 @@ public class AppointmentApiController {
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     static class CreateAppointmentRequest {
         private Long memberId;
         private Long hospitalId;

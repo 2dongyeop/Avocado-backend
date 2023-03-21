@@ -25,7 +25,7 @@ public class ReviewReplyService {
      * 리뷰댓글 저장
      */
     @Transactional
-    public Long save(Long memberId, Long reviewId, String reply) {
+    public Long save(final Long memberId, final Long reviewId, final String reply) {
 
         //엔티티 조회
         Member member = memberService.findOne(memberId);
@@ -42,17 +42,18 @@ public class ReviewReplyService {
      * 리뷰댓글 삭제
      */
     @Transactional
-    public void deleteReviewReply(Long reviewReplyId) {
+    public void deleteReviewReply(final Long reviewReplyId) {
 
         ReviewReply reviewReply = reviewReplyRepository.findOne(reviewReplyId);
         reviewReply.delete();
     }
 
+
     /**
      * 리뷰댓글 수정
      */
     @Transactional
-    public void updateReply(Long reviewReplyId, String reply) {
+    public void updateReply(final Long reviewReplyId, final String reply) {
 
         ReviewReply reviewReply = findOne(reviewReplyId);
 
@@ -60,7 +61,7 @@ public class ReviewReplyService {
         reviewReply.updateReply(reply);
     }
 
-    private void validateParameter(String reply) {
+    private void validateParameter(final String reply) {
 
         if (reply == null) {
             throw new IllegalValueException("reply가 비어있어 수정할 수 없습니다.");
@@ -71,7 +72,7 @@ public class ReviewReplyService {
     /**
      * 리뷰댓글 단건조회
      */
-    public ReviewReply findOne(Long reviewReplyId) {
+    public ReviewReply findOne(final Long reviewReplyId) {
         ReviewReply getReviewReply = reviewReplyRepository.findOne(reviewReplyId);
         if (getReviewReply == null) {
             throw new NullReviewReplyException("해당 리뷰댓글은 존재하지 않습니다.");
@@ -83,21 +84,23 @@ public class ReviewReplyService {
     /**
      * 특정 리뷰의 리뷰댓글 목록 조회
      */
-    public List<ReviewReply> findByReviewId(Long reviewId) {
+    public List<ReviewReply> findByReviewId(final Long reviewId) {
         return reviewReplyRepository.findByReviewId(reviewId);
     }
+
 
     /**
      * 특정 리뷰의 댓글 목록 오름차순 조회
      */
-    public List<ReviewReply> findAllcreateAtASC() {
-        return reviewReplyRepository.findAllcreateAtASC();
+    public List<ReviewReply> findAllOrderByCreateAtAsc(final Long reviewId) {
+        return reviewReplyRepository.findAllOrderByCreateAtAsc(reviewId);
     }
+
 
     /**
      * 특정 리뷰의 댓글 목록 내림차순 조회
      */
-    public List<ReviewReply> findAllcreateAtDESC() {
-        return reviewReplyRepository.findAllcreateAtDESC();
+    public List<ReviewReply> findAllOrderByCreateAtDesc(final Long reviewId) {
+        return reviewReplyRepository.findAllOrderByCreateAtDesc(reviewId);
     }
 }
