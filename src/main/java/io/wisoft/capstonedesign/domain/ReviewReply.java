@@ -41,7 +41,7 @@ public class ReviewReply {
     private Member member;
 
     /* 연관관계 메서드 */
-    public void setMember(Member member) {
+    public void setMember(final Member member) {
         //comment: 기존 관계 제거
         if (this.member != null) {
             this.member.getReviewReplyList().remove(this);
@@ -55,7 +55,7 @@ public class ReviewReply {
         }
     }
 
-    public void setReview(Review review) {
+    public void setReview(final Review review) {
         //comment: 기존 관계 제거
         if (this.review != null) {
             this.review.getReviewReplyList().remove(this);
@@ -70,7 +70,10 @@ public class ReviewReply {
     }
 
     /* 정적 생성 메서드 */
-    public static ReviewReply createReviewReply(Member member, Review review, String reply) {
+    public static ReviewReply createReviewReply(
+            final Member member,
+            final Review review,
+            final String reply) {
 
         ReviewReply reviewReply = new ReviewReply();
 
@@ -99,7 +102,7 @@ public class ReviewReply {
     /**
      * 리뷰댓글 수정
      */
-    public void updateReply(String reply) {
+    public void updateReply(final String reply) {
 
         this.reply = reply;
         this.updateAt = LocalDateTime.now();
