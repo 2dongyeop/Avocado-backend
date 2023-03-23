@@ -32,7 +32,7 @@ public class ReviewReplyRepository {
      */
     public List<ReviewReply> findByReviewId(final Long reviewId) {
 
-        return em.createQuery("select rr from ReviewReply rr join rr.review r where r.id = :id", ReviewReply.class)
+        return em.createQuery("select rr from ReviewReply rr join fetch rr.review r where r.id = :id", ReviewReply.class)
                 .setParameter("id", reviewId)
                 .getResultList();
     }
@@ -42,7 +42,7 @@ public class ReviewReplyRepository {
      */
     public List<ReviewReply> findAllOrderByCreateAtAsc(final Long id) {
 
-        return em.createQuery("select rr from ReviewReply rr join rr.review r where r.id = :id order by rr.createAt asc", ReviewReply.class)
+        return em.createQuery("select rr from ReviewReply rr join fetch rr.review r where r.id = :id order by rr.createAt asc", ReviewReply.class)
                 .setParameter("id", id)
                 .getResultList();
     }
@@ -54,7 +54,7 @@ public class ReviewReplyRepository {
 
         String jpql = "select rr from ReviewReply rr  order by rr.createAt desc";
 
-        return em.createQuery("select rr from ReviewReply rr join rr.review r where r.id = :id order by rr.createAt desc", ReviewReply.class)
+        return em.createQuery("select rr from ReviewReply rr join fetch rr.review r where r.id = :id order by rr.createAt desc", ReviewReply.class)
                 .setParameter("id", id)
                 .getResultList();
     }

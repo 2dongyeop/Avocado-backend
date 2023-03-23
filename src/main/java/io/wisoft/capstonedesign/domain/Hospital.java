@@ -40,7 +40,7 @@ public class Hospital {
     private final List<Pick> pickList = new ArrayList<>();
 
     /* 연관관계 편의 메서드 */
-    public void addAppointment(Appointment appointment) {
+    public void addAppointment(final Appointment appointment) {
         this.appointmentList.add(appointment);
 
         if (appointment.getHospital() != this) { //무한루프에 빠지지 않도록 체크
@@ -48,7 +48,7 @@ public class Hospital {
         }
     }
 
-    public void addPick(Pick pick) {
+    public void addPick(final Pick pick) {
         this.pickList.add(pick);
 
         if (pick.getHospital() != this) { //무한루프에 빠지지 않도록 체크
@@ -56,7 +56,7 @@ public class Hospital {
         }
     }
 
-    public void addStaff(Staff staff) {
+    public void addStaff(final Staff staff) {
         this.staffList.add(staff);
 
         if (staff.getHospital() != this) {
@@ -65,7 +65,12 @@ public class Hospital {
     }
 
     /* 정적 생성 메서드 */
-    public static Hospital createHospital(String name, String number, String address, String operatingTime) {
+    public static Hospital createHospital(
+            final String name,
+            final String number,
+            final String address,
+            final String operatingTime) {
+
         Hospital hospital = new Hospital();
 
         hospital.name = name;

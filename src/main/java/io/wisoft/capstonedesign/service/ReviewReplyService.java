@@ -92,7 +92,7 @@ public class ReviewReplyService {
     /**
      * 특정 리뷰의 댓글 목록 오름차순 조회
      */
-    public List<ReviewReply> findAllOrderByCreateAtAsc(final Long reviewId) {
+    public List<ReviewReply> findAllByReviewIdOrderByCreateAsc(final Long reviewId) {
         return reviewReplyRepository.findAllOrderByCreateAtAsc(reviewId);
     }
 
@@ -100,7 +100,7 @@ public class ReviewReplyService {
     /**
      * 특정 리뷰의 댓글 목록 내림차순 조회
      */
-    public List<ReviewReply> findAllOrderByCreateAtDesc(final Long reviewId) {
+    public List<ReviewReply> findAllByReviewIdOrderByCreateDesc(final Long reviewId) {
         return reviewReplyRepository.findAllOrderByCreateAtDesc(reviewId);
     }
 }

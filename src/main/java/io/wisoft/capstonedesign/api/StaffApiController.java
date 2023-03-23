@@ -24,7 +24,7 @@ public class StaffApiController {
 
         Staff staff = staffService.findOne(id);
 
-        return new Result(new StaffDto(staff.getName(), staff.getEmail(), staff.getDept().toString(), staff.getHospital().toString()));
+        return new Result(new StaffDto(staff));
     }
 
     /* 의료진 목록 조회 */
@@ -116,7 +116,7 @@ public class StaffApiController {
         private String dept;
         private String hospital;
 
-        public StaffDto(Staff staff) {
+        public StaffDto(final Staff staff) {
             this.name = staff.getName();
             this.email = staff.getEmail();
             this.dept = String.valueOf(staff.getDept());
