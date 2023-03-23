@@ -1,10 +1,12 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.domain.Member;
-import io.wisoft.capstonedesign.exception.IllegalValueException;
-import io.wisoft.capstonedesign.exception.duplicate.DuplicateMemberException;
-import io.wisoft.capstonedesign.exception.nullcheck.NullMemberException;
-import io.wisoft.capstonedesign.repository.MemberRepository;
+import io.wisoft.capstonedesign.member.Member;
+import io.wisoft.capstonedesign.global.enumeration.status.MemberStatus;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
+import io.wisoft.capstonedesign.member.MemberRepository;
+import io.wisoft.capstonedesign.member.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +22,8 @@ import static org.junit.Assert.*;
 @Transactional
 public class MemberServiceTest {
 
-    @Autowired MemberService memberService;
+    @Autowired
+    MemberService memberService;
     @Autowired MemberRepository memberRepository;
 
     @Test
@@ -120,18 +123,17 @@ public class MemberServiceTest {
         Assertions.assertThat(getMember.getMemberPhotoPath()).isEqualTo("새로운 사진 경로");
     }
 
-    @Test(expected = NullMemberException.class)
+    @Test
     public void 회원_탈퇴() throws Exception {
         //given -- 조건
         Member member = Member.newInstance("test1", "ldy_2222@naver.com", "1111", "0000");
         Long signUpId = memberService.signUp(member);
 
         //when -- 동작
-        memberService.deleteMember(signUpId);
+        Member member1 = memberService.findOne(signUpId);
+        member1.delete();
 
         //then -- 검증
-        memberService.findOne(signUpId);
-        fail("탈퇴가 정상적으로 동작했다면, findOne의 결과가 없어 예외가 발생해야 한다.");
-
+        Assertions.assertThat(member1.getStatus()).isEqualTo(MemberStatus.DELETE);
     }
 }

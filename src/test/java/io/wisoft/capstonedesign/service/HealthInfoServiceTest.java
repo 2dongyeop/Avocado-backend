@@ -1,12 +1,13 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.domain.HealthInfo;
-import io.wisoft.capstonedesign.domain.Staff;
-import io.wisoft.capstonedesign.domain.enumeration.HealthInfoStatus;
-import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.exception.nullcheck.NullHealthInfoException;
-import io.wisoft.capstonedesign.repository.HealthInfoRepository;
-import jakarta.persistence.EntityManager;
+import io.wisoft.capstonedesign.healthinfo.HealthInfo;
+import io.wisoft.capstonedesign.staff.Staff;
+import io.wisoft.capstonedesign.global.enumeration.status.HealthInfoStatus;
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullHealthInfoException;
+import io.wisoft.capstonedesign.healthinfo.HealthInfoRepository;
+import io.wisoft.capstonedesign.healthinfo.HealthInfoService;
+import io.wisoft.capstonedesign.staff.StaffService;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,8 +22,10 @@ import static org.junit.Assert.*;
 @SpringBootTest
 @Transactional
 public class HealthInfoServiceTest {
-    @Autowired StaffService staffService;
-    @Autowired HealthInfoService healthInfoService;
+    @Autowired
+    StaffService staffService;
+    @Autowired
+    HealthInfoService healthInfoService;
     @Autowired HealthInfoRepository healthInfoRepository;
 
     @Test

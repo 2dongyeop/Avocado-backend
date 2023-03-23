@@ -1,9 +1,10 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.domain.BusInfo;
-import io.wisoft.capstonedesign.domain.enumeration.BusArea;
-import io.wisoft.capstonedesign.domain.enumeration.BusInfoStatus;
-import io.wisoft.capstonedesign.exception.nullcheck.NullBusInfoException;
+import io.wisoft.capstonedesign.businfo.BusInfo;
+import io.wisoft.capstonedesign.businfo.BusInfoService;
+import io.wisoft.capstonedesign.global.enumeration.BusArea;
+import io.wisoft.capstonedesign.global.enumeration.status.BusInfoStatus;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullBusInfoException;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +20,8 @@ import static org.junit.Assert.*;
 @Transactional
 public class BusInfoServiceTest {
 
-    @Autowired BusInfoService busInfoService;
+    @Autowired
+    BusInfoService busInfoService;
 
     @Test
     public void 버스정보_등록() throws Exception {

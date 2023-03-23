@@ -1,8 +1,18 @@
 package io.wisoft.capstonedesign;
 
-import io.wisoft.capstonedesign.domain.*;
-import io.wisoft.capstonedesign.domain.enumeration.BusArea;
-import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.appointment.Appointment;
+import io.wisoft.capstonedesign.board.Board;
+import io.wisoft.capstonedesign.review.Review;
+import io.wisoft.capstonedesign.boardreply.BoardReply;
+import io.wisoft.capstonedesign.businfo.BusInfo;
+import io.wisoft.capstonedesign.global.enumeration.BusArea;
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.healthinfo.HealthInfo;
+import io.wisoft.capstonedesign.hospital.Hospital;
+import io.wisoft.capstonedesign.member.Member;
+import io.wisoft.capstonedesign.pick.Pick;
+import io.wisoft.capstonedesign.reviewreply.ReviewReply;
+import io.wisoft.capstonedesign.staff.Staff;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;

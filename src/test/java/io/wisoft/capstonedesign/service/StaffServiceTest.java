@@ -1,12 +1,19 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.domain.*;
-import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.exception.IllegalValueException;
-import io.wisoft.capstonedesign.exception.duplicate.DuplicateStaffException;
-import io.wisoft.capstonedesign.exception.nullcheck.NullHospitalException;
-import io.wisoft.capstonedesign.exception.nullcheck.NullStaffException;
-import io.wisoft.capstonedesign.repository.StaffRepository;
+import io.wisoft.capstonedesign.board.Board;
+import io.wisoft.capstonedesign.review.Review;
+import io.wisoft.capstonedesign.boardreply.BoardReply;
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.enumeration.status.StaffStatus;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
+import io.wisoft.capstonedesign.hospital.Hospital;
+import io.wisoft.capstonedesign.member.Member;
+import io.wisoft.capstonedesign.staff.StaffRepository;
+import io.wisoft.capstonedesign.staff.Staff;
+import io.wisoft.capstonedesign.staff.StaffService;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -26,7 +33,8 @@ import static org.junit.Assert.*;
 public class StaffServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired StaffService staffService;
+    @Autowired
+    StaffService staffService;
     @Autowired StaffRepository staffRepository;
 
     @Test(expected = DuplicateStaffException.class)
@@ -192,21 +200,20 @@ public class StaffServiceTest {
         fail("존재하지 않는 병원명을 입력해 예외가 발생해야 한다.");
     }
 
-    @Test(expected = NullStaffException.class)
+    @Test
     public void 의료진_탈퇴() throws Exception {
 
         //given -- 조건
         Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
         em.persist(hospital);
 
-        Staff staff = Staff.newInstance(hospital, "lee", "1204@naver.com", "1111", "license", HospitalDept.OBSTETRICS);
-        em.persist(staff);
+        Long id = staffService.signUp(hospital.getId(), "lee", "1204@naver.com", "1111", "license", HospitalDept.OBSTETRICS);
+        Staff staff = staffService.findOne(id);
 
         //when -- 동작
-        staffService.deleteStaff(staff.getId());
+        staff.delete();
 
         //then -- 검증
-        staffService.findOne(staff.getId());
-        fail("탈퇴한 회원의 id로 조회하려 하면 대상이없어 예외가 발생해야 한다.");
+        Assertions.assertThat(staff.getStatus()).isEqualTo(StaffStatus.DELETE);
     }
 }
