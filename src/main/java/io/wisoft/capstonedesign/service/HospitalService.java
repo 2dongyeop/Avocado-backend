@@ -20,7 +20,7 @@ public class HospitalService {
      * 병원 저장
      */
     @Transactional
-    public Long save(Hospital hospital) {
+    public Long save(final Hospital hospital) {
 
         hospitalRepository.save(hospital);
         return hospital.getId();
@@ -29,7 +29,7 @@ public class HospitalService {
     /**
      * 병원 단건 조회
      */
-    public Hospital findOne(Long hospitalId) {
+    public Hospital findOne(final Long hospitalId) {
         Hospital getHospital = hospitalRepository.findOne(hospitalId);
 
         if (getHospital == null) {
@@ -39,8 +39,8 @@ public class HospitalService {
     }
 
     /* 병원 이름으로 조회 */
-    public Hospital findByHospitalName(final String hosptialName) {
-        List<Hospital> hospitals = hospitalRepository.findByHospitalName(hosptialName);
+    public Hospital findByHospitalName(final String hospitalName) {
+        List<Hospital> hospitals = hospitalRepository.findByHospitalName(hospitalName);
 
         if (hospitals.size() == 0) {
             throw new NullHospitalException("해당 병원은 존재하지 않습니다.");

@@ -49,7 +49,7 @@ public class StaffRepository {
      */
     public List<Board> findBoardListByStaffId(final Long staffId) {
 
-        List<BoardReply> boardReplyList = em.createQuery("select br from BoardReply br join br.staff s where s.id = :id", BoardReply.class)
+        List<BoardReply> boardReplyList = em.createQuery("select br from BoardReply br join fetch br.staff s where s.id = :id", BoardReply.class)
                 .setParameter("id", staffId)
                 .getResultList();
 

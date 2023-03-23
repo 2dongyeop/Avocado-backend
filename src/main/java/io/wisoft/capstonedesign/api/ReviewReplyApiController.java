@@ -17,14 +17,26 @@ public class ReviewReplyApiController {
 
     private final ReviewReplyService reviewReplyService;
 
+
     /* 리뷰댓글 저장 */
     @PostMapping("/api/review-reply/new")
     public CreateReviewReplyResponse createReviewReply(
             @RequestBody @Valid final CreateReviewReplyRequest request) {
 
         Long id = reviewReplyService.save(request.memberId, request.reviewId, request.reply);
-        ReviewReply reply = reviewReplyService.findOne(id);
-        return new CreateReviewReplyResponse(reply.getId());
+        ReviewReply reviewReply = reviewReplyService.findOne(id);
+        return new CreateReviewReplyResponse(reviewReply.getId());
+    }
+
+
+    /* 리뷰댓글 삭제 */
+    @DeleteMapping("/api/review-reply/{id}")
+    public DeleteReviewReplyResponse deleteReviewReply(
+            @PathVariable("id") final Long id) {
+
+        reviewReplyService.deleteReviewReply(id);
+        ReviewReply reviewReply = reviewReplyService.findOne(id);
+        return new DeleteReviewReplyResponse(reviewReply.getId(), reviewReply.getStatus().toString());
     }
 
 
@@ -40,16 +52,6 @@ public class ReviewReplyApiController {
     }
 
 
-    /* 리뷰댓글 삭제 */
-    @DeleteMapping("/api/review-reply/{id}")
-    public DeleteReviewReplyResponse deleteReviewReply(@PathVariable("id") final Long id) {
-
-        reviewReplyService.deleteReviewReply(id);
-        ReviewReply reviewReply = reviewReplyService.findOne(id);
-        return new DeleteReviewReplyResponse(reviewReply.getId(), reviewReply.getStatus().toString());
-    }
-
-
     /* 리뷰댓글 단건 조회 */
     @GetMapping("/api/review-reply/{id}")
     public Result reviewReply(@PathVariable("id") final Long id) {
@@ -59,22 +61,25 @@ public class ReviewReplyApiController {
     }
 
 
-    /* 특정 리뷰의 댓글 목록 조회 */
+    /* 특정 리뷰의 댓글목록 조회 */
     @GetMapping("/api/review-reply/review/{review-id}")
-    public Result reviewReplyByReview(@PathVariable("review-id") final Long id) {
+    public Result reviewReplyByReview(
+            @PathVariable("review-id") final Long reviewId) {
 
-        List<ReviewReplyDto> reviewReplyDtoList = reviewReplyService.findByReviewId(id)
+        List<ReviewReplyDto> reviewReplyDtoList = reviewReplyService.findByReviewId(reviewId)
                 .stream().map(ReviewReplyDto::new)
                 .collect(Collectors.toList());
 
         return new Result(reviewReplyDtoList);
     }
 
-    /* 특정 리뷰의 댓글 목록 오름차순 조회 */
+
+    /* 특정 리뷰의 댓글목록 오름차순 조회 */
     @GetMapping("/api/review-reply/review/{review-id}/create-asc")
-    public Result reviewReplyByReviewOrderByCreateAsc(@PathVariable("review-id") final Long id) {
+    public Result reviewReplyByReviewOrderByCreateAsc(
+            @PathVariable("review-id") final Long reviewId) {
 
-        List<ReviewReplyDto> reviewReplyDtoList = reviewReplyService.findAllOrderByCreateAtAsc(id)
+        List<ReviewReplyDto> reviewReplyDtoList = reviewReplyService.findAllByReviewIdOrderByCreateAsc(reviewId)
                 .stream().map(ReviewReplyDto::new)
                 .collect(Collectors.toList());
 
@@ -82,11 +87,12 @@ public class ReviewReplyApiController {
     }
 
 
-    /* 특정 리뷰의 댓글 목록 내림차순 조회 */
+    /* 특정 리뷰의 댓글목록 내림차순 조회 */
     @GetMapping("/api/review-reply/review/{review-id}/create-desc")
-    public Result reviewReplyByReviewOrderByCreateDesc(@PathVariable("review-id") final Long id) {
+    public Result reviewReplyByReviewOrderByCreateDesc(
+            @PathVariable("review-id") final Long reviewId) {
 
-        List<ReviewReplyDto> reviewReplyDtoList = reviewReplyService.findAllOrderByCreateAtDesc(id)
+        List<ReviewReplyDto> reviewReplyDtoList = reviewReplyService.findAllByReviewIdOrderByCreateDesc(reviewId)
                 .stream().map(ReviewReplyDto::new)
                 .collect(Collectors.toList());
 
@@ -100,27 +106,20 @@ public class ReviewReplyApiController {
         private T data;
     }
 
-
     @Data
     @AllArgsConstructor
     static class ReviewReplyDto {
-        private String name;
-        private String title;
+        private Long reviewId;
+        private String reviewTitle;
+        private String writer;
         private String reply;
 
         public ReviewReplyDto(final ReviewReply reviewReply) {
-            this.name = reviewReply.getMember().getNickname();
-            this.title = reviewReply.getReview().getTitle();
+            this.reviewId = reviewReply.getReview().getId();
+            this.reviewTitle = reviewReply.getReview().getTitle();
+            this.writer = reviewReply.getMember().getNickname();
             this.reply = reviewReply.getReply();
         }
-    }
-
-
-    @Data
-    @AllArgsConstructor
-    static class DeleteReviewReplyResponse {
-        private Long id;
-        private String status;
     }
 
 
@@ -130,17 +129,16 @@ public class ReviewReplyApiController {
         private Long id;
     }
 
-
     @Data
     static class UpdateReviewReplyRequest {
         private String reply;
     }
 
-
     @Data
     @AllArgsConstructor
-    static class CreateReviewReplyResponse {
+    static class DeleteReviewReplyResponse {
         private Long id;
+        private String status;
     }
 
     @Data
@@ -148,5 +146,11 @@ public class ReviewReplyApiController {
         private Long memberId;
         private Long reviewId;
         private String reply;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class CreateReviewReplyResponse {
+        private Long id;
     }
 }

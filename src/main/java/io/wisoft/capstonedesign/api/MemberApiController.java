@@ -50,7 +50,7 @@ public class MemberApiController {
     /* 회원 비밀번호 수정 */
     @PatchMapping("/api/members/{id}/password")
     public UpdateMemberResponse updateMemberPassword(
-            @PathVariable("member_id") final Long id,
+            @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateMemberPasswordRequest request) {
 
         memberService.updatePassword(id, request.oldPassword, request.newPassword);

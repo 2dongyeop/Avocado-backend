@@ -42,7 +42,7 @@ public class BoardRepository {
      */
     public List<Board> findByMemberId(final Long memberId) {
 
-        return em.createQuery("select b from Board b join b.member m where m.id = :id", Board.class)
+        return em.createQuery("select b from Board b join fetch b.member m where m.id = :id", Board.class)
                 .setParameter("id", memberId)
                 .getResultList();
     }
@@ -70,7 +70,7 @@ public class BoardRepository {
 
     /* 특정 의료진이 댓글을 단 게시글 목록 조회 */
     public List<Board> findByStaffReply(final Long staffId) {
-        List<BoardReply> boardReplyList = em.createQuery("select br from BoardReply br join br.staff.id = :staffId", BoardReply.class)
+        List<BoardReply> boardReplyList = em.createQuery("select br from BoardReply br join fetch br.staff.id = :staffId", BoardReply.class)
                 .setParameter("staffId", staffId)
                 .getResultList();
 

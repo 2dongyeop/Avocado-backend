@@ -34,7 +34,9 @@ public class BusInfo {
     private LocalDateTime createAt;
 
     /* 정적 생성 메서드 */
-    public static BusInfo createBusInfo(String busInfoPath, BusArea area) {
+    public static BusInfo createBusInfo(
+            final String busInfoPath,
+            final BusArea area) {
 
         BusInfo busInfo = new BusInfo();
         busInfo.busInfoPath = busInfoPath;

@@ -32,7 +32,7 @@ public class BoardReplyRepository {
      */
     public List<BoardReply> findByBoardId(final Long boardId) {
 
-        return em.createQuery("select br from BoardReply br join br.board b where b.id = :id", BoardReply.class)
+        return em.createQuery("select br from BoardReply br join fetch br.board b where b.id = :id", BoardReply.class)
                 .setParameter("id", boardId)
                 .getResultList();
     }

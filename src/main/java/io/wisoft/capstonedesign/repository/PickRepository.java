@@ -30,7 +30,7 @@ public class PickRepository {
      */
     public List<Pick> findByMemberId(final Long memberId) {
 
-        return em.createQuery("select p from Pick p join p.member m where m.id = :id", Pick.class)
+        return em.createQuery("select p from Pick p join fetch p.member m where m.id = :id", Pick.class)
                 .setParameter("id", memberId)
                 .getResultList();
     }
@@ -40,7 +40,7 @@ public class PickRepository {
      */
     public List<Pick> findByMemberIdOrderByCreateDesc(final Long memberId) {
 
-        return em.createQuery("select p from Pick p join p.member m where m.id = :id order by p.pickedAt desc", Pick.class)
+        return em.createQuery("select p from Pick p join fetch p.member m where m.id = :id order by p.pickedAt desc", Pick.class)
                 .setParameter("id", memberId)
                 .getResultList();
     }
@@ -50,7 +50,7 @@ public class PickRepository {
      */
     public List<Pick> findByMemberIdOrderByCreateAsc(final Long memberId) {
 
-        return em.createQuery("select p from Pick p join p.member m where m.id = :id order by p.pickedAt asc", Pick.class)
+        return em.createQuery("select p from Pick p join fetch p.member m where m.id = :id order by p.pickedAt asc", Pick.class)
                 .setParameter("id", memberId)
                 .getResultList();
     }

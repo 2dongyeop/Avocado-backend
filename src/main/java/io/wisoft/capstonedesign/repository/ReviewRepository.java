@@ -55,7 +55,7 @@ public class ReviewRepository {
      */
     public List<Review> findByMemberId(final Long memberId) {
 
-        return em.createQuery("select r from Review r join r.member m where m.id =:id", Review.class)
+        return em.createQuery("select r from Review r join fetch r.member m where m.id =:id", Review.class)
                 .setParameter("id", memberId)
                 .getResultList();
     }
