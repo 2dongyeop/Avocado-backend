@@ -1,13 +1,14 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.domain.Appointment;
-import io.wisoft.capstonedesign.domain.Hospital;
-import io.wisoft.capstonedesign.domain.Member;
-import io.wisoft.capstonedesign.domain.enumeration.AppointmentStatus;
-import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.exception.IllegalValueException;
-import io.wisoft.capstonedesign.exception.nullcheck.NullAppointmentException;
-import io.wisoft.capstonedesign.repository.AppointmentRepository;
+import io.wisoft.capstonedesign.appointment.Appointment;
+import io.wisoft.capstonedesign.appointment.AppointmentService;
+import io.wisoft.capstonedesign.hospital.Hospital;
+import io.wisoft.capstonedesign.member.Member;
+import io.wisoft.capstonedesign.global.enumeration.status.AppointmentStatus;
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullAppointmentException;
+import io.wisoft.capstonedesign.appointment.AppointmentRepository;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -25,7 +26,8 @@ import static org.junit.Assert.*;
 public class AppointmentServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired AppointmentService appointmentService;
+    @Autowired
+    AppointmentService appointmentService;
     @Autowired AppointmentRepository appointmentRepository;
 
     //예약 저장

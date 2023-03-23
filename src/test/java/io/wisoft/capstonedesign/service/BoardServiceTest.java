@@ -1,12 +1,13 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.domain.Board;
-import io.wisoft.capstonedesign.domain.enumeration.BoardStatus;
-import io.wisoft.capstonedesign.domain.Member;
-import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.exception.IllegalValueException;
-import io.wisoft.capstonedesign.exception.nullcheck.NullBoardException;
-import io.wisoft.capstonedesign.repository.BoardRepository;
+import io.wisoft.capstonedesign.board.Board;
+import io.wisoft.capstonedesign.board.BoardService;
+import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;
+import io.wisoft.capstonedesign.member.Member;
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardException;
+import io.wisoft.capstonedesign.board.BoardRepository;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -24,7 +25,8 @@ import static org.junit.Assert.*;
 public class BoardServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired BoardService boardService;
+    @Autowired
+    BoardService boardService;
     @Autowired BoardRepository boardRepository;
 
     //게시글 작성

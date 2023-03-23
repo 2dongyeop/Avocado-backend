@@ -1,11 +1,12 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.domain.Hospital;
-import io.wisoft.capstonedesign.domain.Member;
-import io.wisoft.capstonedesign.domain.Pick;
-import io.wisoft.capstonedesign.domain.enumeration.PickStatus;
-import io.wisoft.capstonedesign.exception.nullcheck.NullPickException;
-import io.wisoft.capstonedesign.repository.PickRepository;
+import io.wisoft.capstonedesign.hospital.Hospital;
+import io.wisoft.capstonedesign.member.Member;
+import io.wisoft.capstonedesign.pick.Pick;
+import io.wisoft.capstonedesign.global.enumeration.status.PickStatus;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullPickException;
+import io.wisoft.capstonedesign.pick.PickRepository;
+import io.wisoft.capstonedesign.pick.PickService;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -24,7 +25,8 @@ import static org.junit.Assert.*;
 public class PickServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired PickService pickService;
+    @Autowired
+    PickService pickService;
     @Autowired PickRepository pickRepository;
     
     //찜하기 저장

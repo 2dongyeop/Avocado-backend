@@ -1,11 +1,16 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.domain.*;
-import io.wisoft.capstonedesign.domain.enumeration.BoardReplyStatus;
-import io.wisoft.capstonedesign.domain.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.exception.IllegalValueException;
-import io.wisoft.capstonedesign.exception.nullcheck.NullBoardReplyException;
-import io.wisoft.capstonedesign.repository.BoardReplyRepository;
+import io.wisoft.capstonedesign.board.Board;
+import io.wisoft.capstonedesign.boardreply.BoardReply;
+import io.wisoft.capstonedesign.boardreply.BoardReplyService;
+import io.wisoft.capstonedesign.global.enumeration.status.BoardReplyStatus;
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardReplyException;
+import io.wisoft.capstonedesign.boardreply.BoardReplyRepository;
+import io.wisoft.capstonedesign.hospital.Hospital;
+import io.wisoft.capstonedesign.member.Member;
+import io.wisoft.capstonedesign.staff.Staff;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -23,7 +28,8 @@ import static org.junit.Assert.*;
 public class BoardReplyServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired BoardReplyService boardReplyService;
+    @Autowired
+    BoardReplyService boardReplyService;
     @Autowired BoardReplyRepository boardReplyRepository;
 
     @Test

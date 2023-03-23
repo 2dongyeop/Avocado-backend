@@ -1,12 +1,13 @@
 package io.wisoft.capstonedesign.service;
 
 
-import io.wisoft.capstonedesign.domain.Member;
-import io.wisoft.capstonedesign.domain.Review;
-import io.wisoft.capstonedesign.domain.enumeration.ReviewStatus;
-import io.wisoft.capstonedesign.exception.IllegalValueException;
-import io.wisoft.capstonedesign.exception.nullcheck.NullReviewException;
-import io.wisoft.capstonedesign.repository.ReviewRepository;
+import io.wisoft.capstonedesign.member.Member;
+import io.wisoft.capstonedesign.review.Review;
+import io.wisoft.capstonedesign.global.enumeration.status.ReviewStatus;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewException;
+import io.wisoft.capstonedesign.review.ReviewRepository;
+import io.wisoft.capstonedesign.review.ReviewService;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -24,7 +25,8 @@ import static org.junit.Assert.*;
 public class ReviewServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired ReviewService reviewService;
+    @Autowired
+    ReviewService reviewService;
     @Autowired ReviewRepository reviewRepository;
 
     @Test
