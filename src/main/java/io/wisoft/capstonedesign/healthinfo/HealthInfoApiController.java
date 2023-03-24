@@ -66,7 +66,7 @@ public class HealthInfoApiController {
 
     /* 특정 병과의 건강 정보 목록 조회 */
     @GetMapping("/api/health-infos/department")
-    public Result healthInfosByDepartment(@RequestBody @Valid HealthInfoByDepartmentRequest request) {
+    public Result healthInfosByDepartment(@RequestBody @Valid final HealthInfoByDepartmentRequest request) {
 
         List<HealthInfoDto> infoDtoList = healthInfoService.findAllByDept(request.department)
                 .stream().map(HealthInfoDto::new)

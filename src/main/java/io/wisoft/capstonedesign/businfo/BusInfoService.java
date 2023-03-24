@@ -34,7 +34,6 @@ public class BusInfoService {
     public void delete(final Long busInfoId) {
 
         BusInfo busInfo = busInfoRepository.findOne(busInfoId);
-//        busInfoRepository.delete(busInfoId);
         busInfo.delete();
     }
 

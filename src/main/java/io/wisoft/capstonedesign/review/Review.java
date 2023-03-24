@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.review;
 
+import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.reviewreply.ReviewReply;
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
@@ -8,17 +9,18 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Review {
+@AttributeOverrides({
+        @AttributeOverride(name = "createAt", column = @Column(name = "review_create_at", nullable = false)),
+        @AttributeOverride(name = "updateAt", column = @Column(name = "review_update_at"))
+})
+public class Review extends BaseEntity {
 
     @Id @GeneratedValue()
     @Column(name = "review_id")
@@ -31,14 +33,6 @@ public class Review {
     @Lob
     @Column(name = "review_body", nullable = false)
     private String body;
-
-    @CreatedDate
-    @Column(name = "review_create_at", nullable = false)
-    private LocalDateTime createAt;
-
-    @LastModifiedDate
-    @Column(name = "review_update_at")
-    private LocalDateTime updateAt;
 
     @Column(name = "review_photo_path")
     private String reviewPhotoPath;
@@ -124,10 +118,12 @@ public class Review {
         review.setMember(member);
         review.title = title;
         review.body = body;
-        review.status = ReviewStatus.WRITE;
-        review.createAt = LocalDateTime.now();
         review.targetHospital = target_hospital;
         review.starPoint = starPoint;
+
+        review.status = ReviewStatus.WRITE;
+        review.createEntity();
+
         return review;
     }
 
@@ -150,6 +146,6 @@ public class Review {
 
         this.title = newTitle;
         this.body = newBody;
-        this.updateAt = LocalDateTime.now();
+        this.updateEntity();
     }
 }

@@ -39,6 +39,8 @@ public class Member {
     @Column(name = "member_photo_path")
     private String memberPhotoPath;
 
+    @Column(name = "member_status")
+    @Enumerated(value = EnumType.STRING)
     private MemberStatus status;
 
     @OneToMany(mappedBy = "member")
@@ -58,21 +60,21 @@ public class Member {
 
 
     /* 연관관계 편의 메소드 */
-    public void addAppointment(Appointment appointment) {
+    public void addAppointment(final Appointment appointment) {
         this.appointmentList.add(appointment);
         if (appointment.getMember() != this) { //무한루프에 빠지지 않도록 체크
             appointment.setMember(this);
         }
     }
 
-    public void addPick(Pick pick) {
+    public void addPick(final Pick pick) {
         this.pickList.add(pick);
         if (pick.getMember() != this) { //무한루프에 빠지지 않도록 체크
             pick.setMember(this);
         }
     }
 
-    public void addBoard(Board board) {
+    public void addBoard(final Board board) {
         this.boardList.add(board);
 
         if (board.getMember() != this) {
@@ -80,7 +82,7 @@ public class Member {
         }
     }
 
-    public void addReview(Review review) {
+    public void addReview(final Review review) {
         this.reviewList.add(review);
 
         if (review.getMember() != this) {
@@ -88,7 +90,7 @@ public class Member {
         }
     }
 
-    public void addReviewReply(ReviewReply reviewReply) {
+    public void addReviewReply(final ReviewReply reviewReply) {
         this.reviewReplyList.add(reviewReply);
 
         if (reviewReply.getMember() != this) {
@@ -97,7 +99,11 @@ public class Member {
     }
 
     /* 생성 메서드 */
-    public static Member newInstance(String nickname, String email, String password, String phoneNumber) {
+    public static Member newInstance(
+            final String nickname,
+            final String email,
+            final String password,
+            final String phoneNumber) {
 
         Member member = new Member();
         member.nickname = nickname;

@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.boardreply;
 
 import io.wisoft.capstonedesign.board.Board;
+import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.staff.Staff;
 import io.wisoft.capstonedesign.global.enumeration.status.BoardReplyStatus;
 import jakarta.persistence.*;
@@ -8,12 +9,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BoardReply {
+@AttributeOverrides({
+        @AttributeOverride(name = "createAt", column = @Column(name = "boardreply_create_at", nullable = false)),
+        @AttributeOverride(name = "updateAt", column = @Column(name = "boardreply_update_at"))
+})
+public class BoardReply extends BaseEntity {
 
     @Id @GeneratedValue()
     @Column(name = "board_reply_id")
@@ -22,13 +25,8 @@ public class BoardReply {
     @Column(name = "reply", nullable = false)
     private String reply;
 
-    @Column(name = "boardreply_create_at")
-    private LocalDateTime createAt;
-
-    @Column(name = "boardreply_update_at")
-    private LocalDateTime updateAt;
-
     @Column(name = "boardreply_status")
+    @Enumerated(EnumType.STRING)
     private BoardReplyStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -77,7 +75,8 @@ public class BoardReply {
         boardReply.setBoard(board);
         boardReply.setStaff(staff);
         boardReply.reply = reply;
-        boardReply.createAt = LocalDateTime.now();
+
+        boardReply.createEntity();
         boardReply.status = BoardReplyStatus.WRITE;
 
         return boardReply;
@@ -101,6 +100,6 @@ public class BoardReply {
     public void update(final String reply) {
 
         this.reply = reply;
-        this.updateAt = LocalDateTime.now();
+        this.updateEntity();
     }
 }

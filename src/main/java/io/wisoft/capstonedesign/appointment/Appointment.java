@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.appointment;
 
+import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.hospital.Hospital;
 import io.wisoft.capstonedesign.member.Member;
 import io.wisoft.capstonedesign.global.enumeration.status.AppointmentStatus;
@@ -8,27 +9,21 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Appointment {
+@AttributeOverrides({
+        @AttributeOverride(name = "createAt", column = @Column(name = "appt_create_at", nullable = false)),
+        @AttributeOverride(name = "updateAt", column = @Column(name = "appt_update_at"))
+})
+public class Appointment extends BaseEntity {
 
-    @Id @GeneratedValue()
+    @Id
+    @GeneratedValue()
     @Column(name = "appointment_id")
     private Long id;
-
-    @CreatedDate
-    @Column(name = "appt_create_at", nullable = false)
-    private LocalDateTime createAt;
-
-    @LastModifiedDate
-    @Column(name = "appt_update_at")
-    private LocalDateTime updateAt;
 
     @Column(name = "appt_dept", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -102,7 +97,7 @@ public class Appointment {
         appointment.appointName = appointName;
         appointment.appointPhonenumber = appointPhonenumber;
 
-        appointment.createAt = LocalDateTime.now();
+        appointment.createEntity();
         appointment.status = AppointmentStatus.COMPLETE;
 
         return appointment;
@@ -133,6 +128,6 @@ public class Appointment {
         this.appointName = appointName;
         this.appointPhonenumber = appointPhonenumber;
 
-        this.updateAt = LocalDateTime.now();
+        this.updateEntity();
     }
 }

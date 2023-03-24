@@ -69,7 +69,7 @@ public class BoardRepository {
 
     /* 특정 의료진이 댓글을 단 게시글 목록 조회 */
     public List<Board> findByStaffReply(final Long staffId) {
-        List<BoardReply> boardReplyList = em.createQuery("select br from BoardReply br join fetch br.staff.id = :staffId", BoardReply.class)
+        List<BoardReply> boardReplyList = em.createQuery("select br from BoardReply br join fetch br.staff s where s.id = :staffId", BoardReply.class)
                 .setParameter("staffId", staffId)
                 .getResultList();
 

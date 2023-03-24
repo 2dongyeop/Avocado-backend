@@ -38,23 +38,6 @@ public class BoardService {
         return board.getId();
     }
 
-    @Transactional
-    public Long save(
-            final Long memberId,
-            final String title,
-            final String body,
-            final HospitalDept dept,
-            final String boardPhotoPath) {
-
-        //엔티티 조회
-        Member member = memberService.findOne(memberId);
-
-        Board board = Board.createBoard(member, title, body, dept, boardPhotoPath);
-
-        boardRepository.save(board);
-        return board.getId();
-    }
-
     /**
      * 게시글 삭제
      */

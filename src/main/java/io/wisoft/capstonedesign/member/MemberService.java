@@ -101,11 +101,11 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public List<Member> findByNickname(String nickname) {
+    public List<Member> findByNickname(final String nickname) {
         return memberRepository.findByNickname(nickname);
     }
 
-    public List<Member> findByEmail(String email) {
+    public List<Member> findByEmail(final String email) {
         return memberRepository.findByEmail(email);
     }
 }

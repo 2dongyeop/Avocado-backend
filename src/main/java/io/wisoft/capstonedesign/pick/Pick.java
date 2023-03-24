@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.pick;
 
+import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.global.enumeration.status.PickStatus;
 import io.wisoft.capstonedesign.hospital.Hospital;
 import io.wisoft.capstonedesign.member.Member;
@@ -8,19 +9,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Pick {
+@AttributeOverride(name = "createAt", column = @Column(name = "pick_date_time", nullable = false))
+
+public class Pick extends BaseEntity {
 
     @Id @GeneratedValue()
     @Column(name = "pick_id")
     private Long id;
-
-    @Column(name = "pick_date_time")
-    private LocalDateTime pickedAt;
 
     @Column(name = "pick_status")
     @Enumerated(EnumType.STRING)
@@ -67,7 +65,8 @@ public class Pick {
         Pick pick = new Pick();
         pick.setMember(member);
         pick.setHospital(hospital);
-        pick.pickedAt = LocalDateTime.now();
+
+        pick.createEntity();
         pick.status = PickStatus.COMPLETE;
 
         return pick;

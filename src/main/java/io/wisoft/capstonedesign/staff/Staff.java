@@ -46,6 +46,8 @@ public class Staff {
     @JoinColumn(name = "hosp_id")
     private Hospital hospital;
 
+    @Column(name = "staff_status")
+    @Enumerated(value = EnumType.STRING)
     private StaffStatus status;
 
     @OneToMany(mappedBy = "staff")
