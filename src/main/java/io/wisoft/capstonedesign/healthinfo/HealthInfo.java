@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.healthinfo;
 
+import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.staff.Staff;
 import io.wisoft.capstonedesign.global.enumeration.status.HealthInfoStatus;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
@@ -8,13 +9,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Table(name = "health_info")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HealthInfo {
+@AttributeOverride(name = "createAt", column = @Column(name = "health_info_create_at", nullable = false))
+public class HealthInfo extends BaseEntity {
 
     @Id @GeneratedValue()
     @Column(name = "health_info_id")
@@ -33,9 +33,6 @@ public class HealthInfo {
     @Column(name = "dept")
     @Enumerated(value = EnumType.STRING)
     private HospitalDept dept;
-
-    @Column(name = "health_info_create_at")
-    private LocalDateTime createAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "staff_id")
@@ -67,7 +64,7 @@ public class HealthInfo {
         healthInfo.dept = dept;
 
         healthInfo.status = HealthInfoStatus.WRITE;
-        healthInfo.createAt = LocalDateTime.now();
+        healthInfo.createEntity();
 
         return healthInfo;
     }

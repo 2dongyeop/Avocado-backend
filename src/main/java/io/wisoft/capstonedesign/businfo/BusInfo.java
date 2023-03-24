@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.businfo;
 
+import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.global.enumeration.BusArea;
 import io.wisoft.capstonedesign.global.enumeration.status.BusInfoStatus;
 import jakarta.persistence.*;
@@ -7,13 +8,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Table(name = "bush_info")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BusInfo {
+@AttributeOverride(name = "createAt", column = @Column(name = "bus_info_create_at", nullable = false))
+public class BusInfo extends BaseEntity {
 
     @Id @GeneratedValue()
     @Column(name = "bus_info_id")
@@ -23,15 +23,12 @@ public class BusInfo {
     private String busInfoPath;
 
     @Column(name = "bus_info_area", nullable = false)
-    @Enumerated
+    @Enumerated(value = EnumType.STRING)
     private BusArea area;
 
     @Column(name = "bus_info_status")
-    @Enumerated
+    @Enumerated(value = EnumType.STRING)
     private BusInfoStatus status;
-
-    @Column(name = "bus_info_create_at")
-    private LocalDateTime createAt;
 
     /* 정적 생성 메서드 */
     public static BusInfo createBusInfo(
@@ -43,7 +40,7 @@ public class BusInfo {
         busInfo.area = area;
 
         busInfo.status = BusInfoStatus.WRITE;
-        busInfo.createAt = LocalDateTime.now();
+        busInfo.createEntity();
 
         return busInfo;
     }

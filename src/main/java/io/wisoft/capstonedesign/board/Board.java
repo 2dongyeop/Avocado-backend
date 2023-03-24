@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.board;
 
 import io.wisoft.capstonedesign.boardreply.BoardReply;
+import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.member.Member;
 import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
@@ -8,17 +9,17 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Board {
+@AttributeOverrides({
+        @AttributeOverride(name = "createAt", column = @Column(name = "board_create_at", nullable = false)),
+        @AttributeOverride(name = "updateAt", column = @Column(name = "board_update_at"))
+})
+public class Board extends BaseEntity {
 
     @Id @GeneratedValue()
     @Column(name = "board_id")
@@ -31,14 +32,6 @@ public class Board {
     @Lob
     @Column(name = "board_body", nullable = false)
     private String body;
-
-    @CreatedDate
-    @Column(name = "board_create_at", nullable = false)
-    private LocalDateTime createAt;
-
-    @LastModifiedDate
-    @Column(name = "board_update_at")
-    private LocalDateTime updateAt;
 
     @Column(name = "board_photo_path")
     private String boardPhotoPath;
@@ -66,7 +59,7 @@ public class Board {
         }
     }
 
-    public void setMember(Member member) {
+    public void setMember(final Member member) {
         //comment: 기존 관계 제거
         if (this.member != null) {
             this.member.getBoardList().remove(this);
@@ -81,20 +74,12 @@ public class Board {
     }
 
     /* 정적 생성 메서드 */
-    public static Board createBoard(Member member, String title, String body, HospitalDept dept) {
-        Board board = getBoard(member, title, body, dept);
+    public static Board createBoard(
+            final Member member,
+            final String title,
+            final String body,
+            final HospitalDept dept) {
 
-        return board;
-    }
-
-    public static Board createBoard(Member member, String title, String body, HospitalDept dept ,String boardPhotoPath) {
-        Board board = getBoard(member, title, body, dept);
-        board.boardPhotoPath = boardPhotoPath;
-
-        return board;
-    }
-
-    private static Board getBoard(Member member, String title, String body, HospitalDept dept) {
         Board board = new Board();
         board.setMember(member);
         board.title = title;
@@ -102,7 +87,8 @@ public class Board {
         board.dept = dept;
 
         board.status = BoardStatus.WRITE;
-        board.createAt = LocalDateTime.now();
+        board.createEntity();
+
         return board;
     }
 
@@ -121,10 +107,10 @@ public class Board {
     /**
      * 게시글 제목 및 본문 수정
      */
-    public void updateTitleBody(String newTitle, String newBody) {
+    public void updateTitleBody(final String newTitle, final String newBody) {
 
         this.title = newTitle;
         this.body = newBody;
-        this.updateAt = LocalDateTime.now();
+        this.updateEntity();
     }
 }

@@ -1,13 +1,12 @@
 package io.wisoft.capstonedesign.reviewreply;
 
+import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.review.Review;
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewReplyStatus;
 import io.wisoft.capstonedesign.member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 /**
  * 리뷰댓글
@@ -16,7 +15,11 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-public class ReviewReply {
+@AttributeOverrides({
+        @AttributeOverride(name = "createAt", column = @Column(name = "reviewreply_create_at", nullable = false)),
+        @AttributeOverride(name = "updateAt", column = @Column(name = "reviewreply_update_at"))
+})
+public class ReviewReply extends BaseEntity {
 
     @Id @GeneratedValue()
     @Column(name = "review_reply_id")
@@ -25,13 +28,8 @@ public class ReviewReply {
     @Column(name = "reply", nullable = false)
     private String reply;
 
-    @Column(name = "reviewreply_create_at")
-    private LocalDateTime createAt;
-
-    @Column(name = "reviewreply_update_at")
-    private LocalDateTime updateAt;
-
     @Column(name = "reviewreply_status")
+    @Enumerated(EnumType.STRING)
     private ReviewReplyStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -82,7 +80,8 @@ public class ReviewReply {
         reviewReply.setMember(member);
         reviewReply.setReview(review);
         reviewReply.reply = reply;
-        reviewReply.createAt = LocalDateTime.now();
+
+        reviewReply.createEntity();
         reviewReply.status = ReviewReplyStatus.WRITE.WRITE;
 
         return reviewReply;
@@ -107,6 +106,6 @@ public class ReviewReply {
     public void updateReply(final String reply) {
 
         this.reply = reply;
-        this.updateAt = LocalDateTime.now();
+        this.updateEntity();
     }
 }
