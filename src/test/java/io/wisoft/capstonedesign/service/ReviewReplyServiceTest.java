@@ -1,13 +1,15 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.member.Member;
-import io.wisoft.capstonedesign.review.Review;
-import io.wisoft.capstonedesign.reviewreply.ReviewReply;
+import io.wisoft.capstonedesign.domain.member.persistence.Member;
+import io.wisoft.capstonedesign.domain.review.persistence.Review;
+import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
+import io.wisoft.capstonedesign.domain.reviewreply.web.dto.CreateReviewReplyRequest;
+import io.wisoft.capstonedesign.domain.reviewreply.web.dto.UpdateReviewReplyRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewReplyStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewReplyException;
-import io.wisoft.capstonedesign.reviewreply.ReviewReplyRepository;
-import io.wisoft.capstonedesign.reviewreply.ReviewReplyService;
+import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReplyRepository;
+import io.wisoft.capstonedesign.domain.reviewreply.application.ReviewReplyService;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -40,12 +42,15 @@ public class ReviewReplyServiceTest {
         Review review = Review.createReview(member, "good hospital", "it is good", starPoint, "avocado");
         em.persist(review);
 
+        CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "저도 가봐야겠네요");
+
         //when -- 동작
-        Long saveId = reviewReplyService.save(member.getId(), review.getId(), "저도 가봐야겠네요");
+        Long saveId = reviewReplyService.save(request);
 
         //then -- 검증
         ReviewReply reviewReply = reviewReplyService.findOne(saveId);
         Assertions.assertThat(reviewReply.getStatus()).isEqualTo(ReviewReplyStatus.WRITE);
+        Assertions.assertThat(reviewReply.getReply()).isEqualTo(request.getReply());
     }
 
     @Test
@@ -59,7 +64,8 @@ public class ReviewReplyServiceTest {
         Review review = Review.createReview(member, "good hospital", "it is good", starPoint, "avocado");
         em.persist(review);
 
-        Long saveId = reviewReplyService.save(member.getId(), review.getId(), "저도 가봐야겠네요");
+        CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "저도 가봐야겠네요");
+        Long saveId = reviewReplyService.save(request);
 
         //when -- 동작
         reviewReplyService.deleteReviewReply(saveId);
@@ -80,9 +86,8 @@ public class ReviewReplyServiceTest {
         Review review = Review.createReview(member, "good hospital", "it is good", starPoint, "avocado");
         em.persist(review);
 
-        Long saveId = reviewReplyService.save(member.getId(), review.getId(), "저도 가봐야겠네요");
-
-        ReviewReply reviewReply = reviewReplyService.findOne(saveId);
+        CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "저도 가봐야겠네요");
+        Long saveId = reviewReplyService.save(request);
 
         //when -- 동작
         reviewReplyService.deleteReviewReply(saveId);
@@ -113,16 +118,17 @@ public class ReviewReplyServiceTest {
         Review review = Review.createReview(member, "title1", "body1", 5, "avocado");
         em.persist(review);
 
-        ReviewReply reviewReply = ReviewReply.createReviewReply(member, review, "멋져요");
-        em.persist(reviewReply);
+        CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "멋져요");
+        Long saveId = reviewReplyService.save(request);
 
         //when -- 동작
-        ReviewReply getReviewReply = reviewReplyService.findOne(reviewReply.getId());
-        reviewReplyService.updateReply(getReviewReply.getId(), "짱 멋져요");
+        ReviewReply reviewReply = reviewReplyService.findOne(saveId);
+        UpdateReviewReplyRequest request2 = new UpdateReviewReplyRequest("짱 멋져요");
+        reviewReplyService.updateReply(reviewReply.getId(), request2);
 
         //then -- 검증
-        Assertions.assertThat(getReviewReply.getReply()).isEqualTo("짱 멋져요");
-        Assertions.assertThat(getReviewReply.getUpdateAt()).isNotNull();
+        Assertions.assertThat(reviewReply.getReply()).isEqualTo(request2.getReply());
+        Assertions.assertThat(reviewReply.getUpdateAt()).isNotNull();
     }
 
     @Test(expected = IllegalValueException.class)
@@ -135,12 +141,13 @@ public class ReviewReplyServiceTest {
         Review review = Review.createReview(member, "title1", "body1", 5, "avocado");
         em.persist(review);
 
-        ReviewReply reviewReply = ReviewReply.createReviewReply(member, review, "멋져요");
-        em.persist(reviewReply);
+        CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "멋져요");
+        Long saveId = reviewReplyService.save(request);
 
         //when -- 동작
-        ReviewReply getReviewReply = reviewReplyService.findOne(reviewReply.getId());
-        reviewReplyService.updateReply(getReviewReply.getId(), null);
+        ReviewReply reviewReply = reviewReplyService.findOne(saveId);
+        UpdateReviewReplyRequest request2 = new UpdateReviewReplyRequest(null);
+        reviewReplyService.updateReply(reviewReply.getId(), request2);
 
         //then -- 검증
         fail("reply가 비어있어 예외가 발생해야 한다.");

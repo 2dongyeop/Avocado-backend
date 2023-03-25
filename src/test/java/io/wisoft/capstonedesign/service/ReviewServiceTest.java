@@ -1,13 +1,15 @@
 package io.wisoft.capstonedesign.service;
 
 
-import io.wisoft.capstonedesign.member.Member;
-import io.wisoft.capstonedesign.review.Review;
+import io.wisoft.capstonedesign.domain.member.persistence.Member;
+import io.wisoft.capstonedesign.domain.review.persistence.Review;
+import io.wisoft.capstonedesign.domain.review.web.dto.CreateReviewRequest;
+import io.wisoft.capstonedesign.domain.review.web.dto.UpdateReviewRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewException;
-import io.wisoft.capstonedesign.review.ReviewRepository;
-import io.wisoft.capstonedesign.review.ReviewService;
+import io.wisoft.capstonedesign.domain.review.persistence.ReviewRepository;
+import io.wisoft.capstonedesign.domain.review.application.ReviewService;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -37,8 +39,10 @@ public class ReviewServiceTest {
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
         em.persist(member);
 
+        CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+
         //when -- 동작
-        Long saveId = reviewService.save(member.getId(), "친절해요", "자세히 진료해줘요", "사진_링크", 5, "아보카도 병원");
+        Long saveId = reviewService.save(request);
 
         //then -- 검증
         Review getReview = reviewRepository.findOne(saveId); //저장된 리뷰
@@ -56,7 +60,8 @@ public class ReviewServiceTest {
         em.persist(member);
 
         //리뷰 생성
-        Long saveId = reviewService.save(member.getId(), "친절해요", "자세히 진료해줘요", "사진_링크", 5, "아보카도 병원");
+        CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        Long saveId = reviewService.save(request);
 
         //when -- 동작
         reviewService.deleteReview(saveId);
@@ -77,7 +82,8 @@ public class ReviewServiceTest {
         em.persist(member);
 
         //리뷰 생성
-        Long saveId = reviewService.save(member.getId(), "친절해요", "자세히 진료해줘요", "사진_링크", 5, "아보카도 병원");
+        CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        Long saveId = reviewService.save(request);
 
         //when -- 동작
         reviewService.deleteReview(saveId);
@@ -95,10 +101,10 @@ public class ReviewServiceTest {
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
         em.persist(member);
 
-        int starPoint = 6;
 
         //when -- 동작
-        Long saveId = reviewService.save(member.getId(), "친절해요", "자세히 진료해줘요", "사진_링크", starPoint, "아보카도 병원");
+        CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 6, "아보카도 병원", "사진_링크");
+        Long saveId = reviewService.save(request);
 
         //then -- 검증
         fail("리뷰의 별점이 1~5 사이의 범위가 아니므로 예외가 발생해야 한다.");
@@ -122,14 +128,18 @@ public class ReviewServiceTest {
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
         em.persist(member);
 
-        Review review = Review.createReview(member, "제목1", "본문1", 4, "avocado");
-        em.persist(review);
+        CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        Long saveId = reviewService.save(request1);
+        Review review = reviewService.findOne(saveId);
 
         //when -- 동작
-        reviewService.updateTitleBody(review.getId(), "제목2", "본문1");
+
+        UpdateReviewRequest request2 = new UpdateReviewRequest("제목2", "본문1");
+
+        reviewService.updateTitleBody(review.getId(), request2);
 
         //then -- 검증
-        Assertions.assertThat(review.getTitle()).isEqualTo("제목2");
+        Assertions.assertThat(review.getTitle()).isEqualTo(request2.getNewTitle());
         Assertions.assertThat(review.getUpdateAt()).isNotNull();
     }
 
@@ -140,11 +150,14 @@ public class ReviewServiceTest {
         Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
         em.persist(member);
 
-        Review review = Review.createReview(member, "제목1", "본문1", 4, "avocado");
-        em.persist(review);
+        CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        Long saveId = reviewService.save(request1);
+        Review review = reviewService.findOne(saveId);
 
         //when -- 동작
-        reviewService.updateTitleBody(review.getId(), null, "본문1");
+        UpdateReviewRequest request2 = new UpdateReviewRequest(null, "본문1");
+
+        reviewService.updateTitleBody(review.getId(), request2);
 
         //then -- 검증
         fail("제목이 없어 예외가 발생해야 한다.");
@@ -160,7 +173,8 @@ public class ReviewServiceTest {
         em.persist(member);
 
         //리뷰생성
-        Long saveId = reviewService.save(member.getId(), "친절해요", "자세히 진료해줘요", "사진_링크", 5, "아보카도 병원");
+        CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        Long saveId = reviewService.save(request1);
 
         //when -- 동작
         reviewService.findByTargetHospital("아보카두두병원");

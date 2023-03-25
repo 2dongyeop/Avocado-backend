@@ -1,9 +1,10 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.hospital.Hospital;
+import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
-import io.wisoft.capstonedesign.hospital.HospitalRepository;
-import io.wisoft.capstonedesign.hospital.HospitalService;
+import io.wisoft.capstonedesign.domain.hospital.persistence.HospitalRepository;
+import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
+import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalRequest;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,14 +27,14 @@ public class HospitalServiceTest {
     @Test
     public void 병원_저장() throws Exception {
         //given -- 조건
-        Hospital hospital = Hospital.createHospital("avocado", "042", "대전", "연중무휴");
+        CreateHospitalRequest request = new CreateHospitalRequest("avocado", "042", "대전", "연중무휴");
 
         //when -- 동작
-        Long saveId = hospitalService.save(hospital);
+        Long saveId = hospitalService.save(request);
 
         //then -- 검증
-        Hospital getHospital = hospitalService.findOne(saveId);
-        Assertions.assertThat(getHospital).isEqualTo(hospital);
+        Hospital hospital = hospitalService.findOne(saveId);
+        Assertions.assertThat(hospital.getName()).isEqualTo(request.getName());
     }
 
     @Test(expected = NullHospitalException.class)
