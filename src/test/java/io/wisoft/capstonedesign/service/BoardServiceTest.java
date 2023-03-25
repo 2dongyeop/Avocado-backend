@@ -1,13 +1,14 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.board.Board;
-import io.wisoft.capstonedesign.board.BoardService;
+import io.wisoft.capstonedesign.domain.board.persistence.Board;
+import io.wisoft.capstonedesign.domain.board.application.BoardService;
+import io.wisoft.capstonedesign.domain.board.web.dto.CreateBoardRequest;
+import io.wisoft.capstonedesign.domain.board.web.dto.UpdateBoardRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;
-import io.wisoft.capstonedesign.member.Member;
-import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardException;
-import io.wisoft.capstonedesign.board.BoardRepository;
+import io.wisoft.capstonedesign.domain.board.persistence.BoardRepository;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -38,9 +39,10 @@ public class BoardServiceTest {
         Member member = Member.newInstance("test", "ldy_1204@naver.com", "1111", "0000");
         em.persist(member);
 
+        CreateBoardRequest request = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
+
         //when -- 동작
-        HospitalDept dept = HospitalDept.OBSTETRICS;
-        Long saveId = boardService.save(member.getId(), "test code!", "I write test code!", dept);
+        Long saveId = boardService.save(request);
 
         //then -- 검증
         Board getBoard = boardRepository.findOne(saveId);
@@ -58,8 +60,9 @@ public class BoardServiceTest {
         em.persist(member);
 
         //게시글 생성 및 저장
-        HospitalDept dept = HospitalDept.OBSTETRICS;
-        Long saveId = boardService.save(member.getId(), "test code!", "I write test code!", dept);
+
+        CreateBoardRequest request = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
+        Long saveId = boardService.save(request);
 
         //when -- 동작
         boardService.deleteBoard(saveId);
@@ -79,8 +82,8 @@ public class BoardServiceTest {
         em.persist(member);
 
         //게시글 생성 및 저장
-        HospitalDept dept = HospitalDept.OBSTETRICS;
-        Long saveId = boardService.save(member.getId(), "test code!", "I write test code!", dept);
+        CreateBoardRequest request = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
+        Long saveId = boardService.save(request);
 
         //when -- 동작
         boardService.deleteBoard(saveId);
@@ -108,15 +111,19 @@ public class BoardServiceTest {
         Member member = Member.newInstance("test","ldy_1204@naver.com", "1111", "0000");
         em.persist(member);
 
-        Board board = Board.createBoard(member, "제목1", "본문1", HospitalDept.OBSTETRICS);
-        em.persist(board);
+        //게시글 생성 및 저장
+        CreateBoardRequest request1 = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
+        Long saveId = boardService.save(request1);
+
+        UpdateBoardRequest request2 = new UpdateBoardRequest("제목2", "본문2");
 
         //when -- 동작
-        boardService.updateTitleBody(board.getId(), "제목2", "본문2");
+        Board board = boardService.findOne(saveId);
+        boardService.updateTitleBody(board.getId(), request2);
 
         //then -- 검증
-        Assertions.assertThat(board.getTitle()).isEqualTo("제목2");
-        Assertions.assertThat(board.getBody()).isEqualTo("본문2");
+        Assertions.assertThat(board.getTitle()).isEqualTo(request2.getNewTitle());
+        Assertions.assertThat(board.getBody()).isEqualTo(request2.getNewBody());
         Assertions.assertThat(board.getUpdateAt()).isNotNull();
     }
 
@@ -127,11 +134,15 @@ public class BoardServiceTest {
         Member member = Member.newInstance("test","ldy_1204@naver.com", "1111", "0000");
         em.persist(member);
 
-        Board board = Board.createBoard(member, "제목1", "본문1", HospitalDept.OBSTETRICS);
-        em.persist(board);
+        //게시글 생성 및 저장
+        CreateBoardRequest request1 = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
+        Long saveId = boardService.save(request1);
+
+        UpdateBoardRequest request2 = new UpdateBoardRequest(null, "본문2");
 
         //when -- 동작
-        boardService.updateTitleBody(board.getId(), null, "본문2");
+        Board board = boardService.findOne(saveId);
+        boardService.updateTitleBody(board.getId(), request2);
 
         //then - 검증
         fail("제목이 비어있어 예외가 발생해야 한다.");

@@ -1,8 +1,8 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.businfo.BusInfo;
-import io.wisoft.capstonedesign.businfo.BusInfoService;
-import io.wisoft.capstonedesign.global.enumeration.BusArea;
+import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfo;
+import io.wisoft.capstonedesign.domain.businfo.application.BusInfoService;
+import io.wisoft.capstonedesign.domain.businfo.web.dto.CreateBusInfoRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.BusInfoStatus;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBusInfoException;
 import org.assertj.core.api.Assertions;
@@ -26,32 +26,34 @@ public class BusInfoServiceTest {
     @Test
     public void 버스정보_등록() throws Exception {
         //given -- 조건
-        BusInfo busInfo = BusInfo.createBusInfo("버스정보경로", BusArea.DAEJEON);
+        CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
 
         //when -- 동작
-        Long saveId = busInfoService.save(busInfo);
+        Long saveId = busInfoService.save(request);
 
         //then -- 검증
-        BusInfo getBusInfo = busInfoService.findOne(saveId);
+        BusInfo busInfo = busInfoService.findOne(saveId);
 
-        Assertions.assertThat(getBusInfo).isEqualTo(busInfo);
-        Assertions.assertThat(getBusInfo.getStatus()).isEqualTo(BusInfoStatus.WRITE);
+        Assertions.assertThat(busInfo.getBusInfoPath()).isEqualTo(request.getBusInfoPath());
+        Assertions.assertThat(busInfo.getArea().toString()).isEqualTo(request.getArea());
+        Assertions.assertThat(busInfo.getStatus()).isEqualTo(BusInfoStatus.WRITE);
     }
 
     @Test
     public void 버스정보_삭제() throws Exception {
         //given -- 조건
-        BusInfo busInfo = BusInfo.createBusInfo("버스정보경로", BusArea.DAEJEON);
-        Long saveId = busInfoService.save(busInfo);
 
-        BusInfo getBusInfo = busInfoService.findOne(saveId);
+        CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
+        Long saveId = busInfoService.save(request);
+
+        BusInfo busInfo = busInfoService.findOne(saveId);
 
         //when -- 동작
-        getBusInfo.delete();
+        busInfo.delete();
 
         //then -- 검증
-        Assertions.assertThat(getBusInfo).isEqualTo(busInfo);
-        Assertions.assertThat(getBusInfo.getStatus()).isEqualTo(BusInfoStatus.DELETE);
+        Assertions.assertThat(busInfo.getBusInfoPath()).isEqualTo(request.getBusInfoPath());
+        Assertions.assertThat(busInfo.getStatus()).isEqualTo(BusInfoStatus.DELETE);
     }
 
     @Test(expected = NullBusInfoException.class)
@@ -68,14 +70,15 @@ public class BusInfoServiceTest {
     @Test(expected = IllegalStateException.class)
     public void 버스정보_삭제요청_중복() throws Exception {
         //given -- 조건
-        BusInfo busInfo = BusInfo.createBusInfo("버스정보경로", BusArea.DAEJEON);
-        Long saveId = busInfoService.save(busInfo);
 
-        BusInfo getBusInfo = busInfoService.findOne(saveId);
+        CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
+        Long saveId = busInfoService.save(request);
+
+        BusInfo busInfo = busInfoService.findOne(saveId);
 
         //when -- 동작
-        getBusInfo.delete();
-        getBusInfo.delete();
+        busInfo.delete();
+        busInfo.delete();
 
         //then -- 검증
         fail("중복 삭제 요청으로 인해 예외가 발생해야 한다.");

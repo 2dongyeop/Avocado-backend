@@ -1,12 +1,13 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.hospital.Hospital;
-import io.wisoft.capstonedesign.member.Member;
-import io.wisoft.capstonedesign.pick.Pick;
+import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
+import io.wisoft.capstonedesign.domain.member.persistence.Member;
+import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
+import io.wisoft.capstonedesign.domain.pick.web.dto.CreatePickRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.PickStatus;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullPickException;
-import io.wisoft.capstonedesign.pick.PickRepository;
-import io.wisoft.capstonedesign.pick.PickService;
+import io.wisoft.capstonedesign.domain.pick.persistence.PickRepository;
+import io.wisoft.capstonedesign.domain.pick.application.PickService;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -41,12 +42,16 @@ public class PickServiceTest {
         Hospital hospital = Hospital.createHospital("아보카도병원", "04212345678", "대전시 유성구", "365일 연중무휴");
         em.persist(hospital);
 
+        CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
+
         //when -- 동작
-        Long saveId = pickService.save(member.getId(), hospital.getId());
+        Long saveId = pickService.save(request);
 
         //then -- 검증
         Pick pick = pickRepository.findOne(saveId);
         Assertions.assertThat(pick.getStatus()).isEqualTo(PickStatus.COMPLETE);
+        Assertions.assertThat(pick.getHospital().getName()).isEqualTo(hospital.getName());
+        Assertions.assertThat(pick.getMember().getNickname()).isEqualTo(member.getNickname());
     }
     
     //찜하기 취소
@@ -61,7 +66,8 @@ public class PickServiceTest {
         Hospital hospital = Hospital.createHospital("아보카도병원", "04212345678", "대전시 유성구", "365일 연중무휴");
         em.persist(hospital);
 
-        Long saveId = pickService.save(member.getId(), hospital.getId());
+        CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
+        Long saveId = pickService.save(request);
 
         //when -- 동작
         pickService.cancelPick(saveId);
@@ -83,7 +89,8 @@ public class PickServiceTest {
         Hospital hospital = Hospital.createHospital("아보카도병원", "04212345678", "대전시 유성구", "365일 연중무휴");
         em.persist(hospital);
 
-        Long saveId = pickService.save(member.getId(), hospital.getId());
+        CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
+        Long saveId = pickService.save(request);
 
         //when -- 동작
         pickService.cancelPick(saveId);

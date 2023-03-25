@@ -1,16 +1,18 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.board.Board;
-import io.wisoft.capstonedesign.boardreply.BoardReply;
-import io.wisoft.capstonedesign.boardreply.BoardReplyService;
+import io.wisoft.capstonedesign.domain.board.persistence.Board;
+import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
+import io.wisoft.capstonedesign.domain.boardreply.application.BoardReplyService;
+import io.wisoft.capstonedesign.domain.boardreply.web.dto.CreateBoardReplyRequest;
+import io.wisoft.capstonedesign.domain.boardreply.web.dto.UpdateBoardReplyRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.BoardReplyStatus;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardReplyException;
-import io.wisoft.capstonedesign.boardreply.BoardReplyRepository;
-import io.wisoft.capstonedesign.hospital.Hospital;
-import io.wisoft.capstonedesign.member.Member;
-import io.wisoft.capstonedesign.staff.Staff;
+import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReplyRepository;
+import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
+import io.wisoft.capstonedesign.domain.member.persistence.Member;
+import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -54,8 +56,10 @@ public class BoardReplyServiceTest {
         Staff staff = Staff.newInstance(hospital, "lim", "lsn@naver.com", "1111", "license", hospitalDept);
         em.persist(staff);
 
+        CreateBoardReplyRequest request = new CreateBoardReplyRequest(board.getId(), staff.getId(), "안과가세요");
+
         //when -- 동작
-        Long saveId = boardReplyService.save(board.getId(), staff.getId(), "안과가세요.");
+        Long saveId = boardReplyService.save(request);
 
         //then -- 검증
         Assertions.assertThat(boardReplyRepository.findOne(saveId).getStatus()).isEqualTo(BoardReplyStatus.WRITE);
@@ -85,7 +89,8 @@ public class BoardReplyServiceTest {
 
 
         //게시글 댓글 생성
-        Long saveId = boardReplyService.save(board.getId(), staff.getId(), "안과가세요.");
+        CreateBoardReplyRequest request = new CreateBoardReplyRequest(board.getId(), staff.getId(), "안과가세요");
+        Long saveId = boardReplyService.save(request);
 
         //when -- 동작
         boardReplyService.deleteBoardReply(saveId);
@@ -129,7 +134,8 @@ public class BoardReplyServiceTest {
         em.persist(staff);
 
         //게시글 댓글 생성
-        Long saveId = boardReplyService.save(board.getId(), staff.getId(), "안과가세요.");
+        CreateBoardReplyRequest request = new CreateBoardReplyRequest(board.getId(), staff.getId(), "안과가세요");
+        Long saveId = boardReplyService.save(request);
 
         //when -- 동작
         boardReplyService.deleteBoardReply(saveId);
@@ -155,11 +161,15 @@ public class BoardReplyServiceTest {
         Staff staff = Staff.newInstance(hospital, "dong", "ldd@naver", "2222", "license_photo", HospitalDept.SURGICAL);
         em.persist(staff);
 
-        BoardReply boardReply = BoardReply.createBoardReply(board, staff, "걱정말아요");
-        em.persist(boardReply);
+        //게시글 댓글 생성
+        CreateBoardReplyRequest request1 = new CreateBoardReplyRequest(board.getId(), staff.getId(), "걱정말아요");
+        Long saveId = boardReplyService.save(request1);
+
+        UpdateBoardReplyRequest request2 = new UpdateBoardReplyRequest("걱정말긴 뭘 말아요!");
 
         //when -- 동작
-        boardReplyService.update(boardReply.getId(), "걱정말긴 뭘 말아요!");
+        BoardReply boardReply = boardReplyService.findOne(saveId);
+        boardReplyService.update(boardReply.getId(), request2);
 
         //then -- 검증
         BoardReply getBoardReply = boardReplyService.findOne(boardReply.getId());
@@ -183,11 +193,16 @@ public class BoardReplyServiceTest {
         Staff staff = Staff.newInstance(hospital, "dong", "ldd@naver", "2222", "license_photo", HospitalDept.SURGICAL);
         em.persist(staff);
 
-        BoardReply boardReply = BoardReply.createBoardReply(board, staff, "걱정말아요");
-        em.persist(boardReply);
+        //게시글 댓글 생성
+        CreateBoardReplyRequest request1 = new CreateBoardReplyRequest(board.getId(), staff.getId(), "걱정말아요");
+        Long saveId = boardReplyService.save(request1);
+
+
+        UpdateBoardReplyRequest request2 = new UpdateBoardReplyRequest(null);
 
         //when -- 동작
-        boardReplyService.update(boardReply.getId(), null);
+        BoardReply boardReply = boardReplyService.findOne(saveId);
+        boardReplyService.update(boardReply.getId(), request2);
 
         //then -- 검증
         fail("댓글이 비어있어 예외가 발생해야 한다.");

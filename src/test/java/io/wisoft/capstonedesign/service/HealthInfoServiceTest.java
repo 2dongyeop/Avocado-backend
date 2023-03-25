@@ -1,13 +1,12 @@
 package io.wisoft.capstonedesign.service;
 
-import io.wisoft.capstonedesign.healthinfo.HealthInfo;
-import io.wisoft.capstonedesign.staff.Staff;
+import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
+import io.wisoft.capstonedesign.domain.healthinfo.web.dto.CreateHealthInfoRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.HealthInfoStatus;
-import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHealthInfoException;
-import io.wisoft.capstonedesign.healthinfo.HealthInfoRepository;
-import io.wisoft.capstonedesign.healthinfo.HealthInfoService;
-import io.wisoft.capstonedesign.staff.StaffService;
+import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfoRepository;
+import io.wisoft.capstonedesign.domain.healthinfo.application.HealthInfoService;
+import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,30 +30,25 @@ public class HealthInfoServiceTest {
     @Test
     public void 건강정보_저장() throws Exception {
         //given -- 조건
-        Staff staff = staffService.findOne(1L);
-
-        HealthInfo healthInfo = HealthInfo.createHealthInfo(staff, "칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
+        CreateHealthInfoRequest request = new CreateHealthInfoRequest(1L, "안경 제대로 쓰기", "OPHTHALMOLOGY", "경로");
 
         //when -- 동작
-        Long saveId = healthInfoService.save(healthInfo);
+        Long saveId = healthInfoService.save(request);
 
         //then -- 검증
-        HealthInfo getHealthInfo = healthInfoService.findOne(saveId);
+        HealthInfo healthInfo = healthInfoService.findOne(saveId);
 
-        Assertions.assertThat(getHealthInfo).isEqualTo(healthInfo);
-        Assertions.assertThat(getHealthInfo.getStatus()).isEqualTo(HealthInfoStatus.WRITE);
-        Assertions.assertThat(getHealthInfo.getTitle()).isEqualTo("안경 제대로 쓰기");
-        Assertions.assertThat(getHealthInfo.getDept()).isEqualTo(HospitalDept.OPHTHALMOLOGY);
+        Assertions.assertThat(healthInfo.getStatus()).isEqualTo(HealthInfoStatus.WRITE);
+        Assertions.assertThat(healthInfo.getTitle()).isEqualTo(request.getTitle());
+        Assertions.assertThat(healthInfo.getDept().toString()).isEqualTo(request.getDept());
     }
 
     @Test
     public void 건강정보_삭제() throws Exception {
         //given -- 조건
-        Staff staff = staffService.findOne(1L);
+        CreateHealthInfoRequest request = new CreateHealthInfoRequest(1L, "안경 제대로 쓰기", "OPHTHALMOLOGY", "경로");
 
-        HealthInfo healthInfo = HealthInfo.createHealthInfo(staff ,"칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
-
-        Long saveId = healthInfoService.save(healthInfo);
+        Long saveId = healthInfoService.save(request);
 
         //when -- 동작
         HealthInfo getHealthInfo = healthInfoService.findOne(saveId);
@@ -67,11 +61,8 @@ public class HealthInfoServiceTest {
     @Test(expected = IllegalStateException.class)
     public void 건강정보_삭제요청_중복() throws Exception {
         //given -- 조건
-        Staff staff = staffService.findOne(1L);
-
-        HealthInfo healthInfo = HealthInfo.createHealthInfo(staff, "칼럼 경로", "안경 제대로 쓰기", HospitalDept.OPHTHALMOLOGY);
-
-        Long saveId = healthInfoService.save(healthInfo);
+        CreateHealthInfoRequest request = new CreateHealthInfoRequest(1L, "안경 제대로 쓰기", "OPHTHALMOLOGY", "경로");
+        Long saveId = healthInfoService.save(request);
 
         //when -- 동작
         HealthInfo getHealthInfo = healthInfoService.findOne(saveId);
