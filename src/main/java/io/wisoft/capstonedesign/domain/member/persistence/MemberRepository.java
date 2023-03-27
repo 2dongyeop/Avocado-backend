@@ -26,6 +26,13 @@ public class MemberRepository {
 
     }
 
+
+    /* 의료진 탈퇴 */
+    public void deleteMember(final Long memberId) {
+        Member member = findOne(memberId);
+        em.remove(member);
+    }
+
     /*
      * 회원조회
      */

@@ -3,7 +3,6 @@ package io.wisoft.capstonedesign.domain.staff.persistence;
 import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.global.enumeration.status.StaffStatus;
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -46,14 +45,10 @@ public class Staff {
     @JoinColumn(name = "hosp_id")
     private Hospital hospital;
 
-    @Column(name = "staff_status")
-    @Enumerated(value = EnumType.STRING)
-    private StaffStatus status;
-
-    @OneToMany(mappedBy = "staff")
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.REMOVE)
     private final List<BoardReply> boardReplyList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "staff")
+    @OneToMany(mappedBy = "staff", cascade = CascadeType.REMOVE)
     private final List<HealthInfo> healthInfoList = new ArrayList<>();
 
     /* 연관관계 메서드 */
@@ -101,7 +96,6 @@ public class Staff {
         staff.password = password;
         staff.license_path = license_path;
         staff.dept = dept;
-        staff.status = StaffStatus.SAVE;
         return staff;
     }
 
@@ -125,13 +119,5 @@ public class Staff {
     public void updateHospital(final Hospital hospital) {
 
         setHospital(hospital);
-    }
-
-    public void delete() {
-
-        if (this.status == StaffStatus.DELETE) {
-            throw new IllegalStateException("이미 탈퇴된 의료진입니다.");
-        }
-        this.status = StaffStatus.DELETE;
     }
 }

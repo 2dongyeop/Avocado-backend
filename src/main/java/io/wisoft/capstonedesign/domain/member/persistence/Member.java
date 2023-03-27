@@ -5,7 +5,6 @@ import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
 import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
-import io.wisoft.capstonedesign.global.enumeration.status.MemberStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -39,23 +38,19 @@ public class Member {
     @Column(name = "member_photo_path")
     private String memberPhotoPath;
 
-    @Column(name = "member_status")
-    @Enumerated(value = EnumType.STRING)
-    private MemberStatus status;
-
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private final List<Board> boardList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private final List<Review> reviewList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private final List<ReviewReply> reviewReplyList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private final List<Appointment> appointmentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private final List<Pick> pickList = new ArrayList<>();
 
 
@@ -111,21 +106,7 @@ public class Member {
         member.password = password;
         member.phoneNumber = phoneNumber;
 
-        member.status = MemberStatus.SAVE;
-
         return member;
-    }
-
-    /**
-     * 삭제 로직
-     */
-    public void delete() {
-
-        if (this.status == MemberStatus.DELETE) {
-            throw new IllegalStateException("이미 탈퇴된 회원입니다.");
-        }
-
-        this.status = MemberStatus.DELETE;
     }
 
 

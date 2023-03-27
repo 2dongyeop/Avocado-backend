@@ -96,9 +96,7 @@ public class StaffService {
     /* 의료진 탈퇴 */
     @Transactional
     public void deleteStaff(final Long staffId) {
-
-        Staff staff = findOne(staffId);
-        staff.delete();
+        staffRepository.delete(staffId);
     }
 
 
