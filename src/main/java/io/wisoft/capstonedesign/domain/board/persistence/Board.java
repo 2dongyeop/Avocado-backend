@@ -48,7 +48,7 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private final List<BoardReply> boardReplyList = new ArrayList<>();
 
     /* 연관관계 편의 메서드 */

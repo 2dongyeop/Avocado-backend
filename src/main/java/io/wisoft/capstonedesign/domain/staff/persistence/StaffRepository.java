@@ -33,6 +33,13 @@ public class StaffRepository {
 
     }
 
+    /* 의료진 탈퇴 */
+    public void delete(final Long staffId) {
+
+        Staff staff = em.find(Staff.class, staffId);
+        em.remove(staff);
+    }
+
     /**
      * 자신이 속한 병원의 리뷰 목록 조회하기
      */
@@ -79,11 +86,5 @@ public class StaffRepository {
 
         return em.createQuery("select s from Staff s join fetch s.hospital h", Staff.class)
                 .getResultList();
-    }
-
-    public void delete(final Long staffId) {
-
-        Staff staff = em.find(Staff.class, staffId);
-        em.remove(staff);
     }
 }

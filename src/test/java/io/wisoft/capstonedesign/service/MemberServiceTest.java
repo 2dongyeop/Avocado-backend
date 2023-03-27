@@ -1,7 +1,6 @@
 package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
-import io.wisoft.capstonedesign.global.enumeration.status.MemberStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
@@ -129,17 +128,17 @@ public class MemberServiceTest {
         Assertions.assertThat(member.getMemberPhotoPath()).isEqualTo(request2.getPhotoPath());
     }
 
-    @Test
+    @Test(expected = NullMemberException.class)
     public void 회원_탈퇴() throws Exception {
         //given -- 조건
         CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_1204@naver.com", "1111", "0000");
         Long signUpId = memberService.signUp(request1);
 
         //when -- 동작
-        Member member1 = memberService.findOne(signUpId);
-        member1.delete();
+        memberService.deleteMember(signUpId);
 
         //then -- 검증
-        Assertions.assertThat(member1.getStatus()).isEqualTo(MemberStatus.DELETE);
+        Member member1 = memberService.findOne(signUpId);
+        fail("탈퇴한 회원 정보에 접근하여 예외가 발생해야 한다.");
     }
 }
