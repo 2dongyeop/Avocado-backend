@@ -8,7 +8,6 @@ import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffHospitalRequest;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPasswordRequest;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPhotoPathRequest;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.global.enumeration.status.StaffStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
@@ -218,7 +217,7 @@ public class StaffServiceTest {
         fail("존재하지 않는 병원명을 입력해 예외가 발생해야 한다.");
     }
 
-    @Test
+    @Test(expected = NullStaffException.class)
     public void 의료진_탈퇴() throws Exception {
 
         //given -- 조건
@@ -227,12 +226,12 @@ public class StaffServiceTest {
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
-        Staff staff = staffService.findOne(id);
 
         //when -- 동작
-        staff.delete();
+        staffService.deleteStaff(id);
 
         //then -- 검증
-        Assertions.assertThat(staff.getStatus()).isEqualTo(StaffStatus.DELETE);
+        Staff staff = staffService.findOne(id);
+        fail("해당 의료진은 탈퇴를 했으므로 예외가 발생해야 한다.");
     }
 }

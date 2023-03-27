@@ -81,4 +81,9 @@ public class StaffRepository {
                 .getResultList();
     }
 
+    public void delete(final Long staffId) {
+
+        Staff staff = em.find(Staff.class, staffId);
+        em.remove(staff);
+    }
 }
