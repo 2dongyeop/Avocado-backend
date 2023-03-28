@@ -4,7 +4,9 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,8 +22,8 @@ public class PickRepository {
     /**
      * 찜하기 단건 조회
      */
-    public Pick findOne(final Long pickId) {
-        return em.find(Pick.class, pickId);
+    public Optional<Pick> findOne(final Long pickId) {
+        return Optional.ofNullable(em.find(Pick.class, pickId));
     }
 
     /**
@@ -39,7 +41,7 @@ public class PickRepository {
      */
     public List<Pick> findByMemberIdOrderByCreateDesc(final Long memberId) {
 
-        return em.createQuery("select p from Pick p join fetch p.member m where m.id = :id order by p.pickedAt desc", Pick.class)
+        return em.createQuery("select p from Pick p join fetch p.member m where m.id = :id order by p.createAt desc", Pick.class)
                 .setParameter("id", memberId)
                 .getResultList();
     }
@@ -49,7 +51,7 @@ public class PickRepository {
      */
     public List<Pick> findByMemberIdOrderByCreateAsc(final Long memberId) {
 
-        return em.createQuery("select p from Pick p join fetch p.member m where m.id = :id order by p.pickedAt asc", Pick.class)
+        return em.createQuery("select p from Pick p join fetch p.member m where m.id = :id order by p.createAt asc", Pick.class)
                 .setParameter("id", memberId)
                 .getResultList();
     }

@@ -4,7 +4,9 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,8 +24,8 @@ public class ReviewReplyRepository {
     /**
      * 댓글 단건 조회
      */
-    public ReviewReply findOne(final Long reviewReplyId) {
-        return em.find(ReviewReply.class, reviewReplyId);
+    public Optional<ReviewReply> findOne(final Long reviewReplyId) {
+        return Optional.ofNullable(em.find(ReviewReply.class, reviewReplyId));
     }
 
     /**

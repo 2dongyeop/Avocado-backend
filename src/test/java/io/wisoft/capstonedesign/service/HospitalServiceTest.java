@@ -2,7 +2,6 @@ package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
-import io.wisoft.capstonedesign.domain.hospital.persistence.HospitalRepository;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalRequest;
 import org.assertj.core.api.Assertions;
@@ -20,9 +19,7 @@ import static org.junit.Assert.*;
 @Transactional
 public class HospitalServiceTest {
 
-    @Autowired
-    HospitalService hospitalService;
-    @Autowired HospitalRepository hospitalRepository;
+    @Autowired HospitalService hospitalService;
 
     @Test
     public void 병원_저장() throws Exception {

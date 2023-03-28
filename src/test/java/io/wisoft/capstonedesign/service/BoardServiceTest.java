@@ -8,7 +8,6 @@ import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardException;
-import io.wisoft.capstonedesign.domain.board.persistence.BoardRepository;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -26,9 +25,7 @@ import static org.junit.Assert.*;
 public class BoardServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired
-    BoardService boardService;
-    @Autowired BoardRepository boardRepository;
+    @Autowired BoardService boardService;
 
     //게시글 작성
     @Test
@@ -45,7 +42,7 @@ public class BoardServiceTest {
         Long saveId = boardService.save(request);
 
         //then -- 검증
-        Board getBoard = boardRepository.findOne(saveId);
+        Board getBoard = boardService.findOne(saveId);
 
         Assertions.assertThat(getBoard.getStatus()).isEqualTo(BoardStatus.WRITE);
     }

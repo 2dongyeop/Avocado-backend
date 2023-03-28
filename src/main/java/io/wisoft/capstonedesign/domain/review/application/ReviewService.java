@@ -11,6 +11,7 @@ import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class ReviewService {
      */
     @Transactional
     public void deleteReview(final Long reviewId) {
-        Review review = reviewRepository.findOne(reviewId);
+        Review review = findOne(reviewId);
         review.delete();
     }
 
@@ -52,15 +53,15 @@ public class ReviewService {
     @Transactional
     public void updateTitleBody(final Long reviewId, final UpdateReviewRequest request) {
 
+        validateTitleBody(request);
         Review review = findOne(reviewId);
-        validateTitleBody(request.getNewTitle(), request.getNewBody());
 
         review.updateTitleBody(request.getNewTitle(), request.getNewBody());
     }
 
-    private void validateTitleBody(final String newTitle, final String newBody) {
+    private void validateTitleBody(final UpdateReviewRequest request) {
 
-        if (newTitle == null || newBody == null) {
+        if (!StringUtils.hasText(request.getNewTitle()) || !StringUtils.hasText(request.getNewBody())) {
             throw new IllegalValueException("제목이나 본문이 비어있습니다.");
         }
     }
@@ -72,17 +73,10 @@ public class ReviewService {
     }
 
     public Review findOne(final Long reviewId) {
-
-        Review getReview = reviewRepository.findOne(reviewId);
-        if (getReview == null) {
-            throw new NullReviewException("해당 리뷰 정보가 존재하지 않습니다.");
-        }
-        return getReview;
+        return reviewRepository.findOne(reviewId).orElseThrow(NullReviewException::new);
     }
 
-    public List<Review> findAll() {
-        return reviewRepository.findAll();
-    }
+    public List<Review> findAll() { return reviewRepository.findAll(); }
 
     public List<Review> findAllOrderByCreateAtASC() { return reviewRepository.findAllOrderByCreateAtASC(); }
 
@@ -92,7 +86,7 @@ public class ReviewService {
 
         List<Review> reviewListByTargetHospital = reviewRepository.findByTargetHospital(targetHospital);
 
-        if (reviewListByTargetHospital.size() == 0) {
+        if (reviewListByTargetHospital.isEmpty()) {
             throw new IllegalValueException("해당 병원에 대한 리뷰는 존재하지 않습니다.");
         }
         return reviewListByTargetHospital;

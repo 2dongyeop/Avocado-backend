@@ -12,8 +12,10 @@ import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -42,7 +44,7 @@ public class BoardService {
      */
     @Transactional
     public void deleteBoard(final Long boardId) {
-        Board board = boardRepository.findOne(boardId);
+        Board board = findOne(boardId);
         board.delete();
     }
 
@@ -52,15 +54,16 @@ public class BoardService {
     @Transactional
     public void updateTitleBody(final Long boardId, final UpdateBoardRequest request) {
 
+        validateTitleBody(request);
         Board board = findOne(boardId);
-        validateTitleBody(request.getNewTitle(), request.getNewBody());
 
         board.updateTitleBody(request.getNewTitle(), request.getNewBody());
     }
 
-    private void validateTitleBody(final String newTitle, final String newBody) {
-        if (newTitle == null || newBody == null) {
-            throw new IllegalValueException("게시글의 제목이나 본문이 비어있습니다.");
+    private void validateTitleBody(final UpdateBoardRequest request) {
+
+        if (!StringUtils.hasText(request.getNewBody()) || !StringUtils.hasText(request.getNewTitle())) {
+            throw new IllegalValueException("파라미터가 비어있어 업데이트할 수 없습니다.");
         }
     }
 
@@ -70,12 +73,7 @@ public class BoardService {
     }
 
     public Board findOne(final Long boardId) {
-        Board getBoard = boardRepository.findOne(boardId);
-
-        if (getBoard == null) {
-            throw new NullBoardException("해당 게시글은 존재하지 않습니다.");
-        }
-        return getBoard;
+        return boardRepository.findOne(boardId).orElseThrow(NullBoardException::new);
     }
 
     public List<Board> findAll() {

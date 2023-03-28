@@ -15,8 +15,11 @@ import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -52,7 +55,8 @@ public class AppointmentService {
      */
     @Transactional
     public void cancelAppointment(final Long appointmentId) {
-        Appointment appointment = appointmentRepository.findOne(appointmentId);
+        Appointment appointment = appointmentRepository.findOne(appointmentId).orElseThrow(NullAppointmentException::new);
+
         appointment.cancel();
     }
 
@@ -62,19 +66,17 @@ public class AppointmentService {
     @Transactional
     public void update(final Long appointmentId, final UpdateAppointmentRequest request) {
 
+        validateParameter(request);
         Appointment appointment = findOne(appointmentId);
-        validateParameter(HospitalDept.valueOf(request.getDept()), request.getComment(), request.getAppointName(), request.getAppointPhonenumber());
 
         appointment.update(HospitalDept.valueOf(request.getDept()), request.getComment(), request.getAppointName(), request.getAppointPhonenumber());
     }
 
     private void validateParameter(
-            final HospitalDept dept,
-            final String comment,
-            final String appointName,
-            final String appointPhonenumber) {
+            final UpdateAppointmentRequest request) {
 
-        if (dept == null || comment == null || appointName == null || appointPhonenumber == null) {
+        if (!StringUtils.hasText(request.getAppointName()) || !StringUtils.hasText(request.getDept())
+            || !StringUtils.hasText(request.getComment()) || !StringUtils.hasText(request.getAppointPhonenumber())) {
             throw new IllegalValueException("파라미터가 비어있어 업데이트할 수 없습니다.");
         }
     }
@@ -84,13 +86,7 @@ public class AppointmentService {
     public List<Appointment> findByMemberId(final Long memberId) { return appointmentRepository.findByMemberId(memberId); }
 
     public Appointment findOne(final Long appointmentId) {
-        Appointment getAppointment = appointmentRepository.findOne(appointmentId);
-
-        if (getAppointment == null) {
-            throw new NullAppointmentException("해당 예약 정보가 존재하지 않습니다.");
-        }
-
-        return getAppointment;
+        return appointmentRepository.findOne(appointmentId).orElseThrow(NullAppointmentException::new);
     }
 
     public List<Appointment> findByMemberIdASC(final Long memberId) { return appointmentRepository.findByMemberIdASC(memberId); }

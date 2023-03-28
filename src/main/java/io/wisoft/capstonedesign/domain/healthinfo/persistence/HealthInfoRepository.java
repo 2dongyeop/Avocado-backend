@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,8 +24,8 @@ public class HealthInfoRepository {
     /**
      * 건강정보 단건 조회
      */
-    public HealthInfo findOne(final Long healthInfoId) {
-        return em.find(HealthInfo.class, healthInfoId);
+    public Optional<HealthInfo> findOne(final Long healthInfoId) {
+        return Optional.ofNullable(em.find(HealthInfo.class, healthInfoId));
     }
 
     /**

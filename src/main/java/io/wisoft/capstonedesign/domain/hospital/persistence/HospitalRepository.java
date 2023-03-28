@@ -4,7 +4,9 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -15,12 +17,16 @@ public class HospitalRepository {
     /**
      * 병원 저장
      */
-    public void save(final Hospital hospital) { em.persist(hospital); }
+    public void save(final Hospital hospital) {
+        em.persist(hospital);
+    }
 
     /**
      * 병원 단건 조회
      */
-    public Hospital findOne(final Long hospitalId) { return em.find(Hospital.class, hospitalId); }
+    public Optional<Hospital> findOne(final Long hospitalId) {
+        return Optional.ofNullable(em.find(Hospital.class, hospitalId));
+    }
 
 
     /* 병원 이름으로 조회 */

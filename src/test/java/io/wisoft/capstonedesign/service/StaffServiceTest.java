@@ -14,7 +14,6 @@ import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
-import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import jakarta.persistence.EntityManager;
@@ -36,9 +35,7 @@ import static org.junit.Assert.*;
 public class StaffServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired
-    StaffService staffService;
-    @Autowired StaffRepository staffRepository;
+    @Autowired StaffService staffService;
 
     @Test(expected = DuplicateStaffException.class)
     public void 의료진중복검증() throws Exception {

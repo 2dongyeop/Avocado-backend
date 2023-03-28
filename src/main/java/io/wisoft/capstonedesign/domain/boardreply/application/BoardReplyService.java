@@ -13,6 +13,7 @@ import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class BoardReplyService {
      */
     @Transactional
     public void deleteBoardReply(final Long boardReplyId) {
-        BoardReply boardReply = boardReplyRepository.findOne(boardReplyId);
+        BoardReply boardReply = findOne(boardReplyId);
         boardReply.delete();
     }
 
@@ -57,16 +58,16 @@ public class BoardReplyService {
     @Transactional
     public void update(final Long boardReplyId, final UpdateBoardReplyRequest request) {
 
+        validateParameter(request);
         BoardReply boardReply = findOne(boardReplyId);
 
-        validateParameter(request.getReply());
         boardReply.update(request.getReply());
     }
 
-    private void validateParameter(final String reply) {
+    private void validateParameter(final UpdateBoardReplyRequest request) {
 
-        if (reply == null) {
-            throw new IllegalValueException("댓글이 비어있습니다.");
+        if (!StringUtils.hasText(request.getReply())) {
+            throw new IllegalValueException();
         }
     }
 
@@ -74,11 +75,7 @@ public class BoardReplyService {
      * 게시글댓글 단건 조회
      */
     public BoardReply findOne(final Long boardReplyId) {
-        BoardReply getBoardReply = boardReplyRepository.findOne(boardReplyId);
-        if (getBoardReply == null) {
-            throw new NullBoardReplyException("해당 게시글댓글은 존재하지 않습니다.");
-        }
-        return getBoardReply;
+        return boardReplyRepository.findOne(boardReplyId).orElseThrow(NullBoardReplyException::new);
     }
 
     /**

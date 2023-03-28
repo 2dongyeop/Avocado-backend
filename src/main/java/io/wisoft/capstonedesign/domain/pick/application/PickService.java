@@ -43,18 +43,13 @@ public class PickService {
      */
     @Transactional
     public void cancelPick(final Long pickId) {
-        Pick pick = pickRepository.findOne(pickId);
+        Pick pick = findOne(pickId);
         pick.cancel();
     }
 
     /* 조회 로직 */
     public Pick findOne(final Long pickId) {
-
-        Pick getPick = pickRepository.findOne(pickId);
-        if (getPick == null) {
-            throw new NullPickException("해당 찜하기 정보가 존재하지 않습니다.");
-        }
-        return getPick;
+        return pickRepository.findOne(pickId).orElseThrow(NullPickException::new);
     }
 
     public List<Pick> findByMemberId(final Long memberId) {

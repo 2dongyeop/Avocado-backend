@@ -1,10 +1,12 @@
 package io.wisoft.capstonedesign.domain.member.persistence;
 
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -29,15 +31,15 @@ public class MemberRepository {
 
     /* 의료진 탈퇴 */
     public void deleteMember(final Long memberId) {
-        Member member = findOne(memberId);
+        Member member = findOne(memberId).orElseThrow(NullMemberException::new);
         em.remove(member);
     }
 
     /*
      * 회원조회
      */
-    public Member findOne(final Long id) {
-        return em.find(Member.class, id);
+    public Optional<Member> findOne(final Long id) {
+        return Optional.ofNullable(em.find(Member.class, id));
     }
 
     public List<Member> findAll() {

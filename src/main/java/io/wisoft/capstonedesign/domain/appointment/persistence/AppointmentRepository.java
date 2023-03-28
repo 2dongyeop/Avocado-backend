@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,8 +29,8 @@ public class AppointmentRepository {
     /**
      * 예약 단건 조회
      */
-    public Appointment findOne(final Long appointmentId) {
-        return em.find(Appointment.class, appointmentId);
+    public Optional<Appointment> findOne(final Long appointmentId) {
+        return Optional.ofNullable(em.find(Appointment.class, appointmentId));
     }
 
     /**

@@ -4,7 +4,6 @@ import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import io.wisoft.capstonedesign.domain.healthinfo.web.dto.CreateHealthInfoRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.HealthInfoStatus;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHealthInfoException;
-import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfoRepository;
 import io.wisoft.capstonedesign.domain.healthinfo.application.HealthInfoService;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import org.assertj.core.api.Assertions;
@@ -21,11 +20,8 @@ import static org.junit.Assert.*;
 @SpringBootTest
 @Transactional
 public class HealthInfoServiceTest {
-    @Autowired
-    StaffService staffService;
-    @Autowired
-    HealthInfoService healthInfoService;
-    @Autowired HealthInfoRepository healthInfoRepository;
+    @Autowired StaffService staffService;
+    @Autowired HealthInfoService healthInfoService;
 
     @Test
     public void 건강정보_저장() throws Exception {

@@ -8,7 +8,6 @@ import io.wisoft.capstonedesign.domain.reviewreply.web.dto.UpdateReviewReplyRequ
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewReplyStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewReplyException;
-import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReplyRepository;
 import io.wisoft.capstonedesign.domain.reviewreply.application.ReviewReplyService;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -27,9 +26,7 @@ import static org.junit.Assert.*;
 public class ReviewReplyServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired
-    ReviewReplyService reviewReplyService;
-    @Autowired ReviewReplyRepository reviewReplyRepository;
+    @Autowired ReviewReplyService reviewReplyService;
 
     @Test
     public void 리뷰_댓글_저장() throws Exception {
