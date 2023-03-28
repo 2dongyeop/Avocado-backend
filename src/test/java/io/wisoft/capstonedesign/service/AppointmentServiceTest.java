@@ -9,7 +9,6 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.status.AppointmentStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullAppointmentException;
-import io.wisoft.capstonedesign.domain.appointment.persistence.AppointmentRepository;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -27,9 +26,7 @@ import static org.junit.Assert.*;
 public class AppointmentServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired
-    AppointmentService appointmentService;
-    @Autowired AppointmentRepository appointmentRepository;
+    @Autowired AppointmentService appointmentService;
 
     //예약 저장
     @Test
@@ -56,7 +53,6 @@ public class AppointmentServiceTest {
         Assertions.assertThat(appointment.getStatus()).isEqualTo(AppointmentStatus.COMPLETE);
         Assertions.assertThat(appointment.getAppointName()).isEqualTo(request.getAppointName());
     }
-
     //예약 취소
     @Test
     public void 예약_취소() throws Exception {
@@ -75,7 +71,7 @@ public class AppointmentServiceTest {
         Long saveId = appointmentService.save(request);
 
         //when -- 동작
-        Appointment appointment = appointmentRepository.findOne(saveId);
+        Appointment appointment = appointmentService.findOne(saveId);
         appointment.cancel();
 
         //then -- 검증

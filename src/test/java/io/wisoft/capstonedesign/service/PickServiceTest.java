@@ -6,7 +6,6 @@ import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.pick.web.dto.CreatePickRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.PickStatus;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullPickException;
-import io.wisoft.capstonedesign.domain.pick.persistence.PickRepository;
 import io.wisoft.capstonedesign.domain.pick.application.PickService;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -26,10 +25,8 @@ import static org.junit.Assert.*;
 public class PickServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired
-    PickService pickService;
-    @Autowired PickRepository pickRepository;
-    
+    @Autowired PickService pickService;
+
     //찜하기 저장
     @Test
     public void 찜하기_저장() throws Exception {
@@ -48,7 +45,7 @@ public class PickServiceTest {
         Long saveId = pickService.save(request);
 
         //then -- 검증
-        Pick pick = pickRepository.findOne(saveId);
+        Pick pick = pickService.findOne(saveId);
         Assertions.assertThat(pick.getStatus()).isEqualTo(PickStatus.COMPLETE);
         Assertions.assertThat(pick.getHospital().getName()).isEqualTo(hospital.getName());
         Assertions.assertThat(pick.getMember().getNickname()).isEqualTo(member.getNickname());

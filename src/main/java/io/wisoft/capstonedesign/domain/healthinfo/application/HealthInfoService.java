@@ -40,19 +40,13 @@ public class HealthInfoService {
     @Transactional
     public void delete(final Long healthInfoId) {
 
-        HealthInfo healthInfo = healthInfoRepository.findOne(healthInfoId);
+        HealthInfo healthInfo = findOne(healthInfoId);
         healthInfo.delete();
     }
 
     /* 조회 로직 */
     public HealthInfo findOne(final Long healthInfoId) {
-        HealthInfo getHealthInfo = healthInfoRepository.findOne(healthInfoId);
-
-        if (getHealthInfo == null) {
-            throw new NullHealthInfoException("해당 건강정보가 조회하지 않습니다.");
-        }
-
-        return getHealthInfo;
+        return healthInfoRepository.findOne(healthInfoId).orElseThrow(NullHealthInfoException::new);
     }
 
     public List<HealthInfo> findAll() {
@@ -60,7 +54,6 @@ public class HealthInfoService {
     }
 
     public List<HealthInfo> findAllByDept(String dept) {
-
         return healthInfoRepository.findAllByDept(HospitalDept.valueOf(dept));
     }
 

@@ -35,19 +35,21 @@ public class StaffService {
     @Transactional
     public Long signUp(final CreateStaffRequest request) {
 
+        validateDuplicateStaff(request);
+
         //엔티티 조회
         Hospital hospital = hospitalService.findOne(request.getHospitalId());
         Staff staff = Staff.newInstance(hospital, request.getName(), request.getEmail(), request.getPassword(), request.getLicensePath(), HospitalDept.valueOf(request.getDept()));
 
-        validateDuplicateStaff(staff);
         staffRepository.signUp(staff);
         return staff.getId();
     }
 
 
-    private void validateDuplicateStaff(final Staff staff) {
-        List<Staff> findStaffsByEmail = staffRepository.findByEmail(staff.getEmail());
-        if (findStaffsByEmail.size() != 0) {
+    private void validateDuplicateStaff(final CreateStaffRequest request) {
+        List<Staff> findStaffsByEmail = staffRepository.findByEmail(request.getEmail());
+
+        if (!findStaffsByEmail.isEmpty()) {
             throw new DuplicateStaffException("중복 의료진 발생 : 이미 존재하는 의료진입니다.");
         }
     }
@@ -60,14 +62,14 @@ public class StaffService {
     public void updatePassword(final Long staffId, final UpdateStaffPasswordRequest request) {
 
         Staff staff = findOne(staffId);
-        validateStaffPassword(staff, request.getOldPassword());
+        validateStaffPassword(staff, request);
 
         staff.updatePassword(request.getNewPassword());
     }
 
-    private void validateStaffPassword(final Staff staff, final String oldPassword) {
+    private void validateStaffPassword(final Staff staff, final UpdateStaffPasswordRequest request) {
 
-        if (!staff.getPassword().equals(oldPassword)) {
+        if (!staff.getPassword().equals(request.getOldPassword())) {
             throw new IllegalValueException("의료진 비밀번호가 일치하지 않아 변경할 수 없습니다.");
         }
     }
@@ -105,7 +107,7 @@ public class StaffService {
      */
     public List<Review> findReviewByStaffHospitalName(final Long staffId) {
 
-        Staff staff = staffRepository.findOne(staffId);
+        Staff staff = findOne(staffId);
         String hospitalName = staff.getHospital().getName();
 
         return staffRepository.findReviewListByStaffHospitalName(hospitalName);
@@ -123,13 +125,7 @@ public class StaffService {
      * 의료진 조회
      */
     public Staff findOne(final Long staffId) {
-
-        Staff getStaff = staffRepository.findOne(staffId);
-
-        if (getStaff == null) {
-            throw new NullStaffException("해당 의료진 정보가 존재하지 않습니다.");
-        }
-        return getStaff;
+        return staffRepository.findOne(staffId).orElseThrow(NullStaffException::new);
     }
 
     public List<Staff> findAll() { return staffRepository.findAll(); }

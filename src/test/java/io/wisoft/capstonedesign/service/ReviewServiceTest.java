@@ -8,7 +8,6 @@ import io.wisoft.capstonedesign.domain.review.web.dto.UpdateReviewRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewException;
-import io.wisoft.capstonedesign.domain.review.persistence.ReviewRepository;
 import io.wisoft.capstonedesign.domain.review.application.ReviewService;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -27,9 +26,7 @@ import static org.junit.Assert.*;
 public class ReviewServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired
-    ReviewService reviewService;
-    @Autowired ReviewRepository reviewRepository;
+    @Autowired ReviewService reviewService;
 
     @Test
     public void 리뷰작성() throws Exception {
@@ -45,7 +42,7 @@ public class ReviewServiceTest {
         Long saveId = reviewService.save(request);
 
         //then -- 검증
-        Review getReview = reviewRepository.findOne(saveId); //저장된 리뷰
+        Review getReview = reviewService.findOne(saveId); //저장된 리뷰
 
         Assertions.assertThat(getReview.getStatus()).isEqualTo(ReviewStatus.WRITE);
     }

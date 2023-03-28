@@ -3,12 +3,14 @@ package io.wisoft.capstonedesign.domain.staff.persistence;
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -36,7 +38,7 @@ public class StaffRepository {
     /* 의료진 탈퇴 */
     public void delete(final Long staffId) {
 
-        Staff staff = em.find(Staff.class, staffId);
+        Staff staff = findOne(staffId).orElseThrow(NullStaffException::new);
         em.remove(staff);
     }
 
@@ -67,8 +69,8 @@ public class StaffRepository {
     /**
      * 의료진 조회
      */
-    public Staff findOne(final Long id) {
-        return em.find(Staff.class, id);
+    public Optional<Staff> findOne(final Long id) {
+        return Optional.ofNullable(em.find(Staff.class, id));
     }
 
     public List<Staff> findAll() {

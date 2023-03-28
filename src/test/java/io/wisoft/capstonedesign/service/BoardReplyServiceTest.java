@@ -9,7 +9,6 @@ import io.wisoft.capstonedesign.global.enumeration.status.BoardReplyStatus;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardReplyException;
-import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReplyRepository;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
@@ -22,6 +21,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -30,9 +31,7 @@ import static org.junit.Assert.*;
 public class BoardReplyServiceTest {
 
     @Autowired EntityManager em;
-    @Autowired
-    BoardReplyService boardReplyService;
-    @Autowired BoardReplyRepository boardReplyRepository;
+    @Autowired BoardReplyService boardReplyService;
 
     @Test
     public void 게시글_댓글_저장() throws Exception {
@@ -62,14 +61,15 @@ public class BoardReplyServiceTest {
         Long saveId = boardReplyService.save(request);
 
         //then -- 검증
-        Assertions.assertThat(boardReplyRepository.findOne(saveId).getStatus()).isEqualTo(BoardReplyStatus.WRITE);
+        BoardReply boardReply = boardReplyService.findOne(saveId);
+        Assertions.assertThat(boardReply.getStatus()).isEqualTo(BoardReplyStatus.WRITE);
     }
 
     @Test
     public void 게시글_댓글_삭제() throws Exception {
         //given -- 조건
 
-        //게시글을 작성할 회원 생성
+        //게시글을 작성할 회원 생성`
         Member member = Member.newInstance("lee", "lee@naver.com", "1111", "0000");
         em.persist(member);
 
@@ -96,7 +96,8 @@ public class BoardReplyServiceTest {
         boardReplyService.deleteBoardReply(saveId);
 
         //then -- 검증
-        Assertions.assertThat(boardReplyRepository.findOne(saveId).getStatus()).isEqualTo(BoardReplyStatus.DELETE);
+        BoardReply boardReply = boardReplyService.findOne(saveId);
+        Assertions.assertThat(boardReply.getStatus()).isEqualTo(BoardReplyStatus.DELETE);
     }
 
     @Test(expected = NullBoardReplyException.class)

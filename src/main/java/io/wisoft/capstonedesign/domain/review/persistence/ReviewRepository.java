@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,8 +21,8 @@ public class ReviewRepository {
     /**
      * 리뷰 단건 조회
      */
-    public Review findOne(final Long reviewId) {
-        return em.find(Review.class, reviewId);
+    public Optional<Review> findOne(final Long reviewId) {
+        return Optional.ofNullable(em.find(Review.class, reviewId));
     }
 
     /**

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,8 +21,8 @@ public class BoardReplyRepository {
     /**
      * 게시글댓글 단건 조회
      */
-    public BoardReply findOne(final Long boardReplyId) {
-        return em.find(BoardReply.class, boardReplyId);
+    public Optional<BoardReply> findOne(final Long boardReplyId) {
+        return Optional.ofNullable(em.find(BoardReply.class, boardReplyId));
     }
 
     /**

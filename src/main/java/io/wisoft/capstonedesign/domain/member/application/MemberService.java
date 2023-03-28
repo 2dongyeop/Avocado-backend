@@ -39,7 +39,8 @@ public class MemberService {
     private void validateDuplicateMember(final Member member) {
         List<Member> findMembersByEmail = memberRepository.findByEmail(member.getEmail());
         List<Member> findMembersByNickname = memberRepository.findByNickname(member.getNickname());
-        if (findMembersByEmail.size() != 0 || findMembersByNickname.size() != 0) {
+
+        if (!findMembersByEmail.isEmpty() || !findMembersByNickname.isEmpty()) {
             throw new DuplicateMemberException("중복 회원 발생 : 이미 존재하는 회원입니다.");
         }
     }
@@ -51,14 +52,14 @@ public class MemberService {
     public void updatePassword(final Long memberId, final UpdateMemberPasswordRequest request) {
 
         Member member = findOne(memberId);
-        validateMemberPassword(member, request.getOldPassword());
+        validateMemberPassword(member, request);
 
         member.updatePassword(request.getNewPassword());
     }
 
-    private void validateMemberPassword(final Member member, final String oldPassword) {
+    private void validateMemberPassword(final Member member, final UpdateMemberPasswordRequest request) {
 
-        if (!member.getPassword().equals(oldPassword)) {
+        if (!member.getPassword().equals(request.getOldPassword())) {
             throw new IllegalValueException("비밀번호가 일치하지 않아 변경할 수 없습니다.");
         }
     }
@@ -87,7 +88,6 @@ public class MemberService {
     /* 회원 탈퇴 */
     @Transactional
     public void deleteMember(final Long memberId) {
-
         memberRepository.deleteMember(memberId);
     }
 
@@ -96,12 +96,7 @@ public class MemberService {
      * 회원 조회
      */
     public Member findOne(final Long memberId) {
-
-        Member getMember = memberRepository.findOne(memberId);
-        if (getMember == null) {
-            throw new NullMemberException("해당 회원 정보가 존재하지 않습니다.");
-        }
-        return getMember;
+        return memberRepository.findOne(memberId).orElseThrow(NullMemberException::new);
     }
 
     public List<Member> findAll() {

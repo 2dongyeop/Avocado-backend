@@ -13,6 +13,7 @@ import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewReplyExcept
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class ReviewReplyService {
     @Transactional
     public void deleteReviewReply(final Long reviewReplyId) {
 
-        ReviewReply reviewReply = reviewReplyRepository.findOne(reviewReplyId);
+        ReviewReply reviewReply = findOne(reviewReplyId);
         reviewReply.delete();
     }
 
@@ -59,15 +60,15 @@ public class ReviewReplyService {
     @Transactional
     public void updateReply(final Long reviewReplyId, final UpdateReviewReplyRequest request) {
 
+        validateParameter(request);
         ReviewReply reviewReply = findOne(reviewReplyId);
 
-        validateParameter(request.getReply());
         reviewReply.updateReply(request.getReply());
     }
 
-    private void validateParameter(final String reply) {
+    private void validateParameter(final UpdateReviewReplyRequest request) {
 
-        if (reply == null) {
+        if (!StringUtils.hasText(request.getReply())) {
             throw new IllegalValueException("reply가 비어있어 수정할 수 없습니다.");
         }
     }
@@ -77,11 +78,7 @@ public class ReviewReplyService {
      * 리뷰댓글 단건조회
      */
     public ReviewReply findOne(final Long reviewReplyId) {
-        ReviewReply getReviewReply = reviewReplyRepository.findOne(reviewReplyId);
-        if (getReviewReply == null) {
-            throw new NullReviewReplyException("해당 리뷰댓글은 존재하지 않습니다.");
-        }
-        return getReviewReply;
+        return reviewReplyRepository.findOne(reviewReplyId).orElseThrow(NullReviewReplyException::new);
     }
 
 

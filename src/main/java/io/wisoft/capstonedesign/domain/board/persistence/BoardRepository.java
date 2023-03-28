@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -24,8 +25,8 @@ public class BoardRepository {
     /**
      * 게시글 단건 조회
      */
-    public Board findOne(final Long boardId) {
-        return em.find(Board.class, boardId);
+    public Optional<Board> findOne(final Long boardId) {
+        return Optional.ofNullable(em.find(Board.class, boardId));
     }
 
     /**

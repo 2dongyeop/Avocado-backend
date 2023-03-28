@@ -4,7 +4,6 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
-import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import io.wisoft.capstonedesign.domain.member.web.dto.CreateMemberRequest;
 import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPasswordRequest;
@@ -24,9 +23,7 @@ import static org.junit.Assert.*;
 @Transactional
 public class MemberServiceTest {
 
-    @Autowired
-    MemberService memberService;
-    @Autowired MemberRepository memberRepository;
+    @Autowired MemberService memberService;
 
     @Test
     public void 회원_저장() throws Exception {
