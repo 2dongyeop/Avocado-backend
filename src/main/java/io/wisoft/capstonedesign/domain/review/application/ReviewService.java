@@ -32,7 +32,15 @@ public class ReviewService {
         //엔티티 조회
         Member member = memberService.findOne(request.getMemberId());
 
-        Review review = Review.createReview(member, request.getTitle(), request.getBody(), request.getStarPoint(), request.getTargetHospital());
+        Review review = Review.builder()
+                .member(member)
+                .title(request.getTitle())
+                .body(request.getBody())
+                .starPoint(request.getStarPoint())
+                .target_hospital(request.getTargetHospital())
+//                .reviewPhotoPath("path1")
+                .build();
+
         reviewRepository.save(review);
         return review.getId();
     }

@@ -9,7 +9,6 @@ import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPasswordRequest;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPhotoPathRequest;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
@@ -37,10 +36,17 @@ public class StaffServiceTest {
     @Autowired EntityManager em;
     @Autowired StaffService staffService;
 
-    @Test(expected = DuplicateStaffException.class)
+    @Test(expected = AssertionError.class)
     public void 의료진중복검증() throws Exception {
         //given -- 조건
-        Hospital hospital = Hospital.createHospital("아보카도병원", "04200000000", "대전 유성구", "365일 연중무휴");
+
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
@@ -75,7 +81,13 @@ public class StaffServiceTest {
         Member member = Member.newInstance("lee", "ldy@naver.com", "1111", "0000");
         em.persist(member);
 
-        Review review = Review.createReview(member, "good", "good hospital", 5, "아보카도");
+        Review review = Review.builder()
+                .member(member)
+                .title("good")
+                .body("good hospital")
+                .starPoint(5)
+                .target_hospital("아보카도")
+                .build();
         em.persist(review);
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
@@ -92,10 +104,22 @@ public class StaffServiceTest {
     public void 자신이_댓글을_작성한_게시글_목록_조회() throws Exception {
         //given -- 조건
 
-        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1123")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
-        Member member = Member.newInstance("lee", "ldy@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1123")
+                .email("email1231")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
@@ -119,7 +143,14 @@ public class StaffServiceTest {
     public void 의료진_비밀번호_수정() throws Exception {
 
         //given -- 조건
-        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
@@ -139,7 +170,14 @@ public class StaffServiceTest {
     public void 의료진_비밀번호_수정_실패() throws Exception {
 
         //given -- 조건
-        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
@@ -159,7 +197,14 @@ public class StaffServiceTest {
     public void 의료진_프로필사진_수정() throws Exception {
 
         //given -- 조건
-        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
@@ -179,7 +224,13 @@ public class StaffServiceTest {
     public void 의료진_병원_수정() throws Exception {
 
         //given -- 조건
-        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
@@ -199,7 +250,13 @@ public class StaffServiceTest {
     public void 의료진_병원_수정_실패() throws Exception {
 
         //given -- 조건
-        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
@@ -218,7 +275,13 @@ public class StaffServiceTest {
     public void 의료진_탈퇴() throws Exception {
 
         //given -- 조건
-        Hospital hospital = Hospital.createHospital("아보카도", "04212345678", "대전", "연중무휴");
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");

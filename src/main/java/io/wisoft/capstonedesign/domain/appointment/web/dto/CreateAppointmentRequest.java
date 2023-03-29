@@ -1,5 +1,7 @@
 package io.wisoft.capstonedesign.domain.appointment.web.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateAppointmentRequest {
-    private Long memberId;
-    private Long hospitalId;
-    private String dept;
-    private String comment;
-    private String appointName;
-    private String appointPhonenumber;
+    @NotNull private Long memberId;
+    @NotNull private Long hospitalId;
+    @NotBlank private String dept;
+    @NotBlank private String comment;
+    @NotBlank private String appointName;
+    @NotBlank private String appointPhonenumber;
 }

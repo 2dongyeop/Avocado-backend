@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.domain.staff.web.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UpdateStaffPasswordRequest {
-    private String oldPassword;
-    private String newPassword;
+    @NotBlank private String oldPassword;
+    @NotBlank private String newPassword;
 }

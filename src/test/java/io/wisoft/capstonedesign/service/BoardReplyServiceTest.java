@@ -37,22 +37,42 @@ public class BoardReplyServiceTest {
     public void 게시글_댓글_저장() throws Exception {
         //given -- 조건
 
-        //게시글을 작성할 회원 생성
-        Member member = Member.newInstance("lee", "lee@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //게시글 생성
-        HospitalDept dept = HospitalDept.OBSTETRICS;
-        Board board = Board.createBoard(member, "title1", "body1", dept);
+        Board board = Board.builder()
+                .member(member)
+                .title("title1")
+                .body("body1")
+                .dept(HospitalDept.OBSTETRICS)
+                .build();
         em.persist(board);
 
-        //회원이 다닐 병원 생성
-        Hospital hospital = Hospital.createHospital("avocado", "04212345678", "대전시 유성구", "연중무휴");
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
-        //댓글을 생성할 의료진 생성
-        HospitalDept hospitalDept = HospitalDept.OBSTETRICS;
-        Staff staff = Staff.newInstance(hospital, "lim", "lsn@naver.com", "1111", "license", hospitalDept);
+        //의료진 생성
+        Staff staff = Staff.builder()
+                .hospital(hospital)
+                .name("name1")
+                .email("email1")
+                .password("pass1")
+                .license_path("licen1")
+                .dept(HospitalDept.DENTAL)
+                .build();
         em.persist(staff);
 
         CreateBoardReplyRequest request = new CreateBoardReplyRequest(board.getId(), staff.getId(), "안과가세요");
@@ -69,22 +89,42 @@ public class BoardReplyServiceTest {
     public void 게시글_댓글_삭제() throws Exception {
         //given -- 조건
 
-        //게시글을 작성할 회원 생성`
-        Member member = Member.newInstance("lee", "lee@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //게시글 생성
-        HospitalDept dept = HospitalDept.OBSTETRICS;
-        Board board = Board.createBoard(member, "title1", "body1", dept);
+        Board board = Board.builder()
+                .member(member)
+                .title("title1")
+                .body("body1")
+                .dept(HospitalDept.OBSTETRICS)
+                .build();
         em.persist(board);
 
-        //회원이 다닐 병원 생성
-        Hospital hospital = Hospital.createHospital("avocado", "04212345678", "대전시 유성구", "연중무휴");
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
-        //댓글을 생성할 의료진 생성
-        HospitalDept hospitalDept = HospitalDept.OBSTETRICS;
-        Staff staff = Staff.newInstance(hospital, "lim", "lsn@naver.com", "1111", "license", hospitalDept);
+        //의료진 생성
+        Staff staff = Staff.builder()
+                .hospital(hospital)
+                .name("name1")
+                .email("email1")
+                .password("pass1")
+                .license_path("licen1")
+                .dept(HospitalDept.DENTAL)
+                .build();
         em.persist(staff);
 
 
@@ -116,22 +156,42 @@ public class BoardReplyServiceTest {
     public void 게시글_댓글_삭제_중복_요청() throws Exception {
         //given -- 조건
 
-        //게시글을 작성할 회원 생성
-        Member member = Member.newInstance("lee", "lee@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //게시글 생성
-        HospitalDept dept = HospitalDept.OBSTETRICS;
-        Board board = Board.createBoard(member, "title1", "body1", dept);
+        Board board = Board.builder()
+                .member(member)
+                .title("title1")
+                .body("body1")
+                .dept(HospitalDept.OBSTETRICS)
+                .build();
         em.persist(board);
 
-        //회원이 다닐 병원 생성
-        Hospital hospital = Hospital.createHospital("avocado", "04212345678", "대전시 유성구", "연중무휴");
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
-        //댓글을 생성할 의료진 생성
-        HospitalDept hospitalDept = HospitalDept.OBSTETRICS;
-        Staff staff = Staff.newInstance(hospital, "lim", "lsn@naver.com", "1111", "license", hospitalDept);
+        //의료진 생성
+        Staff staff = Staff.builder()
+                .hospital(hospital)
+                .name("name1")
+                .email("email1")
+                .password("pass1")
+                .license_path("licen1")
+                .dept(HospitalDept.DENTAL)
+                .build();
         em.persist(staff);
 
         //게시글 댓글 생성
@@ -150,16 +210,42 @@ public class BoardReplyServiceTest {
     public void 게시글_댓글_수정() throws Exception {
         //given -- 조건
 
-        Member member = Member.newInstance("lee", "ldy@naver", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
-        Board board = Board.createBoard(member, "title1", "body1", HospitalDept.OBSTETRICS);
+        //게시글 생성
+        Board board = Board.builder()
+                .member(member)
+                .title("title1")
+                .body("body1")
+                .dept(HospitalDept.OBSTETRICS)
+                .build();
         em.persist(board);
 
-        Hospital hospital = Hospital.createHospital("avocado", "042", "대전", "always");
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
-        Staff staff = Staff.newInstance(hospital, "dong", "ldd@naver", "2222", "license_photo", HospitalDept.SURGICAL);
+        //의료진 생성
+        Staff staff = Staff.builder()
+                .hospital(hospital)
+                .name("name1")
+                .email("email1")
+                .password("pass1")
+                .license_path("licen1")
+                .dept(HospitalDept.DENTAL)
+                .build();
         em.persist(staff);
 
         //게시글 댓글 생성
@@ -182,16 +268,42 @@ public class BoardReplyServiceTest {
     public void 게시글댓글_수정_실패() throws Exception {
         //given -- 조건
 
-        Member member = Member.newInstance("lee", "ldy@naver", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
-        Board board = Board.createBoard(member, "title1", "body1", HospitalDept.OBSTETRICS);
+        //게시글 생성
+        Board board = Board.builder()
+                .member(member)
+                .title("title1")
+                .body("body1")
+                .dept(HospitalDept.OBSTETRICS)
+                .build();
         em.persist(board);
 
-        Hospital hospital = Hospital.createHospital("avocado", "042", "대전", "always");
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
-        Staff staff = Staff.newInstance(hospital, "dong", "ldd@naver", "2222", "license_photo", HospitalDept.SURGICAL);
+        //의료진 생성
+        Staff staff = Staff.builder()
+                .hospital(hospital)
+                .name("name1")
+                .email("email1")
+                .password("pass1")
+                .license_path("licen1")
+                .dept(HospitalDept.DENTAL)
+                .build();
         em.persist(staff);
 
         //게시글 댓글 생성

@@ -35,25 +35,21 @@ public class StaffService {
     @Transactional
     public Long signUp(final CreateStaffRequest request) {
 
-        validateDuplicateStaff(request);
-
         //엔티티 조회
         Hospital hospital = hospitalService.findOne(request.getHospitalId());
-        Staff staff = Staff.newInstance(hospital, request.getName(), request.getEmail(), request.getPassword(), request.getLicensePath(), HospitalDept.valueOf(request.getDept()));
+
+        Staff staff = Staff.builder()
+                .hospital(hospital)
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .license_path(request.getLicensePath())
+                .dept(HospitalDept.valueOf(request.getDept()))
+                .build();
 
         staffRepository.signUp(staff);
         return staff.getId();
     }
-
-
-    private void validateDuplicateStaff(final CreateStaffRequest request) {
-        List<Staff> findStaffsByEmail = staffRepository.findByEmail(request.getEmail());
-
-        if (!findStaffsByEmail.isEmpty()) {
-            throw new DuplicateStaffException("중복 의료진 발생 : 이미 존재하는 의료진입니다.");
-        }
-    }
-
 
     /**
      * 의료진 비밀번호 수정

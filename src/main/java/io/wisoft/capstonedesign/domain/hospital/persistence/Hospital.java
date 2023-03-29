@@ -5,6 +5,7 @@ import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,32 +42,8 @@ public class Hospital {
     @OneToMany(mappedBy = "hospital")
     private final List<Pick> pickList = new ArrayList<>();
 
-    /* 연관관계 편의 메서드 */
-    public void addAppointment(final Appointment appointment) {
-        this.appointmentList.add(appointment);
-
-        if (appointment.getHospital() != this) { //무한루프에 빠지지 않도록 체크
-            appointment.setHospital(this);
-        }
-    }
-
-    public void addPick(final Pick pick) {
-        this.pickList.add(pick);
-
-        if (pick.getHospital() != this) { //무한루프에 빠지지 않도록 체크
-            pick.setHospital(this);
-        }
-    }
-
-    public void addStaff(final Staff staff) {
-        this.staffList.add(staff);
-
-        if (staff.getHospital() != this) {
-            staff.setHospital(this);
-        }
-    }
-
     /* 정적 생성 메서드 */
+    @Builder
     public static Hospital createHospital(
             final String name,
             final String number,

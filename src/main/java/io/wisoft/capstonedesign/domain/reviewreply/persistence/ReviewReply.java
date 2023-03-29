@@ -5,6 +5,7 @@ import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewReplyStatus;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -70,6 +71,7 @@ public class ReviewReply extends BaseEntity {
     }
 
     /* 정적 생성 메서드 */
+    @Builder
     public static ReviewReply createReviewReply(
             final Member member,
             final Review review,

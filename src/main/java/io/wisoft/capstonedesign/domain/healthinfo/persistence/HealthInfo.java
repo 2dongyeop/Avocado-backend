@@ -6,6 +6,7 @@ import io.wisoft.capstonedesign.global.enumeration.status.HealthInfoStatus;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -51,6 +52,7 @@ public class HealthInfo extends BaseEntity {
     }
 
     /* 정적 생성 메서드 */
+    @Builder
     public static HealthInfo createHealthInfo(
             final Staff staff,
             final String healthInfoPath,

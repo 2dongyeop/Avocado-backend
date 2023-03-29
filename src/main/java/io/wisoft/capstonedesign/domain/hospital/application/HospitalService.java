@@ -23,9 +23,12 @@ public class HospitalService {
     @Transactional
     public Long save(final CreateHospitalRequest request) {
 
-        Hospital hospital = Hospital.createHospital(
-                request.getName(), request.getNumber(), request.getAddress(), request.getOperatingTime()
-        );
+        Hospital hospital = Hospital.builder()
+                .name(request.getName())
+                .number(request.getNumber())
+                .address(request.getAddress())
+                .operatingTime(request.getOperatingTime())
+                .build();
 
         hospitalRepository.save(hospital);
         return hospital.getId();

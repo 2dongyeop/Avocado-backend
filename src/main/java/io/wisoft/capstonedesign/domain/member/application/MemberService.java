@@ -12,6 +12,7 @@ import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPhotoPathReque
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -28,7 +29,12 @@ public class MemberService {
     @Transactional
     public Long signUp(final CreateMemberRequest request) {
 
-        Member member = Member.newInstance(request.getNickname(), request.getEmail(), request.getPassword(), request.getPhonenumber());
+        Member member = Member.builder()
+                .nickname(request.getNickname())
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .phoneNumber(request.getPhonenumber())
+                .build();
 
         //comment: 회원 중복 검증
         validateDuplicateMember(member);

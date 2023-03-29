@@ -42,9 +42,14 @@ public class AppointmentService {
         Hospital hospital = hospitalService.findOne(request.getHospitalId());
 
         //예약 정보 생성
-        Appointment appointment = Appointment.createAppointment(
-                member, hospital, HospitalDept.valueOf(request.getDept()),
-                request.getComment(), request.getAppointName(), request.getAppointPhonenumber());
+        Appointment appointment = Appointment.builder()
+                .member(member)
+                .hospital(hospital)
+                .dept(HospitalDept.valueOf(request.getDept()))
+                .comment(request.getComment())
+                .appointName(request.getAppointName())
+                .appointPhonenumber(request.getAppointPhonenumber())
+                .build();
 
         appointmentRepository.save(appointment);
         return appointment.getId();
@@ -76,22 +81,28 @@ public class AppointmentService {
             final UpdateAppointmentRequest request) {
 
         if (!StringUtils.hasText(request.getAppointName()) || !StringUtils.hasText(request.getDept())
-            || !StringUtils.hasText(request.getComment()) || !StringUtils.hasText(request.getAppointPhonenumber())) {
+                || !StringUtils.hasText(request.getComment()) || !StringUtils.hasText(request.getAppointPhonenumber())) {
             throw new IllegalValueException("파라미터가 비어있어 업데이트할 수 없습니다.");
         }
     }
 
 
     /* 조회 로직 */
-    public List<Appointment> findByMemberId(final Long memberId) { return appointmentRepository.findByMemberId(memberId); }
+    public List<Appointment> findByMemberId(final Long memberId) {
+        return appointmentRepository.findByMemberId(memberId);
+    }
 
     public Appointment findOne(final Long appointmentId) {
         return appointmentRepository.findOne(appointmentId).orElseThrow(NullAppointmentException::new);
     }
 
-    public List<Appointment> findByMemberIdASC(final Long memberId) { return appointmentRepository.findByMemberIdASC(memberId); }
+    public List<Appointment> findByMemberIdASC(final Long memberId) {
+        return appointmentRepository.findByMemberIdASC(memberId);
+    }
 
-    public List<Appointment> findByMemberIdDESC(final Long memberId) { return appointmentRepository.findByMemberIdDESC(memberId); }
+    public List<Appointment> findByMemberIdDESC(final Long memberId) {
+        return appointmentRepository.findByMemberIdDESC(memberId);
+    }
 
     public List<Appointment> findAllByCriteria(final AppointmentSearch appointmentSearch) {
         return appointmentRepository.findAllByCriteria(appointmentSearch);
