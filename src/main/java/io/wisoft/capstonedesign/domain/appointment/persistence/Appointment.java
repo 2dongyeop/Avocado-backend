@@ -7,6 +7,7 @@ import io.wisoft.capstonedesign.global.enumeration.status.AppointmentStatus;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -82,6 +83,7 @@ public class Appointment extends BaseEntity {
     }
 
     /* 정적 생성 메서드 */
+    @Builder
     public static Appointment createAppointment(
             final Member member,
             final Hospital hospital,
@@ -89,6 +91,7 @@ public class Appointment extends BaseEntity {
             final String comment,
             final String appointName,
             final String appointPhonenumber) {
+
         Appointment appointment = new Appointment();
         appointment.setMember(member);
         appointment.setHospital(hospital);

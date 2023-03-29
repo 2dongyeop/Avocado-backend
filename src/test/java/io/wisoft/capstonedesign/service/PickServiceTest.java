@@ -33,10 +33,21 @@ public class PickServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
+
         //병원 생성
-        Hospital hospital = Hospital.createHospital("아보카도병원", "04212345678", "대전시 유성구", "365일 연중무휴");
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
@@ -57,10 +68,21 @@ public class PickServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
+
         //병원 생성
-        Hospital hospital = Hospital.createHospital("아보카도병원", "04212345678", "대전시 유성구", "365일 연중무휴");
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
@@ -80,10 +102,21 @@ public class PickServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
+
         //병원 생성
-        Hospital hospital = Hospital.createHospital("아보카도병원", "04212345678", "대전시 유성구", "365일 연중무휴");
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());

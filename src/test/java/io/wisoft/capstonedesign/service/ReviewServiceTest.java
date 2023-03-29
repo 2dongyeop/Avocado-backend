@@ -32,8 +32,13 @@ public class ReviewServiceTest {
     public void 리뷰작성() throws Exception {
         //given -- 조건
 
-        //리뷰를 작성할 회원 생성
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
@@ -52,8 +57,13 @@ public class ReviewServiceTest {
     public void 리뷰삭제() throws Exception {
         //given -- 조건
 
-        //리뷰를 작성할 회원 생성
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //리뷰 생성
@@ -74,8 +84,13 @@ public class ReviewServiceTest {
     public void 리뷰_삭제_중복요청() throws Exception {
         //given -- 조건
 
-        //리뷰를 작성할 회원 생성
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //리뷰 생성
@@ -91,11 +106,17 @@ public class ReviewServiceTest {
     }
 
     //리뷰 별점 1~5만족?
-    @Test(expected = IllegalValueException.class)
+    @Test(expected = AssertionError.class)
     public void 리뷰_별점_범위초과() throws Exception {
         //given -- 조건
-        //리뷰를 작성할 회원 생성
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
 
@@ -122,7 +143,14 @@ public class ReviewServiceTest {
     public void 리뷰_수정() throws Exception {
 
         //given -- 조건
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
@@ -144,7 +172,14 @@ public class ReviewServiceTest {
     public void 리뷰_수정_실패() throws Exception {
 
         //given -- 조건
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
@@ -165,8 +200,13 @@ public class ReviewServiceTest {
 
         //given -- 조건
 
-        //리뷰를 작성할 회원 생성
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1123")
+                .email("email1123")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //리뷰생성

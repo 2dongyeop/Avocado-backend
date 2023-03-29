@@ -6,6 +6,7 @@ import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.global.enumeration.status.BoardReplyStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -67,6 +68,7 @@ public class BoardReply extends BaseEntity {
     }
 
     /* 정적 생성 메서드 */
+    @Builder
     public static BoardReply createBoardReply(
             final Board board,
             final Staff staff,

@@ -33,7 +33,13 @@ public class BoardService {
 
         //엔티티 조회
         Member member = memberService.findOne(request.getMemberId());
-        Board board = Board.createBoard(member, request.getTitle(), request.getBody(), HospitalDept.valueOf(request.getDept()));
+
+        Board board = Board.builder()
+                .member(member)
+                .title(request.getTitle())
+                .body(request.getBody())
+                .dept(HospitalDept.valueOf(request.getDept()))
+                .build();
 
         boardRepository.save(board);
         return board.getId();

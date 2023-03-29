@@ -36,7 +36,11 @@ public class ReviewReplyService {
         Member member = memberService.findOne(request.getMemberId());
         Review review = reviewService.findOne(request.getReviewId());
 
-        ReviewReply reviewReply = ReviewReply.createReviewReply(member, review, request.getReply());
+        ReviewReply reviewReply = ReviewReply.builder()
+                .member(member)
+                .review(review)
+                .reply(request.getReply())
+                .build();
 
         reviewReplyRepository.save(reviewReply);
         return reviewReply.getId();

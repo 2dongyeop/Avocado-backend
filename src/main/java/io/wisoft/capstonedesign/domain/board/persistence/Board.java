@@ -7,6 +7,7 @@ import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.util.ArrayList;
@@ -52,13 +53,6 @@ public class Board extends BaseEntity {
     private final List<BoardReply> boardReplyList = new ArrayList<>();
 
     /* 연관관계 편의 메서드 */
-    public void addBoardReply(BoardReply boardReply) {
-        this.boardReplyList.add(boardReply);
-        if (boardReply.getBoard() != this) { //무한루프에 빠지지 않도록 체크
-            boardReply.setBoard(this);
-        }
-    }
-
     public void setMember(final Member member) {
         //comment: 기존 관계 제거
         if (this.member != null) {
@@ -74,6 +68,7 @@ public class Board extends BaseEntity {
     }
 
     /* 정적 생성 메서드 */
+    @Builder
     public static Board createBoard(
             final Member member,
             final String title,

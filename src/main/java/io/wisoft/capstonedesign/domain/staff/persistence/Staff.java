@@ -6,6 +6,7 @@ import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -66,21 +67,8 @@ public class Staff {
         }
     }
 
-    public void addBoardReply(final BoardReply boardReply) {
-        this.boardReplyList.add(boardReply);
-        if (boardReply.getStaff() != this) { //무한루프에 빠지지 않도록 체크
-            boardReply.setStaff(this);
-        }
-    }
-
-    public void addHealthInfo(final HealthInfo healthInfo) {
-        this.healthInfoList.add(healthInfo);
-        if (healthInfo.getStaff() != this) {
-            healthInfo.setStaff(this);
-        }
-    }
-
     /* 정적 생성 메서드 */
+    @Builder
     public static Staff newInstance(
             final Hospital hospital,
             final String name,
@@ -117,7 +105,6 @@ public class Staff {
 
     /* 의료진 병원 수정 */
     public void updateHospital(final Hospital hospital) {
-
         setHospital(hospital);
     }
 }

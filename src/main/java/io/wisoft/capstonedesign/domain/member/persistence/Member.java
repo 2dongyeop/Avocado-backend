@@ -7,6 +7,7 @@ import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -53,47 +54,8 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private final List<Pick> pickList = new ArrayList<>();
 
-
-    /* 연관관계 편의 메소드 */
-    public void addAppointment(final Appointment appointment) {
-        this.appointmentList.add(appointment);
-        if (appointment.getMember() != this) { //무한루프에 빠지지 않도록 체크
-            appointment.setMember(this);
-        }
-    }
-
-    public void addPick(final Pick pick) {
-        this.pickList.add(pick);
-        if (pick.getMember() != this) { //무한루프에 빠지지 않도록 체크
-            pick.setMember(this);
-        }
-    }
-
-    public void addBoard(final Board board) {
-        this.boardList.add(board);
-
-        if (board.getMember() != this) {
-            board.setMember(this);
-        }
-    }
-
-    public void addReview(final Review review) {
-        this.reviewList.add(review);
-
-        if (review.getMember() != this) {
-            review.setMember(this);
-        }
-    }
-
-    public void addReviewReply(final ReviewReply reviewReply) {
-        this.reviewReplyList.add(reviewReply);
-
-        if (reviewReply.getMember() != this) {
-            reviewReply.setMember(this);
-        }
-    }
-
     /* 생성 메서드 */
+    @Builder
     public static Member newInstance(
             final String nickname,
             final String email,

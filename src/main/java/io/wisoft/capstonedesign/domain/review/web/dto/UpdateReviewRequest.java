@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.domain.review.web.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UpdateReviewRequest {
-    private String newTitle;
-    private String newBody;
+    @NotBlank private String newTitle;
+    @NotBlank private String newBody;
 }

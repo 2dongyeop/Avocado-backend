@@ -32,11 +32,23 @@ public class ReviewReplyServiceTest {
     public void 리뷰_댓글_저장() throws Exception {
         //given -- 조건
 
-        Member member = Member.newInstance("lee", "lee@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
-        int starPoint = 5;
-        Review review = Review.createReview(member, "good hospital", "it is good", starPoint, "avocado");
+        //병원 생성
+        Review review = Review.builder()
+                .member(member)
+                .title("good")
+                .body("good hospital")
+                .starPoint(5)
+                .target_hospital("아보카도")
+                .build();
         em.persist(review);
 
         CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "저도 가봐야겠네요");
@@ -54,11 +66,23 @@ public class ReviewReplyServiceTest {
     public void 리뷰_댓글_삭제() throws Exception {
         //given -- 조건
 
-        Member member = Member.newInstance("lee", "lee@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
-        int starPoint = 5;
-        Review review = Review.createReview(member, "good hospital", "it is good", starPoint, "avocado");
+        //병원 생성
+        Review review = Review.builder()
+                .member(member)
+                .title("good")
+                .body("good hospital")
+                .starPoint(5)
+                .target_hospital("아보카도")
+                .build();
         em.persist(review);
 
         CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "저도 가봐야겠네요");
@@ -76,11 +100,23 @@ public class ReviewReplyServiceTest {
     public void 리뷰_댓글_삭제요청_중복() throws Exception {
         //given -- 조건
 
-        Member member = Member.newInstance("lee", "lee@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
-        int starPoint = 5;
-        Review review = Review.createReview(member, "good hospital", "it is good", starPoint, "avocado");
+        //병원 생성
+        Review review = Review.builder()
+                .member(member)
+                .title("good")
+                .body("good hospital")
+                .starPoint(5)
+                .target_hospital("아보카도")
+                .build();
         em.persist(review);
 
         CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "저도 가봐야겠네요");
@@ -109,10 +145,23 @@ public class ReviewReplyServiceTest {
     public void 리뷰_댓글_수정() throws Exception {
         //given -- 조건
 
-        Member member = Member.newInstance("lee", "ldy", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
-        Review review = Review.createReview(member, "title1", "body1", 5, "avocado");
+        //병원 생성
+        Review review = Review.builder()
+                .member(member)
+                .title("good")
+                .body("good hospital")
+                .starPoint(5)
+                .target_hospital("아보카도")
+                .build();
         em.persist(review);
 
         CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "멋져요");
@@ -132,10 +181,23 @@ public class ReviewReplyServiceTest {
     public void 리뷰_댓글_수정_실패() throws Exception {
         //given -- 조건
 
-        Member member = Member.newInstance("lee", "ldy", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
-        Review review = Review.createReview(member, "title1", "body1", 5, "avocado");
+        //병원 생성
+        Review review = Review.builder()
+                .member(member)
+                .title("good")
+                .body("good hospital")
+                .starPoint(5)
+                .target_hospital("아보카도")
+                .build();
         em.persist(review);
 
         CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "멋져요");

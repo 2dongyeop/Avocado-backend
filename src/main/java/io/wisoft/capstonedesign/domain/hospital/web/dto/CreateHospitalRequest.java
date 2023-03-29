@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.domain.hospital.web.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateHospitalRequest {
-    private String name;
-    private String number;
-    private String address;
-    private String operatingTime;
+    @NotBlank private String name;
+    @NotBlank private String number;
+    @NotBlank private String address;
+    @NotBlank private String operatingTime;
 }

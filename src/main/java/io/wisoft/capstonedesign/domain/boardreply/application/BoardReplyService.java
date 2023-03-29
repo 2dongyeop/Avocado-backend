@@ -36,7 +36,11 @@ public class BoardReplyService {
         Board board = boardService.findOne(request.getBoardId());
         Staff staff = staffService.findOne(request.getStaffId());
 
-        BoardReply boardReply = BoardReply.createBoardReply(board, staff, request.getReply());
+        BoardReply boardReply = BoardReply.builder()
+                .board(board)
+                .staff(staff)
+                .reply(request.getReply())
+                .build();
 
         boardReplyRepository.save(boardReply);
         return boardReply.getId();

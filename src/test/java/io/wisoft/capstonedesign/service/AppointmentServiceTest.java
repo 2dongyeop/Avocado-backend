@@ -34,11 +34,21 @@ public class AppointmentServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //병원 생성
-        Hospital hospital = Hospital.createHospital("아보카도병원", "0420000000", "대전 유성구", "365일 연중 무휴");
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         //임시 요청 생성
@@ -59,11 +69,21 @@ public class AppointmentServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //병원 생성
-        Hospital hospital = Hospital.createHospital("아보카도병원", "0420000000", "대전 유성구", "365일 연중 무휴");
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         //임시 요청 생성
@@ -84,11 +104,21 @@ public class AppointmentServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.newInstance("lee", "ldy_1204@naver.com", "1111", "0000");
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //병원 생성
-        Hospital hospital = Hospital.createHospital("아보카도병원", "0420000000", "대전 유성구", "365일 연중 무휴");
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
         em.persist(hospital);
 
         //임시 요청 생성
@@ -117,16 +147,29 @@ public class AppointmentServiceTest {
     @Test
     public void 예약정보_수정() throws Exception {
         //given -- 조건
-        Hospital hospital = Hospital.createHospital("avocado", "042", "대전", "무휴");
-        em.persist(hospital);
 
-        Member member = Member.newInstance("lee", "ldy", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
+        em.persist(hospital);
+
+        //임시 요청 생성
         CreateAppointmentRequest request1 = new CreateAppointmentRequest(member.getId(), hospital.getId(), "DENTAL", "눈이 건조해요", "이동엽", "01012345678");
         Long saveId = appointmentService.save(request1);
 
-        //임시 요청 생성
         UpdateAppointmentRequest request2 = new UpdateAppointmentRequest("DENTAL", "코를 높이고 싶어요", "이동", "011");
 
         //when -- 동작
@@ -141,16 +184,29 @@ public class AppointmentServiceTest {
     @Test(expected = IllegalValueException.class)
     public void 예약정보_수정_실패() throws Exception {
         //given -- 조건
-        Hospital hospital = Hospital.createHospital("avocado", "042", "대전", "무휴");
-        em.persist(hospital);
 
-        Member member = Member.newInstance("lee", "ldy", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
+        em.persist(hospital);
+
+        //임시 요청 생성
         CreateAppointmentRequest request1 = new CreateAppointmentRequest(member.getId(), hospital.getId(), "DENTAL", "눈이 건조해요", "이동엽", "01012345678");
         Long saveId = appointmentService.save(request1);
 
-        //임시 요청 생성
         UpdateAppointmentRequest request2 = new UpdateAppointmentRequest("DENTAL", null, "이동", "011");
 
         //when -- 동작

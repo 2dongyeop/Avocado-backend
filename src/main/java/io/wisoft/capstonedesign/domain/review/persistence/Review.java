@@ -7,6 +7,7 @@ import io.wisoft.capstonedesign.global.enumeration.status.ReviewStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -69,50 +70,15 @@ public class Review extends BaseEntity {
         }
     }
 
-    public void addReviewReply(final ReviewReply reviewReply) {
-        this.reviewReplyList.add(reviewReply);
-
-        if (reviewReply.getReview() != this) {
-            reviewReply.setReview(this);
-        }
-    }
-
     /* 정적 생성 메서드 */
-    public static Review createReview (
-            final Member member,
-            final String title,
-            final String body,
-            final int starPoint,
-            final String target_hospital
-    ) {
-        Review review = getReview(member, title, body, starPoint, target_hospital);
-
-        return review;
-    }
-
+    @Builder
     public static Review createReview (
             final Member member,
             final String title,
             final String body,
             final String reviewPhotoPath,
             final int starPoint,
-            final String target_hospital
-    ) {
-        Review review = getReview(member, title, body, starPoint, target_hospital);
-        review.reviewPhotoPath = reviewPhotoPath;
-        return review;
-    }
-
-    private static Review getReview(
-            final Member member,
-            final String title,
-            final String body,
-            final int starPoint,
             final String target_hospital) {
-
-        if (starPoint <= 0 || starPoint > 5) {
-            throw new IllegalValueException("별점은 1점부터 5점까지만 작성 가능합니다.");
-        }
 
         Review review = new Review();
         review.setMember(member);
@@ -120,12 +86,14 @@ public class Review extends BaseEntity {
         review.body = body;
         review.targetHospital = target_hospital;
         review.starPoint = starPoint;
+        review.reviewPhotoPath = reviewPhotoPath;
 
         review.status = ReviewStatus.WRITE;
         review.createEntity();
 
         return review;
     }
+
 
     /**
      * 리뷰 삭제

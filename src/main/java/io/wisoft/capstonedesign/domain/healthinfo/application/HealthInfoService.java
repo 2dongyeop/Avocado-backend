@@ -28,7 +28,13 @@ public class HealthInfoService {
     public Long save(final CreateHealthInfoRequest request) {
 
         Staff staff = staffService.findOne(request.getStaffId());
-        HealthInfo healthInfo = HealthInfo.createHealthInfo(staff, request.getHealthInfoPath(), request.getTitle(), HospitalDept.valueOf(request.getDept()));
+
+        HealthInfo healthInfo = HealthInfo.builder()
+                .staff(staff)
+                .healthInfoPath(request.getHealthInfoPath())
+                .title(request.getTitle())
+                .dept(HospitalDept.valueOf(request.getDept()))
+                .build();
 
         healthInfoRepository.save(healthInfo);
         return healthInfo.getId();

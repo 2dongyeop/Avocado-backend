@@ -32,8 +32,13 @@ public class BoardServiceTest {
     public void 게시글작성() throws Exception {
         //given -- 조건
 
-        //게시글을 작성할 회원 생성
-        Member member = Member.newInstance("test", "ldy_1204@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         CreateBoardRequest request = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
@@ -52,8 +57,13 @@ public class BoardServiceTest {
     public void 게시글삭제() throws Exception {
         //given -- 조건
 
-        //게시글을 작성할 회원 생성
-        Member member = Member.newInstance("test", "ldy_1204@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //게시글 생성 및 저장
@@ -74,8 +84,13 @@ public class BoardServiceTest {
     public void 게시물_중복_삭제요청() throws Exception {
         //given -- 조건
 
-        //게시글을 작성할 회원 생성
-        Member member = Member.newInstance("test","ldy_1204@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //게시글 생성 및 저장
@@ -105,7 +120,13 @@ public class BoardServiceTest {
     public void 게시글_수정() throws Exception {
 
         //given -- 조건
-        Member member = Member.newInstance("test","ldy_1204@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //게시글 생성 및 저장
@@ -128,7 +149,13 @@ public class BoardServiceTest {
     public void 게시글_수정_실패() throws Exception {
 
         //given -- 조건
-        Member member = Member.newInstance("test","ldy_1204@naver.com", "1111", "0000");
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
         em.persist(member);
 
         //게시글 생성 및 저장

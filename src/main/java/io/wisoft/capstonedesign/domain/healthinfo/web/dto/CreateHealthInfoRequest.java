@@ -1,5 +1,7 @@
 package io.wisoft.capstonedesign.domain.healthinfo.web.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateHealthInfoRequest {
-    private Long staffId;
-    private String title;
-    private String dept;
-    private String healthInfoPath;
+    @NotNull private Long staffId;
+    @NotBlank private String title;
+    @NotBlank private String dept;
+    @NotBlank private String healthInfoPath;
 }
