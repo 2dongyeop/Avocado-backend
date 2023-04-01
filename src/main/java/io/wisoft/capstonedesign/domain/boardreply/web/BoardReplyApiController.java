@@ -22,7 +22,7 @@ public class BoardReplyApiController {
             @RequestBody @Valid final CreateBoardReplyRequest request) {
 
         Long id = boardReplyService.save(request);
-        BoardReply boardReply = boardReplyService.findOne(id);
+        BoardReply boardReply = boardReplyService.findById(id);
         return new CreateBoardReplyResponse(boardReply.getId());
     }
 
@@ -34,7 +34,7 @@ public class BoardReplyApiController {
             @RequestBody @Valid final UpdateBoardReplyRequest request) {
 
         boardReplyService.update(id, request);
-        BoardReply boardReply = boardReplyService.findOne(id);
+        BoardReply boardReply = boardReplyService.findById(id);
         return new UpdateBoardReplyResponse(boardReply.getId());
     }
 
@@ -43,7 +43,7 @@ public class BoardReplyApiController {
     @DeleteMapping("/api/board-reply/{id}")
     public DeleteBoardReplyResponse deleteBoardReply(@PathVariable("id") final Long id) {
         boardReplyService.deleteBoardReply(id);
-        BoardReply boardReply = boardReplyService.findOne(id);
+        BoardReply boardReply = boardReplyService.findById(id);
         return new DeleteBoardReplyResponse(boardReply.getId(), boardReply.getStatus().toString());
     }
 
@@ -51,7 +51,7 @@ public class BoardReplyApiController {
     /* 특정 게시판댓글 단건 조회 */
     @GetMapping("/api/board-reply/{id}")
     public Result boardReply(@PathVariable("id") final Long id) {
-        BoardReply boardReply = boardReplyService.findOne(id);
+        BoardReply boardReply = boardReplyService.findById(id);
 
         return new Result(new BoardReplyDto(boardReply));
     }

@@ -13,7 +13,6 @@ import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPhotoPathRequest
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffHospitalRequest;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,7 +35,7 @@ public class StaffService {
     public Long signUp(final CreateStaffRequest request) {
 
         //엔티티 조회
-        Hospital hospital = hospitalService.findOne(request.getHospitalId());
+        Hospital hospital = hospitalService.findById(request.getHospitalId());
 
         Staff staff = Staff.builder()
                 .hospital(hospital)
@@ -47,7 +46,7 @@ public class StaffService {
                 .dept(HospitalDept.valueOf(request.getDept()))
                 .build();
 
-        staffRepository.signUp(staff);
+        staffRepository.save(staff);
         return staff.getId();
     }
 
@@ -57,7 +56,7 @@ public class StaffService {
     @Transactional
     public void updatePassword(final Long staffId, final UpdateStaffPasswordRequest request) {
 
-        Staff staff = findOne(staffId);
+        Staff staff = findById(staffId);
         validateStaffPassword(staff, request);
 
         staff.updatePassword(request.getNewPassword());
@@ -76,7 +75,7 @@ public class StaffService {
     @Transactional
     public void uploadPhotoPath(final Long staffId, final UpdateStaffPhotoPathRequest request) {
 
-        Staff staff = findOne(staffId);
+        Staff staff = findById(staffId);
         staff.updatePhotoPath(request.getPhotoPath());
     }
 
@@ -85,7 +84,7 @@ public class StaffService {
     @Transactional
     public void updateStaffHospital(final Long staffId, final UpdateStaffHospitalRequest request) {
 
-        Staff staff = findOne(staffId);
+        Staff staff = findById(staffId);
         Hospital hospital = hospitalService.findByHospitalName(request.getHospitalName());
 
         staff.updateHospital(hospital);
@@ -94,7 +93,8 @@ public class StaffService {
     /* 의료진 탈퇴 */
     @Transactional
     public void deleteStaff(final Long staffId) {
-        staffRepository.delete(staffId);
+        Staff staff = findById(staffId);
+        staffRepository.delete(staff);
     }
 
 
@@ -103,7 +103,7 @@ public class StaffService {
      */
     public List<Review> findReviewByStaffHospitalName(final Long staffId) {
 
-        Staff staff = findOne(staffId);
+        Staff staff = findById(staffId);
         String hospitalName = staff.getHospital().getName();
 
         return staffRepository.findReviewListByStaffHospitalName(hospitalName);
@@ -120,8 +120,8 @@ public class StaffService {
     /**
      * 의료진 조회
      */
-    public Staff findOne(final Long staffId) {
-        return staffRepository.findOne(staffId).orElseThrow(NullStaffException::new);
+    public Staff findById(final Long staffId) {
+        return staffRepository.findById(staffId).orElseThrow(NullStaffException::new);
     }
 
     public List<Staff> findAll() { return staffRepository.findAll(); }

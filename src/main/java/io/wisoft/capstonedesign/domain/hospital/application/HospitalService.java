@@ -37,8 +37,8 @@ public class HospitalService {
     /**
      * 병원 단건 조회
      */
-    public Hospital findOne(final Long hospitalId) {
-        return hospitalRepository.findOne(hospitalId).orElseThrow(NullHospitalException::new);
+    public Hospital findById(final Long hospitalId) {
+        return hospitalRepository.findById(hospitalId).orElseThrow(NullHospitalException::new);
     }
 
     /* 병원 이름으로 조회 */

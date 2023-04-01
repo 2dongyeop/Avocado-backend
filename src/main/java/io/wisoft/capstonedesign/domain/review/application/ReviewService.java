@@ -81,14 +81,14 @@ public class ReviewService {
     }
 
     public Review findOne(final Long reviewId) {
-        return reviewRepository.findOne(reviewId).orElseThrow(NullReviewException::new);
+        return reviewRepository.findById(reviewId).orElseThrow(NullReviewException::new);
     }
 
     public List<Review> findAll() { return reviewRepository.findAll(); }
 
-    public List<Review> findAllOrderByCreateAtASC() { return reviewRepository.findAllOrderByCreateAtASC(); }
+    public List<Review> findAllOrderByCreateAtASC() { return reviewRepository.findAllOrderByCreateAtAsc(); }
 
-    public List<Review> findAllOrderByCreateAtDESC() { return reviewRepository.findAllOrderByCreateAtDESC(); }
+    public List<Review> findAllOrderByCreateAtDESC() { return reviewRepository.findAllOrderByCreateAtDesc(); }
 
     public List<Review> findByTargetHospital(final String targetHospital) {
 

@@ -47,7 +47,7 @@ public class BoardServiceTest {
         Long saveId = boardService.save(request);
 
         //then -- 검증
-        Board getBoard = boardService.findOne(saveId);
+        Board getBoard = boardService.findById(saveId);
 
         Assertions.assertThat(getBoard.getStatus()).isEqualTo(BoardStatus.WRITE);
     }
@@ -75,7 +75,7 @@ public class BoardServiceTest {
         boardService.deleteBoard(saveId);
 
         //then -- 검증
-        Board getBoard = boardService.findOne(saveId);
+        Board getBoard = boardService.findById(saveId);
 
         Assertions.assertThat(getBoard.getStatus()).isEqualTo(BoardStatus.DELETE);
     }
@@ -110,7 +110,7 @@ public class BoardServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Board board = boardService.findOne(100L);
+        Board board = boardService.findById(100L);
 
         //then -- 검증
         fail("해당 boardId에 일치하는 게시글 정보가 없어 예외가 발생해야 한다.");
@@ -136,7 +136,7 @@ public class BoardServiceTest {
         UpdateBoardRequest request2 = new UpdateBoardRequest("제목2", "본문2");
 
         //when -- 동작
-        Board board = boardService.findOne(saveId);
+        Board board = boardService.findById(saveId);
         boardService.updateTitleBody(board.getId(), request2);
 
         //then -- 검증
@@ -165,7 +165,7 @@ public class BoardServiceTest {
         UpdateBoardRequest request2 = new UpdateBoardRequest(null, "본문2");
 
         //when -- 동작
-        Board board = boardService.findOne(saveId);
+        Board board = boardService.findById(saveId);
         boardService.updateTitleBody(board.getId(), request2);
 
         //then - 검증

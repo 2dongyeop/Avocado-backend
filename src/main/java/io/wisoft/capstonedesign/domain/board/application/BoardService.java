@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -50,7 +49,7 @@ public class BoardService {
      */
     @Transactional
     public void deleteBoard(final Long boardId) {
-        Board board = findOne(boardId);
+        Board board = findById(boardId);
         board.delete();
     }
 
@@ -61,7 +60,7 @@ public class BoardService {
     public void updateTitleBody(final Long boardId, final UpdateBoardRequest request) {
 
         validateTitleBody(request);
-        Board board = findOne(boardId);
+        Board board = findById(boardId);
 
         board.updateTitleBody(request.getNewTitle(), request.getNewBody());
     }
@@ -78,8 +77,8 @@ public class BoardService {
         return boardRepository.findByMemberId(memberId);
     }
 
-    public Board findOne(final Long boardId) {
-        return boardRepository.findOne(boardId).orElseThrow(NullBoardException::new);
+    public Board findById(final Long boardId) {
+        return boardRepository.findById(boardId).orElseThrow(NullBoardException::new);
     }
 
     public List<Board> findAll() {

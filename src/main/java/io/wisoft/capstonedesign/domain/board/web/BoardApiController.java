@@ -19,7 +19,7 @@ public class BoardApiController {
     /* 게시글 단건 조회 */
     @GetMapping("/api/boards/{id}")
     public Result board(@PathVariable Long id) {
-        Board board = boardService.findOne(id);
+        Board board = boardService.findById(id);
 
         return new Result(new BoardDto(board));
     }
@@ -90,7 +90,7 @@ public class BoardApiController {
 
         Long id = boardService.save(request);
 
-        Board board = boardService.findOne(id);
+        Board board = boardService.findById(id);
         return new CreateBoardResponse(board.getId());
     }
 
@@ -103,7 +103,7 @@ public class BoardApiController {
 
         boardService.updateTitleBody(id, request);
 
-        Board board = boardService.findOne(id);
+        Board board = boardService.findById(id);
         return new UpdateBoardResponse(board.getId(), board.getTitle(), board.getBody());
     }
 
@@ -113,7 +113,7 @@ public class BoardApiController {
     public DeleteBoardResponse deleteBoard(@PathVariable("id") final Long id) {
 
         boardService.deleteBoard(id);
-        Board board = boardService.findOne(id);
+        Board board = boardService.findById(id);
         return new DeleteBoardResponse(board.getId(), board.getStatus().toString());
     }
 }

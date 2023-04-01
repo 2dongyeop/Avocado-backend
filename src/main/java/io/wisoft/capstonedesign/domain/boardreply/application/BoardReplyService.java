@@ -33,8 +33,8 @@ public class BoardReplyService {
     public Long save(final CreateBoardReplyRequest request) {
 
         //엔티티 조회
-        Board board = boardService.findOne(request.getBoardId());
-        Staff staff = staffService.findOne(request.getStaffId());
+        Board board = boardService.findById(request.getBoardId());
+        Staff staff = staffService.findById(request.getStaffId());
 
         BoardReply boardReply = BoardReply.builder()
                 .board(board)
@@ -52,7 +52,7 @@ public class BoardReplyService {
      */
     @Transactional
     public void deleteBoardReply(final Long boardReplyId) {
-        BoardReply boardReply = findOne(boardReplyId);
+        BoardReply boardReply = findById(boardReplyId);
         boardReply.delete();
     }
 
@@ -63,7 +63,7 @@ public class BoardReplyService {
     public void update(final Long boardReplyId, final UpdateBoardReplyRequest request) {
 
         validateParameter(request);
-        BoardReply boardReply = findOne(boardReplyId);
+        BoardReply boardReply = findById(boardReplyId);
 
         boardReply.update(request.getReply());
     }
@@ -78,8 +78,8 @@ public class BoardReplyService {
     /**
      * 게시글댓글 단건 조회
      */
-    public BoardReply findOne(final Long boardReplyId) {
-        return boardReplyRepository.findOne(boardReplyId).orElseThrow(NullBoardReplyException::new);
+    public BoardReply findById(final Long boardReplyId) {
+        return boardReplyRepository.findById(boardReplyId).orElseThrow(NullBoardReplyException::new);
     }
 
     /**

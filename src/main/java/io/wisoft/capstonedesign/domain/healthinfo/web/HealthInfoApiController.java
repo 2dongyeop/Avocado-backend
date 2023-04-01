@@ -25,7 +25,7 @@ public class HealthInfoApiController {
             @RequestBody @Valid final CreateHealthInfoRequest request) {
 
         Long id = healthInfoService.save(request);
-        HealthInfo healthInfo = healthInfoService.findOne(id);
+        HealthInfo healthInfo = healthInfoService.findById(id);
         return new CreateHealthInfoResponse(healthInfo.getId());
     }
 
@@ -33,7 +33,7 @@ public class HealthInfoApiController {
     /* 건강 정보 삭제 */
     @DeleteMapping("/api/health-infos/{id}")
     public DeleteHealthInfoResponse deleteHealthInfo(@PathVariable("id") final Long id) {
-        HealthInfo healthInfo = healthInfoService.findOne(id);
+        HealthInfo healthInfo = healthInfoService.findById(id);
         healthInfo.delete();
 
         return new DeleteHealthInfoResponse(id);
@@ -43,7 +43,7 @@ public class HealthInfoApiController {
     /* 건강 정보 단건 조회 */
     @GetMapping("/api/health-infos/{id}")
     public Result healthInfo(@PathVariable("id") final Long id) {
-        HealthInfo healthInfo = healthInfoService.findOne(id);
+        HealthInfo healthInfo = healthInfoService.findById(id);
 
         return new Result(new HealthInfoDto(healthInfo));
     }
@@ -51,13 +51,12 @@ public class HealthInfoApiController {
 
     /* 건강 정보 목록 조회 */
     @GetMapping("/api/health-infos")
-    public List<HealthInfoDto> healthInfos() {
+    public Result healthInfos() {
         List<HealthInfoDto> infoDtoList = healthInfoService.findAll()
                 .stream().map(HealthInfoDto::new)
                 .collect(Collectors.toList());
 
-        return infoDtoList;
-//        return new Result(infoDtoList);
+        return new Result(infoDtoList);
     }
 
 

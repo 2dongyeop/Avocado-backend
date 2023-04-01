@@ -25,7 +25,7 @@ public class HospitalApiController {
             @RequestBody @Valid final CreateHospitalRequest request) {
 
         Long id = hospitalService.save(request);
-        Hospital getHospital = hospitalService.findOne(id);
+        Hospital getHospital = hospitalService.findById(id);
         return new CreateHospitalResponse(getHospital.getId());
     }
 
@@ -33,7 +33,7 @@ public class HospitalApiController {
     /* 병원 단건 조회 */
     @GetMapping("/api/hospitals/{id}")
     public Result hospital(@PathVariable final Long id) {
-        Hospital hospital = hospitalService.findOne(id);
+        Hospital hospital = hospitalService.findById(id);
 
         return new Result(new HospitalDto(hospital));
     }

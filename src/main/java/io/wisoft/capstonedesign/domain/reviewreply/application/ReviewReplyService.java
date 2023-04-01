@@ -82,7 +82,7 @@ public class ReviewReplyService {
      * 리뷰댓글 단건조회
      */
     public ReviewReply findOne(final Long reviewReplyId) {
-        return reviewReplyRepository.findOne(reviewReplyId).orElseThrow(NullReviewReplyException::new);
+        return reviewReplyRepository.findById(reviewReplyId).orElseThrow(NullReviewReplyException::new);
     }
 
 
@@ -98,7 +98,7 @@ public class ReviewReplyService {
      * 특정 리뷰의 댓글 목록 오름차순 조회
      */
     public List<ReviewReply> findAllByReviewIdOrderByCreateAsc(final Long reviewId) {
-        return reviewReplyRepository.findAllOrderByCreateAtAsc(reviewId);
+        return reviewReplyRepository.findAllOrderByCreatedAtAsc(reviewId);
     }
 
 
@@ -106,6 +106,6 @@ public class ReviewReplyService {
      * 특정 리뷰의 댓글 목록 내림차순 조회
      */
     public List<ReviewReply> findAllByReviewIdOrderByCreateDesc(final Long reviewId) {
-        return reviewReplyRepository.findAllOrderByCreateAtDesc(reviewId);
+        return reviewReplyRepository.findAllOrderByCreatedAtDesc(reviewId);
     }
 }

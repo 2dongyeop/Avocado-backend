@@ -32,7 +32,7 @@ public class HealthInfoServiceTest {
         Long saveId = healthInfoService.save(request);
 
         //then -- 검증
-        HealthInfo healthInfo = healthInfoService.findOne(saveId);
+        HealthInfo healthInfo = healthInfoService.findById(saveId);
 
         Assertions.assertThat(healthInfo.getStatus()).isEqualTo(HealthInfoStatus.WRITE);
         Assertions.assertThat(healthInfo.getTitle()).isEqualTo(request.getTitle());
@@ -47,7 +47,7 @@ public class HealthInfoServiceTest {
         Long saveId = healthInfoService.save(request);
 
         //when -- 동작
-        HealthInfo getHealthInfo = healthInfoService.findOne(saveId);
+        HealthInfo getHealthInfo = healthInfoService.findById(saveId);
         getHealthInfo.delete();
 
         //then -- 검증
@@ -61,7 +61,7 @@ public class HealthInfoServiceTest {
         Long saveId = healthInfoService.save(request);
 
         //when -- 동작
-        HealthInfo getHealthInfo = healthInfoService.findOne(saveId);
+        HealthInfo getHealthInfo = healthInfoService.findById(saveId);
         getHealthInfo.delete();
         getHealthInfo.delete();
 
@@ -75,7 +75,7 @@ public class HealthInfoServiceTest {
         //given -- 조건
 
         //when -- 동작
-        healthInfoService.findOne(100L);
+        healthInfoService.findById(100L);
 
         //then -- 검증
         fail("단건 조회 실패로 예외가 발생해야 한다.");
