@@ -4,7 +4,6 @@ import io.wisoft.capstonedesign.domain.appointment.persistence.Appointment;
 import io.wisoft.capstonedesign.domain.appointment.persistence.AppointmentRepository;
 import io.wisoft.capstonedesign.domain.appointment.web.dto.CreateAppointmentRequest;
 import io.wisoft.capstonedesign.domain.appointment.web.dto.UpdateAppointmentRequest;
-import io.wisoft.capstonedesign.thymeleaf.AppointmentSearch;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
@@ -18,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,7 +36,7 @@ public class AppointmentService {
 
         //엔티티 조회
         Member member = memberService.findOne(request.getMemberId());
-        Hospital hospital = hospitalService.findOne(request.getHospitalId());
+        Hospital hospital = hospitalService.findById(request.getHospitalId());
 
         //예약 정보 생성
         Appointment appointment = Appointment.builder()
@@ -60,8 +57,7 @@ public class AppointmentService {
      */
     @Transactional
     public void cancelAppointment(final Long appointmentId) {
-        Appointment appointment = appointmentRepository.findOne(appointmentId).orElseThrow(NullAppointmentException::new);
-
+        Appointment appointment = findById(appointmentId);
         appointment.cancel();
     }
 
@@ -72,13 +68,12 @@ public class AppointmentService {
     public void update(final Long appointmentId, final UpdateAppointmentRequest request) {
 
         validateParameter(request);
-        Appointment appointment = findOne(appointmentId);
+        Appointment appointment = findById(appointmentId);
 
         appointment.update(HospitalDept.valueOf(request.getDept()), request.getComment(), request.getAppointName(), request.getAppointPhonenumber());
     }
 
-    private void validateParameter(
-            final UpdateAppointmentRequest request) {
+    private void validateParameter(final UpdateAppointmentRequest request) {
 
         if (!StringUtils.hasText(request.getAppointName()) || !StringUtils.hasText(request.getDept())
                 || !StringUtils.hasText(request.getComment()) || !StringUtils.hasText(request.getAppointPhonenumber())) {
@@ -92,19 +87,15 @@ public class AppointmentService {
         return appointmentRepository.findByMemberId(memberId);
     }
 
-    public Appointment findOne(final Long appointmentId) {
-        return appointmentRepository.findOne(appointmentId).orElseThrow(NullAppointmentException::new);
+    public Appointment findById(final Long appointmentId) {
+        return appointmentRepository.findById(appointmentId).orElseThrow(NullAppointmentException::new);
     }
 
-    public List<Appointment> findByMemberIdASC(final Long memberId) {
-        return appointmentRepository.findByMemberIdASC(memberId);
+    public List<Appointment> findByMemberIdOrderByCreateAtAsc(final Long memberId) {
+        return appointmentRepository.findByMemberIdOrderByCreateAtAsc(memberId);
     }
 
-    public List<Appointment> findByMemberIdDESC(final Long memberId) {
-        return appointmentRepository.findByMemberIdDESC(memberId);
-    }
-
-    public List<Appointment> findAllByCriteria(final AppointmentSearch appointmentSearch) {
-        return appointmentRepository.findAllByCriteria(appointmentSearch);
+    public List<Appointment> findByMemberIdOrderByCreateAtDesc(final Long memberId) {
+        return appointmentRepository.findByMemberIdOrderByCreateAtDesc(memberId);
     }
 }

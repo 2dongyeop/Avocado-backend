@@ -1,78 +1,41 @@
 package io.wisoft.capstonedesign.domain.review.persistence;
 
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
-public class ReviewRepository {
+public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    private final EntityManager em;
-
-    /**
-     * 리뷰 작성
-     */
-    public void save(final Review review) { em.persist(review); }
-
-    /**
-     * 리뷰 단건 조회
-     */
-    public Optional<Review> findOne(final Long reviewId) {
-        return Optional.ofNullable(em.find(Review.class, reviewId));
-    }
-
-    /**
-     * 리뷰 전체 조회
-     */
-    public List<Review> findAll() {
-        return em.createQuery("select r from Review r", Review.class)
-                .getResultList();
-    }
 
     /**
      * 리뷰 목록 오름차순 조회
      */
-    public List<Review> findAllOrderByCreateAtASC() {
-        return em.createQuery("select r from Review r order by r.createAt asc", Review.class)
-                .getResultList();
-    }
+    @Query("select r from Review r order by r.createAt asc")
+    public List<Review> findAllOrderByCreateAtAsc();
 
     /**
      * 리뷰 목록 내림차순 조회
      */
-    public List<Review> findAllOrderByCreateAtDESC() {
-        return em.createQuery("select r from Review r order by r.createAt desc", Review.class)
-                .getResultList();
-    }
+    @Query("select r from Review r order by r.createAt desc")
+    public List<Review> findAllOrderByCreateAtDesc();
 
 
     /**
      * 특정 작성자의 리뷰 조회
      */
-    public List<Review> findByMemberId(final Long memberId) {
-
-        return em.createQuery("select r from Review r join fetch r.member m where m.id =:id", Review.class)
-                .setParameter("id", memberId)
-                .getResultList();
-    }
+    @Query("select r from Review r join fetch r.member m where m.id =:id")
+    public List<Review> findByMemberId(@Param("id") final Long memberId);
 
     /**
      * 특정 병원의 리뷰 조회
      */
-    public List<Review> findByTargetHospital(final String targetHospital) {
+    @Query("select r from Review r where r.targetHospital = :targetHospital")
+    public List<Review> findByTargetHospital(@Param("targetHospital") final String targetHospital);
 
-        return em.createQuery("select r from Review r where r.targetHospital = :targetHospital", Review.class)
-                .setParameter("targetHospital", targetHospital)
-                .getResultList();
-    }
-
-    public List<Review> findAllByMember() {
-
-        return em.createQuery("select r from Review r join fetch r.member m", Review.class)
-                .getResultList();
-    }
+    @Query("select r from Review r join fetch r.member m")
+    public List<Review> findAllByMember();
 }

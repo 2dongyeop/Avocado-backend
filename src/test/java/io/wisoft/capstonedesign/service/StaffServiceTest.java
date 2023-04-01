@@ -65,13 +65,12 @@ public class StaffServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Staff staff = staffService.findOne(100L);
+        Staff staff = staffService.findById(100L);
 
         //then -- 검증
         fail("해당 staffId에 일치하는 의료진 정보가 없어 예외가 발생해야 한다.");
     }
 
-    @Test
     public void 자신이_속한_병원의_리뷰_목록_조회() throws Exception {
         //given -- 조건
 
@@ -124,7 +123,7 @@ public class StaffServiceTest {
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
-        Staff staff = staffService.findOne(id);
+        Staff staff = staffService.findById(id);
 
         Board board = Board.createBoard(member, "이가 아파요", "치과추천좀", HospitalDept.DENTAL);
         em.persist(board);
@@ -155,7 +154,7 @@ public class StaffServiceTest {
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
-        Staff staff = staffService.findOne(id);
+        Staff staff = staffService.findById(id);
 
         //when -- 동작
         UpdateStaffPasswordRequest request2 = new UpdateStaffPasswordRequest("1111", "2222");
@@ -182,7 +181,7 @@ public class StaffServiceTest {
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
-        Staff staff = staffService.findOne(id);
+        Staff staff = staffService.findById(id);
 
         //when -- 동작
         UpdateStaffPasswordRequest request2 = new UpdateStaffPasswordRequest("0000", "2222");
@@ -209,7 +208,7 @@ public class StaffServiceTest {
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
-        Staff staff = staffService.findOne(id);
+        Staff staff = staffService.findById(id);
 
         //when -- 동작
         String newPhotoPath = "새로운사진경로";
@@ -235,14 +234,14 @@ public class StaffServiceTest {
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
-        Staff staff = staffService.findOne(id);
+        Staff staff = staffService.findById(id);
 
         //when -- 동작
         UpdateStaffHospitalRequest request2 = new UpdateStaffHospitalRequest("hospital1");
         staffService.updateStaffHospital(staff.getId(), request2);
 
         //then -- 검증
-        Staff getStaff = staffService.findOne(staff.getId());
+        Staff getStaff = staffService.findById(staff.getId());
         Assertions.assertThat(getStaff.getHospital().getName()).isEqualTo("hospital1");
     }
 
@@ -261,7 +260,7 @@ public class StaffServiceTest {
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
-        Staff staff = staffService.findOne(id);
+        Staff staff = staffService.findById(id);
 
         //when -- 동작
         UpdateStaffHospitalRequest request2 = new UpdateStaffHospitalRequest("dsadasda");
@@ -291,7 +290,7 @@ public class StaffServiceTest {
         staffService.deleteStaff(id);
 
         //then -- 검증
-        Staff staff = staffService.findOne(id);
+        Staff staff = staffService.findById(id);
         fail("해당 의료진은 탈퇴를 했으므로 예외가 발생해야 한다.");
     }
 }

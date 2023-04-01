@@ -20,7 +20,7 @@ public class StaffApiController {
     @GetMapping("api/staff/{id}")
     public Result staff(@PathVariable("id") final Long id) {
 
-        Staff staff = staffService.findOne(id);
+        Staff staff = staffService.findById(id);
 
         return new Result(new StaffDto(staff));
     }
@@ -54,7 +54,7 @@ public class StaffApiController {
             @RequestBody @Valid final UpdateStaffPasswordRequest request) {
 
         staffService.updatePassword(id, request);
-        Staff staff = staffService.findOne(id);
+        Staff staff = staffService.findById(id);
 
         return new UpdateStaffResponse(staff.getId());
     }
@@ -67,7 +67,7 @@ public class StaffApiController {
             @RequestBody @Valid final UpdateStaffPhotoPathRequest request) {
 
         staffService.uploadPhotoPath(id, request);
-        Staff staff = staffService.findOne(id);
+        Staff staff = staffService.findById(id);
 
         return new UpdateStaffResponse(staff.getId());
     }
@@ -80,7 +80,7 @@ public class StaffApiController {
             @RequestBody @Valid final UpdateStaffHospitalRequest request) {
 
         staffService.updateStaffHospital(id, request);
-        Staff staff = staffService.findOne(id);
+        Staff staff = staffService.findById(id);
 
         return new UpdateStaffResponse(staff.getId());
     }

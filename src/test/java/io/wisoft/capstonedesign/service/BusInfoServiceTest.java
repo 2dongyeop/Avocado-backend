@@ -32,7 +32,7 @@ public class BusInfoServiceTest {
         Long saveId = busInfoService.save(request);
 
         //then -- 검증
-        BusInfo busInfo = busInfoService.findOne(saveId);
+        BusInfo busInfo = busInfoService.findById(saveId);
 
         Assertions.assertThat(busInfo.getBusInfoPath()).isEqualTo(request.getBusInfoPath());
         Assertions.assertThat(busInfo.getArea().toString()).isEqualTo(request.getArea());
@@ -46,7 +46,7 @@ public class BusInfoServiceTest {
         CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
         Long saveId = busInfoService.save(request);
 
-        BusInfo busInfo = busInfoService.findOne(saveId);
+        BusInfo busInfo = busInfoService.findById(saveId);
 
         //when -- 동작
         busInfo.delete();
@@ -61,7 +61,7 @@ public class BusInfoServiceTest {
         //given -- 조건
 
         //when -- 동작
-        busInfoService.findOne(100L);
+        busInfoService.findById(100L);
 
         //then -- 검증
         fail("단건 조회 실패로 인해 예외가 발생해야 한다.");
@@ -74,7 +74,7 @@ public class BusInfoServiceTest {
         CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
         Long saveId = busInfoService.save(request);
 
-        BusInfo busInfo = busInfoService.findOne(saveId);
+        BusInfo busInfo = busInfoService.findById(saveId);
 
         //when -- 동작
         busInfo.delete();

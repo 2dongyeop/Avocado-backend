@@ -21,7 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -81,7 +80,7 @@ public class BoardReplyServiceTest {
         Long saveId = boardReplyService.save(request);
 
         //then -- 검증
-        BoardReply boardReply = boardReplyService.findOne(saveId);
+        BoardReply boardReply = boardReplyService.findById(saveId);
         Assertions.assertThat(boardReply.getStatus()).isEqualTo(BoardReplyStatus.WRITE);
     }
 
@@ -136,7 +135,7 @@ public class BoardReplyServiceTest {
         boardReplyService.deleteBoardReply(saveId);
 
         //then -- 검증
-        BoardReply boardReply = boardReplyService.findOne(saveId);
+        BoardReply boardReply = boardReplyService.findById(saveId);
         Assertions.assertThat(boardReply.getStatus()).isEqualTo(BoardReplyStatus.DELETE);
     }
 
@@ -145,7 +144,7 @@ public class BoardReplyServiceTest {
         //given -- 조건
 
         //when -- 동작
-        boardReplyService.findOne(100L);
+        boardReplyService.findById(100L);
 
         //then -- 검증
         fail("예외가 발생해야 한다.");
@@ -255,11 +254,11 @@ public class BoardReplyServiceTest {
         UpdateBoardReplyRequest request2 = new UpdateBoardReplyRequest("걱정말긴 뭘 말아요!");
 
         //when -- 동작
-        BoardReply boardReply = boardReplyService.findOne(saveId);
+        BoardReply boardReply = boardReplyService.findById(saveId);
         boardReplyService.update(boardReply.getId(), request2);
 
         //then -- 검증
-        BoardReply getBoardReply = boardReplyService.findOne(boardReply.getId());
+        BoardReply getBoardReply = boardReplyService.findById(boardReply.getId());
         Assertions.assertThat(getBoardReply.getReply()).isEqualTo("걱정말긴 뭘 말아요!");
         Assertions.assertThat(getBoardReply.getUpdateAt()).isNotNull();
     }
@@ -314,7 +313,7 @@ public class BoardReplyServiceTest {
         UpdateBoardReplyRequest request2 = new UpdateBoardReplyRequest(null);
 
         //when -- 동작
-        BoardReply boardReply = boardReplyService.findOne(saveId);
+        BoardReply boardReply = boardReplyService.findById(saveId);
         boardReplyService.update(boardReply.getId(), request2);
 
         //then -- 검증

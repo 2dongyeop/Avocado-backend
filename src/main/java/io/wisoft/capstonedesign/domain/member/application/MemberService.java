@@ -12,7 +12,6 @@ import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPhotoPathReque
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class MemberService {
 
         //comment: 회원 중복 검증
         validateDuplicateMember(member);
-        memberRepository.signUp(member);
+        memberRepository.save(member);
         return member.getId();
     }
 
@@ -94,7 +93,8 @@ public class MemberService {
     /* 회원 탈퇴 */
     @Transactional
     public void deleteMember(final Long memberId) {
-        memberRepository.deleteMember(memberId);
+        Member member = findOne(memberId);
+        memberRepository.delete(member);
     }
 
 
@@ -102,7 +102,7 @@ public class MemberService {
      * 회원 조회
      */
     public Member findOne(final Long memberId) {
-        return memberRepository.findOne(memberId).orElseThrow(NullMemberException::new);
+        return memberRepository.findById(memberId).orElseThrow(NullMemberException::new);
     }
 
     public List<Member> findAll() {

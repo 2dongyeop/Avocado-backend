@@ -31,7 +31,7 @@ public class PickService {
 
         //엔티티 조회
         Member member = memberService.findOne(request.getMemberId());
-        Hospital hospital = hospitalService.findOne(request.getHospitalId());
+        Hospital hospital = hospitalService.findById(request.getHospitalId());
         Pick pick = Pick.createPick(member, hospital);
 
         pickRepository.save(pick);
@@ -43,13 +43,13 @@ public class PickService {
      */
     @Transactional
     public void cancelPick(final Long pickId) {
-        Pick pick = findOne(pickId);
+        Pick pick = findById(pickId);
         pick.cancel();
     }
 
     /* 조회 로직 */
-    public Pick findOne(final Long pickId) {
-        return pickRepository.findOne(pickId).orElseThrow(NullPickException::new);
+    public Pick findById(final Long pickId) {
+        return pickRepository.findById(pickId).orElseThrow(NullPickException::new);
     }
 
     public List<Pick> findByMemberId(final Long memberId) {
@@ -57,10 +57,10 @@ public class PickService {
     }
 
     public List<Pick> findByMemberIdOrderByCreateAsc(final Long memberId) {
-        return pickRepository.findByMemberIdOrderByCreateAsc(memberId);
+        return pickRepository.findByMemberIdOrderByCreateAtAsc(memberId);
     }
 
     public List<Pick> findByMemberIdOrderByCreateDesc(final Long memberId) {
-        return pickRepository.findByMemberIdOrderByCreateDesc(memberId);
+        return pickRepository.findByMemberIdOrderByCreateAtDesc(memberId);
     }
 }

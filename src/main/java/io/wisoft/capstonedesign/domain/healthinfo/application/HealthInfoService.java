@@ -27,7 +27,7 @@ public class HealthInfoService {
     @Transactional
     public Long save(final CreateHealthInfoRequest request) {
 
-        Staff staff = staffService.findOne(request.getStaffId());
+        Staff staff = staffService.findById(request.getStaffId());
 
         HealthInfo healthInfo = HealthInfo.builder()
                 .staff(staff)
@@ -46,13 +46,13 @@ public class HealthInfoService {
     @Transactional
     public void delete(final Long healthInfoId) {
 
-        HealthInfo healthInfo = findOne(healthInfoId);
+        HealthInfo healthInfo = findById(healthInfoId);
         healthInfo.delete();
     }
 
     /* 조회 로직 */
-    public HealthInfo findOne(final Long healthInfoId) {
-        return healthInfoRepository.findOne(healthInfoId).orElseThrow(NullHealthInfoException::new);
+    public HealthInfo findById(final Long healthInfoId) {
+        return healthInfoRepository.findById(healthInfoId).orElseThrow(NullHealthInfoException::new);
     }
 
     public List<HealthInfo> findAll() {

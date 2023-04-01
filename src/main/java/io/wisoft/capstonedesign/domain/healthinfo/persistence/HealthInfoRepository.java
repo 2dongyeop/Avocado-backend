@@ -1,61 +1,26 @@
 package io.wisoft.capstonedesign.domain.healthinfo.persistence;
 
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
-public class HealthInfoRepository {
+public interface HealthInfoRepository extends JpaRepository<HealthInfo, Long> {
 
-    private final EntityManager em;
-
-    /**
-     * 건강정보 저장
-     */
-    public void save(final HealthInfo healthInfo) {
-        em.persist(healthInfo);
-    }
-
-    /**
-     * 건강정보 단건 조회
-     */
-    public Optional<HealthInfo> findOne(final Long healthInfoId) {
-        return Optional.ofNullable(em.find(HealthInfo.class, healthInfoId));
-    }
-
-    /**
-     * 건강정보 목록 조회
-     */
-    public List<HealthInfo> findAll() {
-
-        return em.createQuery("select hi from HealthInfo hi", HealthInfo.class)
-                .getResultList();
-    }
 
     /* 특정 병과의 건강정보 목록 조회 */
-    public List<HealthInfo> findAllByDept(final HospitalDept dept) {
-
-        return em.createQuery("select hi from HealthInfo hi where hi.dept =: dept", HealthInfo.class)
-                .setParameter("dept", dept)
-                .getResultList();
-    }
+    @Query("select hi from HealthInfo hi where hi.dept =:dept")
+    public List<HealthInfo> findAllByDept(@Param("dept") final HospitalDept dept);
 
     /* 건강정보 목록 오름차순 조회 */
-    public List<HealthInfo> findAllOrderByCreateAsc() {
-
-        return em.createQuery("select hi from HealthInfo hi order by hi.createAt", HealthInfo.class)
-                .getResultList();
-    }
+    @Query("select hi from HealthInfo hi order by hi.createAt asc")
+    public List<HealthInfo> findAllOrderByCreateAsc();
 
     /* 건강정보 목록 내림차순 조회 */
-    public List<HealthInfo> findAllOrderByCreateDesc() {
-
-        return em.createQuery("select hi from HealthInfo hi order by hi.createAt desc", HealthInfo.class)
-                .getResultList();
-    }
+    @Query("select hi from HealthInfo hi order by hi.createAt desc")
+    public List<HealthInfo> findAllOrderByCreateDesc();
 }

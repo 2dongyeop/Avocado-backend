@@ -59,7 +59,7 @@ public class AppointmentServiceTest {
         Long saveId = appointmentService.save(request);
 
         //then -- 검증
-        Appointment appointment = appointmentService.findOne(saveId);
+        Appointment appointment = appointmentService.findById(saveId);
         Assertions.assertThat(appointment.getStatus()).isEqualTo(AppointmentStatus.COMPLETE);
         Assertions.assertThat(appointment.getAppointName()).isEqualTo(request.getAppointName());
     }
@@ -91,7 +91,7 @@ public class AppointmentServiceTest {
         Long saveId = appointmentService.save(request);
 
         //when -- 동작
-        Appointment appointment = appointmentService.findOne(saveId);
+        Appointment appointment = appointmentService.findById(saveId);
         appointment.cancel();
 
         //then -- 검증
@@ -138,7 +138,7 @@ public class AppointmentServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Appointment appointment = appointmentService.findOne(100L);
+        Appointment appointment = appointmentService.findById(100L);
 
         //then -- 검증
         fail("해당 appointmentId에 일치하는 예약 정보가 없어 예외가 발생해야 한다.");
@@ -173,7 +173,7 @@ public class AppointmentServiceTest {
         UpdateAppointmentRequest request2 = new UpdateAppointmentRequest("DENTAL", "코를 높이고 싶어요", "이동", "011");
 
         //when -- 동작
-        Appointment appointment = appointmentService.findOne(saveId);
+        Appointment appointment = appointmentService.findById(saveId);
         appointmentService.update(appointment.getId(), request2);
 
         //then -- 검증
@@ -210,7 +210,7 @@ public class AppointmentServiceTest {
         UpdateAppointmentRequest request2 = new UpdateAppointmentRequest("DENTAL", null, "이동", "011");
 
         //when -- 동작
-        Appointment appointment = appointmentService.findOne(saveId);
+        Appointment appointment = appointmentService.findById(saveId);
         appointmentService.update(appointment.getId(), request2);
 
 

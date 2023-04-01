@@ -1,58 +1,31 @@
 package io.wisoft.capstonedesign.domain.pick.persistence;
 
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
-public class PickRepository {
+public interface PickRepository extends JpaRepository<Pick, Long> {
 
-    private final EntityManager em;
-
-    /**
-     * 찜하기
-     */
-    public void save(final Pick pick) { em.persist(pick); }
-
-    /**
-     * 찜하기 단건 조회
-     */
-    public Optional<Pick> findOne(final Long pickId) {
-        return Optional.ofNullable(em.find(Pick.class, pickId));
-    }
 
     /**
      * 특정 작성자의 찜한 목록 조회
      */
-    public List<Pick> findByMemberId(final Long memberId) {
-
-        return em.createQuery("select p from Pick p join fetch p.member m where m.id = :id", Pick.class)
-                .setParameter("id", memberId)
-                .getResultList();
-    }
+    @Query("select p from Pick p join fetch p.member m where m.id = :id")
+    public List<Pick> findByMemberId(@Param("id") final Long memberId);
 
     /**
      * 특정 작성자의 찜한 목록 내림차순 조회
      */
-    public List<Pick> findByMemberIdOrderByCreateDesc(final Long memberId) {
-
-        return em.createQuery("select p from Pick p join fetch p.member m where m.id = :id order by p.createAt desc", Pick.class)
-                .setParameter("id", memberId)
-                .getResultList();
-    }
+    @Query("select p from Pick p join fetch p.member m where m.id = :id order by p.createAt desc")
+    public List<Pick> findByMemberIdOrderByCreateAtDesc(@Param("id") final Long memberId);
 
     /**
-     * 특정 작성자의 찜한 목록 오름차순 조회 - 기본 세팅!
+     * 특정 작성자의 찜한 목록 오름차순 조회
      */
-    public List<Pick> findByMemberIdOrderByCreateAsc(final Long memberId) {
-
-        return em.createQuery("select p from Pick p join fetch p.member m where m.id = :id order by p.createAt asc", Pick.class)
-                .setParameter("id", memberId)
-                .getResultList();
-    }
+    @Query("select p from Pick p join fetch p.member m where m.id = :id order by p.createAt asc")
+    public List<Pick> findByMemberIdOrderByCreateAtAsc(@Param("id") final Long memberId);
 }

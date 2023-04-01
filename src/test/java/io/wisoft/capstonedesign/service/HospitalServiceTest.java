@@ -30,7 +30,7 @@ public class HospitalServiceTest {
         Long saveId = hospitalService.save(request);
 
         //then -- 검증
-        Hospital hospital = hospitalService.findOne(saveId);
+        Hospital hospital = hospitalService.findById(saveId);
         Assertions.assertThat(hospital.getName()).isEqualTo(request.getName());
     }
 
@@ -39,7 +39,7 @@ public class HospitalServiceTest {
         //given -- 조건
 
         //when -- 동작
-        hospitalService.findOne(100L);
+        hospitalService.findById(100L);
 
         //then -- 검증
         fail("해당 hospitalId에 일치하는 병원이 없어 오류가 발생해야 한다.");

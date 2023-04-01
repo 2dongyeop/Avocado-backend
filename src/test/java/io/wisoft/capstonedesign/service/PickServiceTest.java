@@ -56,7 +56,7 @@ public class PickServiceTest {
         Long saveId = pickService.save(request);
 
         //then -- 검증
-        Pick pick = pickService.findOne(saveId);
+        Pick pick = pickService.findById(saveId);
         Assertions.assertThat(pick.getStatus()).isEqualTo(PickStatus.COMPLETE);
         Assertions.assertThat(pick.getHospital().getName()).isEqualTo(hospital.getName());
         Assertions.assertThat(pick.getMember().getNickname()).isEqualTo(member.getNickname());
@@ -92,7 +92,7 @@ public class PickServiceTest {
         pickService.cancelPick(saveId);
 
         //then -- 검증
-        Assertions.assertThat(pickService.findOne(saveId).getStatus()).isEqualTo(PickStatus.CANCEL);
+        Assertions.assertThat(pickService.findById(saveId).getStatus()).isEqualTo(PickStatus.CANCEL);
     }
 
     
@@ -136,7 +136,7 @@ public class PickServiceTest {
         //given -- 조건
 
         //when -- 동작
-        pickService.findOne(100L);
+        pickService.findById(100L);
 
         //then -- 검증
         fail("해당 pickId에 일치하는 찜하기 정보가 없어 예외가 발생해야 한다.");

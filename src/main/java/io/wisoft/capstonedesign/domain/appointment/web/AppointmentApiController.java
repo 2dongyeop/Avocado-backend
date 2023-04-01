@@ -31,7 +31,7 @@ public class AppointmentApiController {
     public DeleteAppointmentResponse deleteAppointment(@PathVariable("id") final Long id) {
 
         appointmentService.cancelAppointment(id);
-        Appointment appointment = appointmentService.findOne(id);
+        Appointment appointment = appointmentService.findById(id);
         return new DeleteAppointmentResponse(appointment.getId(), appointment.getStatus().toString());
     }
 
@@ -50,7 +50,7 @@ public class AppointmentApiController {
     @GetMapping("/api/appointments/{id}")
     public Result appointment(@PathVariable("id") final Long id) {
 
-        Appointment appointment = appointmentService.findOne(id);
+        Appointment appointment = appointmentService.findById(id);
         return new Result(new AppointmentDto(appointment));
     }
 
@@ -69,7 +69,7 @@ public class AppointmentApiController {
     /* 특정 회원의 예약 정보 목록 오름차순 조회 */
     @GetMapping("/api/appointments/member/{member-id}/create-asc")
     public Result appointmentsByMemberOrderByCreateAsc(@PathVariable("member-id") final Long id) {
-        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdASC(id)
+        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdOrderByCreateAtAsc(id)
                 .stream().map(AppointmentDto::new)
                 .collect(Collectors.toList());
 
@@ -80,7 +80,7 @@ public class AppointmentApiController {
     /* 특정 회원의 예약 정보 목록 내림차순 조회 */
     @GetMapping("/api/appointments/member/{member-id}/create-desc")
     public Result appointmentsByMemberOrderByCreateDesc(@PathVariable("member-id") final Long id) {
-        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdDESC(id)
+        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdOrderByCreateAtDesc(id)
                 .stream().map(AppointmentDto::new)
                 .collect(Collectors.toList());
 

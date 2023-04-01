@@ -35,14 +35,14 @@ public class BusInfoService {
     @Transactional
     public void delete(final Long busInfoId) {
 
-        BusInfo busInfo = findOne(busInfoId);
+        BusInfo busInfo = findById(busInfoId);
         busInfo.delete();
     }
 
 
     /* 조회 로직 */
-    public BusInfo findOne(final Long busInfoId) {
-        return busInfoRepository.findOne(busInfoId).orElseThrow(NullBusInfoException::new);
+    public BusInfo findById(final Long busInfoId) {
+        return busInfoRepository.findById(busInfoId).orElseThrow(NullBusInfoException::new);
     }
 
     public List<BusInfo> findAll() {
@@ -50,8 +50,7 @@ public class BusInfoService {
     }
 
     public List<BusInfo> findByArea(final String area) {
-        BusArea busArea = BusArea.valueOf(area);
-        List<BusInfo> busInfoList = busInfoRepository.findByArea(busArea);
+        List<BusInfo> busInfoList = busInfoRepository.findByArea(BusArea.valueOf(area));
 
         if (busInfoList.size() == 0) {
             throw new NullBusInfoException("해당 버스정보는 존재하지 않습니다.");
