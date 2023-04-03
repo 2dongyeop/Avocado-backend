@@ -62,6 +62,29 @@ public class ReviewApiController {
     }
 
 
+    /** 특정 페이지의 리뷰 목록 오름차순 조회 */
+    @GetMapping("/api/reviews/{page-number}/create-asc")
+    public Result reviewsUsingPagingOrderByCreateAtAsc(@PathVariable("page-number") final int pageNumber)  {
+
+        List<ReviewDto> reviewDtoList = reviewService.findByUsingPagingOOrderByCreateAtAsc(pageNumber)
+                .stream().map(ReviewDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(reviewDtoList);
+    }
+
+    /** 특정 페이지의 리뷰 목록 내림차순 조회 */
+    @GetMapping("/api/reviews/{page-number}/create-desc")
+    public Result reviewsUsingPagingOrderByCreateAtDesc(@PathVariable("page-number") final int pageNumber)  {
+
+        List<ReviewDto> reviewDtoList = reviewService.findByUsingPagingOOrderByCreateAtDesc(pageNumber)
+                .stream().map(ReviewDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(reviewDtoList);
+    }
+
+
     /* 특정 작성자의 리뷰 목록 조회 */
     @GetMapping("/api/reviews/member/{member-id}")
     public Result reviewsByMemberId(@PathVariable("member-id") final Long id) {

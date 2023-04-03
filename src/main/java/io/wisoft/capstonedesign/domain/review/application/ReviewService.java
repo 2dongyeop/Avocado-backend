@@ -9,6 +9,8 @@ import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewException;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -89,6 +91,24 @@ public class ReviewService {
     public List<Review> findAllOrderByCreateAtASC() { return reviewRepository.findAllOrderByCreateAtAsc(); }
 
     public List<Review> findAllOrderByCreateAtDESC() { return reviewRepository.findAllOrderByCreateAtDesc(); }
+
+
+    /** 특정 페이지의 리뷰 목록 오름차순 조회 */
+    public List<Review> findByUsingPagingOOrderByCreateAtAsc(final int pageNumber) {
+
+        PageRequest request = PageRequest.of(pageNumber, 5, Sort.by(Sort.Direction.ASC, "createAt"));
+        return reviewRepository.findByUsingPagingOOrderByCreateAtAsc(request)
+                .getContent();
+    }
+
+
+    /** 특정 페이지의 리뷰 목록 내림차순 조회 */
+    public List<Review> findByUsingPagingOOrderByCreateAtDesc(final int pageNumber) {
+
+        PageRequest request = PageRequest.of(pageNumber, 5, Sort.by(Sort.Direction.DESC, "createAt"));
+        return reviewRepository.findByUsingPagingOOrderByCreateAtDesc(request)
+                .getContent();
+    }
 
     public List<Review> findByTargetHospital(final String targetHospital) {
 
