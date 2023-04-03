@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.domain.board.application;
 
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.board.persistence.BoardRepository;
+import io.wisoft.capstonedesign.domain.board.web.dto.BoardDto;
 import io.wisoft.capstonedesign.domain.board.web.dto.CreateBoardRequest;
 import io.wisoft.capstonedesign.domain.board.web.dto.UpdateBoardRequest;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
@@ -10,6 +11,9 @@ import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -91,6 +95,27 @@ public class BoardService {
 
     public List<Board> findAllOrderByCreateAtDesc() {
         return boardRepository.findAllOrderByCreateAtDesc();
+    }
+
+
+    /** 게시글 목록을 페이징 후 오름차순으로 조회 */
+    public List<Board> findAllUsingPagingOrderByCreateAtAsc(final int pageNumber) {
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, 5, Sort.by(Sort.Direction.ASC, "createAt"));
+        List<Board> boardList = boardRepository.findAllUsingPagingOrderByCreateAtAsc(pageRequest)
+                .stream().toList();
+
+        return boardList;
+    }
+
+    /** 게시글 목록을 페이징 후 내림차순으로 조회 */
+    public List<Board> findAllUsingPagingOrderByCreateAtDesc(final int pageNumber) {
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, 5, Sort.by(Sort.Direction.DESC, "createAt"));
+        List<Board> boardList = boardRepository.findAllUsingPagingOrderByCreateAtDesc(pageRequest)
+                .stream().toList();
+
+        return boardList;
     }
 
     public List<Board> findAllByMember() {

@@ -61,6 +61,30 @@ public class BoardApiController {
     }
 
 
+    /** 게시글 오름차순 조회 - 페이징 사용 */
+    @GetMapping("/api/boards/{page-number}/create-asc")
+    public Result boardsUsingPagingByCreateAsc(@PathVariable("page-number") final int pageNumber) {
+
+        List<BoardDto> boardDtoList = boardService.findAllUsingPagingOrderByCreateAtAsc(pageNumber)
+                .stream().map(BoardDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(boardDtoList);
+    }
+
+
+    /** 게시글 내림차순 조회 - 페이징 사용 */
+    @GetMapping("/api/boards/{page-number}/create-desc")
+    public Result boardsUsingPagingByCreateDesc(@PathVariable("page-number") final int pageNumber) {
+
+        List<BoardDto> boardDtoList = boardService.findAllUsingPagingOrderByCreateAtDesc(pageNumber)
+                .stream().map(BoardDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(boardDtoList);
+    }
+
+
     /* 특정 작성자의 게시글 목록 조회 */
     @GetMapping("/api/boards/member/{member-id}")
     public Result boardsByMember(@PathVariable("member-id") final Long id) {
