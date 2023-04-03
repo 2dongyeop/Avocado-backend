@@ -17,19 +17,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AttributeOverrides({
-        @AttributeOverride(name = "createAt", column = @Column(name = "reviewreply_create_at", nullable = false)),
-        @AttributeOverride(name = "updateAt", column = @Column(name = "reviewreply_update_at"))
+        @AttributeOverride(name = "createAt", column = @Column(name = "review_reply_create_at", nullable = false)),
+        @AttributeOverride(name = "updateAt", column = @Column(name = "review_reply_update_at"))
 })
 public class ReviewReply extends BaseEntity {
 
-    @Id @GeneratedValue()
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_reply_id")
     private Long id;
 
     @Column(name = "reply", nullable = false)
     private String reply;
 
-    @Column(name = "reviewreply_status")
+    @Column(name = "review_reply_status")
     @Enumerated(EnumType.STRING)
     private ReviewReplyStatus status;
 

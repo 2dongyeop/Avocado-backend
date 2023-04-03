@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AttributeOverride(name = "createAt", column = @Column(name = "health_info_create_at", nullable = false))
 public class HealthInfo extends BaseEntity {
 
-    @Id @GeneratedValue()
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "health_info_id")
     private Long id;
 

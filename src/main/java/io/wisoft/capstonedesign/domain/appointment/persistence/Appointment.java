@@ -21,8 +21,7 @@ import lombok.NoArgsConstructor;
 })
 public class Appointment extends BaseEntity {
 
-    @Id
-    @GeneratedValue()
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "appointment_id")
     private Long id;
 

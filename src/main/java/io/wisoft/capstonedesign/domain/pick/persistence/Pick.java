@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 
 public class Pick extends BaseEntity {
 
-    @Id @GeneratedValue()
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pick_id")
     private Long id;
 
