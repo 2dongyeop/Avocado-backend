@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "bush_info")
+@Table(name = "bus_info")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AttributeOverride(name = "createAt", column = @Column(name = "bus_info_create_at", nullable = false))
 public class BusInfo extends BaseEntity {
 
-    @Id @GeneratedValue()
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bus_info_id")
     private Long id;
 

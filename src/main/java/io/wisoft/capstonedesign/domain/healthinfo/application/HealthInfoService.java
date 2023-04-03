@@ -8,6 +8,10 @@ import io.wisoft.capstonedesign.domain.healthinfo.web.dto.CreateHealthInfoReques
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,5 +73,21 @@ public class HealthInfoService {
 
     public List<HealthInfo> findAllOrderByCreateDesc() {
         return healthInfoRepository.findAllOrderByCreateDesc();
+    }
+
+    /** 건강정보 목록을 페이지별로 오름차순 조회하기 */
+    public List<HealthInfo> findByUsingPagingOrderByCreateAtAsc(final int pageNumber) {
+
+        PageRequest request = PageRequest.of(pageNumber, 5, Sort.by(Sort.Direction.ASC, "createAt"));
+        return healthInfoRepository.findByUsingPagingOrderByCreateAtAsc(request)
+                .getContent();
+    }
+
+    /** 건강정보 목록을 페이지별로 내림차순 조회하기 */
+    public List<HealthInfo> findByUsingPagingOrderByCreateAtDesc(final int pageNumber) {
+
+        PageRequest request = PageRequest.of(pageNumber, 5, Sort.by(Sort.Direction.DESC, "createAt"));
+        return healthInfoRepository.findByUsingPagingOrderByCreateAtDesc(request)
+                .getContent();
     }
 }

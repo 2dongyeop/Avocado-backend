@@ -86,4 +86,31 @@ public class AppointmentApiController {
 
         return new Result(appointmentDtoList);
     }
+
+    /** 특정 회원의 특정 페이지 예약 정보 조회 - 오름차순 */
+    @GetMapping("/api/appointments/member/{member-id}/{page-number}/create-asc")
+    public Result appointmentsByMemberIdUsingPagingOrderByCreateAtAsc(
+            @PathVariable("member-id") final Long memberId,
+            @PathVariable("page-number") final int pageNumber) {
+
+        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdUsingPagingOrderByCreateAtAsc(memberId, pageNumber)
+                .stream().map(AppointmentDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(appointmentDtoList);
+    }
+
+
+    /** 특정 회원의 특정 페이지 예약 정보 조회 - 내림차순 */
+    @GetMapping("/api/appointments/member/{member-id}/{page-number}/create-desc")
+    public Result appointmentsByMemberIdUsingPagingOrderByCreateAtDesc(
+            @PathVariable("member-id") final Long memberId,
+            @PathVariable("page-number") final int pageNumber) {
+
+        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdUsingPagingOrderByCreateAtDesc(memberId, pageNumber)
+                .stream().map(AppointmentDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(appointmentDtoList);
+    }
 }

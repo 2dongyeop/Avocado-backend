@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 })
 public class BoardReply extends BaseEntity {
 
-    @Id @GeneratedValue()
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_reply_id")
     private Long id;
 

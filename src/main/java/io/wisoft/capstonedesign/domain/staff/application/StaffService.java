@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.domain.staff.application;
 
 
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
+import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -113,7 +115,13 @@ public class StaffService {
      * 자신이 댓글 단 게시글 목록 조회
      */
     public List<Board> findBoardListByStaffId(final Long staffId) {
-        return staffRepository.findBoardListByStaffId(staffId);
+        List<BoardReply> boardReplyListByStaffId = staffRepository.findBoardReplyListByStaffId(staffId);
+
+        List<Board> boardList = boardReplyListByStaffId.stream()
+                .map(BoardReply::getBoard)
+                .collect(Collectors.toList());
+
+        return boardList;
     }
 
 

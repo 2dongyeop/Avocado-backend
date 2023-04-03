@@ -4,8 +4,6 @@ import io.wisoft.capstonedesign.domain.healthinfo.application.HealthInfoService;
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import io.wisoft.capstonedesign.domain.healthinfo.web.dto.*;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,19 +92,23 @@ public class HealthInfoApiController {
     }
 
 
-    @Data
-    @AllArgsConstructor
-    static class HealthInfoDto {
-        private String writer;
-        private String title;
-        private String dept;
-        private String healthInfoPath;
+    /** 건강정보 목록을 페이지별로 오름차순 조회하기 */
+    @GetMapping("/api/health-infos/{page-number}/create-asc")
+    public Result healthInfosUsingPagingOrderByCreateAtAsc(@PathVariable("page-number") final int pageNumber) {
+        List<HealthInfoDto> healthInfoDtoList = healthInfoService.findByUsingPagingOrderByCreateAtAsc(pageNumber)
+                .stream().map(HealthInfoDto::new)
+                .collect(Collectors.toList());
 
-        public HealthInfoDto(final HealthInfo healthInfo) {
-            this.writer = healthInfo.getStaff().getName();
-            this.title = healthInfo.getTitle();
-            this.dept = healthInfo.getDept().toString();
-            this.healthInfoPath = healthInfo.getHealthInfoPath();
-        }
+        return new Result(healthInfoDtoList);
+    }
+
+    /** 건강정보 목록을 페이지별로 내림차순 조회하기 */
+    @GetMapping("/api/health-infos/{page-number}/create-desc")
+    public Result healthInfosUsingPagingOrderByCreateAtDesc(@PathVariable("page-number") final int pageNumber) {
+        List<HealthInfoDto> healthInfoDtoList = healthInfoService.findByUsingPagingOrderByCreateAtDesc(pageNumber)
+                .stream().map(HealthInfoDto::new)
+                .collect(Collectors.toList());
+
+        return new Result(healthInfoDtoList);
     }
 }
