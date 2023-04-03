@@ -36,7 +36,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             countQuery = "select count(b) from Board b")
     Page<Board> findAllUsingPagingOrderByCreateAtAsc(Pageable pageable);
 
-    /** 게시글 목록을 페이징 후 오름차순으로 조회 */
+    /** 게시글 목록을 페이징 후 내림차순으로 조회 */
     @Query(value = "select b from Board b",
             countQuery = "select count(b) from Board b")
     Page<Board> findAllUsingPagingOrderByCreateAtDesc(Pageable pageable);

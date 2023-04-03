@@ -112,10 +112,8 @@ public class BoardService {
     public List<Board> findAllUsingPagingOrderByCreateAtDesc(final int pageNumber) {
 
         PageRequest pageRequest = PageRequest.of(pageNumber, 5, Sort.by(Sort.Direction.DESC, "createAt"));
-        List<Board> boardList = boardRepository.findAllUsingPagingOrderByCreateAtDesc(pageRequest)
-                .stream().toList();
-
-        return boardList;
+        return boardRepository.findAllUsingPagingOrderByCreateAtDesc(pageRequest)
+                .getContent();
     }
 
     public List<Board> findAllByMember() {
