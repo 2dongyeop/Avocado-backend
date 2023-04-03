@@ -33,18 +33,4 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("select b from Board b join fetch b.member m")
     public List<Board> findAllByMember();
-
-    /** 특정 의료진이 댓글을 단 게시글 목록 조회 */
-    public default List<Board> findByStaffReply(final Long staffId) {
-        List<BoardReply> boardReplyList = getBoardReplyByStaff(staffId);
-
-        return boardReplyList.stream()
-                .map(boardReply -> boardReply.getBoard())
-                .collect(Collectors.toList());
-    }
-
-    @Query("select br from BoardReply br join fetch br.staff s where s.id = :staffId")
-    public List<BoardReply> getBoardReplyByStaff(@Param("staffId") final Long staffId);
-
-
 }

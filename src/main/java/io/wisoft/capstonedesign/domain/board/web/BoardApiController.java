@@ -72,17 +72,6 @@ public class BoardApiController {
     }
 
 
-    /* 특정 의료진이 댓글을 단 게시글 목록 조회 */
-    @GetMapping("/api/boards/staff/{staff-id}")
-    public Result boardsByStaff(@PathVariable("staff-id") final Long id) {
-        List<BoardDto> boardDtoList = boardService.findByStaffReply(id)
-                .stream().map(BoardDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(boardDtoList);
-    }
-
-
     /* 게시글 작성 */
     @PostMapping("/api/boards/new")
     public CreateBoardResponse createBoard(

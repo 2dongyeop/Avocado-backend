@@ -96,8 +96,4 @@ public class BoardService {
     public List<Board> findAllByMember() {
         return boardRepository.findAllByMember();
     }
-
-    public List<Board> findByStaffReply(final Long staffId) {
-        return boardRepository.findByStaffReply(staffId);
-    }
 }
