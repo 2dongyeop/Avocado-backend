@@ -28,7 +28,7 @@ public class MemberServiceTest {
     @Test
     public void 회원_저장() throws Exception {
         //given -- 조건
-        CreateMemberRequest request = new CreateMemberRequest("test1", "email1@naver.com", "1111", "0000");
+        CreateMemberRequest request = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
 
         //when -- 동작
         Long signUpId = memberService.signUp(request);
@@ -42,8 +42,8 @@ public class MemberServiceTest {
     public void 회원_이메일_중복_검증() throws Exception {
 
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_1204@naver.com", "1111", "0000");
-        CreateMemberRequest request2 = new CreateMemberRequest("test2", "ldy_1204@naver.com", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_1204@naver.com", "1111", "1111", "0000");
+        CreateMemberRequest request2 = new CreateMemberRequest("test2", "ldy_1204@naver.com", "1111", "1111", "0000");
 
         //when -- 동작
         memberService.signUp(request1);
@@ -57,8 +57,8 @@ public class MemberServiceTest {
     public void 회원_닉네임_중복_검증() throws Exception {
 
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_111@naver.com", "1111", "0000");
-        CreateMemberRequest request2 = new CreateMemberRequest("test1", "ldy_122@naver.com", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_111@naver.com", "1111", "1111", "0000");
+        CreateMemberRequest request2 = new CreateMemberRequest("test1", "ldy_122@naver.com", "1111", "1111", "0000");
 
 
         //when -- 동작
@@ -83,7 +83,7 @@ public class MemberServiceTest {
     @Test
     public void 회원_비밀번호_수정() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
         Long signUpId = memberService.signUp(request1);
 
         //when -- 동작
@@ -92,13 +92,14 @@ public class MemberServiceTest {
         memberService.updatePassword(getMember.getId(), request2);
 
         //then -- 검증
-        Assertions.assertThat(getMember.getPassword()).isEqualTo("2222");
+        Member updatedMember = memberService.findOne(signUpId);
+        Assertions.assertThat(getMember.getPassword()).isEqualTo(updatedMember.getPassword());
     }
 
     @Test(expected = IllegalValueException.class)
     public void 회원_비밀번호_수정_실패() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
         Long signUpId = memberService.signUp(request1);
 
         //when -- 동작
@@ -113,7 +114,7 @@ public class MemberServiceTest {
     @Test
     public void 회원_프로필사진_수정() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
         Long signUpId = memberService.signUp(request1);
 
         //when -- 동작
@@ -128,7 +129,7 @@ public class MemberServiceTest {
     @Test(expected = NullMemberException.class)
     public void 회원_탈퇴() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
         Long signUpId = memberService.signUp(request1);
 
         //when -- 동작
