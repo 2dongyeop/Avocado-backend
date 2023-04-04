@@ -88,10 +88,6 @@ public class ReviewService {
 
     public List<Review> findAll() { return reviewRepository.findAll(); }
 
-    public List<Review> findAllOrderByCreateAtASC() { return reviewRepository.findAllOrderByCreateAtAsc(); }
-
-    public List<Review> findAllOrderByCreateAtDESC() { return reviewRepository.findAllOrderByCreateAtDesc(); }
-
 
     /** 특정 페이지의 리뷰 목록 오름차순 조회 */
     public List<Review> findByUsingPagingOOrderByCreateAtAsc(final int pageNumber) {
@@ -118,9 +114,5 @@ public class ReviewService {
             throw new IllegalValueException("해당 병원에 대한 리뷰는 존재하지 않습니다.");
         }
         return reviewListByTargetHospital;
-    }
-
-    public List<Review> findAllByMember() {
-        return reviewRepository.findAllByMember();
     }
 }

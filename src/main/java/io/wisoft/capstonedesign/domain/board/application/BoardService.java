@@ -89,14 +89,6 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-    public List<Board> findAllOrderByCreateAtAsc() {
-        return boardRepository.findAllOrderByCreateAtAsc();
-    }
-
-    public List<Board> findAllOrderByCreateAtDesc() {
-        return boardRepository.findAllOrderByCreateAtDesc();
-    }
-
 
     /** 게시글 목록을 페이징 후 오름차순으로 조회 */
     public List<Board> findAllUsingPagingOrderByCreateAtAsc(final int pageNumber) {

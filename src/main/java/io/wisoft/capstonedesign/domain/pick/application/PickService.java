@@ -52,10 +52,6 @@ public class PickService {
         return pickRepository.findById(pickId).orElseThrow(NullPickException::new);
     }
 
-    public List<Pick> findByMemberId(final Long memberId) {
-        return pickRepository.findByMemberId(memberId);
-    }
-
     public List<Pick> findByMemberIdOrderByCreateAsc(final Long memberId) {
         return pickRepository.findByMemberIdOrderByCreateAtAsc(memberId);
     }

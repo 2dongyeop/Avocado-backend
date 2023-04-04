@@ -12,12 +12,6 @@ public interface PickRepository extends JpaRepository<Pick, Long> {
 
 
     /**
-     * 특정 작성자의 찜한 목록 조회
-     */
-    @Query("select p from Pick p join fetch p.member m where m.id = :id")
-    List<Pick> findByMemberId(@Param("id") final Long memberId);
-
-    /**
      * 특정 작성자의 찜한 목록 내림차순 조회
      */
     @Query("select p from Pick p join fetch p.member m where m.id = :id order by p.createAt desc")

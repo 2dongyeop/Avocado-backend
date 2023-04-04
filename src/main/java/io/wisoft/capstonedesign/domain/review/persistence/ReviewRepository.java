@@ -13,19 +13,6 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 
-    /**
-     * 리뷰 목록 오름차순 조회
-     */
-    @Query("select r from Review r order by r.createAt asc")
-    List<Review> findAllOrderByCreateAtAsc();
-
-    /**
-     * 리뷰 목록 내림차순 조회
-     */
-    @Query("select r from Review r order by r.createAt desc")
-    List<Review> findAllOrderByCreateAtDesc();
-
-
     /** 특정 페이지의 리뷰 목록 오름차순 조회 */
     @Query(value = "select r from Review r", countQuery = "select count(r) from Review r")
     Page<Review> findByUsingPagingOOrderByCreateAtAsc(final Pageable pageable);
@@ -47,7 +34,4 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
      */
     @Query("select r from Review r where r.targetHospital = :targetHospital")
     List<Review> findByTargetHospital(@Param("targetHospital") final String targetHospital);
-
-    @Query("select r from Review r join fetch r.member m")
-    List<Review> findAllByMember();
 }

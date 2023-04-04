@@ -11,13 +11,6 @@ import java.util.List;
 public interface BoardReplyRepository extends JpaRepository<BoardReply, Long> {
 
     /**
-     * 특정게시글의 댓글 목록 조회
-     */
-    @Query("select br from BoardReply br join fetch br.board b where b.id = :id")
-    List<BoardReply> findByBoardId(@Param("id") final Long boardId);
-
-
-    /**
      * 특정게시글의 댓글 목록 오름차순 조회
      */
     @Query("select br from BoardReply br order by br.createAt asc")

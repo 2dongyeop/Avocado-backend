@@ -235,15 +235,14 @@ public class StaffServiceTest {
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
-        Staff staff = staffService.findById(id);
 
         //when -- 동작
-        UpdateStaffHospitalRequest request2 = new UpdateStaffHospitalRequest("hospital1");
-        staffService.updateStaffHospital(staff.getId(), request2);
+        UpdateStaffHospitalRequest request2 = new UpdateStaffHospitalRequest("서울대병원");
+        staffService.updateStaffHospital(id, request2);
 
         //then -- 검증
-        Staff getStaff = staffService.findById(staff.getId());
-        Assertions.assertThat(getStaff.getHospital().getName()).isEqualTo("hospital1");
+        Staff getStaff = staffService.findById(id);
+        Assertions.assertThat(getStaff.getHospital().getName()).isEqualTo("서울대병원");
     }
 
     @Test(expected = NullHospitalException.class)

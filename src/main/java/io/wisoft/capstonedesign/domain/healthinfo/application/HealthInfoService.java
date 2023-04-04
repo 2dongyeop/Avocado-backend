@@ -67,14 +67,6 @@ public class HealthInfoService {
         return healthInfoRepository.findAllByDept(HospitalDept.valueOf(dept));
     }
 
-    public List<HealthInfo> findAllOrderByCreateAsc() {
-        return healthInfoRepository.findAllOrderByCreateAsc();
-    }
-
-    public List<HealthInfo> findAllOrderByCreateDesc() {
-        return healthInfoRepository.findAllOrderByCreateDesc();
-    }
-
     /** 건강정보 목록을 페이지별로 오름차순 조회하기 */
     public List<HealthInfo> findByUsingPagingOrderByCreateAtAsc(final int pageNumber) {
 

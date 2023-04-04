@@ -93,14 +93,6 @@ public class AppointmentService {
         return appointmentRepository.findById(appointmentId).orElseThrow(NullAppointmentException::new);
     }
 
-    public List<Appointment> findByMemberIdOrderByCreateAtAsc(final Long memberId) {
-        return appointmentRepository.findByMemberIdOrderByCreateAtAsc(memberId);
-    }
-
-    public List<Appointment> findByMemberIdOrderByCreateAtDesc(final Long memberId) {
-        return appointmentRepository.findByMemberIdOrderByCreateAtDesc(memberId);
-    }
-
     /** 특정 회원의 특정 페이지 예약 정보 조회 - 오름차순 */
     public List<Appointment> findByMemberIdUsingPagingOrderByCreateAtAsc(
             final Long memberId,

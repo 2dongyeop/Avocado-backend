@@ -57,17 +57,6 @@ public class BoardReplyApiController {
     }
 
 
-    /* 특정 게시글의 댓글 목록 조회 */
-    @GetMapping("/api/board-reply/board/{board-id}")
-    public Result boardReplyByBoard(@PathVariable("board-id") final Long id) {
-        List<BoardReplyDto> replyDtoList = boardReplyService.findByBoardId(id)
-                .stream().map(BoardReplyDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(replyDtoList);
-    }
-
-
     /* 특정 게시글의 댓글 목록 오름차순 조회 */
     @GetMapping("/api/board-reply/board/{board-id}/create-asc")
     public Result boardReplyByBoardOrderByCreateAsc(@PathVariable("board-id") final Long id) {
