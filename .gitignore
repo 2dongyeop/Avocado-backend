@@ -8,6 +8,7 @@ build/
 ### CUSTOM
 h2
 *application.yml*
+*.sql*
 
 
 ### STS ###

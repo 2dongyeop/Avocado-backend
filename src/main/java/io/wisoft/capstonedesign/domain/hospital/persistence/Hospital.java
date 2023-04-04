@@ -30,7 +30,7 @@ public class Hospital {
     @Column(name = "hosp_address", nullable = false)
     private String address;
 
-    @Column(name = "hosp_operatingtime", nullable = false)
+    @Column(name = "hosp_operatingtime", nullable = false, columnDefinition="TEXT")
     private String operatingTime;
 
     @OneToMany(mappedBy = "hospital")

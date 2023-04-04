@@ -31,7 +31,7 @@ public class Appointment extends BaseEntity {
 
     //pg 사용시 @Lob 지우고, @Column(nullable = false, columnDefinition="TEXT")로 바꾸기
     @Lob
-    @Column(name = "appt_comment", nullable = false)
+    @Column(name = "appt_comment", nullable = false, columnDefinition="TEXT")
     private String comment;
 
     @Column(name = "appt_status")

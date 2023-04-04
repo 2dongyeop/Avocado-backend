@@ -32,7 +32,7 @@ public class Review extends BaseEntity {
 
     //pg 사용시 @Lob 지우고, @Column(nullable = false, columnDefinition="TEXT")로 바꾸기
     @Lob
-    @Column(name = "review_body", nullable = false)
+    @Column(name = "review_body", nullable = false, columnDefinition="TEXT")
     private String body;
 
     @Column(name = "review_photo_path")

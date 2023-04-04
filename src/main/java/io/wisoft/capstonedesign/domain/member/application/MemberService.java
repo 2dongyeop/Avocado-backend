@@ -10,6 +10,7 @@ import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberNicknameReques
 import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPasswordRequest;
 import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPhotoPathRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /*
      * 회원가입
@@ -34,7 +36,7 @@ public class MemberService {
         Member member = Member.builder()
                 .nickname(request.getNickname())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword1()))
                 .phoneNumber(request.getPhonenumber())
                 .build();
 
@@ -44,7 +46,7 @@ public class MemberService {
 
     private void validateDuplicateMember(final CreateMemberRequest request) {
         List<Member> findMembersByEmail = memberRepository.findByEmail(request.getEmail());
-        List<Member> findMembersByNickname = memberRepository.findByNickname(request.getNickname());
+        List<Member> findMembersByNickname = memberRepository.findAllByNickname(request.getNickname());
 
         if (!findMembersByEmail.isEmpty() || !findMembersByNickname.isEmpty()) {
             throw new DuplicateMemberException("중복 회원 발생 : 이미 존재하는 회원입니다.");
@@ -60,12 +62,12 @@ public class MemberService {
         Member member = findOne(memberId);
         validateMemberPassword(member, request);
 
-        member.updatePassword(request.getNewPassword());
+        member.updatePassword(passwordEncoder.encode(request.getNewPassword()));
     }
 
     private void validateMemberPassword(final Member member, final UpdateMemberPasswordRequest request) {
 
-        if (!member.getPassword().equals(request.getOldPassword())) {
+        if (!passwordEncoder.matches(request.getOldPassword(), member.getPassword())) {
             throw new IllegalValueException("비밀번호가 일치하지 않아 변경할 수 없습니다.");
         }
     }
@@ -111,7 +113,7 @@ public class MemberService {
     }
 
     public List<Member> findByNickname(final String nickname) {
-        return memberRepository.findByNickname(nickname);
+        return memberRepository.findAllByNickname(nickname);
     }
 
     public List<Member> findByEmail(final String email) {
