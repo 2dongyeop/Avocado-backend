@@ -54,46 +54,13 @@ public class AppointmentApiController {
         return new Result(new AppointmentDto(appointment));
     }
 
-
-    /* 특정 회원의 예약 정보 목록 조회 */
-    @GetMapping("/api/appointments/member/{member-id}")
-    public Result appointmentsByMember(@PathVariable("member-id") final Long id) {
-        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberId(id)
-                .stream().map(AppointmentDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(appointmentDtoList);
-    }
-
-
-    /* 특정 회원의 예약 정보 목록 오름차순 조회 */
-    @GetMapping("/api/appointments/member/{member-id}/create-asc")
-    public Result appointmentsByMemberOrderByCreateAsc(@PathVariable("member-id") final Long id) {
-        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdOrderByCreateAtAsc(id)
-                .stream().map(AppointmentDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(appointmentDtoList);
-    }
-
-
-    /* 특정 회원의 예약 정보 목록 내림차순 조회 */
-    @GetMapping("/api/appointments/member/{member-id}/create-desc")
-    public Result appointmentsByMemberOrderByCreateDesc(@PathVariable("member-id") final Long id) {
-        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdOrderByCreateAtDesc(id)
-                .stream().map(AppointmentDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(appointmentDtoList);
-    }
-
     /** 특정 회원의 특정 페이지 예약 정보 조회 - 오름차순 */
-    @GetMapping("/api/appointments/member/{member-id}/{page-number}/create-asc")
+    @GetMapping("/api/appointments/member/{member-id}/create-asc")
     public Result appointmentsByMemberIdUsingPagingOrderByCreateAtAsc(
             @PathVariable("member-id") final Long memberId,
-            @PathVariable("page-number") final int pageNumber) {
+            @RequestParam(value = "page", defaultValue = "0") final int page) {
 
-        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdUsingPagingOrderByCreateAtAsc(memberId, pageNumber)
+        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdUsingPagingOrderByCreateAtAsc(memberId, page)
                 .stream().map(AppointmentDto::new)
                 .collect(Collectors.toList());
 
@@ -102,12 +69,12 @@ public class AppointmentApiController {
 
 
     /** 특정 회원의 특정 페이지 예약 정보 조회 - 내림차순 */
-    @GetMapping("/api/appointments/member/{member-id}/{page-number}/create-desc")
+    @GetMapping("/api/appointments/member/{member-id}/create-desc")
     public Result appointmentsByMemberIdUsingPagingOrderByCreateAtDesc(
             @PathVariable("member-id") final Long memberId,
-            @PathVariable("page-number") final int pageNumber) {
+            @RequestParam(value = "page", defaultValue = "0") final int page) {
 
-        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdUsingPagingOrderByCreateAtDesc(memberId, pageNumber)
+        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdUsingPagingOrderByCreateAtDesc(memberId, page)
                 .stream().map(AppointmentDto::new)
                 .collect(Collectors.toList());
 

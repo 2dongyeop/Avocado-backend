@@ -4,8 +4,6 @@ import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.domain.review.application.ReviewService;
 import io.wisoft.capstonedesign.domain.review.web.dto.*;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,46 +25,13 @@ public class ReviewApiController {
         return new Result(reviewDto);
     }
 
-    /* 리뷰 목록 조회 */
-    @GetMapping("/api/reviews")
-    public Result reviews() {
-
-        List<ReviewDto> reviewDtoList = reviewService.findAllByMember().stream()
-                .map(ReviewDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(reviewDtoList);
-    }
-
-    /* 리뷰 목록을 생성일자를 기준으로 오름차순 조회 */
-    @GetMapping("/api/reviews/create-asc")
-    public Result reviewsOrderByCreateAtASC() {
-
-        List<ReviewDto> reviewDtoList = reviewService.findAllOrderByCreateAtASC().stream()
-                .map(ReviewDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(reviewDtoList);
-    }
-
-
-    /* 리뷰 목록을 생성일자를 기준으로 내림차순 조회 */
-    @GetMapping("/api/reviews/create-desc")
-    public Result reviewsOrderByCreateAtDESC() {
-
-        List<ReviewDto> reviewDtoList = reviewService.findAllOrderByCreateAtDESC().stream()
-                .map(ReviewDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(reviewDtoList);
-    }
-
 
     /** 특정 페이지의 리뷰 목록 오름차순 조회 */
-    @GetMapping("/api/reviews/{page-number}/create-asc")
-    public Result reviewsUsingPagingOrderByCreateAtAsc(@PathVariable("page-number") final int pageNumber)  {
+    @GetMapping("/api/reviews/create-asc")
+    public Result reviewsUsingPagingOrderByCreateAtAsc(
+            @RequestParam(value = "page", defaultValue = "0") final int page) {
 
-        List<ReviewDto> reviewDtoList = reviewService.findByUsingPagingOOrderByCreateAtAsc(pageNumber)
+        List<ReviewDto> reviewDtoList = reviewService.findByUsingPagingOOrderByCreateAtAsc(page)
                 .stream().map(ReviewDto::new)
                 .collect(Collectors.toList());
 
@@ -74,10 +39,11 @@ public class ReviewApiController {
     }
 
     /** 특정 페이지의 리뷰 목록 내림차순 조회 */
-    @GetMapping("/api/reviews/{page-number}/create-desc")
-    public Result reviewsUsingPagingOrderByCreateAtDesc(@PathVariable("page-number") final int pageNumber)  {
+    @GetMapping("/api/reviews/create-desc")
+    public Result reviewsUsingPagingOrderByCreateAtDesc(
+            @RequestParam(value = "page", defaultValue = "0") final int page) {
 
-        List<ReviewDto> reviewDtoList = reviewService.findByUsingPagingOOrderByCreateAtDesc(pageNumber)
+        List<ReviewDto> reviewDtoList = reviewService.findByUsingPagingOOrderByCreateAtDesc(page)
                 .stream().map(ReviewDto::new)
                 .collect(Collectors.toList());
 

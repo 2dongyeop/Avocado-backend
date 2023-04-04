@@ -19,18 +19,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("select b from Board b join fetch b.member m where m.id = :id")
     List<Board> findByMemberId(@Param("id") final Long memberId);
 
-    /**
-     * 게시글 목록 오름차순 조회
-     */
-    @Query("select b from Board b order by b.createAt asc")
-    List<Board> findAllOrderByCreateAtAsc();
-
-    /**
-     * 게시글 목록 내림차순 조회
-     */
-    @Query("select b from Board b order by b.createAt desc")
-    List<Board> findAllOrderByCreateAtDesc();
-
     /** 게시글 목록을 페이징 후 오름차순으로 조회 */
     @Query(value = "select b from Board b",
             countQuery = "select count(b) from Board b")

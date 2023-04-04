@@ -6,17 +6,17 @@ INSERT INTO hospital(hosp_name, hosp_number, hosp_address, hosp_operatingtime)
 values ('을지대학병원', '04211112222', '대전광역시', '연중무휴'),
        ('서울대병원', '0233334444', '서울특별시', '연중무휴');
 
-INSERT INTO board(member_id, board_title, board_body, dept, board_create_at)
-VALUES (1, '이빨이 부러진 것 같아요.', '축구하다 이빨이 부러졌는데 어디로 가야하죠?', 'DENTAL', NOW()),
-       (2, '사랑니가 났어요', '사랑니를 굳이 빼야할까요?', 'DENTAL', NOW());
+INSERT INTO board(member_id, board_title, board_body, dept, board_create_at, board_status)
+VALUES (1, '이빨이 부러진 것 같아요.', '축구하다 이빨이 부러졌는데 어디로 가야하죠?', 'DENTAL', NOW(), 'WRITE'),
+       (2, '사랑니가 났어요', '사랑니를 굳이 빼야할까요?', 'DENTAL', NOW(), 'WRITE');
 
 INSERT INTO appointment(member_id, hosp_id, appt_dept, appt_comment, appt_name, appt_phonenumber, appt_create_at)
 VALUES (1, 2, 'DENTAL', '이빨 붙여주세요.', '이동엽', '01011112222', NOW()),
        (2, 1, 'DENTAL', '사랑니 상담 부탁드려요.', '임세나', '01033334444', NOW());
 
-INSERT INTO staff(staff_name, staff_email, staff_password, staff_license_path, dept)
-VALUES ('윤진원', 'yjw@naver.com', 'yoon1', 'temp_license1', 'DENTAL'),
-       ('서동권', 'seo@naver.com', 'seo1', 'temp_license2', 'DENTAL');
+INSERT INTO staff(staff_name, staff_email, staff_password, staff_license_path, dept, hosp_id)
+VALUES ('윤진원', 'yjw@naver.com', 'yoon1', 'temp_license1', 'DENTAL', 1),
+       ('서동권', 'seo@naver.com', 'seo1', 'temp_license2', 'DENTAL', 2);
 
 INSERT INTO board_reply(board_id, staff_id, reply, boardreply_create_at)
 VALUES (1, 1, '을지대학교 치과병원으로 오세요.', NOW()),

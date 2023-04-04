@@ -8,7 +8,7 @@ import java.util.List;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    public List<Member> findByNickname(final String nickname);
+    List<Member> findByNickname(final String nickname);
 
-    public List<Member> findByEmail(final String email);
+    List<Member> findByEmail(final String email);
 }

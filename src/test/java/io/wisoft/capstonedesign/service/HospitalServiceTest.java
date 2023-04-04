@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.service;
 
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
+import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateHospitalException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalRequest;
@@ -43,5 +44,20 @@ public class HospitalServiceTest {
 
         //then -- 검증
         fail("해당 hospitalId에 일치하는 병원이 없어 오류가 발생해야 한다.");
+    }
+
+    @Test(expected = DuplicateHospitalException.class)
+    public void 병원_중복_저장() throws Exception {
+        //given -- 조건
+
+        CreateHospitalRequest request1 = new CreateHospitalRequest("avocado", "02", "서울", "연중무휴");
+        CreateHospitalRequest request2 = new CreateHospitalRequest("avocado", "042", "대전", "연중무휴");
+
+        //when -- 동작
+        hospitalService.save(request1);
+        hospitalService.save(request2);
+
+        //then -- 검증
+        fail("병원 이름이 중복되어 예외가 발생해야 한다.");
     }
 }

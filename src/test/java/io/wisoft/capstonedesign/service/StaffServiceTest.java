@@ -9,6 +9,7 @@ import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPasswordRequest;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPhotoPathRequest;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
@@ -36,7 +37,7 @@ public class StaffServiceTest {
     @Autowired EntityManager em;
     @Autowired StaffService staffService;
 
-    @Test(expected = AssertionError.class)
+    @Test(expected = DuplicateStaffException.class)
     public void 의료진중복검증() throws Exception {
         //given -- 조건
 
@@ -49,8 +50,8 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
-        CreateStaffRequest request2 = new CreateStaffRequest(hospital.getId(), "lee2", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
+        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "email1@naver.com", "1111", "hhhh", "DENTAL");
+        CreateStaffRequest request2 = new CreateStaffRequest(hospital.getId(), "lee2", "email1@naver.com", "1111", "hhhh", "DENTAL");
 
         //when -- 동작
         staffService.signUp(request1);
@@ -234,15 +235,14 @@ public class StaffServiceTest {
 
         CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
-        Staff staff = staffService.findById(id);
 
         //when -- 동작
-        UpdateStaffHospitalRequest request2 = new UpdateStaffHospitalRequest("hospital1");
-        staffService.updateStaffHospital(staff.getId(), request2);
+        UpdateStaffHospitalRequest request2 = new UpdateStaffHospitalRequest("서울대병원");
+        staffService.updateStaffHospital(id, request2);
 
         //then -- 검증
-        Staff getStaff = staffService.findById(staff.getId());
-        Assertions.assertThat(getStaff.getHospital().getName()).isEqualTo("hospital1");
+        Staff getStaff = staffService.findById(id);
+        Assertions.assertThat(getStaff.getHospital().getName()).isEqualTo("서울대병원");
     }
 
     @Test(expected = NullHospitalException.class)

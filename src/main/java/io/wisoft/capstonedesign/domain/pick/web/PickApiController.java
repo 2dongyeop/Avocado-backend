@@ -44,18 +44,6 @@ public class PickApiController {
     }
 
 
-    /* 특정 회원의 찜하기 목록 조회 */
-    @GetMapping("/api/picks/member/{member-id}")
-    public Result pickByMember(@PathVariable("member-id") final Long memberId) {
-
-        List<PickDto> pickDtoList = pickService.findByMemberId(memberId)
-                .stream().map(PickDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(pickDtoList);
-    }
-
-
     /* 특정 회원의 찜하기 목록 오름차순 조회 */
     @GetMapping("/api/picks/member/{member-id}/create-asc")
     public Result pickByMemberOrderByCreateAsc(@PathVariable("member-id") final Long memberId) {

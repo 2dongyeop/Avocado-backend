@@ -70,42 +70,28 @@ public class HealthInfoApiController {
     }
 
 
-    /* 건강 정보 조회 - 작성 시간을 기준으로 오름차순 */
+    /**
+     * 건강정보 목록을 페이지별로 오름차순 조회하기
+     * ex) /api/health-info/create-asc?page=0
+     * */
     @GetMapping("/api/health-infos/create-asc")
-    public Result healthInfosOrderByCreateAsc() {
-        List<HealthInfoDto> infoDtoList = healthInfoService.findAllOrderByCreateAsc()
-                .stream().map(HealthInfoDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(infoDtoList);
-    }
-
-
-    /* 건강 정보 조회 - 작성 시간을 기준으로 내림차순 */
-    @GetMapping("/api/health-infos/create-desc")
-    public Result healthInfosOrderByCreateDesc() {
-        List<HealthInfoDto> infoDtoList = healthInfoService.findAllOrderByCreateDesc()
-                .stream().map(HealthInfoDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(infoDtoList);
-    }
-
-
-    /** 건강정보 목록을 페이지별로 오름차순 조회하기 */
-    @GetMapping("/api/health-infos/{page-number}/create-asc")
-    public Result healthInfosUsingPagingOrderByCreateAtAsc(@PathVariable("page-number") final int pageNumber) {
-        List<HealthInfoDto> healthInfoDtoList = healthInfoService.findByUsingPagingOrderByCreateAtAsc(pageNumber)
+    public Result healthInfosUsingPagingOrderByCreateAtAsc(
+            @RequestParam(value = "page", defaultValue = "0") final int page) {
+        List<HealthInfoDto> healthInfoDtoList = healthInfoService.findByUsingPagingOrderByCreateAtAsc(page)
                 .stream().map(HealthInfoDto::new)
                 .collect(Collectors.toList());
 
         return new Result(healthInfoDtoList);
     }
 
-    /** 건강정보 목록을 페이지별로 내림차순 조회하기 */
-    @GetMapping("/api/health-infos/{page-number}/create-desc")
-    public Result healthInfosUsingPagingOrderByCreateAtDesc(@PathVariable("page-number") final int pageNumber) {
-        List<HealthInfoDto> healthInfoDtoList = healthInfoService.findByUsingPagingOrderByCreateAtDesc(pageNumber)
+    /**
+     * 건강정보 목록을 페이지별로 내림차순 조회하기
+     * ex) /api/health-info/create-desc?page=0
+     * */
+    @GetMapping("/api/health-infos/create-desc")
+    public Result healthInfosUsingPagingOrderByCreateAtDesc(
+            @RequestParam(value = "page", defaultValue = "0") final int page) {
+        List<HealthInfoDto> healthInfoDtoList = healthInfoService.findByUsingPagingOrderByCreateAtDesc(page)
                 .stream().map(HealthInfoDto::new)
                 .collect(Collectors.toList());
 
