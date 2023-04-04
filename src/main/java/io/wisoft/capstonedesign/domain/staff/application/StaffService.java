@@ -14,6 +14,7 @@ import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPhotoPathRequest
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffHospitalRequest;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,8 @@ public class StaffService {
     @Transactional
     public Long signUp(final CreateStaffRequest request) {
 
+        validateDuplicateStaff(request);
+
         //엔티티 조회
         Hospital hospital = hospitalService.findById(request.getHospitalId());
 
@@ -50,6 +53,11 @@ public class StaffService {
 
         staffRepository.save(staff);
         return staff.getId();
+    }
+
+    private void validateDuplicateStaff(final CreateStaffRequest request) {
+        List<Staff> staffList = staffRepository.findByEmail(request.getEmail());
+        if (!staffList.isEmpty()) throw new DuplicateStaffException();
     }
 
     /**
@@ -124,15 +132,13 @@ public class StaffService {
         return boardList;
     }
 
-
-    /**
-     * 의료진 조회
-     */
     public Staff findById(final Long staffId) {
         return staffRepository.findById(staffId).orElseThrow(NullStaffException::new);
     }
 
-    public List<Staff> findAll() { return staffRepository.findAll(); }
+    public List<Staff> findAll() {
+        return staffRepository.findAll();
+    }
 
     public List<Staff> findAllByHospital() {
         return staffRepository.findAllByHospital();

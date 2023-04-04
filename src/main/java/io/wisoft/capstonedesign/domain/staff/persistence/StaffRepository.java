@@ -17,7 +17,7 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
      * 자신이 속한 병원의 리뷰 목록 조회하기
      */
     @Query("select r from Review r where r.targetHospital = :targetHospital")
-    public List<Review> findReviewListByStaffHospitalName(@Param("targetHospital") final String targetHospital);
+    List<Review> findReviewListByStaffHospitalName(@Param("targetHospital") final String targetHospital);
 
 
     /**
@@ -29,5 +29,7 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
 
 
     @Query("select s from Staff s join fetch s.hospital h")
-    public List<Staff> findAllByHospital();
+    List<Staff> findAllByHospital();
+
+    List<Staff> findByEmail(final String email);
 }

@@ -13,5 +13,5 @@ public interface BusInfoRepository extends JpaRepository<BusInfo, Long> {
 
     /* 특정 지역의 버스 정보 조회 */
     @Query("select bi from BusInfo bi where bi.area =:area")
-    public List<BusInfo> findByArea(@Param("area") final BusArea area);
+    List<BusInfo> findByArea(@Param("area") final BusArea area);
 }

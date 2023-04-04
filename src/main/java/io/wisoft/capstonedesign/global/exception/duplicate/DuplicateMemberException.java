@@ -1,5 +1,9 @@
 package io.wisoft.capstonedesign.global.exception.duplicate;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "duplicate entity")
 public class DuplicateMemberException extends RuntimeException {
     public DuplicateMemberException() {
         super();

@@ -15,17 +15,17 @@ public interface PickRepository extends JpaRepository<Pick, Long> {
      * 특정 작성자의 찜한 목록 조회
      */
     @Query("select p from Pick p join fetch p.member m where m.id = :id")
-    public List<Pick> findByMemberId(@Param("id") final Long memberId);
+    List<Pick> findByMemberId(@Param("id") final Long memberId);
 
     /**
      * 특정 작성자의 찜한 목록 내림차순 조회
      */
     @Query("select p from Pick p join fetch p.member m where m.id = :id order by p.createAt desc")
-    public List<Pick> findByMemberIdOrderByCreateAtDesc(@Param("id") final Long memberId);
+    List<Pick> findByMemberIdOrderByCreateAtDesc(@Param("id") final Long memberId);
 
     /**
      * 특정 작성자의 찜한 목록 오름차순 조회
      */
     @Query("select p from Pick p join fetch p.member m where m.id = :id order by p.createAt asc")
-    public List<Pick> findByMemberIdOrderByCreateAtAsc(@Param("id") final Long memberId);
+    List<Pick> findByMemberIdOrderByCreateAtAsc(@Param("id") final Long memberId);
 }

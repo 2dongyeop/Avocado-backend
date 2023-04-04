@@ -28,7 +28,7 @@ public class MemberServiceTest {
     @Test
     public void 회원_저장() throws Exception {
         //given -- 조건
-        CreateMemberRequest request = new CreateMemberRequest("test1", "ldy_1204@naver.com", "1111", "0000");
+        CreateMemberRequest request = new CreateMemberRequest("test1", "email1@naver.com", "1111", "0000");
 
         //when -- 동작
         Long signUpId = memberService.signUp(request);
@@ -83,7 +83,7 @@ public class MemberServiceTest {
     @Test
     public void 회원_비밀번호_수정() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_1204@naver.com", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "0000");
         Long signUpId = memberService.signUp(request1);
 
         //when -- 동작
@@ -98,7 +98,7 @@ public class MemberServiceTest {
     @Test(expected = IllegalValueException.class)
     public void 회원_비밀번호_수정_실패() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_1204@naver.com", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "0000");
         Long signUpId = memberService.signUp(request1);
 
         //when -- 동작
@@ -113,7 +113,7 @@ public class MemberServiceTest {
     @Test
     public void 회원_프로필사진_수정() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_1204@naver.com", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "0000");
         Long signUpId = memberService.signUp(request1);
 
         //when -- 동작
@@ -128,7 +128,7 @@ public class MemberServiceTest {
     @Test(expected = NullMemberException.class)
     public void 회원_탈퇴() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_1204@naver.com", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "0000");
         Long signUpId = memberService.signUp(request1);
 
         //when -- 동작

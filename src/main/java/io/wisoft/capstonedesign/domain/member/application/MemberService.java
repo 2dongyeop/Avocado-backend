@@ -28,6 +28,9 @@ public class MemberService {
     @Transactional
     public Long signUp(final CreateMemberRequest request) {
 
+        //comment: 회원 중복 검증
+        validateDuplicateMember(request);
+
         Member member = Member.builder()
                 .nickname(request.getNickname())
                 .email(request.getEmail())
@@ -35,15 +38,13 @@ public class MemberService {
                 .phoneNumber(request.getPhonenumber())
                 .build();
 
-        //comment: 회원 중복 검증
-        validateDuplicateMember(member);
         memberRepository.save(member);
         return member.getId();
     }
 
-    private void validateDuplicateMember(final Member member) {
-        List<Member> findMembersByEmail = memberRepository.findByEmail(member.getEmail());
-        List<Member> findMembersByNickname = memberRepository.findByNickname(member.getNickname());
+    private void validateDuplicateMember(final CreateMemberRequest request) {
+        List<Member> findMembersByEmail = memberRepository.findByEmail(request.getEmail());
+        List<Member> findMembersByNickname = memberRepository.findByNickname(request.getNickname());
 
         if (!findMembersByEmail.isEmpty() || !findMembersByNickname.isEmpty()) {
             throw new DuplicateMemberException("중복 회원 발생 : 이미 존재하는 회원입니다.");

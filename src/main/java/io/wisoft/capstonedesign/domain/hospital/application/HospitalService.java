@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.domain.hospital.application;
 
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.hospital.persistence.HospitalRepository;
+import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateHospitalException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
 import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalRequest;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,8 @@ public class HospitalService {
     @Transactional
     public Long save(final CreateHospitalRequest request) {
 
+        validateDuplicateHospital(request);
+
         Hospital hospital = Hospital.builder()
                 .name(request.getName())
                 .number(request.getNumber())
@@ -32,6 +35,11 @@ public class HospitalService {
 
         hospitalRepository.save(hospital);
         return hospital.getId();
+    }
+
+    private void validateDuplicateHospital(final CreateHospitalRequest request) {
+        List<Hospital> hospitalList = hospitalRepository.findByName(request.getName());
+        if (!hospitalList.isEmpty()) throw new DuplicateHospitalException();
     }
 
     /**
