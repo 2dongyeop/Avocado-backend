@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.domain.member.web;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.web.dto.*;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,10 @@ public class MemberApiController {
     /* 회원가입 */
     @PostMapping("/api/members/signup")
     public CreateMemberResponse saveMember(@RequestBody @Valid final CreateMemberRequest request) {
+
+        if (!request.getPassword1().equals(request.getPassword2())) {
+            throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.");
+        }
 
         Long id = memberService.signUp(request);
         return new CreateMemberResponse(id);

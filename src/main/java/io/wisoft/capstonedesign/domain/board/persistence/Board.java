@@ -31,7 +31,7 @@ public class Board extends BaseEntity {
 
     //pg 사용시 @Lob 지우고, @Column(nullable = false, columnDefinition="TEXT")로 바꾸기
     @Lob
-    @Column(name = "board_body", nullable = false)
+    @Column(name = "board_body", nullable = false, columnDefinition="TEXT")
     private String body;
 
     @Column(name = "board_photo_path")

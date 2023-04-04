@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class CreateMemberRequest {
     @NotBlank private String nickname;
     @NotBlank private String email;
-    @NotBlank private String password;
+    @NotBlank private String password1;
+    @NotBlank private String password2;
     @NotBlank private String phonenumber;
 }
