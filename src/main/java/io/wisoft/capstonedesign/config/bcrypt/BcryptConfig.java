@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.config;
+package io.wisoft.capstonedesign.config.bcrypt;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,15 +1,13 @@
 package io.wisoft.capstonedesign.domain.member.application;
 
-import io.wisoft.capstonedesign.config.EncryptHelper;
+import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
-import io.wisoft.capstonedesign.domain.member.web.dto.CreateMemberRequest;
+import io.wisoft.capstonedesign.domain.member.web.dto.*;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
-import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberNicknameRequest;
-import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPasswordRequest;
-import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPhotoPathRequest;
+import io.wisoft.capstonedesign.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +21,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final EncryptHelper encryptHelper;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /*
      * 회원가입
@@ -44,11 +43,20 @@ public class MemberService {
         return member.getId();
     }
 
-    private void validateDuplicateMember(final CreateMemberRequest request) {
-        List<Member> findMembersByEmail = memberRepository.findByEmail(request.getEmail());
-        List<Member> findMembersByNickname = memberRepository.findAllByNickname(request.getNickname());
 
-        if (!findMembersByEmail.isEmpty() || !findMembersByNickname.isEmpty()) {
+    /** 로그인 -> 토큰 생성 */
+    public String createToken(final LoginRequest request) {
+        final Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(NullMemberException::new);
+
+        return jwtTokenProvider.createToken(member.getNickname());
+    }
+
+
+    private void validateDuplicateMember(final CreateMemberRequest request) {
+        List<Member> validateMemberByEmail = memberRepository.findValidateMemberByEmail(request.getEmail());
+        List<Member> validateMemberByNickname = memberRepository.findValidateMemberByNickname(request.getNickname());
+
+        if (!validateMemberByEmail.isEmpty() || !validateMemberByNickname.isEmpty()) {
             throw new DuplicateMemberException("중복 회원 발생 : 이미 존재하는 회원입니다.");
         }
     }
@@ -112,11 +120,7 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public List<Member> findByNickname(final String nickname) {
-        return memberRepository.findAllByNickname(nickname);
-    }
-
-    public List<Member> findByEmail(final String email) {
-        return memberRepository.findByEmail(email);
+    public Member findByEmail(final String email) {
+        return memberRepository.findByEmail(email).orElseThrow(NullMemberException::new);
     }
 }
