@@ -52,34 +52,12 @@ public class MemberApiController {
         return new CreateMemberResponse(id);
     }
 
-
-    /** test api
-     * TODO 지우기 */
-    @GetMapping("/api/info/{member-email}")
-    public ResponseEntity<MemberResponse> getUserFromToken(
-            @PathVariable("member-email") final String email) {
-
-        final Member member = memberService.findByEmail(email);
-        return ResponseEntity.ok().body(MemberResponse.of(member));
-    }
-
-    @Getter
-    static class MemberResponse {
-        private String nickname;
-        public static MemberResponse of(final Member member) {
-            MemberResponse memberResponse = new MemberResponse();
-            memberResponse.nickname = member.getNickname();
-            return memberResponse;
-        }
-    }
-
-
     /** 로그인 */
     @PostMapping("/api/members/login")
     public ResponseEntity<TokenResponse> login(
             @RequestBody @Valid final LoginRequest request) {
 
-        String token = memberService.createToken(request);
+        String token = memberService.login(request);
         return ResponseEntity.ok(new TokenResponse(token, "bearer"));
     }
 

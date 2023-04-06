@@ -44,11 +44,16 @@ public class MemberService {
     }
 
 
-    /** 로그인 -> 토큰 생성 */
-    public String createToken(final LoginRequest request) {
-        final Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(NullMemberException::new);
+    public String login(final LoginRequest request) {
 
-        return jwtTokenProvider.createToken(member.getNickname());
+        Member member = memberRepository.findByEmail(request.getEmail())
+                .orElseThrow(NullMemberException::new);
+
+        if (encryptHelper.isMatch(request.getPassword(), member.getPassword())) {
+            return jwtTokenProvider.createToken(member.getNickname());
+        } else {
+            throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
+        }
     }
 
 
