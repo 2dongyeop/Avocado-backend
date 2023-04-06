@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.domain.member.application;
 
+import io.wisoft.capstonedesign.config.EncryptHelper;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.member.web.dto.CreateMemberRequest;
@@ -10,7 +11,6 @@ import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberNicknameReques
 import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPasswordRequest;
 import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPhotoPathRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final EncryptHelper encryptHelper;
 
     /*
      * 회원가입
@@ -36,7 +36,7 @@ public class MemberService {
         Member member = Member.builder()
                 .nickname(request.getNickname())
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword1()))
+                .password(encryptHelper.encrypt(request.getPassword1()))
                 .phoneNumber(request.getPhonenumber())
                 .build();
 
@@ -62,12 +62,12 @@ public class MemberService {
         Member member = findOne(memberId);
         validateMemberPassword(member, request);
 
-        member.updatePassword(passwordEncoder.encode(request.getNewPassword()));
+        member.updatePassword(encryptHelper.encrypt(request.getNewPassword()));
     }
 
     private void validateMemberPassword(final Member member, final UpdateMemberPasswordRequest request) {
 
-        if (!passwordEncoder.matches(request.getOldPassword(), member.getPassword())) {
+        if (!encryptHelper.isMatch(request.getOldPassword(), member.getPassword())) {
             throw new IllegalValueException("비밀번호가 일치하지 않아 변경할 수 없습니다.");
         }
     }
