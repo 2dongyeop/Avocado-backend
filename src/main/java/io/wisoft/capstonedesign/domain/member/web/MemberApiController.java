@@ -5,7 +5,9 @@ import io.wisoft.capstonedesign.domain.member.web.dto.*;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,9 +40,9 @@ public class MemberApiController {
     }
 
 
-    /* 회원가입 */
+    /** 회원가입 */
     @PostMapping("/api/members/signup")
-    public CreateMemberResponse saveMember(@RequestBody @Valid final CreateMemberRequest request) {
+    public CreateMemberResponse signup(@RequestBody @Valid final CreateMemberRequest request) {
 
         if (!request.getPassword1().equals(request.getPassword2())) {
             throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.");
@@ -49,6 +51,38 @@ public class MemberApiController {
         Long id = memberService.signUp(request);
         return new CreateMemberResponse(id);
     }
+
+
+    /** test api
+     * TODO 지우기 */
+    @GetMapping("/api/info/{member-email}")
+    public ResponseEntity<MemberResponse> getUserFromToken(
+            @PathVariable("member-email") final String email) {
+
+        final Member member = memberService.findByEmail(email);
+        return ResponseEntity.ok().body(MemberResponse.of(member));
+    }
+
+    @Getter
+    static class MemberResponse {
+        private String nickname;
+        public static MemberResponse of(final Member member) {
+            MemberResponse memberResponse = new MemberResponse();
+            memberResponse.nickname = member.getNickname();
+            return memberResponse;
+        }
+    }
+
+
+    /** 로그인 */
+    @PostMapping("/api/members/login")
+    public ResponseEntity<TokenResponse> login(
+            @RequestBody @Valid final LoginRequest request) {
+
+        String token = memberService.createToken(request);
+        return ResponseEntity.ok(new TokenResponse(token, "bearer"));
+    }
+
 
     /* 회원 비밀번호 수정 */
     @PatchMapping("/api/members/{id}/password")

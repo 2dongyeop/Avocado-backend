@@ -28,7 +28,7 @@ public class MemberServiceTest {
     @Test
     public void 회원_저장() throws Exception {
         //given -- 조건
-        CreateMemberRequest request = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+        CreateMemberRequest request = new CreateMemberRequest("test1", "email@naver.com", "1111", "1111", "0000");
 
         //when -- 동작
         Long signUpId = memberService.signUp(request);
