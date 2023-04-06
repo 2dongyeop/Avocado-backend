@@ -26,9 +26,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-
-
+	implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
