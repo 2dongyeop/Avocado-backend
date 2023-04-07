@@ -27,7 +27,6 @@ public class PickServiceTest {
     @Autowired EntityManager em;
     @Autowired PickService pickService;
 
-    //찜하기 저장
     @Test
     public void 찜하기_저장() throws Exception {
         //given -- 조건
@@ -62,7 +61,6 @@ public class PickServiceTest {
         Assertions.assertThat(pick.getMember().getNickname()).isEqualTo(member.getNickname());
     }
     
-    //찜하기 취소
     @Test
     public void 찜하기_취소() throws Exception {
         //given -- 조건
@@ -96,7 +94,6 @@ public class PickServiceTest {
     }
 
     
-    //찜하기 중복 취소 요청
     @Test(expected = IllegalStateException.class)
     public void 찜하기_취소_요청_중복() throws Exception {
         //given -- 조건
@@ -130,7 +127,6 @@ public class PickServiceTest {
         fail("중복 찜하기 취소 요청으로 인한 예외가 발생해야 한다.");
     }
 
-    //찜하기 단건 조회 실패
     @Test(expected = NullPickException.class)
     public void 찜하기_단건_조회_실패() throws Exception {
         //given -- 조건
