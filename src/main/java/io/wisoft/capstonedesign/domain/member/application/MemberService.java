@@ -29,7 +29,6 @@ public class MemberService {
     @Transactional
     public Long signUp(final CreateMemberRequest request) {
 
-        //comment: 회원 중복 검증
         validateDuplicateMember(request);
 
         Member member = Member.builder()
