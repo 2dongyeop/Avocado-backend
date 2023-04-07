@@ -18,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -28,7 +30,7 @@ public class AppointmentServiceTest {
     @Autowired EntityManager em;
     @Autowired AppointmentService appointmentService;
 
-    //예약 저장
+
     @Test
     public void 예약_저장() throws Exception {
         //given -- 조건
@@ -63,7 +65,8 @@ public class AppointmentServiceTest {
         Assertions.assertThat(appointment.getStatus()).isEqualTo(AppointmentStatus.COMPLETE);
         Assertions.assertThat(appointment.getAppointName()).isEqualTo(request.getAppointName());
     }
-    //예약 취소
+
+
     @Test
     public void 예약_취소() throws Exception {
         //given -- 조건
@@ -98,7 +101,7 @@ public class AppointmentServiceTest {
         Assertions.assertThat(appointment.getStatus()).isEqualTo(AppointmentStatus.CANCEL);
     }
 
-    //예약 중복 취소 요청
+
     @Test(expected = IllegalStateException.class)
     public void 예약_중복_취소요청() throws Exception {
         //given -- 조건
@@ -216,5 +219,16 @@ public class AppointmentServiceTest {
 
         //then -- 검증
         fail("코멘트가 비어있으므로 예외가 발생해야 한다.");
+    }
+
+    @Test
+    public void paging() throws Exception {
+        //given -- 조건
+
+        //when -- 동작
+        List<Appointment> list = appointmentService.findByMemberIdUsingPagingOrderByCreateAtAsc(1L, 0);
+
+        //then -- 검증
+        Assertions.assertThat(list.size()).isEqualTo(1);
     }
 }
