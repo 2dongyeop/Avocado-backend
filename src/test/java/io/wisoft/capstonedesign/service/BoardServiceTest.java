@@ -17,6 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -170,5 +172,18 @@ public class BoardServiceTest {
 
         //then - 검증
         fail("제목이 비어있어 예외가 발생해야 한다.");
+    }
+
+
+    @Test
+    public void paging() throws Exception {
+        //given -- 조건
+
+
+        //when -- 동작
+        List<Board> page = boardService.findAllUsingPagingOrderByCreateAtAsc(0);
+
+        //then -- 검증
+        Assertions.assertThat(page.size()).isEqualTo(2);
     }
 }
