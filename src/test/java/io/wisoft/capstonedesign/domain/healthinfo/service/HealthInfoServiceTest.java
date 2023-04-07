@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.service;
+package io.wisoft.capstonedesign.domain.healthinfo.service;
 
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import io.wisoft.capstonedesign.domain.healthinfo.web.dto.CreateHealthInfoRequest;

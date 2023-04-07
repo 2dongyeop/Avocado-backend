@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.service;
+package io.wisoft.capstonedesign.domain.staff.service;
 
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;

@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.service;
+package io.wisoft.capstonedesign.domain.appointment.service;
 
 import io.wisoft.capstonedesign.domain.appointment.persistence.Appointment;
 import io.wisoft.capstonedesign.domain.appointment.application.AppointmentService;

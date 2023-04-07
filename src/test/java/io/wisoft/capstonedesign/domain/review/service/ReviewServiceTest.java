@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.service;
+package io.wisoft.capstonedesign.domain.review.service;
 
 
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
