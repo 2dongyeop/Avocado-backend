@@ -2,7 +2,6 @@ package io.wisoft.capstonedesign.domain.board.application;
 
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.board.persistence.BoardRepository;
-import io.wisoft.capstonedesign.domain.board.web.dto.BoardDto;
 import io.wisoft.capstonedesign.domain.board.web.dto.CreateBoardRequest;
 import io.wisoft.capstonedesign.domain.board.web.dto.UpdateBoardRequest;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
@@ -11,7 +10,6 @@ import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -35,7 +33,7 @@ public class BoardService {
     public Long save(final CreateBoardRequest request) {
 
         //엔티티 조회
-        Member member = memberService.findOne(request.getMemberId());
+        Member member = memberService.findById(request.getMemberId());
 
         Board board = Board.builder()
                 .member(member)

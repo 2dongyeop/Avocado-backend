@@ -43,17 +43,17 @@ public class MemberService {
         return member.getId();
     }
 
-
+    /** 로그인 */
     public String login(final LoginRequest request) {
 
         Member member = memberRepository.findByEmail(request.getEmail())
                 .orElseThrow(NullMemberException::new);
 
-        if (encryptHelper.isMatch(request.getPassword(), member.getPassword())) {
-            return jwtTokenProvider.createToken(member.getNickname());
-        } else {
+        if (!encryptHelper.isMatch(request.getPassword(), member.getPassword())) {
             throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
         }
+
+        return jwtTokenProvider.createToken(member.getNickname());
     }
 
 
@@ -72,7 +72,7 @@ public class MemberService {
     @Transactional
     public void updatePassword(final Long memberId, final UpdateMemberPasswordRequest request) {
 
-        Member member = findOne(memberId);
+        Member member = findById(memberId);
         validateMemberPassword(member, request);
 
         member.updatePassword(encryptHelper.encrypt(request.getNewPassword()));
@@ -90,7 +90,7 @@ public class MemberService {
     @Transactional
     public void updateMemberNickname(final Long memberId, final UpdateMemberNicknameRequest request) {
 
-        Member member = findOne(memberId);
+        Member member = findById(memberId);
         member.updateNickname(request.getNickname());
     }
 
@@ -101,7 +101,7 @@ public class MemberService {
     @Transactional
     public void uploadPhotoPath(final Long memberId, final UpdateMemberPhotoPathRequest request) {
 
-        Member member = findOne(memberId);
+        Member member = findById(memberId);
         member.uploadPhotoPath(request.getPhotoPath());
     }
 
@@ -109,7 +109,7 @@ public class MemberService {
     /* 회원 탈퇴 */
     @Transactional
     public void deleteMember(final Long memberId) {
-        Member member = findOne(memberId);
+        Member member = findById(memberId);
         memberRepository.delete(member);
     }
 
@@ -117,7 +117,7 @@ public class MemberService {
     /*
      * 회원 조회
      */
-    public Member findOne(final Long memberId) {
+    public Member findById(final Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(NullMemberException::new);
     }
 

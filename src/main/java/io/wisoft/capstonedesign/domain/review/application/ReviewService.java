@@ -32,7 +32,7 @@ public class ReviewService {
     public Long save(final CreateReviewRequest request) {
 
         //엔티티 조회
-        Member member = memberService.findOne(request.getMemberId());
+        Member member = memberService.findById(request.getMemberId());
 
         Review review = Review.builder()
                 .member(member)

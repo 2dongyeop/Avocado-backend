@@ -30,7 +30,7 @@ public class PickService {
     public Long save(final CreatePickRequest request) {
 
         //엔티티 조회
-        Member member = memberService.findOne(request.getMemberId());
+        Member member = memberService.findById(request.getMemberId());
         Hospital hospital = hospitalService.findById(request.getHospitalId());
         Pick pick = Pick.createPick(member, hospital);
 

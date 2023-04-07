@@ -37,7 +37,7 @@ public class AppointmentService {
             final CreateAppointmentRequest request) {
 
         //엔티티 조회
-        Member member = memberService.findOne(request.getMemberId());
+        Member member = memberService.findById(request.getMemberId());
         Hospital hospital = hospitalService.findById(request.getHospitalId());
 
         //예약 정보 생성
