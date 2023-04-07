@@ -1,6 +1,8 @@
 package io.wisoft.capstonedesign.domain.staff.service;
 
+import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
+import io.wisoft.capstonedesign.domain.member.web.dto.LoginRequest;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
 import io.wisoft.capstonedesign.domain.staff.web.dto.CreateStaffRequest;
@@ -36,6 +38,7 @@ public class StaffServiceTest {
 
     @Autowired EntityManager em;
     @Autowired StaffService staffService;
+    @Autowired EncryptHelper encryptHelper;
 
 
     @Test
@@ -56,6 +59,7 @@ public class StaffServiceTest {
                 "staff1",
                 "email1",
                 "pw1",
+                "pw2",
                 "path1",
                 "DENTAL"
         );
@@ -83,8 +87,8 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "email1@naver.com", "1111", "hhhh", "DENTAL");
-        CreateStaffRequest request2 = new CreateStaffRequest(hospital.getId(), "lee2", "email1@naver.com", "1111", "hhhh", "DENTAL");
+        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "email1@naver.com", "1111", "1111","hhhh", "DENTAL");
+        CreateStaffRequest request2 = new CreateStaffRequest(hospital.getId(), "lee2", "email1@naver.com", "1111", "1111","hhhh", "DENTAL");
 
         //when -- 동작
         staffService.signUp(request1);
@@ -93,6 +97,49 @@ public class StaffServiceTest {
         //then -- 검증
         fail("의료진의 이메일이 중복되어 예외가 발생해야 한다.");
     }
+
+
+    @Test
+    public void login() throws Exception {
+        //given -- 조건
+        LoginRequest loginRequest = new LoginRequest("yjw@naver.com", "yoon1");
+
+        //when -- 동작
+        String token = staffService.login(loginRequest);
+
+        //then -- 검증
+        Assertions.assertThat(token).isNotNull();
+    }
+
+
+    @Test
+    public void createToken_isMatch() throws Exception {
+        //given -- 조건
+        String password = "1234";
+        String hashedPassword = encryptHelper.encrypt(password);
+
+        //when -- 동작
+        boolean result = encryptHelper.isMatch(password, hashedPassword);
+
+        //then -- 검증
+        Assertions.assertThat(result).isTrue();
+    }
+
+
+    @Test
+    public void createToken_isMatch_Fail() throws Exception {
+        //given -- 조건
+        String password = "1234";
+        String hashedPassword = encryptHelper.encrypt(password);
+
+        //when -- 동작
+        String failPassword = "1233";
+        boolean result = encryptHelper.isMatch(failPassword, hashedPassword);
+
+        //then -- 검증
+        Assertions.assertThat(result).isFalse();
+    }
+
 
     @Test(expected = NullStaffException.class)
     public void 의료진_단건_조회_실패() throws Exception {
@@ -123,7 +170,7 @@ public class StaffServiceTest {
                 .build();
         em.persist(review);
 
-        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
+        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111","1111", "hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
 
         //when -- 동작
@@ -155,7 +202,7 @@ public class StaffServiceTest {
                 .build();
         em.persist(member);
 
-        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
+        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
         Staff staff = staffService.findById(id);
 
@@ -186,7 +233,7 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
+        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
         Staff staff = staffService.findById(id);
 
@@ -196,7 +243,8 @@ public class StaffServiceTest {
         staffService.updatePassword(staff.getId(), request2);
 
         //then -- 검증
-        Assertions.assertThat(staff.getPassword()).isEqualTo(request2.getNewPassword());
+        Staff updateStaff = staffService.findById(id);
+        Assertions.assertThat(staff.getPassword()).isEqualTo(updateStaff.getPassword());
     }
 
     @Test(expected = IllegalValueException.class)
@@ -213,7 +261,7 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
+        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
         Staff staff = staffService.findById(id);
 
@@ -240,7 +288,7 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
+        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
         Staff staff = staffService.findById(id);
 
@@ -266,7 +314,7 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
+        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
 
         //when -- 동작
@@ -291,7 +339,7 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
+        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
         Staff staff = staffService.findById(id);
 
@@ -316,7 +364,7 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "hhhh", "DENTAL");
+        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL");
         Long id = staffService.signUp(request1);
 
         //when -- 동작
