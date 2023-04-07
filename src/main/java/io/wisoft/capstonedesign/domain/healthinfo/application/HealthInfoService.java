@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.domain.healthinfo.application;
 
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHealthInfoException;
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfoRepository;
 import io.wisoft.capstonedesign.domain.healthinfo.web.dto.CreateHealthInfoRequest;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -63,8 +66,22 @@ public class HealthInfoService {
         return healthInfoRepository.findAll();
     }
 
-    public List<HealthInfo> findAllByDept(String dept) {
+    public List<HealthInfo> findAllByDept(final String dept) {
+
+        validateDept(dept);
         return healthInfoRepository.findAllByDept(HospitalDept.valueOf(dept));
+    }
+
+    private boolean validateDept(final String dept) {
+
+        Iterator<HospitalDept> iterator = Arrays.stream(HospitalDept.values()).iterator();
+
+        while (iterator.hasNext()) {
+            if (iterator.next().getCode().equals(dept.toUpperCase())) {
+                return true;
+            }
+        }
+        throw new IllegalValueException("일치하는 hospitalDept가 없습니다.");
     }
 
     /** 건강정보 목록을 페이지별로 오름차순 조회하기 */
