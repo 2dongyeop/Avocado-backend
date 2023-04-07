@@ -5,7 +5,6 @@ import io.wisoft.capstonedesign.domain.member.web.dto.*;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,7 @@ public class MemberApiController {
     @GetMapping("/api/members/{id}")
     public Result member(@PathVariable("id") final Long id) {
 
-        Member member = memberService.findOne(id);
+        Member member = memberService.findById(id);
 
         return new Result(new MemberDto(member.getNickname(), member.getEmail(), member.getPhoneNumber()));
     }
@@ -69,7 +68,7 @@ public class MemberApiController {
             @RequestBody @Valid final UpdateMemberPasswordRequest request) {
 
         memberService.updatePassword(id, request);
-        Member member = memberService.findOne(id);
+        Member member = memberService.findById(id);
 
         return new UpdateMemberResponse(member.getId());
     }
@@ -81,7 +80,7 @@ public class MemberApiController {
             @RequestBody @Valid final UpdateMemberNicknameRequest request) {
 
         memberService.updateMemberNickname(id, request);
-        Member member = memberService.findOne(id);
+        Member member = memberService.findById(id);
 
         return new UpdateMemberResponse(member.getId());
     }
@@ -94,7 +93,7 @@ public class MemberApiController {
             @RequestBody @Valid final UpdateMemberPhotoPathRequest request) {
 
         memberService.uploadPhotoPath(id, request);
-        Member member = memberService.findOne(id);
+        Member member = memberService.findById(id);
 
         return new UpdateMemberResponse(member.getId());
     }

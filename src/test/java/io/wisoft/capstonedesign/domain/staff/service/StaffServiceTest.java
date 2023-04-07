@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.service;
+package io.wisoft.capstonedesign.domain.staff.service;
 
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
@@ -36,6 +36,39 @@ public class StaffServiceTest {
 
     @Autowired EntityManager em;
     @Autowired StaffService staffService;
+
+
+    @Test
+    public void 의료진가입() throws Exception {
+        //given -- 조건
+
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
+        em.persist(hospital);
+
+        CreateStaffRequest request = new CreateStaffRequest(
+                hospital.getId(),
+                "staff1",
+                "email1",
+                "pw1",
+                "path1",
+                "DENTAL"
+        );
+
+        //when -- 동작
+        Long signUpId = staffService.signUp(request);
+
+        //then -- 검증
+        Staff staff = staffService.findById(signUpId);
+        Assertions.assertThat(staff.getName()).isEqualTo(request.getName());
+        Assertions.assertThat(staff.getEmail()).isEqualTo(request.getEmail());
+    }
+
 
     @Test(expected = DuplicateStaffException.class)
     public void 의료진중복검증() throws Exception {

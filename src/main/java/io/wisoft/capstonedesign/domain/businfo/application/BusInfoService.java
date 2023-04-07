@@ -3,12 +3,15 @@ package io.wisoft.capstonedesign.domain.businfo.application;
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfo;
 import io.wisoft.capstonedesign.domain.businfo.web.dto.CreateBusInfoRequest;
 import io.wisoft.capstonedesign.global.enumeration.BusArea;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBusInfoException;
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -50,6 +53,8 @@ public class BusInfoService {
     }
 
     public List<BusInfo> findByArea(final String area) {
+
+        validateArea(area);
         List<BusInfo> busInfoList = busInfoRepository.findByArea(BusArea.valueOf(area));
 
         if (busInfoList.size() == 0) {
@@ -57,4 +62,20 @@ public class BusInfoService {
         }
         return busInfoList;
     }
+
+    private boolean validateArea(final String area) {
+
+        Iterator<BusArea> iterator = Arrays.stream(BusArea.values()).iterator();
+
+        while (iterator.hasNext()) {
+            BusArea busArea = iterator.next();
+
+            if (busArea.getCode().equals(area.toUpperCase())) {
+                return true;
+            }
+        }
+        throw new IllegalValueException("일치하는 BusArea가 없습니다.");
+    }
+
+
 }

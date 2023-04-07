@@ -33,7 +33,7 @@ public class ReviewReplyService {
     public Long save(final CreateReviewReplyRequest request) {
 
         //엔티티 조회
-        Member member = memberService.findOne(request.getMemberId());
+        Member member = memberService.findById(request.getMemberId());
         Review review = reviewService.findOne(request.getReviewId());
 
         ReviewReply reviewReply = ReviewReply.builder()

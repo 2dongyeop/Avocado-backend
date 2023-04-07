@@ -51,7 +51,7 @@ public class HospitalService {
 
     /* 병원 이름으로 조회 */
     public Hospital findByHospitalName(final String hospitalName) {
-        List<Hospital> hospitalList = hospitalRepository.findByHospitalName(hospitalName);
+        List<Hospital> hospitalList = hospitalRepository.findByName(hospitalName);
 
         if (hospitalList.isEmpty()) {
             throw new NullHospitalException();
