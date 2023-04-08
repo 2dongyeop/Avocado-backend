@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverride(name = "createAt", column = @Column(name = "pick_date_time", nullable = false))
-
 public class Pick extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,8 +64,8 @@ public class Pick extends BaseEntity {
         pick.setMember(member);
         pick.setHospital(hospital);
 
-        pick.createEntity();
         pick.status = PickStatus.COMPLETE;
+        pick.createEntity();
 
         return pick;
     }
@@ -82,5 +80,6 @@ public class Pick extends BaseEntity {
         }
 
         this.status = PickStatus.CANCEL;
+        this.updateEntity();
     }
 }

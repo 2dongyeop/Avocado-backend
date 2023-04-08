@@ -19,7 +19,7 @@ public class BoardApiController {
     /* 게시글 단건 조회 */
     @GetMapping("/api/boards/{id}")
     public Result board(@PathVariable Long id) {
-        Board board = boardService.findById(id);
+        Board board = boardService.findDetailById(id);
 
         return new Result(new BoardDto(board));
     }

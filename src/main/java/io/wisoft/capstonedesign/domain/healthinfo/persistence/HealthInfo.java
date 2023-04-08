@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "health_info")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverride(name = "createAt", column = @Column(name = "health_info_create_at", nullable = false))
 public class HealthInfo extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -81,5 +80,6 @@ public class HealthInfo extends BaseEntity {
         }
 
         this.status = HealthInfoStatus.DELETE;
+        this.updateEntity();
     }
 }

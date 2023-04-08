@@ -23,7 +23,7 @@ public class ReviewReplyApiController {
             @RequestBody @Valid final CreateReviewReplyRequest request) {
 
         Long id = reviewReplyService.save(request);
-        ReviewReply reviewReply = reviewReplyService.findOne(id);
+        ReviewReply reviewReply = reviewReplyService.findById(id);
         return new CreateReviewReplyResponse(reviewReply.getId());
     }
 
@@ -34,7 +34,7 @@ public class ReviewReplyApiController {
             @PathVariable("id") final Long id) {
 
         reviewReplyService.deleteReviewReply(id);
-        ReviewReply reviewReply = reviewReplyService.findOne(id);
+        ReviewReply reviewReply = reviewReplyService.findById(id);
         return new DeleteReviewReplyResponse(reviewReply.getId(), reviewReply.getStatus().toString());
     }
 
@@ -46,7 +46,7 @@ public class ReviewReplyApiController {
             @RequestBody @Valid final UpdateReviewReplyRequest request) {
 
         reviewReplyService.updateReply(id, request);
-        ReviewReply reviewReply = reviewReplyService.findOne(id);
+        ReviewReply reviewReply = reviewReplyService.findById(id);
         return new UpdateReviewReplyResponse(reviewReply.getId());
     }
 
@@ -55,7 +55,7 @@ public class ReviewReplyApiController {
     @GetMapping("/api/review-reply/{id}")
     public Result reviewReply(@PathVariable("id") final Long id) {
 
-        ReviewReply reviewReply = reviewReplyService.findOne(id);
+        ReviewReply reviewReply = reviewReplyService.findDetailById(id);
         return new Result(new ReviewReplyDto(reviewReply));
     }
 

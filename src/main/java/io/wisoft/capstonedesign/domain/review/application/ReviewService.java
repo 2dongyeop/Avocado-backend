@@ -53,7 +53,7 @@ public class ReviewService {
      */
     @Transactional
     public void deleteReview(final Long reviewId) {
-        Review review = findOne(reviewId);
+        Review review = findById(reviewId);
         review.delete();
     }
 
@@ -64,7 +64,7 @@ public class ReviewService {
     public void updateTitleBody(final Long reviewId, final UpdateReviewRequest request) {
 
         validateTitleBody(request);
-        Review review = findOne(reviewId);
+        Review review = findById(reviewId);
 
         review.updateTitleBody(request.getNewTitle(), request.getNewBody());
     }
@@ -82,12 +82,16 @@ public class ReviewService {
         return reviewRepository.findByMemberId(memberId);
     }
 
-    public Review findOne(final Long reviewId) {
+    public Review findById(final Long reviewId) {
         return reviewRepository.findById(reviewId).orElseThrow(NullReviewException::new);
     }
 
     public List<Review> findAll() { return reviewRepository.findAll(); }
 
+    /** 상세 조회 */
+    public Review findDetailById(final Long reviewId) {
+        return reviewRepository.findDetailById(reviewId).orElseThrow(NullReviewException::new);
+    }
 
     /** 특정 페이지의 리뷰 목록 오름차순 조회 */
     public List<Review> findByUsingPagingOOrderByCreateAtAsc(final int pageNumber) {

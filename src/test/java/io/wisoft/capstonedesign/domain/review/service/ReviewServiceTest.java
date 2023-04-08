@@ -47,7 +47,7 @@ public class ReviewServiceTest {
         Long saveId = reviewService.save(request);
 
         //then -- 검증
-        Review getReview = reviewService.findOne(saveId); //저장된 리뷰
+        Review getReview = reviewService.findById(saveId); //저장된 리뷰
 
         Assertions.assertThat(getReview.getStatus()).isEqualTo(ReviewStatus.WRITE);
     }
@@ -74,7 +74,7 @@ public class ReviewServiceTest {
         reviewService.deleteReview(saveId);
 
         //then -- 검증
-        Review getReview = reviewService.findOne(saveId);
+        Review getReview = reviewService.findById(saveId);
 
         Assertions.assertThat(getReview.getStatus()).isEqualTo(ReviewStatus.DELETE);
     }
@@ -133,7 +133,7 @@ public class ReviewServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Review review = reviewService.findOne(100L);
+        Review review = reviewService.findById(100L);
 
         //then -- 검증
         fail("해당 reviewId에 일치하는 리뷰 정보가 없어 예외가 발생해야 한다.");
@@ -155,7 +155,7 @@ public class ReviewServiceTest {
 
         CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
         Long saveId = reviewService.save(request1);
-        Review review = reviewService.findOne(saveId);
+        Review review = reviewService.findById(saveId);
 
         //when -- 동작
 
@@ -184,7 +184,7 @@ public class ReviewServiceTest {
 
         CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
         Long saveId = reviewService.save(request1);
-        Review review = reviewService.findOne(saveId);
+        Review review = reviewService.findById(saveId);
 
         //when -- 동작
         UpdateReviewRequest request2 = new UpdateReviewRequest(null, "본문1");

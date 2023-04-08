@@ -27,8 +27,7 @@ public class StaffApiController {
     @GetMapping("api/staff/{id}")
     public Result staff(@PathVariable("id") final Long id) {
 
-        Staff staff = staffService.findById(id);
-
+        Staff staff = staffService.findDetailById(id);
         return new Result(new StaffDto(staff));
     }
 

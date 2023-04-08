@@ -16,10 +16,6 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverrides({
-        @AttributeOverride(name = "createAt", column = @Column(name = "board_create_at", nullable = false)),
-        @AttributeOverride(name = "updateAt", column = @Column(name = "board_update_at"))
-})
 public class Board extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -97,6 +93,7 @@ public class Board extends BaseEntity {
         }
 
         this.status = BoardStatus.DELETE;
+        this.updateEntity();
     }
 
     /**

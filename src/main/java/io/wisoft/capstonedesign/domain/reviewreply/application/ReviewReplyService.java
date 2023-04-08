@@ -34,7 +34,7 @@ public class ReviewReplyService {
 
         //엔티티 조회
         Member member = memberService.findById(request.getMemberId());
-        Review review = reviewService.findOne(request.getReviewId());
+        Review review = reviewService.findById(request.getReviewId());
 
         ReviewReply reviewReply = ReviewReply.builder()
                 .member(member)
@@ -53,7 +53,7 @@ public class ReviewReplyService {
     @Transactional
     public void deleteReviewReply(final Long reviewReplyId) {
 
-        ReviewReply reviewReply = findOne(reviewReplyId);
+        ReviewReply reviewReply = findById(reviewReplyId);
         reviewReply.delete();
     }
 
@@ -65,7 +65,7 @@ public class ReviewReplyService {
     public void updateReply(final Long reviewReplyId, final UpdateReviewReplyRequest request) {
 
         validateParameter(request);
-        ReviewReply reviewReply = findOne(reviewReplyId);
+        ReviewReply reviewReply = findById(reviewReplyId);
 
         reviewReply.updateReply(request.getReply());
     }
@@ -78,11 +78,18 @@ public class ReviewReplyService {
     }
 
 
-    /**
+    /*
      * 리뷰댓글 단건조회
      */
-    public ReviewReply findOne(final Long reviewReplyId) {
+    public ReviewReply findById(final Long reviewReplyId) {
         return reviewReplyRepository.findById(reviewReplyId).orElseThrow(NullReviewReplyException::new);
+    }
+
+    /**
+     * 리뷰댓글 단건 상세조회
+     */
+    public ReviewReply findDetailById(final Long reviewReplyId) {
+        return reviewReplyRepository.findDetailById(reviewReplyId).orElseThrow(NullReviewReplyException::new);
     }
 
 

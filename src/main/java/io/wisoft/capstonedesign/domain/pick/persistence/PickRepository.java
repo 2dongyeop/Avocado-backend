@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PickRepository extends JpaRepository<Pick, Long> {
@@ -22,4 +23,13 @@ public interface PickRepository extends JpaRepository<Pick, Long> {
      */
     @Query("select p from Pick p join fetch p.member m where m.id = :id order by p.createAt asc")
     List<Pick> findByMemberIdOrderByCreateAtAsc(@Param("id") final Long memberId);
+
+
+    /** 상세 조회 */
+    @Query("select p from Pick p" +
+            " join fetch p.member m" +
+            " join fetch p.hospital h" +
+            " where p.id = :id")
+    Optional<Pick> findDetailById(@Param("id") final Long id);
+
 }

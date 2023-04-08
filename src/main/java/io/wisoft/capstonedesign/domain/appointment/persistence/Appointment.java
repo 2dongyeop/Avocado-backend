@@ -15,10 +15,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverrides({
-        @AttributeOverride(name = "createAt", column = @Column(name = "appt_create_at", nullable = false)),
-        @AttributeOverride(name = "updateAt", column = @Column(name = "appt_update_at"))
-})
 public class Appointment extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -99,8 +95,8 @@ public class Appointment extends BaseEntity {
         appointment.appointName = appointName;
         appointment.appointPhonenumber = appointPhonenumber;
 
-        appointment.createEntity();
         appointment.status = AppointmentStatus.COMPLETE;
+        appointment.createEntity();
 
         return appointment;
     }
@@ -115,6 +111,7 @@ public class Appointment extends BaseEntity {
         }
 
         this.status = AppointmentStatus.CANCEL;
+        this.updateEntity();
     }
 
     /**

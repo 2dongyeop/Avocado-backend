@@ -35,4 +35,13 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
     List<Staff> findValidateByEmail(final String email);
 
     Optional<Staff> findByEmail(final String email);
+
+    /** 상세 조회 */
+    @Query("select s from Staff s" +
+            " join fetch s.hospital h" +
+            " join s.boardReplyList br" +
+            " join s.healthInfoList hi" +
+            " where s.id = :id")
+    Optional<Staff> findDetailById(@Param("id") final Long id);
+
 }

@@ -8,15 +8,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BoardReplyDto {
-    private Long boardId;
     private String boardTitle;
-    private String name;
+    private String boardWriter;
+    private String replyWriter;
     private String reply;
 
     public BoardReplyDto(final BoardReply boardReply) {
-        this.boardId = boardReply.getBoard().getId();
         this.boardTitle = boardReply.getBoard().getTitle();
-        this.name = boardReply.getStaff().getName();
+        this.boardWriter = boardReply.getBoard().getMember().getNickname();
+        this.replyWriter = boardReply.getStaff().getName();
         this.reply = boardReply.getReply();
     }
 }
