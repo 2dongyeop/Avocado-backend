@@ -8,9 +8,20 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
+
+
+    /**
+     * 게시글 단건 상세 조회
+     */
+    @Query("select b from Board b" +
+            " join fetch b.member m" +
+            " join b.boardReplyList br" +
+            " where b.id =:id")
+    Optional<Board> findDetailById(@Param("id") final Long id);
 
 
     /**

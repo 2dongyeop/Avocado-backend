@@ -62,6 +62,10 @@ public class HealthInfoService {
         return healthInfoRepository.findById(healthInfoId).orElseThrow(NullHealthInfoException::new);
     }
 
+    public HealthInfo findDetailById(final Long healthInfoId) {
+        return healthInfoRepository.findDetailById(healthInfoId).orElseThrow(NullHealthInfoException::new);
+    }
+
     public List<HealthInfo> findAll() {
         return healthInfoRepository.findAll();
     }

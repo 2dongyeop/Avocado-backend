@@ -51,7 +51,7 @@ public class BoardReplyApiController {
     /* 특정 게시판댓글 단건 조회 */
     @GetMapping("/api/board-reply/{id}")
     public Result boardReply(@PathVariable("id") final Long id) {
-        BoardReply boardReply = boardReplyService.findById(id);
+        BoardReply boardReply = boardReplyService.findDetailById(id);
 
         return new Result(new BoardReplyDto(boardReply));
     }

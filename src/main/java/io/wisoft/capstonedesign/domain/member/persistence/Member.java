@@ -5,6 +5,7 @@ import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
 import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
+import io.wisoft.capstonedesign.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,6 +68,7 @@ public class Member {
         member.email = email;
         member.password = password;
         member.phoneNumber = phoneNumber;
+        member.createEntity();
 
         return member;
     }
@@ -77,14 +79,17 @@ public class Member {
      */
     public void updatePassword(String newPassword) {
         this.password = newPassword;
+        this.updateEntity();
     }
 
     public void updateNickname(String newNickname) {
         this.nickname = newNickname;
+        this.updateEntity();
     }
 
     public void uploadPhotoPath(String newPhotoPath) {
         this.memberPhotoPath = newPhotoPath;
+        this.updateEntity();
     }
 
 }

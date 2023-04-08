@@ -52,6 +52,11 @@ public class PickService {
         return pickRepository.findById(pickId).orElseThrow(NullPickException::new);
     }
 
+    /** 상세조회 */
+    public Pick findDetailById(final Long pickId) {
+        return pickRepository.findDetailById(pickId).orElseThrow(NullPickException::new);
+    }
+
     public List<Pick> findByMemberIdOrderByCreateAsc(final Long memberId) {
         return pickRepository.findByMemberIdOrderByCreateAtAsc(memberId);
     }

@@ -83,6 +83,13 @@ public class BoardReplyService {
     }
 
     /**
+     * 게시글댓글 단건 상세 조회
+     */
+    public BoardReply findDetailById(final Long boardReplyId) {
+        return boardReplyRepository.findDetailById(boardReplyId).orElseThrow(NullBoardReplyException::new);
+    }
+
+    /**
      * 특정게시글의 댓글 목록 오름차순 조회
      */
     public List<BoardReply> findByBoardIdOrderByCreateAsc() {

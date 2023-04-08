@@ -22,9 +22,9 @@ public class MemberApiController {
     @GetMapping("/api/members/{id}")
     public Result member(@PathVariable("id") final Long id) {
 
-        Member member = memberService.findById(id);
+        Member member = memberService.findDetailById(id);
 
-        return new Result(new MemberDto(member.getNickname(), member.getEmail(), member.getPhoneNumber()));
+        return new Result(new MemberDto(member));
     }
 
     /* 회원 목록 조회 */

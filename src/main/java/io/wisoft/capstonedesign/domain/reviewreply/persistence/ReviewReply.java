@@ -16,10 +16,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@AttributeOverrides({
-        @AttributeOverride(name = "createAt", column = @Column(name = "review_reply_create_at", nullable = false)),
-        @AttributeOverride(name = "updateAt", column = @Column(name = "review_reply_update_at"))
-})
 public class ReviewReply extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,7 +80,7 @@ public class ReviewReply extends BaseEntity {
         reviewReply.reply = reply;
 
         reviewReply.createEntity();
-        reviewReply.status = ReviewReplyStatus.WRITE.WRITE;
+        reviewReply.status = ReviewReplyStatus.WRITE;
 
         return reviewReply;
     }
@@ -94,11 +90,11 @@ public class ReviewReply extends BaseEntity {
      */
     public void delete() {
 
-        if (this.status == ReviewReplyStatus.DELETE.DELETE) {
+        if (this.status == ReviewReplyStatus.DELETE) {
             throw new IllegalStateException("이미 삭제된 댓글입니다.");
         }
 
-        this.status = ReviewReplyStatus.DELETE.DELETE;
+        this.status = ReviewReplyStatus.DELETE;
     }
 
 

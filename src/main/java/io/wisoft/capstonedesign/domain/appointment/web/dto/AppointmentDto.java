@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AppointmentDto {
@@ -13,6 +15,8 @@ public class AppointmentDto {
     private String comment;
     private String appointName;
     private String appointPhonenumber;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
 
     public AppointmentDto(final Appointment appointment) {
         this.hospital = appointment.getHospital().getName();
@@ -20,5 +24,7 @@ public class AppointmentDto {
         this.comment = appointment.getComment();
         this.appointName = appointment.getAppointName();
         this.appointPhonenumber = appointment.getAppointPhonenumber();
+        this.createAt = appointment.getCreateAt();
+        this.updateAt = appointment.getUpdateAt();
     }
 }

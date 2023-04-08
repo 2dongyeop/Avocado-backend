@@ -13,10 +13,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverrides({
-        @AttributeOverride(name = "createAt", column = @Column(name = "boardreply_create_at", nullable = false)),
-        @AttributeOverride(name = "updateAt", column = @Column(name = "boardreply_update_at"))
-})
 public class BoardReply extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +22,7 @@ public class BoardReply extends BaseEntity {
     @Column(name = "reply", nullable = false)
     private String reply;
 
-    @Column(name = "boardreply_status")
+    @Column(name = "board_reply_status")
     @Enumerated(EnumType.STRING)
     private BoardReplyStatus status;
 
@@ -78,8 +74,8 @@ public class BoardReply extends BaseEntity {
         boardReply.setStaff(staff);
         boardReply.reply = reply;
 
-        boardReply.createEntity();
         boardReply.status = BoardReplyStatus.WRITE;
+        boardReply.createEntity();
 
         return boardReply;
     }
@@ -94,6 +90,7 @@ public class BoardReply extends BaseEntity {
         }
 
         this.status = BoardReplyStatus.DELETE;
+        this.updateEntity();
     }
 
     /**

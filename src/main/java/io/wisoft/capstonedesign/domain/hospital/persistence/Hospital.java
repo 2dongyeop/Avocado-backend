@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.domain.hospital.persistence;
 import io.wisoft.capstonedesign.domain.appointment.persistence.Appointment;
 import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
+import io.wisoft.capstonedesign.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Hospital {
+public class Hospital extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hosp_id")
@@ -56,6 +57,7 @@ public class Hospital {
         hospital.number = number;
         hospital.address = address;
         hospital.operatingTime = operatingTime;
+        hospital.createEntity();
 
         return hospital;
     }

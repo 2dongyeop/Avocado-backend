@@ -79,6 +79,13 @@ public class BoardService {
         return boardRepository.findByMemberId(memberId);
     }
 
+
+    /** 게시글 단건 상세 조회 */
+    public Board findDetailById(final Long boardId) {
+        return boardRepository.findDetailById(boardId).orElseThrow(NullBoardException::new);
+    }
+
+    /** 게시글 단건 조회 */
     public Board findById(final Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(NullBoardException::new);
     }

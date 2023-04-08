@@ -154,6 +154,11 @@ public class StaffService {
         return boardList;
     }
 
+    /** 상세 조회 */
+    public Staff findDetailById(final Long staffId) {
+        return staffRepository.findDetailById(staffId).orElseThrow(NullStaffException::new);
+    }
+
     public Staff findById(final Long staffId) {
         return staffRepository.findById(staffId).orElseThrow(NullStaffException::new);
     }

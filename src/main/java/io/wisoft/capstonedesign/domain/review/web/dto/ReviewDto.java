@@ -1,9 +1,13 @@
 package io.wisoft.capstonedesign.domain.review.web.dto;
 
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
+import io.wisoft.capstonedesign.domain.reviewreply.web.dto.ReviewReplyDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,6 +17,7 @@ public class ReviewDto {
     private String body;
     private int starPoint;
     private String targetHospital;
+    private List<ReviewReplyDto> reviewReplyList;
 
     public ReviewDto(final Review review) {
         this.writer = review.getMember().getNickname();
@@ -20,5 +25,8 @@ public class ReviewDto {
         this.body = review.getBody();
         this.starPoint = review.getStarPoint();
         this.targetHospital = review.getTargetHospital();
+        this.reviewReplyList = review.getReviewReplyList()
+                .stream().map(ReviewReplyDto::new)
+                .collect(Collectors.toList());
     }
 }

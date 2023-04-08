@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.domain.staff.persistence;
 
 import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
+import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import jakarta.persistence.*;
@@ -16,7 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Staff {
+public class Staff extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "staff_id")
@@ -83,6 +84,8 @@ public class Staff {
         staff.password = password;
         staff.license_path = license_path;
         staff.dept = dept;
+
+        staff.createEntity();
         return staff;
     }
 
@@ -92,18 +95,20 @@ public class Staff {
      * */
     public void updatePassword(final String newPassword) {
         this.password = newPassword;
+        this.updateEntity();
     }
-
 
     /*
      * 의료진 프로필사진 수정
      */
     public void updatePhotoPath(final String newPhotoPath) {
         this.staffPhotoPath = newPhotoPath;
+        this.updateEntity();
     }
 
     /* 의료진 병원 수정 */
     public void updateHospital(final Hospital hospital) {
         setHospital(hospital);
+        this.updateEntity();
     }
 }

@@ -41,7 +41,7 @@ public class HealthInfoApiController {
     /* 건강 정보 단건 조회 */
     @GetMapping("/api/health-infos/{id}")
     public Result healthInfo(@PathVariable("id") final Long id) {
-        HealthInfo healthInfo = healthInfoService.findById(id);
+        HealthInfo healthInfo = healthInfoService.findDetailById(id);
 
         return new Result(new HealthInfoDto(healthInfo));
     }

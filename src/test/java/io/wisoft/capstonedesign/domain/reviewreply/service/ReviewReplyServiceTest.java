@@ -57,7 +57,7 @@ public class ReviewReplyServiceTest {
         Long saveId = reviewReplyService.save(request);
 
         //then -- 검증
-        ReviewReply reviewReply = reviewReplyService.findOne(saveId);
+        ReviewReply reviewReply = reviewReplyService.findById(saveId);
         Assertions.assertThat(reviewReply.getStatus()).isEqualTo(ReviewReplyStatus.WRITE);
         Assertions.assertThat(reviewReply.getReply()).isEqualTo(request.getReply());
     }
@@ -92,7 +92,7 @@ public class ReviewReplyServiceTest {
         reviewReplyService.deleteReviewReply(saveId);
 
         //then -- 검증
-        ReviewReply getReviewReply = reviewReplyService.findOne(saveId);
+        ReviewReply getReviewReply = reviewReplyService.findById(saveId);
         Assertions.assertThat(getReviewReply.getStatus()).isEqualTo(ReviewReplyStatus.DELETE);
     }
 
@@ -135,7 +135,7 @@ public class ReviewReplyServiceTest {
         //given -- 조건
 
         //when -- 동작
-        reviewReplyService.findOne(100L);
+        reviewReplyService.findById(100L);
 
         //then -- 검증
         fail("일치하는 리뷰댓글이 존재하지 않아 예외가 발생해야 한다.");
@@ -168,7 +168,7 @@ public class ReviewReplyServiceTest {
         Long saveId = reviewReplyService.save(request);
 
         //when -- 동작
-        ReviewReply reviewReply = reviewReplyService.findOne(saveId);
+        ReviewReply reviewReply = reviewReplyService.findById(saveId);
         UpdateReviewReplyRequest request2 = new UpdateReviewReplyRequest("짱 멋져요");
         reviewReplyService.updateReply(reviewReply.getId(), request2);
 
@@ -204,7 +204,7 @@ public class ReviewReplyServiceTest {
         Long saveId = reviewReplyService.save(request);
 
         //when -- 동작
-        ReviewReply reviewReply = reviewReplyService.findOne(saveId);
+        ReviewReply reviewReply = reviewReplyService.findById(saveId);
         UpdateReviewReplyRequest request2 = new UpdateReviewReplyRequest(null);
         reviewReplyService.updateReply(reviewReply.getId(), request2);
 

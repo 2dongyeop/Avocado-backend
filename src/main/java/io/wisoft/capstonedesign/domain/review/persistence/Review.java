@@ -17,10 +17,6 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverrides({
-        @AttributeOverride(name = "createAt", column = @Column(name = "review_create_at", nullable = false)),
-        @AttributeOverride(name = "updateAt", column = @Column(name = "review_update_at"))
-})
 public class Review extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -105,6 +101,7 @@ public class Review extends BaseEntity {
         }
 
         this.status = ReviewStatus.DELETE;
+        this.updateEntity();
     }
 
     /**

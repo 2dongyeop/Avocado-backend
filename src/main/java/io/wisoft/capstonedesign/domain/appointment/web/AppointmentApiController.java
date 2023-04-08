@@ -50,7 +50,7 @@ public class AppointmentApiController {
     @GetMapping("/api/appointments/{id}")
     public Result appointment(@PathVariable("id") final Long id) {
 
-        Appointment appointment = appointmentService.findById(id);
+        Appointment appointment = appointmentService.findDetailById(id);
         return new Result(new AppointmentDto(appointment));
     }
 

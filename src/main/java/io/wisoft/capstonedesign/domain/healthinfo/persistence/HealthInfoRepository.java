@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HealthInfoRepository extends JpaRepository<HealthInfo, Long> {
@@ -29,4 +30,12 @@ public interface HealthInfoRepository extends JpaRepository<HealthInfo, Long> {
     @Query(value = "select hi from HealthInfo hi join fetch hi.staff s",
             countQuery = "select count(hi) from HealthInfo hi")
     Page<HealthInfo> findByUsingPagingOrderByCreateAtDesc(final Pageable pageable);
+
+    /**
+     * 건강정보 상세 조회
+     */
+    @Query("select hi from HealthInfo hi" +
+            " join fetch hi.staff s" +
+            " where hi.id = :id")
+    Optional<HealthInfo> findDetailById(@Param("id") final Long healthInfoId);
 }

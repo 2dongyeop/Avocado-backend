@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -70,6 +72,7 @@ public class AppointmentService {
     public void update(final Long appointmentId, final UpdateAppointmentRequest request) {
 
         validateParameter(request);
+        validateDept(request.getDept());
         Appointment appointment = findById(appointmentId);
 
         appointment.update(HospitalDept.valueOf(request.getDept()), request.getComment(), request.getAppointName(), request.getAppointPhonenumber());
@@ -83,10 +86,29 @@ public class AppointmentService {
         }
     }
 
+    private void validateDept(final String dept) {
+        HospitalDept[] values = HospitalDept.values();
+        Iterator<HospitalDept> iterator = Arrays.stream(values).iterator();
+
+        while (iterator.hasNext()) {
+            HospitalDept hospitalDept = iterator.next();
+
+            if (hospitalDept.toString().equals(dept)) {
+                return;
+            }
+        }
+
+        throw new IllegalValueException("일치하는 dept가 존재하지 않습니다.");
+    }
+
 
     /* 조회 로직 */
     public List<Appointment> findByMemberId(final Long memberId) {
         return appointmentRepository.findByMemberId(memberId);
+    }
+
+    public Appointment findDetailById(final Long appointmentId) {
+        return appointmentRepository.findDetailById(appointmentId).orElseThrow(NullAppointmentException::new);
     }
 
     public Appointment findById(final Long appointmentId) {

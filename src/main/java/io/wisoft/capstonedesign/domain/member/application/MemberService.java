@@ -120,6 +120,10 @@ public class MemberService {
         return memberRepository.findById(memberId).orElseThrow(NullMemberException::new);
     }
 
+    public Member findDetailById(final Long memberId) {
+        return memberRepository.findDetailById(memberId).orElseThrow(NullMemberException::new);
+    }
+
     public List<Member> findAll() {
         return memberRepository.findAll();
     }

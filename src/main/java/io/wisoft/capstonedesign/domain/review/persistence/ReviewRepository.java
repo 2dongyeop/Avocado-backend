@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
@@ -34,4 +35,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
      */
     @Query("select r from Review r where r.targetHospital = :targetHospital")
     List<Review> findByTargetHospital(@Param("targetHospital") final String targetHospital);
+
+    /** 상세 조회 */
+    @Query("select r from Review r" +
+            " join fetch r.member m" +
+            " join r.reviewReplyList rr" +
+            " where r.id = :id")
+    Optional<Review> findDetailById(@Param("id") final Long id);
 }
