@@ -11,9 +11,7 @@ import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -77,11 +75,6 @@ public class BoardService {
     }
 
     /* 조회 로직 */
-    public List<Board> findByMemberId(final Long memberId) {
-        return boardRepository.findByMemberId(memberId);
-    }
-
-
     /** 게시글 단건 상세 조회 */
     public Board findDetailById(final Long boardId) {
         return boardRepository.findDetailById(boardId).orElseThrow(NullBoardException::new);
@@ -102,6 +95,10 @@ public class BoardService {
         return boardRepository.findAllUsingPaging(pageable);
     }
 
+    /** 특정 회원의 게시글 목록 페이징 조회 */
+    public Page<Board> findByMemberIdUsingPaging(final Long memberId, final Pageable pageable) {
+        return boardRepository.findByMemberIdUsingPaging(memberId, pageable);
+    }
 
     public List<Board> findAllByMember() {
         return boardRepository.findAllByMember();

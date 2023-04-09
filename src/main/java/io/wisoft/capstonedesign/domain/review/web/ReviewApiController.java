@@ -43,7 +43,7 @@ public class ReviewApiController {
     }
 
 
-    /* 특정 병원의 리뷰 목록 조회 */
+    /** 특정 병원의 리뷰 목록 페이징 조회 */
     @GetMapping("/api/reviews/hospital")
     public Page<ReviewListDto> reviewsByTargetHospital(
             @RequestBody @Valid final ReviewsByTargetHospitalRequest request,

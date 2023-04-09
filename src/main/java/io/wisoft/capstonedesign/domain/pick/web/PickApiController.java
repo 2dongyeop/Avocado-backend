@@ -5,6 +5,8 @@ import io.wisoft.capstonedesign.domain.pick.application.PickService;
 import io.wisoft.capstonedesign.domain.pick.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +37,7 @@ public class PickApiController {
     }
 
 
-    /* 찜하기 단건 조회 */
+    /* 찜하기 단건 상세 조회 */
     @GetMapping("/api/picks/{id}")
     public Result pick(@PathVariable("id") final Long id) {
         Pick pick = pickService.findDetailById(id);
@@ -44,26 +46,12 @@ public class PickApiController {
     }
 
 
-    /* 특정 회원의 찜하기 목록 오름차순 조회 */
-    @GetMapping("/api/picks/member/{member-id}/create-asc")
-    public Result pickByMemberOrderByCreateAsc(@PathVariable("member-id") final Long memberId) {
+    /** 특정 회원의 찜하기 목록 페이징 조회 */
+    @GetMapping("/api/picks/member/{member-id}")
+    public Page<PickDto> pickByMemberOrderByCreateAsc(
+            @PathVariable("member-id") final Long memberId, final Pageable pageable) {
 
-        List<PickDto> pickDtoList = pickService.findByMemberIdOrderByCreateAsc(memberId)
-                .stream().map(PickDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(pickDtoList);
-    }
-
-
-    /* 특정 회원의 찜하기 목록 내림차순 조회 */
-    @GetMapping("/api/picks/member/{member-id}/create-desc")
-    public Result pickByMemberOrderByCreateDesc(@PathVariable("member-id") final Long memberId) {
-
-        List<PickDto> pickDtoList = pickService.findByMemberIdOrderByCreateDesc(memberId)
-                .stream().map(PickDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(pickDtoList);
+        return pickService.findByMemberIdUsingPaging(memberId, pageable)
+                .map(PickDto::new);
     }
 }
