@@ -5,6 +5,7 @@ import io.wisoft.capstonedesign.domain.appointment.application.AppointmentServic
 import io.wisoft.capstonedesign.domain.appointment.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.*;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,13 +56,13 @@ public class AppointmentApiController {
         return new Result(new AppointmentDto(appointment));
     }
 
-    /** 특정 회원의 특정 페이지 예약 정보 조회 */
+    /**
+     * 특정 회원의 특정 페이지 예약 정보 조회
+     */
     @GetMapping("/api/appointments/member/{member-id}")
-    public Result appointmentsByMemberIdUsingPagingOrderByCreateAtAsc(
+    public Page<AppointmentDto> appointmentsByMemberIdUsingPagingOrderByCreateAtAsc(
             @PathVariable("member-id") final Long memberId, final Pageable pageable) {
 
-        return new Result(appointmentService.findByMemberIdUsingPaging(memberId, pageable)
-                .map(AppointmentDto::new)
-                .getContent());
+        return appointmentService.findByMemberIdUsingPaging(memberId, pageable).map(AppointmentDto::new);
     }
 }

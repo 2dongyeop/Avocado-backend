@@ -5,6 +5,8 @@ import io.wisoft.capstonedesign.domain.board.application.BoardService;
 import io.wisoft.capstonedesign.domain.board.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,41 +27,10 @@ public class BoardApiController {
     }
 
 
-    /* 게시글 조회 */
+    /** 게시글 목록 조회 - 페이징 사용 */
     @GetMapping("/api/boards")
-    public Result boards() {
-
-        List<BoardDto> boardDtoList = boardService.findAllByMember().stream()
-                .map(BoardDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(boardDtoList);
-    }
-
-
-    /** 게시글 오름차순 조회 - 페이징 사용 */
-    @GetMapping("/api/boards/create-asc")
-    public Result boardsUsingPagingByCreateAsc(
-            @RequestParam(value = "page", defaultValue = "0") final int page) {
-
-        List<BoardDto> boardDtoList = boardService.findAllUsingPagingOrderByCreateAtAsc(page)
-                .stream().map(BoardDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(boardDtoList);
-    }
-
-
-    /** 게시글 내림차순 조회 - 페이징 사용 */
-    @GetMapping("/api/boards/create-desc")
-    public Result boardsUsingPagingByCreateDesc(
-            @RequestParam(value = "page", defaultValue = "0") final int page) {
-
-        List<BoardDto> boardDtoList = boardService.findAllUsingPagingOrderByCreateAtDesc(page)
-                .stream().map(BoardDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(boardDtoList);
+    public Page<BoardListDto> boardsUsingPaging(final Pageable pageable) {
+        return boardService.findAllUsingPaging(pageable).map(BoardListDto::new);
     }
 
 
