@@ -5,6 +5,7 @@ import io.wisoft.capstonedesign.domain.appointment.application.AppointmentServic
 import io.wisoft.capstonedesign.domain.appointment.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,30 +55,13 @@ public class AppointmentApiController {
         return new Result(new AppointmentDto(appointment));
     }
 
-    /** 특정 회원의 특정 페이지 예약 정보 조회 - 오름차순 */
-    @GetMapping("/api/appointments/member/{member-id}/create-asc")
+    /** 특정 회원의 특정 페이지 예약 정보 조회 */
+    @GetMapping("/api/appointments/member/{member-id}")
     public Result appointmentsByMemberIdUsingPagingOrderByCreateAtAsc(
-            @PathVariable("member-id") final Long memberId,
-            @RequestParam(value = "page", defaultValue = "0") final int page) {
+            @PathVariable("member-id") final Long memberId, final Pageable pageable) {
 
-        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdUsingPagingOrderByCreateAtAsc(memberId, page)
-                .stream().map(AppointmentDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(appointmentDtoList);
-    }
-
-
-    /** 특정 회원의 특정 페이지 예약 정보 조회 - 내림차순 */
-    @GetMapping("/api/appointments/member/{member-id}/create-desc")
-    public Result appointmentsByMemberIdUsingPagingOrderByCreateAtDesc(
-            @PathVariable("member-id") final Long memberId,
-            @RequestParam(value = "page", defaultValue = "0") final int page) {
-
-        List<AppointmentDto> appointmentDtoList = appointmentService.findByMemberIdUsingPagingOrderByCreateAtDesc(memberId, page)
-                .stream().map(AppointmentDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(appointmentDtoList);
+        return new Result(appointmentService.findByMemberIdUsingPaging(memberId, pageable)
+                .map(AppointmentDto::new)
+                .getContent());
     }
 }

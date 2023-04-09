@@ -12,7 +12,9 @@ import io.wisoft.capstonedesign.global.exception.nullcheck.NullAppointmentExcept
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,25 +117,12 @@ public class AppointmentService {
         return appointmentRepository.findById(appointmentId).orElseThrow(NullAppointmentException::new);
     }
 
-    /** 특정 회원의 특정 페이지 예약 정보 조회 - 오름차순 */
-    public List<Appointment> findByMemberIdUsingPagingOrderByCreateAtAsc(
-            final Long memberId,
-            final int pageNumber) {
+    /** 특정 회원의 특정 페이지 예약 정보 조회 */
+    public Page<Appointment> findByMemberIdUsingPaging(final Long memberId, final Pageable pageable) {
 
-        PageRequest request = PageRequest.of(pageNumber, 5, Sort.by(Sort.Direction.ASC, "createAt"));
-
-        return appointmentRepository.findByMemberIdUsingPagingOrderByCreateAtAsc(memberId, request)
-                .getContent();
-    }
-
-    /** 특정 회원의 특정 페이지 예약 정보 조회 - 내림차순 */
-    public List<Appointment> findByMemberIdUsingPagingOrderByCreateAtDesc(
-            final Long memberId,
-            final int pageNumber) {
-
-        PageRequest request = PageRequest.of(pageNumber, 5, Sort.by(Sort.Direction.DESC, "createAt"));
-
-        return appointmentRepository.findByMemberIdUsingPagingOrderByCreateAtDesc(memberId, request)
-                .getContent();
+        return appointmentRepository.findByMemberIdUsingPaging(memberId, pageable);
     }
 }
+
+
+

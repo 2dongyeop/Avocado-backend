@@ -25,7 +25,7 @@ public class AppointmentRepositoryTest {
         PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
 
         //when -- 동작
-        Page<Appointment> page = appointmentRepository.findByMemberIdUsingPagingOrderByCreateAtAsc(1L, request);
+        Page<Appointment> page = appointmentRepository.findByMemberIdUsingPaging(1L, request);
         List<Appointment> content = page.getContent();
 
         //then -- 검증
