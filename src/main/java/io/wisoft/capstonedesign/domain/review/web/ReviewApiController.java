@@ -5,6 +5,8 @@ import io.wisoft.capstonedesign.domain.review.application.ReviewService;
 import io.wisoft.capstonedesign.domain.review.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,53 +27,30 @@ public class ReviewApiController {
     }
 
 
-    /** 특정 페이지의 리뷰 목록 오름차순 조회 */
-    @GetMapping("/api/reviews/create-asc")
-    public Result reviewsUsingPagingOrderByCreateAtAsc(
-            @RequestParam(value = "page", defaultValue = "0") final int page) {
-
-        List<ReviewDto> reviewDtoList = reviewService.findByUsingPagingOOrderByCreateAtAsc(page)
-                .stream().map(ReviewDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(reviewDtoList);
+    /** 리뷰 목록 페이징 조회 */
+    @GetMapping("/api/reviews")
+    public Page<ReviewListDto> reviewsUsingPagingOrderByCreateAtAsc(final Pageable pageable) {
+        return reviewService.findByUsingPaging(pageable).map(ReviewListDto::new);
     }
 
-    /** 특정 페이지의 리뷰 목록 내림차순 조회 */
-    @GetMapping("/api/reviews/create-desc")
-    public Result reviewsUsingPagingOrderByCreateAtDesc(
-            @RequestParam(value = "page", defaultValue = "0") final int page) {
-
-        List<ReviewDto> reviewDtoList = reviewService.findByUsingPagingOOrderByCreateAtDesc(page)
-                .stream().map(ReviewDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(reviewDtoList);
-    }
-
-
-    /* 특정 작성자의 리뷰 목록 조회 */
+    /** 특정 작성자의 리뷰 목록 조회 */
     @GetMapping("/api/reviews/member/{member-id}")
-    public Result reviewsByMemberId(@PathVariable("member-id") final Long id) {
+    public Page<ReviewListDto> reviewsByMemberId(
+            @PathVariable("member-id") final Long id, final Pageable pageable) {
 
-        List<ReviewDto> reviewDtoList = reviewService.findByMemberId(id).stream()
-                .map(ReviewDto::new)
-                .collect(Collectors.toList());
-
-        return new Result<>(reviewDtoList);
+        return reviewService.findByMemberIdUsingPaging(id,pageable)
+                .map(ReviewListDto::new);
     }
 
 
     /* 특정 병원의 리뷰 목록 조회 */
     @GetMapping("/api/reviews/hospital")
-    public Result reviewsByTargetHospital(
-            @RequestBody @Valid final ReviewsByTargetHospitalRequest request) {
+    public Page<ReviewListDto> reviewsByTargetHospital(
+            @RequestBody @Valid final ReviewsByTargetHospitalRequest request,
+            final Pageable pageable) {
 
-        List<ReviewDto> reviewDtoList = reviewService.findByTargetHospital(request.getTargetHospital())
-                .stream().map(ReviewDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(reviewDtoList);
+        return reviewService.findByTargetHospital(request.getTargetHospital(), pageable)
+                .map(ReviewListDto::new);
     }
 
 

@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -212,9 +214,10 @@ public class ReviewServiceTest {
         //리뷰생성
         CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
         Long saveId = reviewService.save(request1);
+        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
 
         //when -- 동작
-        reviewService.findByTargetHospital("아보카두두병원");
+        reviewService.findByTargetHospital("아보카두두병원", request);
 
         //then -- 검증
         fail("해당 이름을 가진 병원 리뷰가 존재하지 않아 예외가 발생해야 한다.");

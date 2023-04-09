@@ -9,8 +9,8 @@ import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewException;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -78,10 +78,6 @@ public class ReviewService {
 
 
     /* 조회 로직 */
-    public List<Review> findByMemberId(final Long memberId) {
-        return reviewRepository.findByMemberId(memberId);
-    }
-
     public Review findById(final Long reviewId) {
         return reviewRepository.findById(reviewId).orElseThrow(NullReviewException::new);
     }
@@ -93,30 +89,24 @@ public class ReviewService {
         return reviewRepository.findDetailById(reviewId).orElseThrow(NullReviewException::new);
     }
 
-    /** 특정 페이지의 리뷰 목록 오름차순 조회 */
-    public List<Review> findByUsingPagingOOrderByCreateAtAsc(final int pageNumber) {
-
-        PageRequest request = PageRequest.of(pageNumber, 5, Sort.by(Sort.Direction.ASC, "createAt"));
-        return reviewRepository.findByUsingPagingOOrderByCreateAtAsc(request)
-                .getContent();
+    /** 리뷰 목록 페이징 조회 */
+    public Page<Review> findByUsingPaging(final Pageable pageable) {
+        return reviewRepository.findByUsingPaging(pageable);
     }
 
-
-    /** 특정 페이지의 리뷰 목록 내림차순 조회 */
-    public List<Review> findByUsingPagingOOrderByCreateAtDesc(final int pageNumber) {
-
-        PageRequest request = PageRequest.of(pageNumber, 5, Sort.by(Sort.Direction.DESC, "createAt"));
-        return reviewRepository.findByUsingPagingOOrderByCreateAtDesc(request)
-                .getContent();
+    /** 특정 작성자의 리뷰 페이징 조회 */
+    public Page<Review> findByMemberIdUsingPaging(final Long memberId, final Pageable pageable) {
+        return reviewRepository.findByMemberIdUsingPaging(memberId, pageable);
     }
 
-    public List<Review> findByTargetHospital(final String targetHospital) {
+    /** 특정 병원의 리뷰 페이징 조회 */
+    public Page<Review> findByTargetHospital(final String targetHospital, final Pageable pageable) {
 
-        List<Review> reviewListByTargetHospital = reviewRepository.findByTargetHospital(targetHospital);
+        Page<Review> page = reviewRepository.findByTargetHospitalUsingPaging(targetHospital, pageable);
 
-        if (reviewListByTargetHospital.isEmpty()) {
+        if (page.isEmpty()) {
             throw new IllegalValueException("해당 병원에 대한 리뷰는 존재하지 않습니다.");
         }
-        return reviewListByTargetHospital;
+        return page;
     }
 }

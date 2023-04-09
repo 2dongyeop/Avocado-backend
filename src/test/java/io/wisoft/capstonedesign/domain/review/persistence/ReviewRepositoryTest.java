@@ -27,7 +27,7 @@ public class ReviewRepositoryTest {
         PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
 
         //when -- 동작
-        Page<Review> page = reviewRepository.findByUsingPagingOOrderByCreateAtDesc(request);
+        Page<Review> page = reviewRepository.findByUsingPaging(request);
         List<Review> content = page.getContent();
 
         //then -- 검증
