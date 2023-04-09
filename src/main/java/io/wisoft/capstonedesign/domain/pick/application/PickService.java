@@ -9,6 +9,8 @@ import io.wisoft.capstonedesign.global.exception.nullcheck.NullPickException;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,11 +59,9 @@ public class PickService {
         return pickRepository.findDetailById(pickId).orElseThrow(NullPickException::new);
     }
 
-    public List<Pick> findByMemberIdOrderByCreateAsc(final Long memberId) {
-        return pickRepository.findByMemberIdOrderByCreateAtAsc(memberId);
-    }
 
-    public List<Pick> findByMemberIdOrderByCreateDesc(final Long memberId) {
-        return pickRepository.findByMemberIdOrderByCreateAtDesc(memberId);
+    /** 특정 작성자의 찜하기 목록 페이징 조회 */
+    public Page<Pick> findByMemberIdUsingPaging(final Long memberId, final Pageable pageable) {
+        return pickRepository.findByMemberIdUsingPaging(memberId, pageable);
     }
 }
