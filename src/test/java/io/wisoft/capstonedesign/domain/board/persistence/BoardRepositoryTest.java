@@ -26,10 +26,10 @@ public class BoardRepositoryTest {
         PageRequest pageRequest = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
 
         //when -- 동작
-        Page<Board> page = boardRepository.findAllUsingPagingOrderByCreateAtAsc(pageRequest);
+        Page<Board> page = boardRepository.findAllUsingPaging(pageRequest);
         List<Board> content = page.getContent();
-        Board board1 = content.get(0);
-        Board board2 = content.get(1);
+//        Board board1 = content.get(0);
+//        Board board2 = content.get(1);
 
         //then -- 검증
         assertThat(content.size()).isEqualTo(2);

@@ -14,6 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -178,10 +180,10 @@ public class BoardServiceTest {
     @Test
     public void paging() throws Exception {
         //given -- 조건
-
+        PageRequest pageRequest = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
 
         //when -- 동작
-        List<Board> page = boardService.findAllUsingPagingOrderByCreateAtAsc(0);
+        List<Board> page = boardService.findAllUsingPaging(pageRequest).getContent();
 
         //then -- 검증
         Assertions.assertThat(page.size()).isEqualTo(2);

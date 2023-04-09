@@ -90,9 +90,10 @@ public class HealthInfoServiceTest {
     public void findAllByDept() throws Exception {
         //given -- 조건
         String dept = "DENTAL";
+        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
 
         //when -- 동작
-        List<HealthInfo> list = healthInfoService.findAllByDept(dept);
+        List<HealthInfo> list = healthInfoService.findAllByDeptUsingPaging(dept, request).getContent();
 
         //then -- 검증
         Assertions.assertThat(list.size()).isEqualTo(2);
@@ -104,9 +105,11 @@ public class HealthInfoServiceTest {
     public void findAllByDept_fail() throws Exception {
         //given -- 조건
         String dept = "1231231";
+        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
+
 
         //when -- 동작
-        List<HealthInfo> list = healthInfoService.findAllByDept(dept);
+        healthInfoService.findAllByDeptUsingPaging(dept, request).getContent();
 
         //then -- 검증
         fail();
@@ -116,9 +119,10 @@ public class HealthInfoServiceTest {
     @Test
     public void paging() throws Exception {
         //given -- 조건
+        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
 
         //when -- 동작
-        List<HealthInfo> list = healthInfoService.findByUsingPagingOrderByCreateAtAsc(0);
+        List<HealthInfo> list = healthInfoService.findByUsingPaging(request).getContent();
 
         //then -- 검증
         Assertions.assertThat(list.size()).isEqualTo(2);

@@ -29,7 +29,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 
     /**
-     * 특정 회원의 특정 페이지 예약 정보 조회 - 오름차순
+     * 특정 회원의 특정 페이지 예약 정보 조회
      */
     @Query(value = "select a" +
             " from Appointment a" +
@@ -37,24 +37,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             " join fetch a.hospital h" +
             " where m.id = :id",
             countQuery = "select count(a) from Appointment a where a.member.id = :id")
-    Page<Appointment> findByMemberIdUsingPagingOrderByCreateAtAsc(
+    Page<Appointment> findByMemberIdUsingPaging(
             @Param("id") final Long memberId,
             final Pageable pageable);
-
-
-    /**
-     * 특정 회원의 특정 페이지 예약 정보 조회 - 내림차순
-     */
-    @Query(value = "select a" +
-            " from Appointment a" +
-            " join fetch a.member m" +
-            " join fetch a.hospital h" +
-            " where m.id = :id",
-            countQuery = "select count(a) from Appointment a where a.member.id = :id")
-    Page<Appointment> findByMemberIdUsingPagingOrderByCreateAtDesc(
-            @Param("id") final Long memberId,
-            final Pageable pageable);
-
 }
 
 

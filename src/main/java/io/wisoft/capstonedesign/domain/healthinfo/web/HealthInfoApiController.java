@@ -5,6 +5,8 @@ import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import io.wisoft.capstonedesign.domain.healthinfo.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,54 +49,25 @@ public class HealthInfoApiController {
     }
 
 
-    /* 건강 정보 목록 조회 */
-    @GetMapping("/api/health-infos")
-    public Result healthInfos() {
-        List<HealthInfoDto> infoDtoList = healthInfoService.findAll()
-                .stream().map(HealthInfoDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(infoDtoList);
-    }
-
-
-    /* 특정 병과의 건강 정보 목록 조회 */
+    /**
+     * 특정 병과의 건강 정보 목록 페이징 조회
+     * ex) /api/health-infos/department?page=0&size=5&sort=createAt,desc
+     */
     @GetMapping("/api/health-infos/department")
-    public Result healthInfosByDepartment(@RequestBody @Valid final HealthInfoByDepartmentRequest request) {
+    public Page<HealthInfoDto> healthInfosByDepartmentUsingPaging(
+            @RequestBody @Valid final HealthInfoByDepartmentRequest request, final Pageable pageable) {
 
-        List<HealthInfoDto> infoDtoList = healthInfoService.findAllByDept(request.getDepartment())
-                .stream().map(HealthInfoDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(infoDtoList);
+        return healthInfoService.findAllByDeptUsingPaging(request.getDepartment(), pageable)
+                .map(HealthInfoDto::new);
     }
 
 
     /**
      * 건강정보 목록을 페이지별로 오름차순 조회하기
-     * ex) /api/health-info/create-asc?page=0
-     * */
-    @GetMapping("/api/health-infos/create-asc")
-    public Result healthInfosUsingPagingOrderByCreateAtAsc(
-            @RequestParam(value = "page", defaultValue = "0") final int page) {
-        List<HealthInfoDto> healthInfoDtoList = healthInfoService.findByUsingPagingOrderByCreateAtAsc(page)
-                .stream().map(HealthInfoDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(healthInfoDtoList);
-    }
-
-    /**
-     * 건강정보 목록을 페이지별로 내림차순 조회하기
-     * ex) /api/health-info/create-desc?page=0
-     * */
-    @GetMapping("/api/health-infos/create-desc")
-    public Result healthInfosUsingPagingOrderByCreateAtDesc(
-            @RequestParam(value = "page", defaultValue = "0") final int page) {
-        List<HealthInfoDto> healthInfoDtoList = healthInfoService.findByUsingPagingOrderByCreateAtDesc(page)
-                .stream().map(HealthInfoDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(healthInfoDtoList);
+     * ex) /api/health-infos?page=0&size=5&sort=createAt,desc
+     */
+    @GetMapping("/api/health-infos")
+    public Page<HealthInfoDto> healthInfosUsingPaging(final Pageable pageable) {
+        return healthInfoService.findByUsingPaging(pageable).map(HealthInfoDto::new);
     }
 }

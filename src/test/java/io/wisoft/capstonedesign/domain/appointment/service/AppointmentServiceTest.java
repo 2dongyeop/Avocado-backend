@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -224,9 +226,11 @@ public class AppointmentServiceTest {
     @Test
     public void paging() throws Exception {
         //given -- 조건
+        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
 
         //when -- 동작
-        List<Appointment> list = appointmentService.findByMemberIdUsingPagingOrderByCreateAtAsc(1L, 0);
+        List<Appointment> list = appointmentService.findByMemberIdUsingPaging(1L, request)
+                .getContent();
 
         //then -- 검증
         Assertions.assertThat(list.size()).isEqualTo(1);
