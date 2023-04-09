@@ -63,7 +63,7 @@ public class HealthInfoApiController {
 
 
     /**
-     * 건강정보 목록을 페이지별로 오름차순 조회하기
+     * 건강정보 목록을 페이지별로 조회하기
      * ex) /api/health-infos?page=0&size=5&sort=createAt,desc
      */
     @GetMapping("/api/health-infos")

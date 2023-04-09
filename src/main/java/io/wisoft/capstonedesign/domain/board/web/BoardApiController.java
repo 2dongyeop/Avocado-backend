@@ -34,14 +34,11 @@ public class BoardApiController {
     }
 
 
-    /* 특정 작성자의 게시글 목록 조회 */
+    /** 특정 작성자의 게시글 목록 페이징 조회 */
     @GetMapping("/api/boards/member/{member-id}")
-    public Result boardsByMember(@PathVariable("member-id") final Long id) {
-        List<BoardDto> boardDtoList = boardService.findByMemberId(id)
-                .stream().map(BoardDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(boardDtoList);
+    public Page<BoardListDto> boardsByMemberUsingPaging(
+            @PathVariable("member-id") final Long id, final Pageable pageable) {
+        return boardService.findByMemberIdUsingPaging(id, pageable).map(BoardListDto::new);
     }
 
 
@@ -51,7 +48,6 @@ public class BoardApiController {
             @RequestBody @Valid final CreateBoardRequest request) {
 
         Long id = boardService.save(request);
-
         Board board = boardService.findById(id);
         return new CreateBoardResponse(board.getId());
     }

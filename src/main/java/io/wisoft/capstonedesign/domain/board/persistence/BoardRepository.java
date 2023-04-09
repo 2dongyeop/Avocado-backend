@@ -27,13 +27,16 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     /**
      * 특정 작성자의 게시글 조회
      */
-    @Query("select b from Board b join fetch b.member m where m.id = :id")
-    List<Board> findByMemberId(@Param("id") final Long memberId);
+    @Query(value = "select b from Board b" +
+            " join fetch b.member m" +
+            " where m.id = :id",
+            countQuery = "select count(b) from Board b")
+    Page<Board> findByMemberIdUsingPaging(@Param("id") final Long memberId, final Pageable pageable);
 
 
     /**
      * 게시글 목록을 페이징 조회
-     * */
+     */
     @Query(value = "select b from Board b", countQuery = "select count(b) from Board b")
     Page<Board> findAllUsingPaging(final Pageable pageable);
 
