@@ -1,7 +1,6 @@
 package io.wisoft.capstonedesign.domain.healthinfo.persistence;
 
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -25,9 +23,10 @@ public class HealthInfoRepositoryTest {
     public void findByAllDept() throws Exception {
         //given -- 조건
         HospitalDept hospitalDept = HospitalDept.DENTAL;
+        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
 
         //when -- 동작
-        List<HealthInfo> list = healthInfoRepository.findAllByDept(hospitalDept);
+        List<HealthInfo> list = healthInfoRepository.findAllByDeptUsingPaging(hospitalDept, request).getContent();
 
         //then -- 검증
         assertThat(list.size()).isEqualTo(2);
@@ -39,7 +38,7 @@ public class HealthInfoRepositoryTest {
         PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
 
         //when -- 동작
-        Page<HealthInfo> page = healthInfoRepository.findByUsingPagingOrderByCreateAtAsc(request);
+        Page<HealthInfo> page = healthInfoRepository.findByUsingPaging(request);
         List<HealthInfo> content = page.getContent();
 
         //then -- 검증
