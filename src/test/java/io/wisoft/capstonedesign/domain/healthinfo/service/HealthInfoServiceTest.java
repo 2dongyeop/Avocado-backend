@@ -90,7 +90,7 @@ public class HealthInfoServiceTest {
     public void findAllByDept() throws Exception {
         //given -- 조건
         String dept = "DENTAL";
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
+        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
         List<HealthInfo> list = healthInfoService.findAllByDeptUsingPaging(dept, request).getContent();
@@ -119,7 +119,7 @@ public class HealthInfoServiceTest {
     @Test
     public void paging() throws Exception {
         //given -- 조건
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
+        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
         List<HealthInfo> list = healthInfoService.findByUsingPaging(request).getContent();

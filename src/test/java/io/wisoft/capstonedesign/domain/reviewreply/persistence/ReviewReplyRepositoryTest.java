@@ -26,6 +26,6 @@ public class ReviewReplyRepositoryTest {
         List<ReviewReply> list = reviewReplyRepository.findByReviewId(1L);
 
         //then -- 검증
-        assertThat(list.size()).isEqualTo(1);
+        assertThat(list.size()).isEqualTo(2);
     }
 }

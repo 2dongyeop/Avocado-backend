@@ -23,7 +23,7 @@ public class HealthInfoRepositoryTest {
     public void findByAllDept() throws Exception {
         //given -- 조건
         HospitalDept hospitalDept = HospitalDept.DENTAL;
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
+        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
         List<HealthInfo> list = healthInfoRepository.findAllByDeptUsingPaging(hospitalDept, request).getContent();
@@ -35,7 +35,7 @@ public class HealthInfoRepositoryTest {
     @Test
     public void paging() throws Exception {
         //given -- 조건
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
+        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
         Page<HealthInfo> page = healthInfoRepository.findByUsingPaging(request);
