@@ -105,9 +105,6 @@ public class AppointmentService {
 
 
     /* 조회 로직 */
-    public List<Appointment> findByMemberId(final Long memberId) {
-        return appointmentRepository.findByMemberId(memberId);
-    }
 
     public Appointment findDetailById(final Long appointmentId) {
         return appointmentRepository.findDetailById(appointmentId).orElseThrow(NullAppointmentException::new);
@@ -115,11 +112,6 @@ public class AppointmentService {
 
     public Appointment findById(final Long appointmentId) {
         return appointmentRepository.findById(appointmentId).orElseThrow(NullAppointmentException::new);
-    }
-
-    /** 특정 회원의 특정 페이지 예약 정보 조회 */
-    public Page<Appointment> findByMemberIdUsingPaging(final Long memberId, final Pageable pageable) {
-        return appointmentRepository.findByMemberIdUsingPaging(memberId, pageable);
     }
 }
 

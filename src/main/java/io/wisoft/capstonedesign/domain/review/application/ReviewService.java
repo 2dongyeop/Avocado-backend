@@ -94,11 +94,6 @@ public class ReviewService {
         return reviewRepository.findByUsingPaging(pageable);
     }
 
-    /** 특정 작성자의 리뷰 페이징 조회 */
-    public Page<Review> findByMemberIdUsingPaging(final Long memberId, final Pageable pageable) {
-        return reviewRepository.findByMemberIdUsingPaging(memberId, pageable);
-    }
-
     /** 특정 병원의 리뷰 페이징 조회 */
     public Page<Review> findByTargetHospital(final String targetHospital, final Pageable pageable) {
 

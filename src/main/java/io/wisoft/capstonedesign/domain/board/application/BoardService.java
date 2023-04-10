@@ -95,10 +95,6 @@ public class BoardService {
         return boardRepository.findAllUsingPaging(pageable);
     }
 
-    /** 특정 회원의 게시글 목록 페이징 조회 */
-    public Page<Board> findByMemberIdUsingPaging(final Long memberId, final Pageable pageable) {
-        return boardRepository.findByMemberIdUsingPaging(memberId, pageable);
-    }
 
     public List<Board> findAllByMember() {
         return boardRepository.findAllByMember();

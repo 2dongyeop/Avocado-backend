@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.domain.member.application;
 
 import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
+import io.wisoft.capstonedesign.domain.member.persistence.MemberMyPageRepository;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.member.web.dto.*;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;

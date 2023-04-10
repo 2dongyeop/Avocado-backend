@@ -34,14 +34,6 @@ public class BoardApiController {
     }
 
 
-    /** 특정 작성자의 게시글 목록 페이징 조회 */
-    @GetMapping("/api/boards/member/{member-id}")
-    public Page<BoardListDto> boardsByMemberUsingPaging(
-            @PathVariable("member-id") final Long id, final Pageable pageable) {
-        return boardService.findByMemberIdUsingPaging(id, pageable).map(BoardListDto::new);
-    }
-
-
     /* 게시글 작성 */
     @PostMapping("/api/boards/new")
     public CreateBoardResponse createBoard(

@@ -9,9 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
 @RequiredArgsConstructor
 public class PickApiController {
@@ -43,15 +40,5 @@ public class PickApiController {
         Pick pick = pickService.findDetailById(id);
 
         return new Result(new PickDto(pick));
-    }
-
-
-    /** 특정 회원의 찜하기 목록 페이징 조회 */
-    @GetMapping("/api/picks/member/{member-id}")
-    public Page<PickDto> pickByMemberOrderByCreateAsc(
-            @PathVariable("member-id") final Long memberId, final Pageable pageable) {
-
-        return pickService.findByMemberIdUsingPaging(memberId, pageable)
-                .map(PickDto::new);
     }
 }
