@@ -23,7 +23,7 @@ public class BoardRepositoryTest {
     @Test
     public void paging() throws Exception {
         //given -- 조건
-        PageRequest pageRequest = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
+        PageRequest pageRequest = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
         Page<Board> page = boardRepository.findAllUsingPaging(pageRequest);
@@ -32,8 +32,8 @@ public class BoardRepositoryTest {
 //        Board board2 = content.get(1);
 
         //then -- 검증
-        assertThat(content.size()).isEqualTo(2);
-        assertThat(page.getTotalElements()).isEqualTo(2);
+        assertThat(content.size()).isEqualTo(3);
+        assertThat(page.getTotalElements()).isEqualTo(3);
         assertThat(page.getTotalPages()).isEqualTo(1);
         assertThat(page.getNumber()).isEqualTo(0);
         assertThat(page.isFirst()).isTrue();

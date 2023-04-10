@@ -174,7 +174,7 @@ public class ReviewReplyServiceTest {
 
         //then -- 검증
         Assertions.assertThat(reviewReply.getReply()).isEqualTo(request2.getReply());
-        Assertions.assertThat(reviewReply.getUpdateAt()).isNotNull();
+        Assertions.assertThat(reviewReply.getUpdatedAt()).isNotNull();
     }
 
     @Test(expected = IllegalValueException.class)

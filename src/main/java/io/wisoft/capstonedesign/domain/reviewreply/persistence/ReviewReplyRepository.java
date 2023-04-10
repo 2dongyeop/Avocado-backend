@@ -21,13 +21,13 @@ public interface ReviewReplyRepository extends JpaRepository<ReviewReply, Long> 
     /**
      * 특정 리뷰의 댓글 목록 오름차순 조회
      */
-    @Query("select rr from ReviewReply rr join fetch rr.review r where r.id = :id order by rr.createAt asc")
+    @Query("select rr from ReviewReply rr join fetch rr.review r where r.id = :id order by rr.createdAt asc")
     List<ReviewReply> findAllOrderByCreatedAtAsc(@Param("id") final Long id);
 
     /**
      * 특정 리뷰의 댓글 목록 내림차순 조회
      */
-    @Query("select rr from ReviewReply rr join fetch rr.review r where r.id = :id order by rr.createAt desc")
+    @Query("select rr from ReviewReply rr join fetch rr.review r where r.id = :id order by rr.createdAt desc")
     List<ReviewReply> findAllOrderByCreatedAtDesc(@Param("id") final Long id);
 
     /** 상세 조회 */

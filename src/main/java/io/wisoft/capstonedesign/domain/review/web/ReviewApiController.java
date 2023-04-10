@@ -33,15 +33,6 @@ public class ReviewApiController {
         return reviewService.findByUsingPaging(pageable).map(ReviewListDto::new);
     }
 
-    /** 특정 작성자의 리뷰 목록 조회 */
-    @GetMapping("/api/reviews/member/{member-id}")
-    public Page<ReviewListDto> reviewsByMemberId(
-            @PathVariable("member-id") final Long id, final Pageable pageable) {
-
-        return reviewService.findByMemberIdUsingPaging(id,pageable)
-                .map(ReviewListDto::new);
-    }
-
 
     /** 특정 병원의 리뷰 목록 페이징 조회 */
     @GetMapping("/api/reviews/hospital")

@@ -58,10 +58,4 @@ public class PickService {
     public Pick findDetailById(final Long pickId) {
         return pickRepository.findDetailById(pickId).orElseThrow(NullPickException::new);
     }
-
-
-    /** 특정 작성자의 찜하기 목록 페이징 조회 */
-    public Page<Pick> findByMemberIdUsingPaging(final Long memberId, final Pageable pageable) {
-        return pickRepository.findByMemberIdUsingPaging(memberId, pageable);
-    }
 }

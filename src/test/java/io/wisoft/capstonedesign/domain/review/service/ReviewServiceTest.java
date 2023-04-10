@@ -167,7 +167,7 @@ public class ReviewServiceTest {
 
         //then -- 검증
         Assertions.assertThat(review.getTitle()).isEqualTo(request2.getNewTitle());
-        Assertions.assertThat(review.getUpdateAt()).isNotNull();
+        Assertions.assertThat(review.getUpdatedAt()).isNotNull();
     }
 
     @Test(expected = IllegalValueException.class)
@@ -214,7 +214,7 @@ public class ReviewServiceTest {
         //리뷰생성
         CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
         Long saveId = reviewService.save(request1);
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
+        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
         reviewService.findByTargetHospital("아보카두두병원", request);

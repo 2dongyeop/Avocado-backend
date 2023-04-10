@@ -146,7 +146,7 @@ public class BoardServiceTest {
         //then -- 검증
         Assertions.assertThat(board.getTitle()).isEqualTo(request2.getNewTitle());
         Assertions.assertThat(board.getBody()).isEqualTo(request2.getNewBody());
-        Assertions.assertThat(board.getUpdateAt()).isNotNull();
+        Assertions.assertThat(board.getUpdatedAt()).isNotNull();
     }
 
     @Test(expected = IllegalValueException.class)
@@ -180,12 +180,12 @@ public class BoardServiceTest {
     @Test
     public void paging() throws Exception {
         //given -- 조건
-        PageRequest pageRequest = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
+        PageRequest pageRequest = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
         List<Board> page = boardService.findAllUsingPaging(pageRequest).getContent();
 
         //then -- 검증
-        Assertions.assertThat(page.size()).isEqualTo(2);
+        Assertions.assertThat(page.size()).isEqualTo(3);
     }
 }

@@ -21,14 +21,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 
     /**
-     * 특정 작성자의 리뷰 조회
-     */
-    @Query(value = "select r from Review r join fetch r.member m where m.id =:id order by r.createAt asc"
-            , countQuery = "select count(r) from Review r")
-    Page<Review> findByMemberIdUsingPaging(@Param("id") final Long memberId, final Pageable pageable);
-
-
-    /**
      * 특정 병원의 리뷰 조회
      */
     @Query(value = "select r from Review r where r.targetHospital = :targetHospital",

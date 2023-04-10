@@ -9,6 +9,7 @@ build/
 h2
 *application.yml*
 *.sql*
+*chatgpt*
 
 
 ### STS ###

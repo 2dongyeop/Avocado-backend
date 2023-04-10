@@ -19,27 +19,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
      */
     @Query("select a from Appointment a join fetch a.hospital h where a.id =:id")
     Optional<Appointment> findDetailById(@Param("id") final Long id);
-
-
-    /**
-     * 특정 회원의 예약 정보 조회
-     */
-    @Query("select a from Appointment a join fetch a.member m where m.id = :id")
-    List<Appointment> findByMemberId(@Param("id") final Long id);
-
-
-    /**
-     * 특정 회원의 특정 페이지 예약 정보 조회
-     */
-    @Query(value = "select a" +
-            " from Appointment a" +
-            " join fetch a.member m" +
-            " join fetch a.hospital h" +
-            " where m.id = :id",
-            countQuery = "select count(a) from Appointment a where a.member.id = :id")
-    Page<Appointment> findByMemberIdUsingPaging(
-            @Param("id") final Long memberId,
-            final Pageable pageable);
 }
 
 

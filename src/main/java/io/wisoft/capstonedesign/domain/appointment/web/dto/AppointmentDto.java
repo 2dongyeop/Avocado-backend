@@ -26,7 +26,7 @@ public class AppointmentDto {
         this.member = appointment.getMember().getNickname();
         this.appointName = appointment.getAppointName();
         this.appointPhonenumber = appointment.getAppointPhonenumber();
-        this.createAt = appointment.getCreateAt();
-        this.updateAt = appointment.getUpdateAt();
+        this.createAt = appointment.getCreatedAt();
+        this.updateAt = appointment.getUpdatedAt();
     }
 }

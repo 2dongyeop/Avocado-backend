@@ -183,7 +183,7 @@ public class AppointmentServiceTest {
 
         //then -- 검증
         Assertions.assertThat(appointment.getComment()).isEqualTo("코를 높이고 싶어요");
-        Assertions.assertThat(appointment.getUpdateAt()).isNotNull();
+        Assertions.assertThat(appointment.getUpdatedAt()).isNotNull();
     }
 
     @Test(expected = IllegalValueException.class)
@@ -221,18 +221,5 @@ public class AppointmentServiceTest {
 
         //then -- 검증
         fail("코멘트가 비어있으므로 예외가 발생해야 한다.");
-    }
-
-    @Test
-    public void paging() throws Exception {
-        //given -- 조건
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
-
-        //when -- 동작
-        List<Appointment> list = appointmentService.findByMemberIdUsingPaging(1L, request)
-                .getContent();
-
-        //then -- 검증
-        Assertions.assertThat(list.size()).isEqualTo(1);
     }
 }
