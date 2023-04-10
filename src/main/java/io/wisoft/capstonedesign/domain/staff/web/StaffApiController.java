@@ -43,30 +43,6 @@ public class StaffApiController {
     }
 
 
-    /* 자신이 댓글을 작성한 게시글 목록 조회 */
-    @GetMapping("/api/staff/{staff-id}/boards")
-    public Result boardListByStaffId(@PathVariable("staff-id") final Long id) {
-
-        List<BoardDto> boardDtoList = staffService.findBoardListByStaffId(id).stream()
-                .map(BoardDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(boardDtoList);
-    }
-
-
-    /* 자신이 속한 병원의 리뷰 목록 조회 */
-    @GetMapping("/api/staff/{staff-id}/reviews")
-    public Result reviewListByStaffId(@PathVariable("staff-id") final Long id) {
-
-        List<ReviewDto> reviewDtoList = staffService.findReviewByStaffHospitalName(id)
-                .stream().map(ReviewDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(reviewDtoList);
-    }
-
-
     /* 의료진 가입 */
     @PostMapping("/api/staff/signup")
     public CreateStaffResponse saveStaff(

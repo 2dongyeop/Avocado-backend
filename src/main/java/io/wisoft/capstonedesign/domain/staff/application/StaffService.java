@@ -129,31 +129,6 @@ public class StaffService {
         staffRepository.delete(staff);
     }
 
-
-    /**
-     * 자신이 속한 병원의 리뷰 목록 조회
-     */
-    public List<Review> findReviewByStaffHospitalName(final Long staffId) {
-
-        Staff staff = findById(staffId);
-        String hospitalName = staff.getHospital().getName();
-
-        return staffRepository.findReviewListByStaffHospitalName(hospitalName);
-    }
-
-    /**
-     * 자신이 댓글 단 게시글 목록 조회
-     */
-    public List<Board> findBoardListByStaffId(final Long staffId) {
-        List<BoardReply> boardReplyListByStaffId = staffRepository.findBoardReplyListByStaffId(staffId);
-
-        List<Board> boardList = boardReplyListByStaffId.stream()
-                .map(BoardReply::getBoard)
-                .collect(Collectors.toList());
-
-        return boardList;
-    }
-
     /** 상세 조회 */
     public Staff findDetailById(final Long staffId) {
         return staffRepository.findDetailById(staffId).orElseThrow(NullStaffException::new);
