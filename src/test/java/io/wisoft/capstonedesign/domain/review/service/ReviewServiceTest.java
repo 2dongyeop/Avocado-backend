@@ -167,7 +167,7 @@ public class ReviewServiceTest {
 
         //then -- 검증
         Assertions.assertThat(review.getTitle()).isEqualTo(request2.getNewTitle());
-        Assertions.assertThat(review.getUpdateAt()).isNotNull();
+        Assertions.assertThat(review.getUpdatedAt()).isNotNull();
     }
 
     @Test(expected = IllegalValueException.class)

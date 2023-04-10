@@ -23,7 +23,7 @@ public class BoardListDto {
         this.body = board.getBody();
         this.dept = board.getDept().toString();
         this.writer = board.getMember().getNickname();
-        this.createAt = board.getCreateAt();
-        this.updateAt = board.getUpdateAt();
+        this.createAt = board.getCreatedAt();
+        this.updateAt = board.getUpdatedAt();
     }
 }

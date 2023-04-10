@@ -25,12 +25,12 @@ public interface BoardReplyRepository extends JpaRepository<BoardReply, Long> {
     /**
      * 특정게시글의 댓글 목록 오름차순 조회
      */
-    @Query("select br from BoardReply br order by br.createAt asc")
+    @Query("select br from BoardReply br order by br.createdAt asc")
     List<BoardReply> findByBoardIdOrderByCreateAsc();
 
     /**
      * 특정게시글의 댓글 목록 내림차순 조회
      */
-    @Query("select br from BoardReply br order by br.createAt desc")
+    @Query("select br from BoardReply br order by br.createdAt desc")
     List<BoardReply> findByBoardIdOrderByCreateDesc();
 }

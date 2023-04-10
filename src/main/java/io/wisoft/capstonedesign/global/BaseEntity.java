@@ -17,17 +17,17 @@ public abstract class BaseEntity {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     public void createEntity() {
-        createAt = LocalDateTime.now();
-        updateAt = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     public void updateEntity() {
-        updateAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 }

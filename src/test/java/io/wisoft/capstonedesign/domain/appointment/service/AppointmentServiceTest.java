@@ -183,7 +183,7 @@ public class AppointmentServiceTest {
 
         //then -- 검증
         Assertions.assertThat(appointment.getComment()).isEqualTo("코를 높이고 싶어요");
-        Assertions.assertThat(appointment.getUpdateAt()).isNotNull();
+        Assertions.assertThat(appointment.getUpdatedAt()).isNotNull();
     }
 
     @Test(expected = IllegalValueException.class)

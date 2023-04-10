@@ -260,7 +260,7 @@ public class BoardReplyServiceTest {
         //then -- 검증
         BoardReply getBoardReply = boardReplyService.findById(boardReply.getId());
         Assertions.assertThat(getBoardReply.getReply()).isEqualTo("걱정말긴 뭘 말아요!");
-        Assertions.assertThat(getBoardReply.getUpdateAt()).isNotNull();
+        Assertions.assertThat(getBoardReply.getUpdatedAt()).isNotNull();
     }
 
     @Test(expected = IllegalValueException.class)

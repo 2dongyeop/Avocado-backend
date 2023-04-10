@@ -60,7 +60,7 @@ public class AppointmentApiController {
      * 특정 회원의 특정 페이지 예약 정보 조회
      */
     @GetMapping("/api/appointments/member/{member-id}")
-    public Page<AppointmentDto> appointmentsByMemberIdUsingPagingOrderByCreateAtAsc(
+    public Page<AppointmentDto> appointmentsByMemberIdUsingPaging(
             @PathVariable("member-id") final Long memberId, final Pageable pageable) {
 
         return appointmentService.findByMemberIdUsingPaging(memberId, pageable).map(AppointmentDto::new);

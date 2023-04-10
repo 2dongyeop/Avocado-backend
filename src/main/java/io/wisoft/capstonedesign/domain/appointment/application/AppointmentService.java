@@ -119,7 +119,6 @@ public class AppointmentService {
 
     /** 특정 회원의 특정 페이지 예약 정보 조회 */
     public Page<Appointment> findByMemberIdUsingPaging(final Long memberId, final Pageable pageable) {
-
         return appointmentRepository.findByMemberIdUsingPaging(memberId, pageable);
     }
 }

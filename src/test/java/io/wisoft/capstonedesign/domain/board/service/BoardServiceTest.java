@@ -146,7 +146,7 @@ public class BoardServiceTest {
         //then -- 검증
         Assertions.assertThat(board.getTitle()).isEqualTo(request2.getNewTitle());
         Assertions.assertThat(board.getBody()).isEqualTo(request2.getNewBody());
-        Assertions.assertThat(board.getUpdateAt()).isNotNull();
+        Assertions.assertThat(board.getUpdatedAt()).isNotNull();
     }
 
     @Test(expected = IllegalValueException.class)

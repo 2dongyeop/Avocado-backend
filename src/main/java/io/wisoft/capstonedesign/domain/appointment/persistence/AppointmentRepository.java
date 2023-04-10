@@ -37,9 +37,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             " join fetch a.hospital h" +
             " where m.id = :id",
             countQuery = "select count(a) from Appointment a where a.member.id = :id")
-    Page<Appointment> findByMemberIdUsingPaging(
-            @Param("id") final Long memberId,
-            final Pageable pageable);
+    Page<Appointment> findByMemberIdUsingPaging(@Param("id") final Long memberId, final Pageable pageable);
 }
 
 
