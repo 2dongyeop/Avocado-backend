@@ -27,7 +27,7 @@ public class ReviewApiController {
 
     /** 리뷰 목록 페이징 조회 */
     @GetMapping("/api/reviews")
-    public Page<ReviewListDto> reviewsUsingPagingOrderByCreateAtAsc(final Pageable pageable) {
+    public Page<ReviewListDto> reviewsUsingPaging(final Pageable pageable) {
         return reviewService.findByUsingPaging(pageable).map(ReviewListDto::new);
     }
 
