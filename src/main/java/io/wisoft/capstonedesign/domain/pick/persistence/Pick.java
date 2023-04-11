@@ -3,7 +3,6 @@ package io.wisoft.capstonedesign.domain.pick.persistence;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.BaseEntity;
-import io.wisoft.capstonedesign.global.enumeration.status.PickStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,10 +16,6 @@ public class Pick extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pick_id")
     private Long id;
-
-    @Column(name = "pick_status")
-    @Enumerated(EnumType.STRING)
-    private PickStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -64,22 +59,7 @@ public class Pick extends BaseEntity {
         pick.setMember(member);
         pick.setHospital(hospital);
 
-        pick.status = PickStatus.COMPLETE;
         pick.createEntity();
-
         return pick;
-    }
-
-    /**
-     * 찜하기 취소
-     */
-    public void cancel() {
-
-        if (this.status == PickStatus.CANCEL) {
-            throw new IllegalStateException("이미 취소된 찜하기입니다.");
-        }
-
-        this.status = PickStatus.CANCEL;
-        this.updateEntity();
     }
 }

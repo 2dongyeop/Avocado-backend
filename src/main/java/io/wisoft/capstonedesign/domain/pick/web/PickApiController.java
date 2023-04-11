@@ -5,8 +5,6 @@ import io.wisoft.capstonedesign.domain.pick.application.PickService;
 import io.wisoft.capstonedesign.domain.pick.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,9 +26,7 @@ public class PickApiController {
     @DeleteMapping("/api/picks/{id}")
     public DeletePickResponse deletePick(@PathVariable("id") final Long id) {
         pickService.cancelPick(id);
-        Pick pick = pickService.findById(id);
-
-        return new DeletePickResponse(pick.getId(), pick.getStatus().toString());
+        return new DeletePickResponse(id);
     }
 
 

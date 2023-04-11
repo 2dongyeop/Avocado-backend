@@ -15,6 +15,7 @@ public class BoardListDto {
     private String body;
     private String dept;
     private String writer;
+    private String status;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
@@ -23,6 +24,7 @@ public class BoardListDto {
         this.body = board.getBody();
         this.dept = board.getDept().toString();
         this.writer = board.getMember().getNickname();
+        this.status = board.getStatus().toString();
         this.createAt = board.getCreatedAt();
         this.updateAt = board.getUpdatedAt();
     }

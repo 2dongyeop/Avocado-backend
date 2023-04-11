@@ -43,8 +43,7 @@ public class BoardReplyApiController {
     @DeleteMapping("/api/board-reply/{id}")
     public DeleteBoardReplyResponse deleteBoardReply(@PathVariable("id") final Long id) {
         boardReplyService.deleteBoardReply(id);
-        BoardReply boardReply = boardReplyService.findById(id);
-        return new DeleteBoardReplyResponse(boardReply.getId(), boardReply.getStatus().toString());
+        return new DeleteBoardReplyResponse(id);
     }
 
 

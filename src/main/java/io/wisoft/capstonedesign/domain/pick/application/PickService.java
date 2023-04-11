@@ -9,8 +9,6 @@ import io.wisoft.capstonedesign.global.exception.nullcheck.NullPickException;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +44,7 @@ public class PickService {
     @Transactional
     public void cancelPick(final Long pickId) {
         Pick pick = findById(pickId);
-        pick.cancel();
+        pickRepository.delete(pick);
     }
 
     /* 조회 로직 */

@@ -50,9 +50,8 @@ public class HealthInfoService {
      */
     @Transactional
     public void delete(final Long healthInfoId) {
-
         HealthInfo healthInfo = findById(healthInfoId);
-        healthInfo.delete();
+        healthInfoRepository.delete(healthInfo);
     }
 
     /* 조회 로직 */

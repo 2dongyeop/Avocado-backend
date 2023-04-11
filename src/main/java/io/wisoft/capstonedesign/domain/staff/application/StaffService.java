@@ -2,12 +2,9 @@ package io.wisoft.capstonedesign.domain.staff.application;
 
 
 import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
-import io.wisoft.capstonedesign.domain.board.persistence.Board;
-import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.web.dto.LoginRequest;
-import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.domain.staff.web.dto.CreateStaffRequest;

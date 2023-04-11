@@ -9,8 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +27,7 @@ public class ReviewApiController {
 
     /** 리뷰 목록 페이징 조회 */
     @GetMapping("/api/reviews")
-    public Page<ReviewListDto> reviewsUsingPagingOrderByCreateAtAsc(final Pageable pageable) {
+    public Page<ReviewListDto> reviewsUsingPaging(final Pageable pageable) {
         return reviewService.findByUsingPaging(pageable).map(ReviewListDto::new);
     }
 

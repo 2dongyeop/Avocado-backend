@@ -53,7 +53,7 @@ public class BoardReplyService {
     @Transactional
     public void deleteBoardReply(final Long boardReplyId) {
         BoardReply boardReply = findById(boardReplyId);
-        boardReply.delete();
+        boardReplyRepository.delete(boardReply);
     }
 
     /**

@@ -16,15 +16,22 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     /**
      * 특정 페이지의 리뷰 목록 조회
      */
-    @Query(value = "select r from Review r join fetch r.member m", countQuery = "select count(r) from Review r")
+    @Query(value =
+            "select r" +
+                    " from Review r" +
+                    " join fetch r.member m" +
+                    " where r.status = 'WRITE'", countQuery = "select count(r) from Review r")
     Page<Review> findByUsingPaging(final Pageable pageable);
 
 
     /**
      * 특정 병원의 리뷰 조회
      */
-    @Query(value = "select r from Review r where r.targetHospital = :targetHospital",
-            countQuery = "select count(r) from Review r")
+    @Query(value =
+            "select r" +
+                    " from Review r" +
+                    " where r.targetHospital = :targetHospital" +
+                    " and r.status = 'WRITE'", countQuery = "select count(r) from Review r")
     Page<Review> findByTargetHospitalUsingPaging(
             @Param("targetHospital") final String targetHospital, final Pageable pageable);
 

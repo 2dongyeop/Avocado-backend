@@ -1,12 +1,10 @@
-package io.wisoft.capstonedesign.domain.appointment.service;
+package io.wisoft.capstonedesign.domain.appointment.application;
 
 import io.wisoft.capstonedesign.domain.appointment.persistence.Appointment;
-import io.wisoft.capstonedesign.domain.appointment.application.AppointmentService;
 import io.wisoft.capstonedesign.domain.appointment.web.dto.CreateAppointmentRequest;
 import io.wisoft.capstonedesign.domain.appointment.web.dto.UpdateAppointmentRequest;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
-import io.wisoft.capstonedesign.global.enumeration.status.AppointmentStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullAppointmentException;
 import jakarta.persistence.EntityManager;
@@ -15,12 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -64,47 +58,24 @@ public class AppointmentServiceTest {
 
         //then -- 검증
         Appointment appointment = appointmentService.findById(saveId);
-        Assertions.assertThat(appointment.getStatus()).isEqualTo(AppointmentStatus.COMPLETE);
         Assertions.assertThat(appointment.getAppointName()).isEqualTo(request.getAppointName());
     }
 
 
-    @Test
+    @Test(expected = NullAppointmentException.class)
     public void 예약_취소() throws Exception {
         //given -- 조건
 
-        //회원 생성
-        Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
-        em.persist(member);
-
-        //병원 생성
-        Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
-        em.persist(hospital);
-
-        //임시 요청 생성
-        CreateAppointmentRequest request = new CreateAppointmentRequest(member.getId(), hospital.getId(), "DENTAL", "눈이 건조해요", "이동엽", "01012345678");
-        Long saveId = appointmentService.save(request);
-
         //when -- 동작
-        Appointment appointment = appointmentService.findById(saveId);
-        appointment.cancel();
+        appointmentService.deleteAppointment(1L);
 
         //then -- 검증
-        Assertions.assertThat(appointment.getStatus()).isEqualTo(AppointmentStatus.CANCEL);
+        appointmentService.findById(1L);
+        fail("1번 예약은 취소되었으니 결과가 없어 예외가 발생해야 한다.");
     }
 
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = NullAppointmentException.class)
     public void 예약_중복_취소요청() throws Exception {
         //given -- 조건
 
@@ -131,8 +102,8 @@ public class AppointmentServiceTest {
         Long saveId = appointmentService.save(request);
 
         //when -- 동작
-        appointmentService.cancelAppointment(saveId);
-        appointmentService.cancelAppointment(saveId);
+        appointmentService.deleteAppointment(saveId);
+        appointmentService.deleteAppointment(saveId);
 
         //then -- 검증
         fail("중복 예약 취소 요청으로 인한 예외가 발생해야 한다.");

@@ -1,7 +1,6 @@
 package io.wisoft.capstonedesign.domain.staff.persistence;
 
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
-import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

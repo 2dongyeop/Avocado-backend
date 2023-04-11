@@ -1,9 +1,7 @@
-package io.wisoft.capstonedesign.domain.businfo.service;
+package io.wisoft.capstonedesign.domain.businfo.application;
 
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfo;
-import io.wisoft.capstonedesign.domain.businfo.application.BusInfoService;
 import io.wisoft.capstonedesign.domain.businfo.web.dto.CreateBusInfoRequest;
-import io.wisoft.capstonedesign.global.enumeration.status.BusInfoStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBusInfoException;
 import org.assertj.core.api.Assertions;
@@ -40,24 +38,21 @@ public class BusInfoServiceTest {
 
         Assertions.assertThat(busInfo.getBusInfoPath()).isEqualTo(request.getBusInfoPath());
         Assertions.assertThat(busInfo.getArea().toString()).isEqualTo(request.getArea());
-        Assertions.assertThat(busInfo.getStatus()).isEqualTo(BusInfoStatus.WRITE);
     }
 
-    @Test
+    @Test(expected = NullBusInfoException.class)
     public void 버스정보_삭제() throws Exception {
         //given -- 조건
 
         CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
         Long saveId = busInfoService.save(request);
 
-        BusInfo busInfo = busInfoService.findById(saveId);
-
         //when -- 동작
-        busInfo.delete();
+        busInfoService.delete(saveId);
 
         //then -- 검증
-        Assertions.assertThat(busInfo.getBusInfoPath()).isEqualTo(request.getBusInfoPath());
-        Assertions.assertThat(busInfo.getStatus()).isEqualTo(BusInfoStatus.DELETE);
+        busInfoService.findById(saveId);
+        fail("존재하지 않는 아이디로 인해 예외가 발샐");
     }
 
     @Test(expected = NullBusInfoException.class)
@@ -71,18 +66,16 @@ public class BusInfoServiceTest {
         fail("단건 조회 실패로 인해 예외가 발생해야 한다.");
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = NullBusInfoException.class)
     public void 버스정보_삭제요청_중복() throws Exception {
         //given -- 조건
 
         CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
         Long saveId = busInfoService.save(request);
 
-        BusInfo busInfo = busInfoService.findById(saveId);
-
         //when -- 동작
-        busInfo.delete();
-        busInfo.delete();
+        busInfoService.delete(saveId);
+        busInfoService.delete(saveId);
 
         //then -- 검증
         fail("중복 삭제 요청으로 인해 예외가 발생해야 한다.");

@@ -11,11 +11,13 @@ import lombok.NoArgsConstructor;
 public class ReviewListDto {
     private String writer;
     private String title;
+    private String status;
     private String targetHospital;
 
     public ReviewListDto(final Review review) {
         this.writer = review.getMember().getNickname();
         this.title = review.getTitle();
+        this.status = review.getStatus().toString();
         this.targetHospital = review.getTargetHospital();
     }
 }

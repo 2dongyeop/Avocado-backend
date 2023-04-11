@@ -2,7 +2,6 @@ package io.wisoft.capstonedesign.domain.healthinfo.persistence;
 
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.global.BaseEntity;
-import io.wisoft.capstonedesign.global.enumeration.status.HealthInfoStatus;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -22,10 +21,6 @@ public class HealthInfo extends BaseEntity {
 
     @Column(name = "health_info_path", nullable = false)
     private String healthInfoPath;
-
-    @Column(name = "health_info_status")
-    @Enumerated(value = EnumType.STRING)
-    private HealthInfoStatus status;
 
     @Column(name = "health_info_title", nullable = false)
     private String title;
@@ -64,22 +59,7 @@ public class HealthInfo extends BaseEntity {
         healthInfo.title = title;
         healthInfo.dept = dept;
 
-        healthInfo.status = HealthInfoStatus.WRITE;
         healthInfo.createEntity();
-
         return healthInfo;
-    }
-
-    /**
-     * 건강정보 삭제
-     */
-    public void delete() {
-
-        if (this.status == HealthInfoStatus.DELETE) {
-            throw new IllegalStateException("이미 삭제된 건강정보입니다.");
-        }
-
-        this.status = HealthInfoStatus.DELETE;
-        this.updateEntity();
     }
 }

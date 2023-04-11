@@ -9,8 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,9 +31,7 @@ public class HealthInfoApiController {
     /* 건강 정보 삭제 */
     @DeleteMapping("/api/health-infos/{id}")
     public DeleteHealthInfoResponse deleteHealthInfo(@PathVariable("id") final Long id) {
-        HealthInfo healthInfo = healthInfoService.findById(id);
-        healthInfo.delete();
-
+        healthInfoService.delete(id);
         return new DeleteHealthInfoResponse(id);
     }
 

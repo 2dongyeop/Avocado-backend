@@ -12,17 +12,12 @@ import io.wisoft.capstonedesign.global.exception.nullcheck.NullAppointmentExcept
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -62,9 +57,9 @@ public class AppointmentService {
      * 예약 정보 삭제
      */
     @Transactional
-    public void cancelAppointment(final Long appointmentId) {
+    public void deleteAppointment(final Long appointmentId) {
         Appointment appointment = findById(appointmentId);
-        appointment.cancel();
+        appointmentRepository.delete(appointment);
     }
 
     /**

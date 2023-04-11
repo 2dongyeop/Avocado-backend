@@ -3,7 +3,6 @@ package io.wisoft.capstonedesign.domain.boardreply.persistence;
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
-import io.wisoft.capstonedesign.global.enumeration.status.BoardReplyStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,10 +20,6 @@ public class BoardReply extends BaseEntity {
 
     @Column(name = "reply", nullable = false)
     private String reply;
-
-    @Column(name = "board_reply_status")
-    @Enumerated(EnumType.STRING)
-    private BoardReplyStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
@@ -74,24 +69,10 @@ public class BoardReply extends BaseEntity {
         boardReply.setStaff(staff);
         boardReply.reply = reply;
 
-        boardReply.status = BoardReplyStatus.WRITE;
         boardReply.createEntity();
-
         return boardReply;
     }
 
-    /**
-     * 댓글 삭제
-     */
-    public void delete() {
-
-        if (this.status == BoardReplyStatus.DELETE) {
-            throw new IllegalStateException("이미 삭제된 댓글입니다.");
-        }
-
-        this.status = BoardReplyStatus.DELETE;
-        this.updateEntity();
-    }
 
     /**
      * 게시글댓글 수정

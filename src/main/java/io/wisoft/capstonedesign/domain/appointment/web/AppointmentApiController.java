@@ -5,12 +5,8 @@ import io.wisoft.capstonedesign.domain.appointment.application.AppointmentServic
 import io.wisoft.capstonedesign.domain.appointment.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,10 +27,8 @@ public class AppointmentApiController {
     /* 예약 삭제 */
     @DeleteMapping("/api/appointments/{id}")
     public DeleteAppointmentResponse deleteAppointment(@PathVariable("id") final Long id) {
-
-        appointmentService.cancelAppointment(id);
-        Appointment appointment = appointmentService.findById(id);
-        return new DeleteAppointmentResponse(appointment.getId(), appointment.getStatus().toString());
+        appointmentService.deleteAppointment(id);
+        return new DeleteAppointmentResponse(id);
     }
 
 

@@ -1,7 +1,6 @@
-package io.wisoft.capstonedesign.domain.board.service;
+package io.wisoft.capstonedesign.domain.board.application;
 
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
-import io.wisoft.capstonedesign.domain.board.application.BoardService;
 import io.wisoft.capstonedesign.domain.board.web.dto.CreateBoardRequest;
 import io.wisoft.capstonedesign.domain.board.web.dto.UpdateBoardRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;

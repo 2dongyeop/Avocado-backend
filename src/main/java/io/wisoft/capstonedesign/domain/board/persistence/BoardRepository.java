@@ -27,7 +27,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     /**
      * 게시글 목록을 페이징 조회
      */
-    @Query(value = "select b from Board b", countQuery = "select count(b) from Board b")
+    @Query(value = "select b from Board b where b.status = 'WRITE'", countQuery = "select count(b) from Board b")
     Page<Board> findAllUsingPaging(final Pageable pageable);
 
     @Query("select b from Board b join fetch b.member m")

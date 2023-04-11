@@ -1,10 +1,7 @@
 package io.wisoft.capstonedesign.domain.staff.web;
 
-import io.wisoft.capstonedesign.domain.board.persistence.Board;
-import io.wisoft.capstonedesign.domain.board.web.dto.BoardDto;
 import io.wisoft.capstonedesign.domain.member.web.dto.LoginRequest;
 import io.wisoft.capstonedesign.domain.member.web.dto.TokenResponse;
-import io.wisoft.capstonedesign.domain.review.web.dto.ReviewDto;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import io.wisoft.capstonedesign.domain.staff.web.dto.*;

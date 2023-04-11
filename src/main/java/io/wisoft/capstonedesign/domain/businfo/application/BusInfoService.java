@@ -39,7 +39,7 @@ public class BusInfoService {
     public void delete(final Long busInfoId) {
 
         BusInfo busInfo = findById(busInfoId);
-        busInfo.delete();
+        busInfoRepository.delete(busInfo);
     }
 
 

@@ -6,9 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DeleteAppointmentResponse {
     private Long id;
-    private String status;
+
+
+    public DeleteAppointmentResponse(final Long id) {
+        this.id = id;
+    }
 }

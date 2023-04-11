@@ -2,7 +2,6 @@ package io.wisoft.capstonedesign.domain.businfo.persistence;
 
 import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.global.enumeration.BusArea;
-import io.wisoft.capstonedesign.global.enumeration.status.BusInfoStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,10 +24,6 @@ public class BusInfo extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private BusArea area;
 
-    @Column(name = "bus_info_status")
-    @Enumerated(value = EnumType.STRING)
-    private BusInfoStatus status;
-
     /* 정적 생성 메서드 */
     public static BusInfo createBusInfo(
             final String busInfoPath,
@@ -38,22 +33,7 @@ public class BusInfo extends BaseEntity {
         busInfo.busInfoPath = busInfoPath;
         busInfo.area = area;
 
-        busInfo.status = BusInfoStatus.WRITE;
         busInfo.createEntity();
-
         return busInfo;
-    }
-
-    /**
-     * 버스정보 삭제
-     */
-    public void delete() {
-
-        if (this.status == BusInfoStatus.DELETE) {
-            throw new IllegalStateException("이미 삭제된 버스정보입니다.");
-        }
-
-        this.status = BusInfoStatus.DELETE;
-        this.updateEntity();
     }
 }

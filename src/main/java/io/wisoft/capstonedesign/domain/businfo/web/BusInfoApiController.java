@@ -52,7 +52,6 @@ public class BusInfoApiController {
     @DeleteMapping("/api/bus-info/{id}")
     public Result delete(@PathVariable final Long id) {
         busInfoService.delete(id);
-        BusInfo busInfo = busInfoService.findById(id);
-        return new Result(new DeleteBusInfoResponse(busInfo.getId(), busInfo.getStatus().toString()));
+        return new Result(new DeleteBusInfoResponse(id));
     }
 }
