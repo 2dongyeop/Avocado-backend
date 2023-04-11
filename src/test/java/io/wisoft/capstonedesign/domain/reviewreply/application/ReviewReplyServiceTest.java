@@ -5,7 +5,6 @@ import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
 import io.wisoft.capstonedesign.domain.reviewreply.web.dto.CreateReviewReplyRequest;
 import io.wisoft.capstonedesign.domain.reviewreply.web.dto.UpdateReviewReplyRequest;
-import io.wisoft.capstonedesign.global.enumeration.status.ReviewReplyStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewReplyException;
 import jakarta.persistence.EntityManager;
@@ -57,11 +56,10 @@ public class ReviewReplyServiceTest {
 
         //then -- 검증
         ReviewReply reviewReply = reviewReplyService.findById(saveId);
-        Assertions.assertThat(reviewReply.getStatus()).isEqualTo(ReviewReplyStatus.WRITE);
         Assertions.assertThat(reviewReply.getReply()).isEqualTo(request.getReply());
     }
 
-    @Test
+    @Test(expected = NullReviewReplyException.class)
     public void 리뷰_댓글_삭제() throws Exception {
         //given -- 조건
 
@@ -91,11 +89,11 @@ public class ReviewReplyServiceTest {
         reviewReplyService.deleteReviewReply(saveId);
 
         //then -- 검증
-        ReviewReply getReviewReply = reviewReplyService.findById(saveId);
-        Assertions.assertThat(getReviewReply.getStatus()).isEqualTo(ReviewReplyStatus.DELETE);
+        reviewReplyService.findById(saveId);
+        fail("해당 아이디가 존재하지 않아 예외가 발생해야 한다.");
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = NullReviewReplyException.class)
     public void 리뷰_댓글_삭제요청_중복() throws Exception {
         //given -- 조건
 

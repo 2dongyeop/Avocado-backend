@@ -57,9 +57,9 @@ public class AppointmentService {
      * 예약 정보 삭제
      */
     @Transactional
-    public void cancelAppointment(final Long appointmentId) {
+    public void deleteAppointment(final Long appointmentId) {
         Appointment appointment = findById(appointmentId);
-        appointment.cancel();
+        appointmentRepository.delete(appointment);
     }
 
     /**

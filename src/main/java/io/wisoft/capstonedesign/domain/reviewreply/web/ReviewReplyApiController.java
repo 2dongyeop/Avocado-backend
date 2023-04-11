@@ -34,8 +34,7 @@ public class ReviewReplyApiController {
             @PathVariable("id") final Long id) {
 
         reviewReplyService.deleteReviewReply(id);
-        ReviewReply reviewReply = reviewReplyService.findById(id);
-        return new DeleteReviewReplyResponse(reviewReply.getId(), reviewReply.getStatus().toString());
+        return new DeleteReviewReplyResponse(id);
     }
 
 

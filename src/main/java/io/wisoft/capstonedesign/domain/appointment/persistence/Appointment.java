@@ -3,7 +3,6 @@ package io.wisoft.capstonedesign.domain.appointment.persistence;
 import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
-import io.wisoft.capstonedesign.global.enumeration.status.AppointmentStatus;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -29,10 +28,6 @@ public class Appointment extends BaseEntity {
     @Lob
     @Column(name = "appt_comment", nullable = false, columnDefinition="TEXT")
     private String comment;
-
-    @Column(name = "appt_status")
-    @Enumerated(EnumType.STRING)
-    private AppointmentStatus status;
 
     @Column(name = "appt_name", nullable = false)
     private String appointName;
@@ -95,23 +90,8 @@ public class Appointment extends BaseEntity {
         appointment.appointName = appointName;
         appointment.appointPhonenumber = appointPhonenumber;
 
-        appointment.status = AppointmentStatus.COMPLETE;
         appointment.createEntity();
-
         return appointment;
-    }
-
-    /**
-     * 예약 취소
-     */
-    public void cancel() {
-
-        if (this.status == AppointmentStatus.CANCEL) {
-            throw new IllegalStateException("이미 취소된 예약입니다.");
-        }
-
-        this.status = AppointmentStatus.CANCEL;
-        this.updateEntity();
     }
 
     /**

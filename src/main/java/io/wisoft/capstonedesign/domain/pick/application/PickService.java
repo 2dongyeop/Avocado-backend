@@ -44,7 +44,7 @@ public class PickService {
     @Transactional
     public void cancelPick(final Long pickId) {
         Pick pick = findById(pickId);
-        pick.cancel();
+        pickRepository.delete(pick);
     }
 
     /* 조회 로직 */

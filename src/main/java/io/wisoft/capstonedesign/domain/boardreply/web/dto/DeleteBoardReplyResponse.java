@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DeleteBoardReplyResponse {
     private Long id;
-    private String status;
 }

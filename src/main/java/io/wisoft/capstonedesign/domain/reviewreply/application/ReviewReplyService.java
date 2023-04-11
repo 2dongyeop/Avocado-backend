@@ -54,7 +54,7 @@ public class ReviewReplyService {
     public void deleteReviewReply(final Long reviewReplyId) {
 
         ReviewReply reviewReply = findById(reviewReplyId);
-        reviewReply.delete();
+        reviewReplyRepository.delete(reviewReply);
     }
 
 

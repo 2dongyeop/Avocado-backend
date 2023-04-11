@@ -26,9 +26,7 @@ public class PickApiController {
     @DeleteMapping("/api/picks/{id}")
     public DeletePickResponse deletePick(@PathVariable("id") final Long id) {
         pickService.cancelPick(id);
-        Pick pick = pickService.findById(id);
-
-        return new DeletePickResponse(pick.getId(), pick.getStatus().toString());
+        return new DeletePickResponse(id);
     }
 
 

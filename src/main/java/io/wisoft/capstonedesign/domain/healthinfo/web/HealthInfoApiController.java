@@ -31,9 +31,7 @@ public class HealthInfoApiController {
     /* 건강 정보 삭제 */
     @DeleteMapping("/api/health-infos/{id}")
     public DeleteHealthInfoResponse deleteHealthInfo(@PathVariable("id") final Long id) {
-        HealthInfo healthInfo = healthInfoService.findById(id);
-        healthInfo.delete();
-
+        healthInfoService.delete(id);
         return new DeleteHealthInfoResponse(id);
     }
 

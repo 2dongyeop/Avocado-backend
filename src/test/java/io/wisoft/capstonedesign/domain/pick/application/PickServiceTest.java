@@ -4,7 +4,6 @@ import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.pick.web.dto.CreatePickRequest;
-import io.wisoft.capstonedesign.global.enumeration.status.PickStatus;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullPickException;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -55,12 +54,11 @@ public class PickServiceTest {
 
         //then -- 검증
         Pick pick = pickService.findById(saveId);
-        Assertions.assertThat(pick.getStatus()).isEqualTo(PickStatus.COMPLETE);
         Assertions.assertThat(pick.getHospital().getName()).isEqualTo(hospital.getName());
         Assertions.assertThat(pick.getMember().getNickname()).isEqualTo(member.getNickname());
     }
     
-    @Test
+    @Test(expected = NullPickException.class)
     public void 찜하기_취소() throws Exception {
         //given -- 조건
 
@@ -89,11 +87,12 @@ public class PickServiceTest {
         pickService.cancelPick(saveId);
 
         //then -- 검증
-        Assertions.assertThat(pickService.findById(saveId).getStatus()).isEqualTo(PickStatus.CANCEL);
+        pickService.findById(saveId);
+        fail("해당 아이디가 삭제되어 존재하지 않아 예외가 발생해야 한다.");
     }
 
     
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = NullPickException.class)
     public void 찜하기_취소_요청_중복() throws Exception {
         //given -- 조건
 

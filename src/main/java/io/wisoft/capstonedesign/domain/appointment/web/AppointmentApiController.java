@@ -27,10 +27,8 @@ public class AppointmentApiController {
     /* 예약 삭제 */
     @DeleteMapping("/api/appointments/{id}")
     public DeleteAppointmentResponse deleteAppointment(@PathVariable("id") final Long id) {
-
-        appointmentService.cancelAppointment(id);
-        Appointment appointment = appointmentService.findById(id);
-        return new DeleteAppointmentResponse(appointment.getId(), appointment.getStatus().toString());
+        appointmentService.deleteAppointment(id);
+        return new DeleteAppointmentResponse(id);
     }
 
 
