@@ -1,7 +1,6 @@
-package io.wisoft.capstonedesign.domain.appointment.service;
+package io.wisoft.capstonedesign.domain.appointment.application;
 
 import io.wisoft.capstonedesign.domain.appointment.persistence.Appointment;
-import io.wisoft.capstonedesign.domain.appointment.application.AppointmentService;
 import io.wisoft.capstonedesign.domain.appointment.web.dto.CreateAppointmentRequest;
 import io.wisoft.capstonedesign.domain.appointment.web.dto.UpdateAppointmentRequest;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
@@ -15,12 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static org.junit.Assert.*;
 

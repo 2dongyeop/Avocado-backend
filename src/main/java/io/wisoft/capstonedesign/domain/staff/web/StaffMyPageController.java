@@ -31,7 +31,7 @@ public class StaffMyPageController {
     /** 자신이 댓글을 작성한 게시글 목록 조회 */
     @GetMapping("/api/staff/{staff-id}/my-page/boards")
     public Result boardListByStaffId(@PathVariable("staff-id") final Long id) {
-        return new Result(staffMyPageService.query(id).stream()
+        return new Result(staffMyPageService.findBoardListByStaffId(id).stream()
                 .map(BoardDto::new)
                 .collect(Collectors.toList()));
     }

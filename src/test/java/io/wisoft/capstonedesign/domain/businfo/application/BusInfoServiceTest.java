@@ -1,7 +1,6 @@
-package io.wisoft.capstonedesign.domain.businfo.service;
+package io.wisoft.capstonedesign.domain.businfo.application;
 
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfo;
-import io.wisoft.capstonedesign.domain.businfo.application.BusInfoService;
 import io.wisoft.capstonedesign.domain.businfo.web.dto.CreateBusInfoRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.BusInfoStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;

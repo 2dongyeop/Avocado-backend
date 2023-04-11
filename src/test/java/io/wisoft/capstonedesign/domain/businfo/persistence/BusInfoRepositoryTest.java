@@ -1,7 +1,6 @@
 package io.wisoft.capstonedesign.domain.businfo.persistence;
 
 import io.wisoft.capstonedesign.global.enumeration.BusArea;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

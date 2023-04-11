@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.domain.member.service;
+package io.wisoft.capstonedesign.domain.member.application;
 
 import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;

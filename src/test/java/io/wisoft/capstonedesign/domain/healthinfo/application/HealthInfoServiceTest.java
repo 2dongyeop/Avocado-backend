@@ -1,11 +1,10 @@
-package io.wisoft.capstonedesign.domain.healthinfo.service;
+package io.wisoft.capstonedesign.domain.healthinfo.application;
 
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import io.wisoft.capstonedesign.domain.healthinfo.web.dto.CreateHealthInfoRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.HealthInfoStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHealthInfoException;
-import io.wisoft.capstonedesign.domain.healthinfo.application.HealthInfoService;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;

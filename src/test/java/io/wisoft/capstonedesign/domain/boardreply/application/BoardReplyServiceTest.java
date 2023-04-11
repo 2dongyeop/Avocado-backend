@@ -1,8 +1,7 @@
-package io.wisoft.capstonedesign.domain.boardreply.service;
+package io.wisoft.capstonedesign.domain.boardreply.application;
 
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
-import io.wisoft.capstonedesign.domain.boardreply.application.BoardReplyService;
 import io.wisoft.capstonedesign.domain.boardreply.web.dto.CreateBoardReplyRequest;
 import io.wisoft.capstonedesign.domain.boardreply.web.dto.UpdateBoardReplyRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.BoardReplyStatus;

@@ -5,12 +5,8 @@ import io.wisoft.capstonedesign.domain.appointment.application.AppointmentServic
 import io.wisoft.capstonedesign.domain.appointment.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

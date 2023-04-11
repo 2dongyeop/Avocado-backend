@@ -5,8 +5,6 @@ import io.wisoft.capstonedesign.domain.pick.application.PickService;
 import io.wisoft.capstonedesign.domain.pick.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

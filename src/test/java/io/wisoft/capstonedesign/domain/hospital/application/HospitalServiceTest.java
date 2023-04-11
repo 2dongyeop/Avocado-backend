@@ -1,9 +1,8 @@
-package io.wisoft.capstonedesign.domain.hospital.service;
+package io.wisoft.capstonedesign.domain.hospital.application;
 
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateHospitalException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
-import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalRequest;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;

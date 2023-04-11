@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.domain.pick.service;
+package io.wisoft.capstonedesign.domain.pick.application;
 
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
@@ -6,7 +6,6 @@ import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.pick.web.dto.CreatePickRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.PickStatus;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullPickException;
-import io.wisoft.capstonedesign.domain.pick.application.PickService;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;

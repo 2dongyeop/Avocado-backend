@@ -4,7 +4,6 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
 import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewStatus;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

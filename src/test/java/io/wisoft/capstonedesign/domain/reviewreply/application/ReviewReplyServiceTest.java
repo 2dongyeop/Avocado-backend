@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.domain.reviewreply.service;
+package io.wisoft.capstonedesign.domain.reviewreply.application;
 
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
@@ -8,7 +8,6 @@ import io.wisoft.capstonedesign.domain.reviewreply.web.dto.UpdateReviewReplyRequ
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewReplyStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewReplyException;
-import io.wisoft.capstonedesign.domain.reviewreply.application.ReviewReplyService;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
