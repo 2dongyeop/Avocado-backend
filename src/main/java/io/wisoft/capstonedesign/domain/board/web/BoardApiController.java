@@ -17,7 +17,7 @@ public class BoardApiController {
     private final BoardService boardService;
 
     /* 게시글 단건 조회 */
-    @GetMapping("/api/boards/{id}")
+    @GetMapping("/api/boards/{id}/details")
     public Result board(@PathVariable Long id) {
         Board board = boardService.findDetailById(id);
 

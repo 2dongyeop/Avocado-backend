@@ -31,7 +31,7 @@ public class PickApiController {
 
 
     /* 찜하기 단건 상세 조회 */
-    @GetMapping("/api/picks/{id}")
+    @GetMapping("/api/picks/{id}/details")
     public Result pick(@PathVariable("id") final Long id) {
         Pick pick = pickService.findDetailById(id);
 

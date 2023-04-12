@@ -27,7 +27,7 @@ public class BusInfoApiController {
 
 
     /* 셔틀 버스 단건 조회 */
-    @GetMapping("/api/bus-info/{id}")
+    @GetMapping("/api/bus-info/{id}/details")
     public Result busInfo(@PathVariable final Long id) {
 
         BusInfo busInfo = busInfoService.findById(id);
@@ -36,7 +36,7 @@ public class BusInfoApiController {
 
 
     /* 특정 지역 셔틀 버스 정보 조회 */
-    @GetMapping("/api/bus-info/area")
+    @GetMapping("/api/bus-info/area/details")
     public Result busInfoByArea(
             @RequestBody @Valid final BusInfoByAreaRequest request) {
 

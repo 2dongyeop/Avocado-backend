@@ -43,7 +43,7 @@ public class AppointmentApiController {
     }
 
     /* 예약 정보 단건 조회 */
-    @GetMapping("/api/appointments/{id}")
+    @GetMapping("/api/appointments/{id}/details")
     public Result appointment(@PathVariable("id") final Long id) {
 
         Appointment appointment = appointmentService.findDetailById(id);
