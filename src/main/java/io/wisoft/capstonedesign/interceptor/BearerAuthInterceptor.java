@@ -1,5 +1,7 @@
 package io.wisoft.capstonedesign.interceptor;
 
+import io.wisoft.capstonedesign.global.exception.token.NotExistTokenException;
+import io.wisoft.capstonedesign.global.exception.token.NotValidTokenException;
 import io.wisoft.capstonedesign.jwt.AuthorizationExtractor;
 import io.wisoft.capstonedesign.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,11 +37,11 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
 
         if (!StringUtils.hasText(token)) {
             logger.error("토큰이 존재하지 않음");
-            throw new IllegalArgumentException("토큰이 존재하지 않음");
+            throw new NotExistTokenException("토큰이 존재하지 않음");
         }
         if (!jwtTokenProvider.validateToken(token)) {
             logger.error("유효하지 않은 토큰");
-            throw new IllegalArgumentException("유효하지 않은 토큰");
+            throw new NotValidTokenException("유효하지 않은 토큰");
         }
 
         //토큰을 디코딩

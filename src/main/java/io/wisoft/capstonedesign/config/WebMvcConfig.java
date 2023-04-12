@@ -21,22 +21,40 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(final InterceptorRegistry registry){
         logger.info(">>> 인터셉터 등록");
 
-        /* 추후에 등록
         registry.addInterceptor(bearerAuthInterceptor)
                 .addPathPatterns("/api/members")
-                .addPathPatterns("/api/members/**")
-                .excludePathPatterns("/api/members/login")
-                .excludePathPatterns("/api/members/signup")
+                .addPathPatterns("/api/members/**") //마이페이지가 여기에 같이 포함
 
                 .addPathPatterns("/api/staff")
                 .addPathPatterns("/api/staff/**")
-                .excludePathPatterns("/api/staff/login")
-                .excludePathPatterns("/api/staff/signup")
 
                 .addPathPatterns("/api/health-infos/new")
                 .addPathPatterns("/api/health-infos/new")
+
+                .addPathPatterns("/api/health-infos/{id}")
+
+                .addPathPatterns("/api/reviews/**")
+                .excludePathPatterns("/api/reviews/{id}/details")
+                .excludePathPatterns("/api/reviews/hospital")
+
+                .addPathPatterns("/api/boards/**")
+                .excludePathPatterns("/api/boards/{id}/details")
+
+                .addPathPatterns("/api/picks/**")
+                .excludePathPatterns("/api/picks/{id}/details")
+
+                .addPathPatterns("/api/appointments/**")
+
+                .addPathPatterns("/api/board-reply/**")
+                .excludePathPatterns("/api/board-reply/board/{board-id}/**")
+
+                .addPathPatterns("/api/review-reply/**")
+                .excludePathPatterns("/api/review-reply/review/{review_id}/**")
+
+                .addPathPatterns("/api/bus-info/**")
+                .excludePathPatterns("/api/bus-info/{id}/details")
+                .excludePathPatterns("/api/bus-info/area/{area}/details")
         ;
 
-         */
     }
 }
