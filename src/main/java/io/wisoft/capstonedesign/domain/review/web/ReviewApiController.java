@@ -17,7 +17,7 @@ public class ReviewApiController {
     private final ReviewService reviewService;
 
     /* 리뷰 단건 조회 */
-    @GetMapping("/api/reviews/{id}")
+    @GetMapping("/api/reviews/{id}/details")
     public Result review(@PathVariable("id") final Long id) {
         Review review = reviewService.findDetailById(id);
 

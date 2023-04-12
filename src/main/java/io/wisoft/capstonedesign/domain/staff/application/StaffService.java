@@ -4,24 +4,18 @@ package io.wisoft.capstonedesign.domain.staff.application;
 import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
-import io.wisoft.capstonedesign.domain.member.web.dto.LoginRequest;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
-import io.wisoft.capstonedesign.domain.staff.web.dto.CreateStaffRequest;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPasswordRequest;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPhotoPathRequest;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffHospitalRequest;
-import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
-import io.wisoft.capstonedesign.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -31,53 +25,6 @@ public class StaffService {
     private final StaffRepository staffRepository;
     private final HospitalService hospitalService;
     private final EncryptHelper encryptHelper;
-    private final JwtTokenProvider jwtTokenProvider;
-
-    /**
-     * 의료진가입
-     */
-    @Transactional
-    public Long signUp(final CreateStaffRequest request) {
-
-        validateDuplicateStaff(request);
-
-        //엔티티 조회
-        Hospital hospital = hospitalService.findById(request.getHospitalId());
-
-        Staff staff = Staff.builder()
-                .hospital(hospital)
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(encryptHelper.encrypt(request.getPassword1()))
-                .license_path(request.getLicensePath())
-                .dept(HospitalDept.valueOf(request.getDept()))
-                .build();
-
-        staffRepository.save(staff);
-        return staff.getId();
-    }
-
-    private void validateDuplicateStaff(final CreateStaffRequest request) {
-        List<Staff> staffList = staffRepository.findValidateByEmail(request.getEmail());
-        if (!staffList.isEmpty()) throw new DuplicateStaffException();
-    }
-
-
-    /**
-     * 의료진 로그인
-     */
-    public String login(final LoginRequest request) {
-
-        Staff staff = staffRepository.findByEmail(request.getEmail())
-                .orElseThrow(NullStaffException::new);
-
-        if (!encryptHelper.isMatch(request.getPassword(), staff.getPassword())) {
-            throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
-        }
-
-        return jwtTokenProvider.createToken(staff.getName());
-    }
-
 
     /**
      * 의료진 비밀번호 수정

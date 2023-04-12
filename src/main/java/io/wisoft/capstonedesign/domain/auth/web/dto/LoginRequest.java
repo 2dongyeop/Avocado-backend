@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.domain.member.web.dto;
+package io.wisoft.capstonedesign.domain.auth.web.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;

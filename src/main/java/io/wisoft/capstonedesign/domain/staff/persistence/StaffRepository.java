@@ -14,9 +14,6 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
     @Query("select s from Staff s join fetch s.hospital h")
     List<Staff> findAllByHospital();
 
-    List<Staff> findValidateByEmail(final String email);
-
-    Optional<Staff> findByEmail(final String email);
 
     /** 상세 조회 */
     @Query("select s from Staff s" +
@@ -26,4 +23,7 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
             " where s.id = :id")
     Optional<Staff> findDetailById(@Param("id") final Long id);
 
+    List<Staff> findValidateByEmail(final String email);
+
+    Optional<Staff> findStaffByEmail(final String email);
 }

@@ -31,7 +31,7 @@ public class HospitalApiController {
 
 
     /* 병원 단건 조회 */
-    @GetMapping("/api/hospitals/{id}")
+    @GetMapping("/api/hospitals/{id}/details")
     public Result hospital(@PathVariable final Long id) {
         Hospital hospital = hospitalService.findById(id);
 
