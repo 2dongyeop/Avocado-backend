@@ -47,7 +47,7 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "review", cascade = CascadeType.REMOVE)
     private List<ReviewReply> reviewReplyList = new ArrayList<>();
 
     /* 연관관계 편의 메서드 */

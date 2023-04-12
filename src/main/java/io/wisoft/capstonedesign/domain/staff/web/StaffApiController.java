@@ -1,14 +1,10 @@
 package io.wisoft.capstonedesign.domain.staff.web;
 
-import io.wisoft.capstonedesign.domain.member.web.dto.LoginRequest;
-import io.wisoft.capstonedesign.domain.member.web.dto.TokenResponse;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import io.wisoft.capstonedesign.domain.staff.web.dto.*;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +17,7 @@ public class StaffApiController {
     private final StaffService staffService;
 
     /* 의료진 단건 상세 조회 */
-    @GetMapping("api/staff/{id}")
+    @GetMapping("api/staff/{id}/details")
     public Result staff(@PathVariable("id") final Long id) {
 
         Staff staff = staffService.findDetailById(id);
@@ -37,30 +33,6 @@ public class StaffApiController {
                 .collect(Collectors.toList());
 
         return new Result(staffDtoList);
-    }
-
-
-    /* 의료진 가입 */
-    @PostMapping("/api/staff/signup")
-    public CreateStaffResponse saveStaff(
-            @RequestBody @Valid final CreateStaffRequest request) {
-
-        if (!request.getPassword1().equals(request.getPassword2())) {
-            throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.");
-        }
-
-        Long id = staffService.signUp(request);
-        return new CreateStaffResponse(id);
-    }
-
-
-    /** 의료진 로그인 */
-    @PostMapping("/api/staff/login")
-    public ResponseEntity<TokenResponse> login(
-            @RequestBody @Valid final LoginRequest request) {
-
-        String token = staffService.login(request);
-        return ResponseEntity.ok(new TokenResponse(token, "bearer"));
     }
 
 
