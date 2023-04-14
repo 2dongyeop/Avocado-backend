@@ -9,11 +9,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
 import java.util.Properties;
-
-@ComponentScan(basePackages = { "io.wisoft.capsonedesign.mail" })
+@ComponentScan(basePackages = { "io.wisoft.capstonedesign.domain.mail.application" })
 @PropertySource(value={"classpath:application.properties"})
 public class EmailConfig {
-
 
     @Value("${spring.mail.host}")
     private String mailServerHost;

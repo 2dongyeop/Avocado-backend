@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.mail;
+package io.wisoft.capstonedesign.domain.mail.persistence;
 
 
 import jakarta.validation.constraints.Email;
@@ -8,13 +8,9 @@ import lombok.Getter;
 
 @Getter
 public class MailObject {
-    @Email
-    @NotNull
+    @Email @NotNull
     @Size(min = 1, message = "Please, set an email address to send the message to it")
     private String to;
-    private String recipientName;
     private String subject;
     private String text;
-    private String senderName;
-    private String templateEngine;
 }

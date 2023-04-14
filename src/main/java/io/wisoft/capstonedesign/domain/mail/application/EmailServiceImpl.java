@@ -1,20 +1,24 @@
-package io.wisoft.capstonedesign.mail;
+package io.wisoft.capstonedesign.domain.mail.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service("EmailService")
 public class EmailServiceImpl implements EmailService {
 
-    private static final String AVOCADO_ADDRESS = "20181676@edu.hanbat.ac.kr";
+    @Value("${spring.mail.username}")
+    private String AVOCADO_ADDRESS;
 
     @Autowired
     private JavaMailSender emailSender;
 
-    public void sendSimpleMessage(String to, String subject, String text) {
+    @Async
+    public void sendSimpleMessage(final String to, final String subject, final String text) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(AVOCADO_ADDRESS);
