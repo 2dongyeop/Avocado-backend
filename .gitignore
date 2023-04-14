@@ -15,6 +15,7 @@ h2
 *application-mail.yml*
 *.sql*
 *chatgpt*
+*mail*
 
 
 ### STS ###
