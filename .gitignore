@@ -8,8 +8,14 @@ build/
 ### CUSTOM
 h2
 *application.yml*
+*application.properties*
+*application-oauth.yml*
+*application-chatgpt.yml*
+*application-jwt.yml*
+*application-mail.yml*
 *.sql*
 *chatgpt*
+*mail*
 
 
 ### STS ###
