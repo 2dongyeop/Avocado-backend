@@ -2,33 +2,17 @@ package io.wisoft.capstonedesign.config;
 
 
 import org.springframework.beans.factory.annotation.Value;
-<<<<<<< HEAD
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-=======
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.context.annotation.Bean;
->>>>>>> c95b240 (refactor: mac 내에 패키지 이전)
 import org.springframework.context.annotation.PropertySource;
 
 import java.util.Properties;
-
-<<<<<<< HEAD
-@ComponentScan(basePackages = { "io.wisoft.capsonedesign.mail" })
-@PropertySource(value={"classpath:application.properties"})
-public class EmailConfig {
-
-
-=======
 @ComponentScan(basePackages = { "io.wisoft.capstonedesign.domain.mail.application" })
 @PropertySource(value={"classpath:application.properties"})
 public class EmailConfig {
 
->>>>>>> c95b240 (refactor: mac 내에 패키지 이전)
     @Value("${spring.mail.host}")
     private String mailServerHost;
 
