@@ -14,9 +14,15 @@ public class MailController {
 
     @Autowired public EmailService emailService;
 
-    @PostMapping("/mail/send")
-    public ResponseEntity<String> createMail(@RequestBody MailObject mailObject) {
-        emailService.sendSimpleMessage(mailObject.getTo(), mailObject.getSubject(), mailObject.getText());
-        return ResponseEntity.ok("ok");
+    @PostMapping("/mail/certification")
+    public ResponseEntity<String> certificateEmail(@RequestBody final MailObject mailObject) {
+        emailService.sendCertificationCode(mailObject.getEmail());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/mail/password")
+    public ResponseEntity<String> resetPassword(@RequestBody final MailObject mailObject) {
+        emailService.sendResetPassword(mailObject.getEmail());
+        return ResponseEntity.ok().build();
     }
 }
