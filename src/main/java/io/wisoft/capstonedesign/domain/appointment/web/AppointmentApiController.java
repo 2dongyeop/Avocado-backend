@@ -1,6 +1,5 @@
 package io.wisoft.capstonedesign.domain.appointment.web;
 
-import io.wisoft.capstonedesign.domain.appointment.persistence.Appointment;
 import io.wisoft.capstonedesign.domain.appointment.application.AppointmentService;
 import io.wisoft.capstonedesign.domain.appointment.web.dto.*;
 import jakarta.validation.Valid;

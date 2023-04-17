@@ -3,7 +3,6 @@ package io.wisoft.capstonedesign.domain.member.web.dto;
 import io.wisoft.capstonedesign.domain.appointment.persistence.Appointment;
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
-import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import lombok.AccessLevel;
 import lombok.Getter;

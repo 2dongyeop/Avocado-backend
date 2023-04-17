@@ -93,7 +93,7 @@ public class MemberServiceTest {
 
         //then -- 검증
         Member member = memberService.findById(signUpId);
-        Assertions.assertThat(member.getMemberPhotoPath()).isEqualTo(request2.getPhotoPath());
+        Assertions.assertThat(member.getMemberPhotoPath()).isEqualTo(request2.photoPath());
     }
 
     @Test
@@ -113,7 +113,7 @@ public class MemberServiceTest {
 
         //then -- 검증
         Member member = memberService.findById(signUpId);
-        Assertions.assertThat(member.getNickname()).isEqualTo(request.getNickname());
+        Assertions.assertThat(member.getNickname()).isEqualTo(request.nickname());
     }
 
     @Test(expected = NullMemberException.class)

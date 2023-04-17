@@ -27,7 +27,7 @@ public class BusInfoService {
     @Transactional
     public Long save(final CreateBusInfoRequest request) {
 
-        final BusInfo busInfo = BusInfo.createBusInfo(request.getBusInfoPath(), BusArea.valueOf(request.getArea()));
+        final BusInfo busInfo = BusInfo.createBusInfo(request.busInfoPath(), BusArea.valueOf(request.area()));
         busInfoRepository.save(busInfo);
         return busInfo.getId();
     }

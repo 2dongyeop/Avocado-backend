@@ -33,13 +33,13 @@ public class BoardReplyService {
     public Long save(final CreateBoardReplyRequest request) {
 
         //엔티티 조회
-        final Board board = boardService.findById(request.getBoardId());
-        final Staff staff = staffService.findById(request.getStaffId());
+        final Board board = boardService.findById(request.boardId());
+        final Staff staff = staffService.findById(request.staffId());
 
         final BoardReply boardReply = BoardReply.builder()
                 .board(board)
                 .staff(staff)
-                .reply(request.getReply())
+                .reply(request.reply())
                 .build();
 
         boardReplyRepository.save(boardReply);
@@ -64,12 +64,12 @@ public class BoardReplyService {
         validateParameter(request);
         BoardReply boardReply = findById(boardReplyId);
 
-        boardReply.update(request.getReply());
+        boardReply.update(request.reply());
     }
 
     private void validateParameter(final UpdateBoardReplyRequest request) {
 
-        if (!StringUtils.hasText(request.getReply())) {
+        if (!StringUtils.hasText(request.reply())) {
             throw new IllegalValueException();
         }
     }

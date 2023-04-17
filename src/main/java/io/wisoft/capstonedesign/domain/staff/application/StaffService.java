@@ -3,7 +3,6 @@ package io.wisoft.capstonedesign.domain.staff.application;
 
 import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
-import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPasswordRequest;
@@ -35,12 +34,12 @@ public class StaffService {
         final Staff staff = findById(staffId);
         validateStaffPassword(staff, request);
 
-        staff.updatePassword(encryptHelper.encrypt(request.getNewPassword()));
+        staff.updatePassword(encryptHelper.encrypt(request.newPassword()));
     }
 
     private void validateStaffPassword(final Staff staff, final UpdateStaffPasswordRequest request) {
 
-        if (!encryptHelper.isMatch(request.getOldPassword(), staff.getPassword())) {
+        if (!encryptHelper.isMatch(request.oldPassword(), staff.getPassword())) {
             throw new IllegalValueException("의료진 비밀번호가 일치하지 않아 변경할 수 없습니다.");
         }
     }
@@ -52,7 +51,7 @@ public class StaffService {
     public void uploadPhotoPath(final Long staffId, final UpdateStaffPhotoPathRequest request) {
 
         final Staff staff = findById(staffId);
-        staff.updatePhotoPath(request.getPhotoPath());
+        staff.updatePhotoPath(request.photoPath());
     }
 
 
@@ -61,7 +60,7 @@ public class StaffService {
     public void updateStaffHospital(final Long staffId, final UpdateStaffHospitalRequest request) {
 
         final Staff staff = findById(staffId);
-        staff.updateHospital(hospitalService.findByHospitalName(request.getHospitalName()));
+        staff.updateHospital(hospitalService.findByHospitalName(request.hospitalName()));
     }
 
     /* 의료진 탈퇴 */

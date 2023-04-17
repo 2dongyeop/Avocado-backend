@@ -33,13 +33,13 @@ public class BoardService {
     public Long save(final CreateBoardRequest request) {
 
         //엔티티 조회
-        final Member member = memberService.findById(request.getMemberId());
+        final Member member = memberService.findById(request.memberId());
 
         final Board board = Board.builder()
                 .member(member)
-                .title(request.getTitle())
-                .body(request.getBody())
-                .dept(HospitalDept.valueOf(request.getDept()))
+                .title(request.title())
+                .body(request.body())
+                .dept(HospitalDept.valueOf(request.dept()))
                 .build();
 
         boardRepository.save(board);
@@ -64,12 +64,12 @@ public class BoardService {
         validateTitleBody(request);
         final Board board = findById(boardId);
 
-        board.updateTitleBody(request.getNewTitle(), request.getNewBody());
+        board.updateTitleBody(request.newTitle(), request.newBody());
     }
 
     private void validateTitleBody(final UpdateBoardRequest request) {
 
-        if (!StringUtils.hasText(request.getNewBody()) || !StringUtils.hasText(request.getNewTitle())) {
+        if (!StringUtils.hasText(request.newBody()) || !StringUtils.hasText(request.newTitle())) {
             throw new IllegalValueException("파라미터가 비어있어 업데이트할 수 없습니다.");
         }
     }

@@ -16,8 +16,8 @@ public class AppointmentDto {
     private String member;
     private String appointName;
     private String appointPhonenumber;
-    private LocalDateTime createAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public AppointmentDto(final Appointment appointment) {
         this.hospital = appointment.getHospital().getName();
@@ -26,7 +26,7 @@ public class AppointmentDto {
         this.member = appointment.getMember().getNickname();
         this.appointName = appointment.getAppointName();
         this.appointPhonenumber = appointment.getAppointPhonenumber();
-        this.createAt = appointment.getCreatedAt();
-        this.updateAt = appointment.getUpdatedAt();
+        this.createdAt = appointment.getCreatedAt();
+        this.updatedAt = appointment.getUpdatedAt();
     }
 }

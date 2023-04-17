@@ -45,14 +45,14 @@ public class AuthService {
     @Transactional
     public Long signUpMember(final CreateMemberRequest request) {
 
-        validateAuthenticateCode(request.getEmail(), request.getCode());
+        validateAuthenticateCode(request.email(), request.code());
         validateDuplicateMember(request);
 
         final Member member = Member.builder()
-                .nickname(request.getNickname())
-                .email(request.getEmail())
-                .password(encryptHelper.encrypt(request.getPassword1()))
-                .phoneNumber(request.getPhonenumber())
+                .nickname(request.nickname())
+                .email(request.email())
+                .password(encryptHelper.encrypt(request.password1()))
+                .phoneNumber(request.phonenumber())
                 .build();
 
         memberRepository.save(member);
@@ -68,8 +68,8 @@ public class AuthService {
     }
 
     private void validateDuplicateMember(final CreateMemberRequest request) {
-        final List<Member> validateMemberByEmail = memberRepository.findValidateMemberByEmail(request.getEmail());
-        final List<Member> validateMemberByNickname = memberRepository.findValidateMemberByNickname(request.getNickname());
+        final List<Member> validateMemberByEmail = memberRepository.findValidateMemberByEmail(request.email());
+        final List<Member> validateMemberByNickname = memberRepository.findValidateMemberByNickname(request.nickname());
 
         if (!validateMemberByEmail.isEmpty() || !validateMemberByNickname.isEmpty()) {
             throw new DuplicateMemberException("중복 회원 발생 : 이미 존재하는 회원입니다.");
@@ -79,10 +79,10 @@ public class AuthService {
     /** 로그인 */
     public String loginMember(final LoginRequest request) {
 
-        final Member member = memberRepository.findMemberByEmail(request.getEmail())
+        final Member member = memberRepository.findMemberByEmail(request.email())
                 .orElseThrow(NullMemberException::new);
 
-        if (!encryptHelper.isMatch(request.getPassword(), member.getPassword())) {
+        if (!encryptHelper.isMatch(request.password(), member.getPassword())) {
             throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
         }
 
@@ -95,19 +95,19 @@ public class AuthService {
      */
     @Transactional
     public Long signUpStaff(final CreateStaffRequest request) {
-        validateAuthenticateCode(request.getEmail(), request.getCode());
+        validateAuthenticateCode(request.email(), request.code());
         validateDuplicateStaff(request);
 
         //엔티티 조회
-        final Hospital hospital = hospitalService.findById(request.getHospitalId());
+        final Hospital hospital = hospitalService.findById(request.hospitalId());
 
         final Staff staff = Staff.builder()
                 .hospital(hospital)
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(encryptHelper.encrypt(request.getPassword1()))
-                .license_path(request.getLicensePath())
-                .dept(HospitalDept.valueOf(request.getDept()))
+                .name(request.name())
+                .email(request.email())
+                .password(encryptHelper.encrypt(request.password1()))
+                .license_path(request.licensePath())
+                .dept(HospitalDept.valueOf(request.dept()))
                 .build();
 
         staffRepository.save(staff);
@@ -115,7 +115,7 @@ public class AuthService {
     }
 
     private void validateDuplicateStaff(final CreateStaffRequest request) {
-        final List<Staff> staffList = staffRepository.findValidateByEmail(request.getEmail());
+        final List<Staff> staffList = staffRepository.findValidateByEmail(request.email());
         if (!staffList.isEmpty()) throw new DuplicateStaffException();
     }
 
@@ -125,9 +125,9 @@ public class AuthService {
      */
     public String loginStaff(final LoginRequest request) {
 
-        final Staff staff = staffRepository.findStaffByEmail(request.getEmail()).orElseThrow(NullStaffException::new);
+        final Staff staff = staffRepository.findStaffByEmail(request.email()).orElseThrow(NullStaffException::new);
 
-        if (!encryptHelper.isMatch(request.getPassword(), staff.getPassword())) {
+        if (!encryptHelper.isMatch(request.password(), staff.getPassword())) {
             throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
         }
 

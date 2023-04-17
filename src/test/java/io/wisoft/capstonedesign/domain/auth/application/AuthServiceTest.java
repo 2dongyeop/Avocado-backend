@@ -49,7 +49,7 @@ public class AuthServiceTest {
 
         //then -- 검증
         Member member = memberService.findById(signUpId);
-        Assertions.assertThat(member.getNickname()).isEqualTo(request.getNickname());
+        Assertions.assertThat(member.getNickname()).isEqualTo(request.nickname());
     }
 
     @Test(expected = DuplicateMemberException.class)
@@ -106,7 +106,7 @@ public class AuthServiceTest {
         authService.signUpMember(request);
 
         //when -- 동작
-        LoginRequest loginRequest = new LoginRequest(request.getEmail(), request.getPassword1());
+        LoginRequest loginRequest = new LoginRequest(request.email(), request.password1());
         String token = authService.loginMember(loginRequest);
 
         //then -- 검증
@@ -174,8 +174,8 @@ public class AuthServiceTest {
 
         //then -- 검증
         Staff staff = staffService.findById(signUpId);
-        Assertions.assertThat(staff.getName()).isEqualTo(request.getName());
-        Assertions.assertThat(staff.getEmail()).isEqualTo(request.getEmail());
+        Assertions.assertThat(staff.getName()).isEqualTo(request.name());
+        Assertions.assertThat(staff.getEmail()).isEqualTo(request.email());
     }
 
 

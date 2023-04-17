@@ -18,19 +18,19 @@ public class MailController {
 
     @PostMapping("/mail/certification")
     public ResponseEntity<String> certificateEmail(@RequestBody final MailObject mailObject) {
-        emailService.sendCertificationCode(mailObject.getEmail());
+        emailService.sendCertificationCode(mailObject.email());
         return ResponseEntity.ok("success");
     }
 
     @PostMapping("/mail/member/password")
     public ResponseEntity<String> resetMemberPassword(@RequestBody final MailObject mailObject) {
-        emailService.sendResetMemberPassword(mailObject.getEmail());
+        emailService.sendResetMemberPassword(mailObject.email());
         return ResponseEntity.ok("success");
     }
 
     @PostMapping("/mail/staff/password")
     public ResponseEntity<String> resetStaffPassword(@RequestBody final MailObject mailObject) {
-        emailService.sendResetStaffPassword(mailObject.getEmail());
+        emailService.sendResetStaffPassword(mailObject.email());
         return ResponseEntity.ok("success");
     }
 }

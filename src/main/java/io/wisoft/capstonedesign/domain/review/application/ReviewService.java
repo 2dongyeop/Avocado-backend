@@ -32,14 +32,14 @@ public class ReviewService {
     public Long save(final CreateReviewRequest request) {
 
         //엔티티 조회
-        final Member member = memberService.findById(request.getMemberId());
+        final Member member = memberService.findById(request.memberId());
 
         final Review review = Review.builder()
                 .member(member)
-                .title(request.getTitle())
-                .body(request.getBody())
-                .starPoint(request.getStarPoint())
-                .target_hospital(request.getTargetHospital())
+                .title(request.title())
+                .body(request.body())
+                .starPoint(request.starPoint())
+                .target_hospital(request.targetHospital())
 //                .reviewPhotoPath("path1")
                 .build();
 
@@ -66,12 +66,12 @@ public class ReviewService {
         validateTitleBody(request);
         final Review review = findById(reviewId);
 
-        review.updateTitleBody(request.getNewTitle(), request.getNewBody());
+        review.updateTitleBody(request.newTitle(), request.newBody());
     }
 
     private void validateTitleBody(final UpdateReviewRequest request) {
 
-        if (!StringUtils.hasText(request.getNewTitle()) || !StringUtils.hasText(request.getNewBody())) {
+        if (!StringUtils.hasText(request.newTitle()) || !StringUtils.hasText(request.newBody())) {
             throw new IllegalValueException("제목이나 본문이 비어있습니다.");
         }
     }

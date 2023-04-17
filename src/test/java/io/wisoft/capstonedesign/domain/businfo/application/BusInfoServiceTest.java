@@ -36,8 +36,8 @@ public class BusInfoServiceTest {
         //then -- 검증
         BusInfo busInfo = busInfoService.findById(saveId);
 
-        Assertions.assertThat(busInfo.getBusInfoPath()).isEqualTo(request.getBusInfoPath());
-        Assertions.assertThat(busInfo.getArea().toString()).isEqualTo(request.getArea());
+        Assertions.assertThat(busInfo.getBusInfoPath()).isEqualTo(request.busInfoPath());
+        Assertions.assertThat(busInfo.getArea().toString()).isEqualTo(request.area());
     }
 
     @Test(expected = NullBusInfoException.class)

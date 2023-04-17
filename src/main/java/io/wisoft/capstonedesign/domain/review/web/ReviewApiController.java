@@ -36,7 +36,7 @@ public class ReviewApiController {
             @RequestBody @Valid final ReviewsByTargetHospitalRequest request,
             final Pageable pageable) {
 
-        return reviewService.findByTargetHospital(request.getTargetHospital(), pageable)
+        return reviewService.findByTargetHospital(request.targetHospital(), pageable)
                 .map(ReviewListDto::new);
     }
 

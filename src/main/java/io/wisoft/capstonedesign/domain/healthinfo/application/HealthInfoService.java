@@ -32,13 +32,13 @@ public class HealthInfoService {
     @Transactional
     public Long save(final CreateHealthInfoRequest request) {
 
-        final Staff staff = staffService.findById(request.getStaffId());
+        final Staff staff = staffService.findById(request.staffId());
 
         final HealthInfo healthInfo = HealthInfo.builder()
                 .staff(staff)
-                .healthInfoPath(request.getHealthInfoPath())
-                .title(request.getTitle())
-                .dept(HospitalDept.valueOf(request.getDept()))
+                .healthInfoPath(request.healthInfoPath())
+                .title(request.title())
+                .dept(HospitalDept.valueOf(request.dept()))
                 .build();
 
         healthInfoRepository.save(healthInfo);

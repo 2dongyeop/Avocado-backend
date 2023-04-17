@@ -29,12 +29,12 @@ public class MemberService {
         final Member member = findById(memberId);
         validateMemberPassword(member, request);
 
-        member.updatePassword(encryptHelper.encrypt(request.getNewPassword()));
+        member.updatePassword(encryptHelper.encrypt(request.newPassword()));
     }
 
     private void validateMemberPassword(final Member member, final UpdateMemberPasswordRequest request) {
 
-        if (!encryptHelper.isMatch(request.getOldPassword(), member.getPassword())) {
+        if (!encryptHelper.isMatch(request.oldPassword(), member.getPassword())) {
             throw new IllegalValueException("비밀번호가 일치하지 않아 변경할 수 없습니다.");
         }
     }
@@ -45,7 +45,7 @@ public class MemberService {
     public void updateMemberNickname(final Long memberId, final UpdateMemberNicknameRequest request) {
 
         final Member member = findById(memberId);
-        member.updateNickname(request.getNickname());
+        member.updateNickname(request.nickname());
     }
 
 
@@ -56,7 +56,7 @@ public class MemberService {
     public void uploadPhotoPath(final Long memberId, final UpdateMemberPhotoPathRequest request) {
 
         final Member member = findById(memberId);
-        member.uploadPhotoPath(request.getPhotoPath());
+        member.uploadPhotoPath(request.photoPath());
     }
 
 
@@ -66,7 +66,6 @@ public class MemberService {
         final Member member = findById(memberId);
         memberRepository.delete(member);
     }
-
 
     /*
      * 회원 조회
