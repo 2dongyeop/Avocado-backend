@@ -8,7 +8,8 @@ import lombok.Getter;
 
 @Getter
 public class MailObject {
-    @Email @NotNull
+    @Email(message = "이메일 형식에 맞지 않습니다.")
+    @NotNull
     @Size(min = 1, message = "Please, set an email address to send the message to it")
     private String email;
 }

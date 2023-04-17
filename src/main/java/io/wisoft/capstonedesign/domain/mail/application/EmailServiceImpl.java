@@ -3,7 +3,10 @@ package io.wisoft.capstonedesign.domain.mail.application;
 import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
+import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
+import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +29,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired private JavaMailSender emailSender;
     @Autowired private MemberRepository memberRepository;
+    @Autowired private StaffRepository staffRepository;
     @Autowired private EncryptHelper encryptHelper;
 
     private static final String EMAIL_CERTIFICATION_SUBJECT = "AVOCADO 이메일 인증 코드입니다.";
@@ -39,11 +43,22 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Transactional
-    public void sendResetPassword(final String to) {
+    public void sendResetMemberPassword(final String to) {
         String temporaryPassword = sendEmail(to, PASSWORD_RESET_SUBJECT);
 
         Member member = memberRepository.findByEmail(to).orElseThrow(NullMemberException::new);
         member.updatePassword(encryptHelper.encrypt(temporaryPassword));
+
+        log.info(to + "으로 임시 비밀번호를 발급합니다.");
+    }
+
+    @Async
+    @Transactional
+    public void sendResetStaffPassword(final String to) {
+        String temporaryPassword = sendEmail(to, PASSWORD_RESET_SUBJECT);
+
+        Staff staff = staffRepository.findByEmail(to).orElseThrow(NullStaffException::new);
+        staff.updatePassword(encryptHelper.encrypt(temporaryPassword));
 
         log.info(to + "으로 임시 비밀번호를 발급합니다.");
     }

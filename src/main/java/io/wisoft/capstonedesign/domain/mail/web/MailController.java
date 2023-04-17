@@ -20,9 +20,15 @@ public class MailController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/mail/password")
-    public ResponseEntity<String> resetPassword(@RequestBody final MailObject mailObject) {
-        emailService.sendResetPassword(mailObject.getEmail());
+    @PostMapping("/mail/member/password")
+    public ResponseEntity<String> resetMemberPassword(@RequestBody final MailObject mailObject) {
+        emailService.sendResetMemberPassword(mailObject.getEmail());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/mail/staff/password")
+    public ResponseEntity<String> resetStaffPassword(@RequestBody final MailObject mailObject) {
+        emailService.sendResetStaffPassword(mailObject.getEmail());
         return ResponseEntity.ok().build();
     }
 }
