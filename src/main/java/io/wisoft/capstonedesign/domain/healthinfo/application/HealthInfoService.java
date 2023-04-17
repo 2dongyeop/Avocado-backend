@@ -32,9 +32,9 @@ public class HealthInfoService {
     @Transactional
     public Long save(final CreateHealthInfoRequest request) {
 
-        Staff staff = staffService.findById(request.getStaffId());
+        final Staff staff = staffService.findById(request.getStaffId());
 
-        HealthInfo healthInfo = HealthInfo.builder()
+        final HealthInfo healthInfo = HealthInfo.builder()
                 .staff(staff)
                 .healthInfoPath(request.getHealthInfoPath())
                 .title(request.getTitle())
@@ -50,8 +50,7 @@ public class HealthInfoService {
      */
     @Transactional
     public void delete(final Long healthInfoId) {
-        HealthInfo healthInfo = findById(healthInfoId);
-        healthInfoRepository.delete(healthInfo);
+        healthInfoRepository.delete(findById(healthInfoId));
     }
 
     /* 조회 로직 */
@@ -77,7 +76,7 @@ public class HealthInfoService {
 
     private boolean validateDept(final String dept) {
 
-        Iterator<HospitalDept> iterator = Arrays.stream(HospitalDept.values()).iterator();
+        final Iterator<HospitalDept> iterator = Arrays.stream(HospitalDept.values()).iterator();
 
         while (iterator.hasNext()) {
             if (iterator.next().getCode().equals(dept.toUpperCase())) {

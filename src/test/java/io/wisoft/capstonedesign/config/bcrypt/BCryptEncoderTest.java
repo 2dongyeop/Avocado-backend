@@ -1,20 +1,19 @@
 package io.wisoft.capstonedesign.config.bcrypt;
 
+import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
 public class BCryptEncoderTest {
 
-    @Autowired EncryptHelper encryptHelper;
+    @Autowired
+    EncryptHelper encryptHelper;
 
     @Test
     @DisplayName("비밀번호가 Bcrypt 암호화가 되었는지 확인")

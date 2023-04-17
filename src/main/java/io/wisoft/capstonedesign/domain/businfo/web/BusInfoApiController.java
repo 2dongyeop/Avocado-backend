@@ -20,18 +20,14 @@ public class BusInfoApiController {
     @PostMapping("/api/bus-info/new")
     public CreateBusInfoResponse createBusInfo(
             @RequestBody @Valid final CreateBusInfoRequest request) {
-
-        Long id = busInfoService.save(request);
-        return new CreateBusInfoResponse(id);
+        return new CreateBusInfoResponse(busInfoService.save(request));
     }
 
 
     /* 셔틀 버스 단건 조회 */
     @GetMapping("/api/bus-info/{id}/details")
     public Result busInfo(@PathVariable final Long id) {
-
-        BusInfo busInfo = busInfoService.findById(id);
-        return new Result(new BusInfoDto(busInfo));
+        return new Result(new BusInfoDto(busInfoService.findById(id)));
     }
 
 
@@ -40,11 +36,9 @@ public class BusInfoApiController {
     public Result busInfoByArea(
             @RequestBody @Valid final BusInfoByAreaRequest request) {
 
-        List<BusInfoDto> busInfoDtoList = busInfoService.findByArea(request.getArea())
+        return new Result(busInfoService.findByArea(request.getArea())
                 .stream().map(BusInfoDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(busInfoDtoList);
+                .collect(Collectors.toList()));
     }
 
 

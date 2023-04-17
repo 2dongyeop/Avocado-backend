@@ -26,7 +26,7 @@ public class HospitalService {
 
         validateDuplicateHospital(request);
 
-        Hospital hospital = Hospital.builder()
+        final Hospital hospital = Hospital.builder()
                 .name(request.getName())
                 .number(request.getNumber())
                 .address(request.getAddress())
@@ -38,7 +38,7 @@ public class HospitalService {
     }
 
     private void validateDuplicateHospital(final CreateHospitalRequest request) {
-        List<Hospital> hospitalList = hospitalRepository.findByName(request.getName());
+        final List<Hospital> hospitalList = hospitalRepository.findByName(request.getName());
         if (!hospitalList.isEmpty()) throw new DuplicateHospitalException();
     }
 
@@ -51,7 +51,7 @@ public class HospitalService {
 
     /* 병원 이름으로 조회 */
     public Hospital findByHospitalName(final String hospitalName) {
-        List<Hospital> hospitalList = hospitalRepository.findByName(hospitalName);
+        final List<Hospital> hospitalList = hospitalRepository.findByName(hospitalName);
 
         if (hospitalList.isEmpty()) {
             throw new NullHospitalException();

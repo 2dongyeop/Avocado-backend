@@ -1,8 +1,8 @@
-package io.wisoft.capstonedesign.config;
+package io.wisoft.capstonedesign.global.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.wisoft.capstonedesign.interceptor.BearerAuthInterceptor;
+import io.wisoft.capstonedesign.global.interceptor.BearerAuthInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -29,9 +29,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/staff/**")
 
                 .addPathPatterns("/api/health-infos/new")
-                .addPathPatterns("/api/health-infos/new")
-
                 .addPathPatterns("/api/health-infos/{id}")
+                .excludePathPatterns("/api/health-infos/department")
 
                 .addPathPatterns("/api/reviews/**")
                 .excludePathPatterns("/api/reviews/{id}/details")
@@ -39,6 +38,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
                 .addPathPatterns("/api/boards/**")
                 .excludePathPatterns("/api/boards/{id}/details")
+                .excludePathPatterns("/api/boards")
 
                 .addPathPatterns("/api/picks/**")
                 .excludePathPatterns("/api/picks/{id}/details")

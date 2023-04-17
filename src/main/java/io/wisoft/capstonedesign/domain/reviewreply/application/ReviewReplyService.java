@@ -33,10 +33,10 @@ public class ReviewReplyService {
     public Long save(final CreateReviewReplyRequest request) {
 
         //엔티티 조회
-        Member member = memberService.findById(request.getMemberId());
-        Review review = reviewService.findById(request.getReviewId());
+        final Member member = memberService.findById(request.getMemberId());
+        final Review review = reviewService.findById(request.getReviewId());
 
-        ReviewReply reviewReply = ReviewReply.builder()
+        final ReviewReply reviewReply = ReviewReply.builder()
                 .member(member)
                 .review(review)
                 .reply(request.getReply())
@@ -52,9 +52,7 @@ public class ReviewReplyService {
      */
     @Transactional
     public void deleteReviewReply(final Long reviewReplyId) {
-
-        ReviewReply reviewReply = findById(reviewReplyId);
-        reviewReplyRepository.delete(reviewReply);
+        reviewReplyRepository.delete(findById(reviewReplyId));
     }
 
 
@@ -65,7 +63,7 @@ public class ReviewReplyService {
     public void updateReply(final Long reviewReplyId, final UpdateReviewReplyRequest request) {
 
         validateParameter(request);
-        ReviewReply reviewReply = findById(reviewReplyId);
+        final ReviewReply reviewReply = findById(reviewReplyId);
 
         reviewReply.updateReply(request.getReply());
     }

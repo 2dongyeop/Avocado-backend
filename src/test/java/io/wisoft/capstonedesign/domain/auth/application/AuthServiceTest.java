@@ -1,6 +1,8 @@
 package io.wisoft.capstonedesign.domain.auth.application;
 
-import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
+import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthentication;
+import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
+import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.LoginRequest;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
@@ -8,7 +10,7 @@ import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
-import io.wisoft.capstonedesign.domain.staff.web.dto.CreateStaffRequest;
+import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import jakarta.persistence.EntityManager;
@@ -31,12 +33,16 @@ public class AuthServiceTest {
     @Autowired MemberService memberService;
     @Autowired StaffService staffService;
     @Autowired EncryptHelper encryptHelper;
-
+    @Autowired MailAuthenticationRepository mailAuthenticationRepository;
 
     @Test
     public void 회원_저장() throws Exception {
         //given -- 조건
-        CreateMemberRequest request = new CreateMemberRequest("test1", "email@naver.com", "1111", "1111", "0000");
+        CreateMemberRequest request = new CreateMemberRequest("test1", "email@naver.com", "1111", "1111", "0000", "ssss");
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("email@naver.com")
+                .code("ssss")
+                .build());
 
         //when -- 동작
         Long signUpId = authService.signUpMember(request);
@@ -50,8 +56,12 @@ public class AuthServiceTest {
     public void 회원_이메일_중복_검증() throws Exception {
 
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_1204@naver.com", "1111", "1111", "0000");
-        CreateMemberRequest request2 = new CreateMemberRequest("test2", "ldy_1204@naver.com", "1111", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_1204@naver.com", "1111", "1111", "0000", "ssss");
+        CreateMemberRequest request2 = new CreateMemberRequest("test2", "ldy_1204@naver.com", "1111", "1111", "0000", "ssss");
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("ldy_1204@naver.com")
+                .code("ssss")
+                .build());
 
         //when -- 동작
         authService.signUpMember(request1);
@@ -65,9 +75,16 @@ public class AuthServiceTest {
     public void 회원_닉네임_중복_검증() throws Exception {
 
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_111@naver.com", "1111", "1111", "0000");
-        CreateMemberRequest request2 = new CreateMemberRequest("test1", "ldy_122@naver.com", "1111", "1111", "0000");
-
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_111@naver.com", "1111", "1111", "0000", "ssss");
+        CreateMemberRequest request2 = new CreateMemberRequest("test1", "ldy_122@naver.com", "1111", "1111", "0000", "ssss");
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("ldy_111@naver.com")
+                .code("ssss")
+                .build());
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("ldy_122@naver.com")
+                .code("ssss")
+                .build());
 
         //when -- 동작
         authService.signUpMember(request1);
@@ -81,7 +98,11 @@ public class AuthServiceTest {
     @Test
     public void member_login() throws Exception {
         //given -- 조건
-        CreateMemberRequest request = new CreateMemberRequest("test1", "email@naver.com", "1111", "1111", "0000");
+        CreateMemberRequest request = new CreateMemberRequest("test1", "email@naver.com", "1111", "1111", "0000", "ssss");
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("email@naver.com")
+                .code("ssss")
+                .build());
         authService.signUpMember(request);
 
         //when -- 동작
@@ -140,8 +161,13 @@ public class AuthServiceTest {
                 "pw1",
                 "pw2",
                 "path1",
-                "DENTAL"
+                "DENTAL",
+                "ssss"
         );
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("email1")
+                .code("ssss")
+                .build());
 
         //when -- 동작
         Long signUpId = authService.signUpStaff(request);
@@ -166,8 +192,12 @@ public class AuthServiceTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "email1@naver.com", "1111", "1111","hhhh", "DENTAL");
-        CreateStaffRequest request2 = new CreateStaffRequest(hospital.getId(), "lee2", "email1@naver.com", "1111", "1111","hhhh", "DENTAL");
+        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "email1@naver.com", "1111", "1111","hhhh", "DENTAL", "ssss");
+        CreateStaffRequest request2 = new CreateStaffRequest(hospital.getId(), "lee2", "email1@naver.com", "1111", "1111","hhhh", "DENTAL", "ssss");
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("email1@naver.com")
+                .code("ssss")
+                .build());
 
         //when -- 동작
         authService.signUpStaff(request1);
@@ -181,7 +211,7 @@ public class AuthServiceTest {
     @Test
     public void staff_login() throws Exception {
         //given -- 조건
-        LoginRequest loginRequest = new LoginRequest("yjw@naver.com", "yoon1");
+        LoginRequest loginRequest = new LoginRequest("yjw9424@naver.com", "yoon1");
 
         //when -- 동작
         String token = authService.loginStaff(loginRequest);

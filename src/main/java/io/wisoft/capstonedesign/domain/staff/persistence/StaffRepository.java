@@ -26,4 +26,6 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
     List<Staff> findValidateByEmail(final String email);
 
     Optional<Staff> findStaffByEmail(final String email);
+
+    Optional<Staff> findByEmail(final String email);
 }

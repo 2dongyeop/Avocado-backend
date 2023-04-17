@@ -27,7 +27,7 @@ public class BusInfoService {
     @Transactional
     public Long save(final CreateBusInfoRequest request) {
 
-        BusInfo busInfo = BusInfo.createBusInfo(request.getBusInfoPath(), BusArea.valueOf(request.getArea()));
+        final BusInfo busInfo = BusInfo.createBusInfo(request.getBusInfoPath(), BusArea.valueOf(request.getArea()));
         busInfoRepository.save(busInfo);
         return busInfo.getId();
     }
@@ -37,9 +37,7 @@ public class BusInfoService {
      */
     @Transactional
     public void delete(final Long busInfoId) {
-
-        BusInfo busInfo = findById(busInfoId);
-        busInfoRepository.delete(busInfo);
+        busInfoRepository.delete(findById(busInfoId));
     }
 
 
@@ -55,7 +53,7 @@ public class BusInfoService {
     public List<BusInfo> findByArea(final String area) {
 
         validateArea(area);
-        List<BusInfo> busInfoList = busInfoRepository.findByArea(BusArea.valueOf(area));
+        final List<BusInfo> busInfoList = busInfoRepository.findByArea(BusArea.valueOf(area));
 
         if (busInfoList.size() == 0) {
             throw new NullBusInfoException("해당 버스정보는 존재하지 않습니다.");
@@ -65,7 +63,7 @@ public class BusInfoService {
 
     private boolean validateArea(final String area) {
 
-        Iterator<BusArea> iterator = Arrays.stream(BusArea.values()).iterator();
+        final Iterator<BusArea> iterator = Arrays.stream(BusArea.values()).iterator();
 
         while (iterator.hasNext()) {
             BusArea busArea = iterator.next();

@@ -33,9 +33,9 @@ public class BoardService {
     public Long save(final CreateBoardRequest request) {
 
         //엔티티 조회
-        Member member = memberService.findById(request.getMemberId());
+        final Member member = memberService.findById(request.getMemberId());
 
-        Board board = Board.builder()
+        final Board board = Board.builder()
                 .member(member)
                 .title(request.getTitle())
                 .body(request.getBody())
@@ -51,7 +51,7 @@ public class BoardService {
      */
     @Transactional
     public void deleteBoard(final Long boardId) {
-        Board board = findById(boardId);
+        final Board board = findById(boardId);
         board.delete();
     }
 
@@ -62,7 +62,7 @@ public class BoardService {
     public void updateTitleBody(final Long boardId, final UpdateBoardRequest request) {
 
         validateTitleBody(request);
-        Board board = findById(boardId);
+        final Board board = findById(boardId);
 
         board.updateTitleBody(request.getNewTitle(), request.getNewBody());
     }
@@ -94,7 +94,6 @@ public class BoardService {
     public Page<Board> findAllUsingPaging(final Pageable pageable) {
         return boardRepository.findAllUsingPaging(pageable);
     }
-
 
     public List<Board> findAllByMember() {
         return boardRepository.findAllByMember();

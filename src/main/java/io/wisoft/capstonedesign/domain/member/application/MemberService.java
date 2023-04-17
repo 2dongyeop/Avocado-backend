@@ -1,6 +1,6 @@
 package io.wisoft.capstonedesign.domain.member.application;
 
-import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
+import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.member.web.dto.*;
@@ -26,7 +26,7 @@ public class MemberService {
     @Transactional
     public void updatePassword(final Long memberId, final UpdateMemberPasswordRequest request) {
 
-        Member member = findById(memberId);
+        final Member member = findById(memberId);
         validateMemberPassword(member, request);
 
         member.updatePassword(encryptHelper.encrypt(request.getNewPassword()));
@@ -44,7 +44,7 @@ public class MemberService {
     @Transactional
     public void updateMemberNickname(final Long memberId, final UpdateMemberNicknameRequest request) {
 
-        Member member = findById(memberId);
+        final Member member = findById(memberId);
         member.updateNickname(request.getNickname());
     }
 
@@ -55,7 +55,7 @@ public class MemberService {
     @Transactional
     public void uploadPhotoPath(final Long memberId, final UpdateMemberPhotoPathRequest request) {
 
-        Member member = findById(memberId);
+        final Member member = findById(memberId);
         member.uploadPhotoPath(request.getPhotoPath());
     }
 
@@ -63,7 +63,7 @@ public class MemberService {
     /* 회원 탈퇴 */
     @Transactional
     public void deleteMember(final Long memberId) {
-        Member member = findById(memberId);
+        final Member member = findById(memberId);
         memberRepository.delete(member);
     }
 

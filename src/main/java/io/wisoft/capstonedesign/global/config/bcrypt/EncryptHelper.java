@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.config.bcrypt;
+package io.wisoft.capstonedesign.global.config.bcrypt;
 
 public interface EncryptHelper {
     String encrypt(String password);

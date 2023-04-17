@@ -1,7 +1,7 @@
 package io.wisoft.capstonedesign.domain.staff.application;
 
 
-import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
+import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
@@ -32,7 +32,7 @@ public class StaffService {
     @Transactional
     public void updatePassword(final Long staffId, final UpdateStaffPasswordRequest request) {
 
-        Staff staff = findById(staffId);
+        final Staff staff = findById(staffId);
         validateStaffPassword(staff, request);
 
         staff.updatePassword(encryptHelper.encrypt(request.getNewPassword()));
@@ -51,7 +51,7 @@ public class StaffService {
     @Transactional
     public void uploadPhotoPath(final Long staffId, final UpdateStaffPhotoPathRequest request) {
 
-        Staff staff = findById(staffId);
+        final Staff staff = findById(staffId);
         staff.updatePhotoPath(request.getPhotoPath());
     }
 
@@ -60,17 +60,14 @@ public class StaffService {
     @Transactional
     public void updateStaffHospital(final Long staffId, final UpdateStaffHospitalRequest request) {
 
-        Staff staff = findById(staffId);
-        Hospital hospital = hospitalService.findByHospitalName(request.getHospitalName());
-
-        staff.updateHospital(hospital);
+        final Staff staff = findById(staffId);
+        staff.updateHospital(hospitalService.findByHospitalName(request.getHospitalName()));
     }
 
     /* 의료진 탈퇴 */
     @Transactional
     public void deleteStaff(final Long staffId) {
-        Staff staff = findById(staffId);
-        staffRepository.delete(staff);
+        staffRepository.delete(findById(staffId));
     }
 
     /** 상세 조회 */

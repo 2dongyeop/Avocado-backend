@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.domain.staff.web.dto;
+package io.wisoft.capstonedesign.domain.auth.web.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

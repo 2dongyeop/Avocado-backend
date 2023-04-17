@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.jwt;
+package io.wisoft.capstonedesign.global.jwt;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;

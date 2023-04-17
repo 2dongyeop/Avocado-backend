@@ -1,6 +1,8 @@
 package io.wisoft.capstonedesign.domain.member.application;
 
-import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
+import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthentication;
+import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
+import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.auth.application.AuthService;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberRequest;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
@@ -25,7 +27,7 @@ public class MemberServiceTest {
     @Autowired AuthService authService;
     @Autowired MemberService memberService;
     @Autowired EncryptHelper encryptHelper;
-
+    @Autowired MailAuthenticationRepository mailAuthenticationRepository;
 
     @Test(expected = NullMemberException.class)
     public void 회원_단건_조회_실패() throws Exception {
@@ -41,7 +43,12 @@ public class MemberServiceTest {
     @Test
     public void 회원_비밀번호_수정() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000", "ssss");
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("email1@naver.com")
+                .code("ssss")
+                .build());
+
         Long signUpId = authService.signUpMember(request1);
 
         //when -- 동작
@@ -57,7 +64,7 @@ public class MemberServiceTest {
     @Test(expected = IllegalValueException.class)
     public void 회원_비밀번호_수정_실패() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000", "ssss");
         Long signUpId = authService.signUpMember(request1);
 
         //when -- 동작
@@ -72,7 +79,12 @@ public class MemberServiceTest {
     @Test
     public void 회원_프로필사진_수정() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000", "ssss");
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("email1@naver.com")
+                .code("ssss")
+                .build());
+
         Long signUpId = authService.signUpMember(request1);
 
         //when -- 동작
@@ -87,7 +99,12 @@ public class MemberServiceTest {
     @Test
     public void updateMemberNickname() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000", "ssss");
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("email1@naver.com")
+                .code("ssss")
+                .build());
+
         Long signUpId = authService.signUpMember(request1);
 
         //when -- 동작
@@ -102,7 +119,12 @@ public class MemberServiceTest {
     @Test(expected = NullMemberException.class)
     public void 회원_탈퇴() throws Exception {
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+        CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000", "ssss");
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("email1@naver.com")
+                .code("ssss")
+                .build());
+
         Long signUpId = authService.signUpMember(request1);
 
         //when -- 동작

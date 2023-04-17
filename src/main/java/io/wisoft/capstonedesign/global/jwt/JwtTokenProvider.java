@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.jwt;
+package io.wisoft.capstonedesign.global.jwt;
 
 import io.jsonwebtoken.*;
 

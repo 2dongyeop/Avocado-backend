@@ -23,7 +23,7 @@ public class StaffMyPageService {
      */
     public List<Review> findReviewByStaffHospitalName(final Long staffId) {
 
-        Staff staff = staffMyPageRepository.findById(staffId)
+        final Staff staff = staffMyPageRepository.findById(staffId)
                 .orElseThrow(NullStaffException::new);
 
         String hospitalName = staff.getHospital().getName();

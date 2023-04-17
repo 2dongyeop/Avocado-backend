@@ -22,8 +22,8 @@ public class ReviewReplyApiController {
     public CreateReviewReplyResponse createReviewReply(
             @RequestBody @Valid final CreateReviewReplyRequest request) {
 
-        Long id = reviewReplyService.save(request);
-        ReviewReply reviewReply = reviewReplyService.findById(id);
+        final Long id = reviewReplyService.save(request);
+        final ReviewReply reviewReply = reviewReplyService.findById(id);
         return new CreateReviewReplyResponse(reviewReply.getId());
     }
 
@@ -45,7 +45,7 @@ public class ReviewReplyApiController {
             @RequestBody @Valid final UpdateReviewReplyRequest request) {
 
         reviewReplyService.updateReply(id, request);
-        ReviewReply reviewReply = reviewReplyService.findById(id);
+        final ReviewReply reviewReply = reviewReplyService.findById(id);
         return new UpdateReviewReplyResponse(reviewReply.getId());
     }
 
@@ -53,9 +53,7 @@ public class ReviewReplyApiController {
     /* 리뷰댓글 단건 조회 */
     @GetMapping("/api/review-reply/{id}/details")
     public Result reviewReply(@PathVariable("id") final Long id) {
-
-        ReviewReply reviewReply = reviewReplyService.findDetailById(id);
-        return new Result(new ReviewReplyDto(reviewReply));
+        return new Result(new ReviewReplyDto(reviewReplyService.findDetailById(id)));
     }
 
 
@@ -64,11 +62,9 @@ public class ReviewReplyApiController {
     public Result reviewReplyByReview(
             @PathVariable("review-id") final Long reviewId) {
 
-        List<ReviewReplyDto> reviewReplyDtoList = reviewReplyService.findByReviewId(reviewId)
+        return new Result(reviewReplyService.findByReviewId(reviewId)
                 .stream().map(ReviewReplyDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(reviewReplyDtoList);
+                .collect(Collectors.toList()));
     }
 
 
@@ -77,11 +73,9 @@ public class ReviewReplyApiController {
     public Result reviewReplyByReviewOrderByCreateAsc(
             @PathVariable("review-id") final Long reviewId) {
 
-        List<ReviewReplyDto> reviewReplyDtoList = reviewReplyService.findAllByReviewIdOrderByCreateAsc(reviewId)
+        return new Result(reviewReplyService.findAllByReviewIdOrderByCreateAsc(reviewId)
                 .stream().map(ReviewReplyDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(reviewReplyDtoList);
+                .collect(Collectors.toList()));
     }
 
 
@@ -90,10 +84,8 @@ public class ReviewReplyApiController {
     public Result reviewReplyByReviewOrderByCreateDesc(
             @PathVariable("review-id") final Long reviewId) {
 
-        List<ReviewReplyDto> reviewReplyDtoList = reviewReplyService.findAllByReviewIdOrderByCreateDesc(reviewId)
+        return new Result(reviewReplyService.findAllByReviewIdOrderByCreateDesc(reviewId)
                 .stream().map(ReviewReplyDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(reviewReplyDtoList);
+                .collect(Collectors.toList()));
     }
 }
