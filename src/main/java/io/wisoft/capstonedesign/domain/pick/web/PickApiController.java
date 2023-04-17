@@ -1,6 +1,5 @@
 package io.wisoft.capstonedesign.domain.pick.web;
 
-import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.pick.application.PickService;
 import io.wisoft.capstonedesign.domain.pick.web.dto.*;
 import jakarta.validation.Valid;

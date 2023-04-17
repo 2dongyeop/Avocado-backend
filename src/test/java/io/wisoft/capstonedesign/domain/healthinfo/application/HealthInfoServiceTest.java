@@ -38,8 +38,8 @@ public class HealthInfoServiceTest {
         //then -- 검증
         HealthInfo healthInfo = healthInfoService.findById(saveId);
 
-        Assertions.assertThat(healthInfo.getTitle()).isEqualTo(request.getTitle());
-        Assertions.assertThat(healthInfo.getDept().toString()).isEqualTo(request.getDept());
+        Assertions.assertThat(healthInfo.getTitle()).isEqualTo(request.title());
+        Assertions.assertThat(healthInfo.getDept().toString()).isEqualTo(request.dept());
     }
 
     @Test(expected = NullHealthInfoException.class)

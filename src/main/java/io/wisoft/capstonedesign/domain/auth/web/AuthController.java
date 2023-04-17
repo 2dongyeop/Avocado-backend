@@ -27,7 +27,7 @@ public class AuthController {
     @PostMapping("/api/auth/signup/members")
     public CreateMemberResponse signupMember(@RequestBody @Valid final CreateMemberRequest request) {
 
-        if (!request.getPassword1().equals(request.getPassword2())) {
+        if (!request.password1().equals(request.password2())) {
             throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.");
         }
         return new CreateMemberResponse(authService.signUpMember(request));
@@ -47,7 +47,7 @@ public class AuthController {
     public CreateStaffResponse signupStaff(
             @RequestBody @Valid final CreateStaffRequest request) {
 
-        if (!request.getPassword1().equals(request.getPassword2())) {
+        if (!request.password1().equals(request.password2())) {
             throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.");
         }
 

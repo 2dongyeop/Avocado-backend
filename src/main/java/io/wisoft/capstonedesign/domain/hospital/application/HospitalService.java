@@ -27,10 +27,10 @@ public class HospitalService {
         validateDuplicateHospital(request);
 
         final Hospital hospital = Hospital.builder()
-                .name(request.getName())
-                .number(request.getNumber())
-                .address(request.getAddress())
-                .operatingTime(request.getOperatingTime())
+                .name(request.name())
+                .number(request.number())
+                .address(request.address())
+                .operatingTime(request.operatingTime())
                 .build();
 
         hospitalRepository.save(hospital);
@@ -38,7 +38,7 @@ public class HospitalService {
     }
 
     private void validateDuplicateHospital(final CreateHospitalRequest request) {
-        final List<Hospital> hospitalList = hospitalRepository.findByName(request.getName());
+        final List<Hospital> hospitalList = hospitalRepository.findByName(request.name());
         if (!hospitalList.isEmpty()) throw new DuplicateHospitalException();
     }
 

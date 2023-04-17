@@ -56,7 +56,7 @@ public class ReviewReplyServiceTest {
 
         //then -- 검증
         ReviewReply reviewReply = reviewReplyService.findById(saveId);
-        Assertions.assertThat(reviewReply.getReply()).isEqualTo(request.getReply());
+        Assertions.assertThat(reviewReply.getReply()).isEqualTo(request.reply());
     }
 
     @Test(expected = NullReviewReplyException.class)
@@ -170,7 +170,7 @@ public class ReviewReplyServiceTest {
         reviewReplyService.updateReply(reviewReply.getId(), request2);
 
         //then -- 검증
-        Assertions.assertThat(reviewReply.getReply()).isEqualTo(request2.getReply());
+        Assertions.assertThat(reviewReply.getReply()).isEqualTo(request2.reply());
         Assertions.assertThat(reviewReply.getUpdatedAt()).isNotNull();
     }
 

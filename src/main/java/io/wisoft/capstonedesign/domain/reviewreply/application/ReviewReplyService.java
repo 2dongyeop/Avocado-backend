@@ -33,13 +33,13 @@ public class ReviewReplyService {
     public Long save(final CreateReviewReplyRequest request) {
 
         //엔티티 조회
-        final Member member = memberService.findById(request.getMemberId());
-        final Review review = reviewService.findById(request.getReviewId());
+        final Member member = memberService.findById(request.memberId());
+        final Review review = reviewService.findById(request.reviewId());
 
         final ReviewReply reviewReply = ReviewReply.builder()
                 .member(member)
                 .review(review)
-                .reply(request.getReply())
+                .reply(request.reply())
                 .build();
 
         reviewReplyRepository.save(reviewReply);
@@ -65,12 +65,12 @@ public class ReviewReplyService {
         validateParameter(request);
         final ReviewReply reviewReply = findById(reviewReplyId);
 
-        reviewReply.updateReply(request.getReply());
+        reviewReply.updateReply(request.reply());
     }
 
     private void validateParameter(final UpdateReviewReplyRequest request) {
 
-        if (!StringUtils.hasText(request.getReply())) {
+        if (!StringUtils.hasText(request.reply())) {
             throw new IllegalValueException("reply가 비어있어 수정할 수 없습니다.");
         }
     }

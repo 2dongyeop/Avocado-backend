@@ -143,8 +143,8 @@ public class BoardServiceTest {
         boardService.updateTitleBody(board.getId(), request2);
 
         //then -- 검증
-        Assertions.assertThat(board.getTitle()).isEqualTo(request2.getNewTitle());
-        Assertions.assertThat(board.getBody()).isEqualTo(request2.getNewBody());
+        Assertions.assertThat(board.getTitle()).isEqualTo(request2.newTitle());
+        Assertions.assertThat(board.getBody()).isEqualTo(request2.newBody());
         Assertions.assertThat(board.getUpdatedAt()).isNotNull();
     }
 

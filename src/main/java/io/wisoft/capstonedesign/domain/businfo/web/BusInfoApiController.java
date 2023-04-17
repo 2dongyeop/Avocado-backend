@@ -1,13 +1,11 @@
 package io.wisoft.capstonedesign.domain.businfo.web;
 
-import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfo;
 import io.wisoft.capstonedesign.domain.businfo.application.BusInfoService;
 import io.wisoft.capstonedesign.domain.businfo.web.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,7 +34,7 @@ public class BusInfoApiController {
     public Result busInfoByArea(
             @RequestBody @Valid final BusInfoByAreaRequest request) {
 
-        return new Result(busInfoService.findByArea(request.getArea())
+        return new Result(busInfoService.findByArea(request.area())
                 .stream().map(BusInfoDto::new)
                 .collect(Collectors.toList()));
     }

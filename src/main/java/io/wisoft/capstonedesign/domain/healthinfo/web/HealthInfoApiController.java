@@ -51,7 +51,7 @@ public class HealthInfoApiController {
     public Page<HealthInfoDto> healthInfosByDepartmentUsingPaging(
             @RequestBody @Valid final HealthInfoByDepartmentRequest request, final Pageable pageable) {
 
-        return healthInfoService.findAllByDeptUsingPaging(request.getDepartment(), pageable)
+        return healthInfoService.findAllByDeptUsingPaging(request.department(), pageable)
                 .map(HealthInfoDto::new);
     }
 

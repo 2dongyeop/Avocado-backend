@@ -1,13 +1,3 @@
 package io.wisoft.capstonedesign.domain.auth.web.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CreateStaffResponse {
-    private Long id;
-}
+public record CreateStaffResponse(Long id) { }

@@ -79,7 +79,7 @@ public class BoardReplyServiceTest {
 
         //then -- 검증
         BoardReply boardReply = boardReplyService.findById(saveId);
-        Assertions.assertThat(boardReply.getReply()).isEqualTo(request.getReply());
+        Assertions.assertThat(boardReply.getReply()).isEqualTo(request.reply());
     }
 
     @Test(expected = NullBoardReplyException.class)

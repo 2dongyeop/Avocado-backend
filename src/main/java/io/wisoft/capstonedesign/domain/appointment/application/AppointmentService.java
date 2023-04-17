@@ -36,17 +36,17 @@ public class AppointmentService {
             final CreateAppointmentRequest request) {
 
         //엔티티 조회
-        final Member member = memberService.findById(request.getMemberId());
-        final Hospital hospital = hospitalService.findById(request.getHospitalId());
+        final Member member = memberService.findById(request.memberId());
+        final Hospital hospital = hospitalService.findById(request.hospitalId());
 
         //예약 정보 생성
         final Appointment appointment = Appointment.builder()
                 .member(member)
                 .hospital(hospital)
-                .dept(HospitalDept.valueOf(request.getDept()))
-                .comment(request.getComment())
-                .appointName(request.getAppointName())
-                .appointPhonenumber(request.getAppointPhonenumber())
+                .dept(HospitalDept.valueOf(request.dept()))
+                .comment(request.comment())
+                .appointName(request.appointName())
+                .appointPhonenumber(request.appointPhonenumber())
                 .build();
 
         appointmentRepository.save(appointment);
@@ -69,16 +69,16 @@ public class AppointmentService {
     public void update(final Long appointmentId, final UpdateAppointmentRequest request) {
 
         validateParameter(request);
-        validateDept(request.getDept());
+        validateDept(request.dept());
         final Appointment appointment = findById(appointmentId);
 
-        appointment.update(HospitalDept.valueOf(request.getDept()), request.getComment(), request.getAppointName(), request.getAppointPhonenumber());
+        appointment.update(HospitalDept.valueOf(request.dept()), request.comment(), request.appointName(), request.appointPhonenumber());
     }
 
     private void validateParameter(final UpdateAppointmentRequest request) {
 
-        if (!StringUtils.hasText(request.getAppointName()) || !StringUtils.hasText(request.getDept())
-                || !StringUtils.hasText(request.getComment()) || !StringUtils.hasText(request.getAppointPhonenumber())) {
+        if (!StringUtils.hasText(request.appointName()) || !StringUtils.hasText(request.dept())
+                || !StringUtils.hasText(request.comment()) || !StringUtils.hasText(request.appointPhonenumber())) {
             throw new IllegalValueException("파라미터가 비어있어 업데이트할 수 없습니다.");
         }
     }

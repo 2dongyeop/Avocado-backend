@@ -31,7 +31,7 @@ public class HospitalServiceTest {
 
         //then -- 검증
         Hospital hospital = hospitalService.findById(saveId);
-        Assertions.assertThat(hospital.getName()).isEqualTo(request.getName());
+        Assertions.assertThat(hospital.getName()).isEqualTo(request.name());
     }
 
     @Test(expected = NullHospitalException.class)

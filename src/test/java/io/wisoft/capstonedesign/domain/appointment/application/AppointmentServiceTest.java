@@ -58,7 +58,7 @@ public class AppointmentServiceTest {
 
         //then -- 검증
         Appointment appointment = appointmentService.findById(saveId);
-        Assertions.assertThat(appointment.getAppointName()).isEqualTo(request.getAppointName());
+        Assertions.assertThat(appointment.getAppointName()).isEqualTo(request.appointName());
     }
 
 

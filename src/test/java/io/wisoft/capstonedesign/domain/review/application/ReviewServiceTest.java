@@ -165,7 +165,7 @@ public class ReviewServiceTest {
         reviewService.updateTitleBody(review.getId(), request2);
 
         //then -- 검증
-        Assertions.assertThat(review.getTitle()).isEqualTo(request2.getNewTitle());
+        Assertions.assertThat(review.getTitle()).isEqualTo(request2.newTitle());
         Assertions.assertThat(review.getUpdatedAt()).isNotNull();
     }
 
