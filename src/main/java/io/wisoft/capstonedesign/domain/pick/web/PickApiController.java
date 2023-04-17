@@ -16,9 +16,7 @@ public class PickApiController {
     /* 찜하기 생성 */
     @PostMapping("/api/picks/new")
     public CreatePickResponse createPick(@RequestBody @Valid final CreatePickRequest request) {
-
-        Long id = pickService.save(request);
-        return new CreatePickResponse(id);
+        return new CreatePickResponse(pickService.save(request));
     }
 
 
@@ -33,8 +31,6 @@ public class PickApiController {
     /* 찜하기 단건 상세 조회 */
     @GetMapping("/api/picks/{id}/details")
     public Result pick(@PathVariable("id") final Long id) {
-        Pick pick = pickService.findDetailById(id);
-
-        return new Result(new PickDto(pick));
+        return new Result(new PickDto(pickService.findDetailById(id)));
     }
 }

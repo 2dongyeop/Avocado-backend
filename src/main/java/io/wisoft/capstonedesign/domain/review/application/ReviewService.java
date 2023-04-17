@@ -32,9 +32,9 @@ public class ReviewService {
     public Long save(final CreateReviewRequest request) {
 
         //엔티티 조회
-        Member member = memberService.findById(request.getMemberId());
+        final Member member = memberService.findById(request.getMemberId());
 
-        Review review = Review.builder()
+        final Review review = Review.builder()
                 .member(member)
                 .title(request.getTitle())
                 .body(request.getBody())
@@ -53,7 +53,7 @@ public class ReviewService {
      */
     @Transactional
     public void deleteReview(final Long reviewId) {
-        Review review = findById(reviewId);
+        final Review review = findById(reviewId);
         review.delete();
     }
 
@@ -64,7 +64,7 @@ public class ReviewService {
     public void updateTitleBody(final Long reviewId, final UpdateReviewRequest request) {
 
         validateTitleBody(request);
-        Review review = findById(reviewId);
+        final Review review = findById(reviewId);
 
         review.updateTitleBody(request.getNewTitle(), request.getNewBody());
     }
@@ -97,7 +97,7 @@ public class ReviewService {
     /** 특정 병원의 리뷰 페이징 조회 */
     public Page<Review> findByTargetHospital(final String targetHospital, final Pageable pageable) {
 
-        Page<Review> page = reviewRepository.findByTargetHospitalUsingPaging(targetHospital, pageable);
+        final Page<Review> page = reviewRepository.findByTargetHospitalUsingPaging(targetHospital, pageable);
 
         if (page.isEmpty()) {
             throw new IllegalValueException("해당 병원에 대한 리뷰는 존재하지 않습니다.");

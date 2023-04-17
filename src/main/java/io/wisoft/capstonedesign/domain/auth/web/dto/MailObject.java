@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.domain.mail.persistence;
+package io.wisoft.capstonedesign.domain.auth.web.dto;
 
 
 import jakarta.validation.constraints.Email;

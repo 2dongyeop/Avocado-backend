@@ -19,20 +19,16 @@ public class StaffApiController {
     /* 의료진 단건 상세 조회 */
     @GetMapping("api/staff/{id}/details")
     public Result staff(@PathVariable("id") final Long id) {
-
-        Staff staff = staffService.findDetailById(id);
-        return new Result(new StaffDto(staff));
+        return new Result(new StaffDto(staffService.findDetailById(id)));
     }
 
     /* 의료진 목록 조회 */
     @GetMapping("/api/staff")
     public Result staffs() {
 
-        List<StaffDto> staffDtoList = staffService.findAllByHospital().stream()
+        return new Result(staffService.findAllByHospital().stream()
                 .map(StaffDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(staffDtoList);
+                .collect(Collectors.toList()));
     }
 
 
@@ -43,7 +39,7 @@ public class StaffApiController {
             @RequestBody @Valid final UpdateStaffPasswordRequest request) {
 
         staffService.updatePassword(id, request);
-        Staff staff = staffService.findById(id);
+        final Staff staff = staffService.findById(id);
 
         return new UpdateStaffResponse(staff.getId());
     }
@@ -56,7 +52,7 @@ public class StaffApiController {
             @RequestBody @Valid final UpdateStaffPhotoPathRequest request) {
 
         staffService.uploadPhotoPath(id, request);
-        Staff staff = staffService.findById(id);
+        final Staff staff = staffService.findById(id);
 
         return new UpdateStaffResponse(staff.getId());
     }
@@ -69,7 +65,7 @@ public class StaffApiController {
             @RequestBody @Valid final UpdateStaffHospitalRequest request) {
 
         staffService.updateStaffHospital(id, request);
-        Staff staff = staffService.findById(id);
+        final Staff staff = staffService.findById(id);
 
         return new UpdateStaffResponse(staff.getId());
     }

@@ -1,9 +1,9 @@
-package io.wisoft.capstonedesign.interceptor;
+package io.wisoft.capstonedesign.global.interceptor;
 
 import io.wisoft.capstonedesign.global.exception.token.NotExistTokenException;
 import io.wisoft.capstonedesign.global.exception.token.NotValidTokenException;
-import io.wisoft.capstonedesign.jwt.AuthorizationExtractor;
-import io.wisoft.capstonedesign.jwt.JwtTokenProvider;
+import io.wisoft.capstonedesign.global.jwt.AuthorizationExtractor;
+import io.wisoft.capstonedesign.global.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;

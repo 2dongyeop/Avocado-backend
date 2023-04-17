@@ -18,9 +18,7 @@ public class AppointmentApiController {
     @PostMapping("/api/appointments/new")
     public CreateAppointmentResponse createAppointment(
             @RequestBody @Valid final CreateAppointmentRequest request) {
-
-        Long id = appointmentService.save(request);
-        return new CreateAppointmentResponse(id);
+        return new CreateAppointmentResponse(appointmentService.save(request));
     }
 
 
@@ -45,8 +43,6 @@ public class AppointmentApiController {
     /* 예약 정보 단건 조회 */
     @GetMapping("/api/appointments/{id}/details")
     public Result appointment(@PathVariable("id") final Long id) {
-
-        Appointment appointment = appointmentService.findDetailById(id);
-        return new Result(new AppointmentDto(appointment));
+        return new Result(new AppointmentDto(appointmentService.findDetailById(id)));
     }
 }

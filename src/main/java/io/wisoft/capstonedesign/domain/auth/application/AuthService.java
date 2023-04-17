@@ -1,7 +1,9 @@
 package io.wisoft.capstonedesign.domain.auth.application;
 
 
-import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
+import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthentication;
+import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
+import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.LoginRequest;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
@@ -17,7 +19,7 @@ import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberExcept
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
-import io.wisoft.capstonedesign.jwt.JwtTokenProvider;
+import io.wisoft.capstonedesign.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,8 @@ public class AuthService {
     private final HospitalService hospitalService;
     private final EncryptHelper encryptHelper;
     private final JwtTokenProvider jwtTokenProvider;
+    private final MailAuthenticationRepository mailAuthenticationRepository;
+
 
     /*
      * 회원가입
@@ -41,9 +45,10 @@ public class AuthService {
     @Transactional
     public Long signUpMember(final CreateMemberRequest request) {
 
+        validateAuthenticateCode(request.getEmail(), request.getCode());
         validateDuplicateMember(request);
 
-        Member member = Member.builder()
+        final Member member = Member.builder()
                 .nickname(request.getNickname())
                 .email(request.getEmail())
                 .password(encryptHelper.encrypt(request.getPassword1()))
@@ -54,9 +59,17 @@ public class AuthService {
         return member.getId();
     }
 
+    private void validateAuthenticateCode(final String email, final String code) {
+        MailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(IllegalValueException::new);
+
+        if (!mail.getCode().equals(code)) {
+            throw new IllegalValueException("이메일 인증 코드가 올바르지 않습니다.");
+        }
+    }
+
     private void validateDuplicateMember(final CreateMemberRequest request) {
-        List<Member> validateMemberByEmail = memberRepository.findValidateMemberByEmail(request.getEmail());
-        List<Member> validateMemberByNickname = memberRepository.findValidateMemberByNickname(request.getNickname());
+        final List<Member> validateMemberByEmail = memberRepository.findValidateMemberByEmail(request.getEmail());
+        final List<Member> validateMemberByNickname = memberRepository.findValidateMemberByNickname(request.getNickname());
 
         if (!validateMemberByEmail.isEmpty() || !validateMemberByNickname.isEmpty()) {
             throw new DuplicateMemberException("중복 회원 발생 : 이미 존재하는 회원입니다.");
@@ -66,7 +79,7 @@ public class AuthService {
     /** 로그인 */
     public String loginMember(final LoginRequest request) {
 
-        Member member = memberRepository.findMemberByEmail(request.getEmail())
+        final Member member = memberRepository.findMemberByEmail(request.getEmail())
                 .orElseThrow(NullMemberException::new);
 
         if (!encryptHelper.isMatch(request.getPassword(), member.getPassword())) {
@@ -82,13 +95,13 @@ public class AuthService {
      */
     @Transactional
     public Long signUpStaff(final CreateStaffRequest request) {
-
+        validateAuthenticateCode(request.getEmail(), request.getCode());
         validateDuplicateStaff(request);
 
         //엔티티 조회
-        Hospital hospital = hospitalService.findById(request.getHospitalId());
+        final Hospital hospital = hospitalService.findById(request.getHospitalId());
 
-        Staff staff = Staff.builder()
+        final Staff staff = Staff.builder()
                 .hospital(hospital)
                 .name(request.getName())
                 .email(request.getEmail())
@@ -102,7 +115,7 @@ public class AuthService {
     }
 
     private void validateDuplicateStaff(final CreateStaffRequest request) {
-        List<Staff> staffList = staffRepository.findValidateByEmail(request.getEmail());
+        final List<Staff> staffList = staffRepository.findValidateByEmail(request.getEmail());
         if (!staffList.isEmpty()) throw new DuplicateStaffException();
     }
 
@@ -112,8 +125,7 @@ public class AuthService {
      */
     public String loginStaff(final LoginRequest request) {
 
-        Staff staff = staffRepository.findStaffByEmail(request.getEmail())
-                .orElseThrow(NullStaffException::new);
+        final Staff staff = staffRepository.findStaffByEmail(request.getEmail()).orElseThrow(NullStaffException::new);
 
         if (!encryptHelper.isMatch(request.getPassword(), staff.getPassword())) {
             throw new IllegalValueException("비밀번호가 일치하지 않습니다.");

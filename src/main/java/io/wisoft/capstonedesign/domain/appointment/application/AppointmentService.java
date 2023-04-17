@@ -36,11 +36,11 @@ public class AppointmentService {
             final CreateAppointmentRequest request) {
 
         //엔티티 조회
-        Member member = memberService.findById(request.getMemberId());
-        Hospital hospital = hospitalService.findById(request.getHospitalId());
+        final Member member = memberService.findById(request.getMemberId());
+        final Hospital hospital = hospitalService.findById(request.getHospitalId());
 
         //예약 정보 생성
-        Appointment appointment = Appointment.builder()
+        final Appointment appointment = Appointment.builder()
                 .member(member)
                 .hospital(hospital)
                 .dept(HospitalDept.valueOf(request.getDept()))
@@ -58,7 +58,7 @@ public class AppointmentService {
      */
     @Transactional
     public void deleteAppointment(final Long appointmentId) {
-        Appointment appointment = findById(appointmentId);
+        final Appointment appointment = findById(appointmentId);
         appointmentRepository.delete(appointment);
     }
 
@@ -70,7 +70,7 @@ public class AppointmentService {
 
         validateParameter(request);
         validateDept(request.getDept());
-        Appointment appointment = findById(appointmentId);
+        final Appointment appointment = findById(appointmentId);
 
         appointment.update(HospitalDept.valueOf(request.getDept()), request.getComment(), request.getAppointName(), request.getAppointPhonenumber());
     }
@@ -84,8 +84,8 @@ public class AppointmentService {
     }
 
     private void validateDept(final String dept) {
-        HospitalDept[] values = HospitalDept.values();
-        Iterator<HospitalDept> iterator = Arrays.stream(values).iterator();
+        final HospitalDept[] values = HospitalDept.values();
+        final Iterator<HospitalDept> iterator = Arrays.stream(values).iterator();
 
         while (iterator.hasNext()) {
             HospitalDept hospitalDept = iterator.next();

@@ -33,10 +33,10 @@ public class BoardReplyService {
     public Long save(final CreateBoardReplyRequest request) {
 
         //엔티티 조회
-        Board board = boardService.findById(request.getBoardId());
-        Staff staff = staffService.findById(request.getStaffId());
+        final Board board = boardService.findById(request.getBoardId());
+        final Staff staff = staffService.findById(request.getStaffId());
 
-        BoardReply boardReply = BoardReply.builder()
+        final BoardReply boardReply = BoardReply.builder()
                 .board(board)
                 .staff(staff)
                 .reply(request.getReply())
@@ -52,8 +52,7 @@ public class BoardReplyService {
      */
     @Transactional
     public void deleteBoardReply(final Long boardReplyId) {
-        BoardReply boardReply = findById(boardReplyId);
-        boardReplyRepository.delete(boardReply);
+        boardReplyRepository.delete(findById(boardReplyId));
     }
 
     /**

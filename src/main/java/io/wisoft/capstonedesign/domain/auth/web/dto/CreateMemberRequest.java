@@ -23,4 +23,5 @@ public class CreateMemberRequest {
 
     @NotBlank private String password2;
     @NotBlank private String phonenumber;
+    @NotBlank private String code;
 }

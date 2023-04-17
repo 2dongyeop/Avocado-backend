@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -30,9 +28,9 @@ public class PickService {
     public Long save(final CreatePickRequest request) {
 
         //엔티티 조회
-        Member member = memberService.findById(request.getMemberId());
-        Hospital hospital = hospitalService.findById(request.getHospitalId());
-        Pick pick = Pick.createPick(member, hospital);
+        final Member member = memberService.findById(request.getMemberId());
+        final Hospital hospital = hospitalService.findById(request.getHospitalId());
+        final Pick pick = Pick.createPick(member, hospital);
 
         pickRepository.save(pick);
         return pick.getId();
@@ -43,8 +41,7 @@ public class PickService {
      */
     @Transactional
     public void cancelPick(final Long pickId) {
-        Pick pick = findById(pickId);
-        pickRepository.delete(pick);
+        pickRepository.delete(findById(pickId));
     }
 
     /* 조회 로직 */

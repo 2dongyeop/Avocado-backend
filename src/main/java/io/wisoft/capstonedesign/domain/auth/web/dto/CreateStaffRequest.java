@@ -25,4 +25,5 @@ public class CreateStaffRequest {
     @NotBlank private String password2;
     @NotBlank private String licensePath;
     @NotBlank private String dept;
+    @NotBlank private String code;
 }

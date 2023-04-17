@@ -10,7 +10,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,8 +23,8 @@ public class HospitalApiController {
     public CreateHospitalResponse createHospitalRequest(
             @RequestBody @Valid final CreateHospitalRequest request) {
 
-        Long id = hospitalService.save(request);
-        Hospital getHospital = hospitalService.findById(id);
+        final Long id = hospitalService.save(request);
+        final Hospital getHospital = hospitalService.findById(id);
         return new CreateHospitalResponse(getHospital.getId());
     }
 
@@ -33,19 +32,15 @@ public class HospitalApiController {
     /* 병원 단건 조회 */
     @GetMapping("/api/hospitals/{id}/details")
     public Result hospital(@PathVariable final Long id) {
-        Hospital hospital = hospitalService.findById(id);
-
-        return new Result(new HospitalDto(hospital));
+        return new Result(new HospitalDto(hospitalService.findById(id)));
     }
 
 
     /* 병원 목록 조회 */
     @GetMapping("/api/hospitals")
     public Result hospitals() {
-        List<HospitalDto> hospitalDtoList = hospitalService.findAll()
+        return new Result(hospitalService.findAll()
                 .stream().map(HospitalDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(hospitalDtoList);
+                .collect(Collectors.toList()));
     }
 }

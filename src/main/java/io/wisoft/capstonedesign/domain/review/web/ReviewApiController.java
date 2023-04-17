@@ -19,9 +19,7 @@ public class ReviewApiController {
     /* 리뷰 단건 조회 */
     @GetMapping("/api/reviews/{id}/details")
     public Result review(@PathVariable("id") final Long id) {
-        Review review = reviewService.findDetailById(id);
-
-        return new Result(new ReviewDto(review));
+        return new Result(new ReviewDto(reviewService.findDetailById(id)));
     }
 
 
@@ -48,8 +46,8 @@ public class ReviewApiController {
     public CreateReviewResponse createReview(
             @RequestBody @Valid final CreateReviewRequest request) {
 
-        Long id = reviewService.save(request);
-        Review review = reviewService.findById(id);
+        final Long id = reviewService.save(request);
+        final Review review = reviewService.findById(id);
 
         return new CreateReviewResponse(review.getId());
     }
@@ -62,7 +60,7 @@ public class ReviewApiController {
             @RequestBody @Valid final UpdateReviewRequest request) {
 
         reviewService.updateTitleBody(id, request);
-        Review review = reviewService.findById(id);
+        final Review review = reviewService.findById(id);
 
         return new UpdateReviewResponse(review.getId(), review.getTitle(), review.getBody());
     }
@@ -73,7 +71,7 @@ public class ReviewApiController {
     public DeleteReviewResponse deleteReview(@PathVariable("id") final Long id) {
 
         reviewService.deleteReview(id);
-        Review review = reviewService.findById(id);
+        final Review review = reviewService.findById(id);
 
         return new DeleteReviewResponse(review.getId(), review.getStatus().toString());
     }

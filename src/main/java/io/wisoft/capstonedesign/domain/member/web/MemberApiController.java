@@ -19,21 +19,15 @@ public class MemberApiController {
     /* 회원 단건 조회 */
     @GetMapping("/api/members/{id}/details")
     public Result member(@PathVariable("id") final Long id) {
-
-        Member member = memberService.findDetailById(id);
-
-        return new Result(new MemberDto(member));
+        return new Result(new MemberDto(memberService.findDetailById(id)));
     }
 
     /* 회원 목록 조회 */
     @GetMapping("/api/members")
     public Result members() {
-
-        List<MemberListDto> memberListDtoList = memberService.findAll().stream()
+        return new Result(memberService.findAll().stream()
                 .map(MemberListDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(memberListDtoList);
+                .collect(Collectors.toList()));
     }
 
 
@@ -44,7 +38,7 @@ public class MemberApiController {
             @RequestBody @Valid final UpdateMemberPasswordRequest request) {
 
         memberService.updatePassword(id, request);
-        Member member = memberService.findById(id);
+        final Member member = memberService.findById(id);
 
         return new UpdateMemberResponse(member.getId());
     }
@@ -56,7 +50,7 @@ public class MemberApiController {
             @RequestBody @Valid final UpdateMemberNicknameRequest request) {
 
         memberService.updateMemberNickname(id, request);
-        Member member = memberService.findById(id);
+        final Member member = memberService.findById(id);
 
         return new UpdateMemberResponse(member.getId());
     }
@@ -69,7 +63,7 @@ public class MemberApiController {
             @RequestBody @Valid final UpdateMemberPhotoPathRequest request) {
 
         memberService.uploadPhotoPath(id, request);
-        Member member = memberService.findById(id);
+        final Member member = memberService.findById(id);
 
         return new UpdateMemberResponse(member.getId());
     }
@@ -78,7 +72,6 @@ public class MemberApiController {
     /* 회원 탈퇴 */
     @DeleteMapping("/api/members/{id}")
     public DeleteMemberResponse deleteMember(@PathVariable("id") final Long id) {
-
         memberService.deleteMember(id);
         return new DeleteMemberResponse(id);
     }

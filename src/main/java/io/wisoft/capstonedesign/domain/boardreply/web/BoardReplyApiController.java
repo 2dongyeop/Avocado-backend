@@ -21,8 +21,8 @@ public class BoardReplyApiController {
     public CreateBoardReplyResponse createBoardReply(
             @RequestBody @Valid final CreateBoardReplyRequest request) {
 
-        Long id = boardReplyService.save(request);
-        BoardReply boardReply = boardReplyService.findById(id);
+        final Long id = boardReplyService.save(request);
+        final BoardReply boardReply = boardReplyService.findById(id);
         return new CreateBoardReplyResponse(boardReply.getId());
     }
 
@@ -34,7 +34,7 @@ public class BoardReplyApiController {
             @RequestBody @Valid final UpdateBoardReplyRequest request) {
 
         boardReplyService.update(id, request);
-        BoardReply boardReply = boardReplyService.findById(id);
+        final BoardReply boardReply = boardReplyService.findById(id);
         return new UpdateBoardReplyResponse(boardReply.getId());
     }
 
@@ -50,30 +50,24 @@ public class BoardReplyApiController {
     /* 특정 게시판댓글 단건 조회 */
     @GetMapping("/api/board-reply/{id}/details")
     public Result boardReply(@PathVariable("id") final Long id) {
-        BoardReply boardReply = boardReplyService.findDetailById(id);
-
-        return new Result(new BoardReplyDto(boardReply));
+        return new Result(new BoardReplyDto(boardReplyService.findDetailById(id)));
     }
 
 
     /* 특정 게시글의 댓글 목록 오름차순 조회 */
     @GetMapping("/api/board-reply/board/{board-id}/create-asc")
     public Result boardReplyByBoardOrderByCreateAsc(@PathVariable("board-id") final Long id) {
-        List<BoardReplyDto> replyDtoList = boardReplyService.findByBoardIdOrderByCreateAsc()
+        return new Result(boardReplyService.findByBoardIdOrderByCreateAsc()
                 .stream().map(BoardReplyDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(replyDtoList);
+                .collect(Collectors.toList()));
     }
 
 
     /* 특정 게시글의 댓글 목록 내림차순 조회 */
     @GetMapping("/api/board-reply/board/{board-id}/create-desc")
     public Result boardReplyByBoardOrderByCreateDesc(@PathVariable("board-id") final Long id) {
-        List<BoardReplyDto> replyDtoList = boardReplyService.findByBoardIdOrderByCreateDesc()
+        return new Result(boardReplyService.findByBoardIdOrderByCreateDesc()
                 .stream().map(BoardReplyDto::new)
-                .collect(Collectors.toList());
-
-        return new Result(replyDtoList);
+                .collect(Collectors.toList()));
     }
 }

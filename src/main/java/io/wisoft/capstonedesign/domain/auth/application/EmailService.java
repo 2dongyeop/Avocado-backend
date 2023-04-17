@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.domain.mail.application;
+package io.wisoft.capstonedesign.domain.auth.application;
 
 public interface EmailService {
     void sendCertificationCode(final String email);

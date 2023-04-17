@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.config;
+package io.wisoft.capstonedesign.global.config;
 
 
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
 import java.util.Properties;
-@ComponentScan(basePackages = { "io.wisoft.capstonedesign.domain.mail.application" })
+@ComponentScan(basePackages = { "io.wisoft.capstonedesign.domain.auth.application" })
 @PropertySource(value={"classpath:application.properties"})
 public class EmailConfig {
 
