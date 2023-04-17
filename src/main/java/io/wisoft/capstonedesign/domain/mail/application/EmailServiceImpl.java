@@ -1,5 +1,9 @@
 package io.wisoft.capstonedesign.domain.mail.application;
 
+import io.wisoft.capstonedesign.config.bcrypt.EncryptHelper;
+import io.wisoft.capstonedesign.domain.member.persistence.Member;
+import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,18 +12,21 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
 @Slf4j
 @Service("EmailService")
+@Transactional(readOnly = true)
 public class EmailServiceImpl implements EmailService {
 
     @Value("${spring.mail.username}")
     private String AVOCADO_ADDRESS;
 
-    @Autowired
-    private JavaMailSender emailSender;
+    @Autowired private JavaMailSender emailSender;
+    @Autowired private MemberRepository memberRepository;
+    @Autowired private EncryptHelper encryptHelper;
 
     private static final String EMAIL_CERTIFICATION_SUBJECT = "AVOCADO 이메일 인증 코드입니다.";
     private static final String PASSWORD_RESET_SUBJECT = "AVOCADO 임시 비밀번호입니다.";
@@ -31,23 +38,32 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Async
+    @Transactional
     public void sendResetPassword(final String to) {
-        sendEmail(to, PASSWORD_RESET_SUBJECT);
+        String temporaryPassword = sendEmail(to, PASSWORD_RESET_SUBJECT);
+
+        Member member = memberRepository.findByEmail(to).orElseThrow(NullMemberException::new);
+        member.updatePassword(encryptHelper.encrypt(temporaryPassword));
+
         log.info(to + "으로 임시 비밀번호를 발급합니다.");
     }
 
-    private void sendEmail(final String to, final String subject) {
+    private String sendEmail(final String to, final String subject) {
+        String code = createCertificationCode();
+        
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(AVOCADO_ADDRESS);
             message.setTo(to);
             message.setSubject(subject);
-            message.setText(createCertificationCode());
+            message.setText(code);
 
             emailSender.send(message);
         } catch (MailException exception) {
             exception.printStackTrace();
         }
+        
+        return code;
     }
 
     private String createCertificationCode() {
