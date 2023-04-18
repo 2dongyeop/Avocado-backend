@@ -31,7 +31,7 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
             final HttpServletResponse response,
             final Object handler) throws Exception {
 
-        logger.info(">>> interceptor.preHandle 호출");
+        logger.info("interceptor.preHandle 호출");
 
         final String token = authExtractor.extract(request, "Bearer");
 

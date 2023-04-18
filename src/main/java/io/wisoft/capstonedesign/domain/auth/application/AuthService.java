@@ -19,13 +19,17 @@ import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberExcept
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
+import io.wisoft.capstonedesign.global.jwt.AuthorizationExtractor;
 import io.wisoft.capstonedesign.global.jwt.JwtTokenProvider;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -37,7 +41,7 @@ public class AuthService {
     private final EncryptHelper encryptHelper;
     private final JwtTokenProvider jwtTokenProvider;
     private final MailAuthenticationRepository mailAuthenticationRepository;
-
+    private final AuthorizationExtractor authExtractor;
 
     /*
      * 회원가입
@@ -56,6 +60,8 @@ public class AuthService {
                 .build();
 
         memberRepository.save(member);
+
+        log.info(member.getNickname() + "님이 회원가입을 하셨습니다.");
         return member.getId();
     }
 
@@ -63,6 +69,7 @@ public class AuthService {
         MailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(IllegalValueException::new);
 
         if (!mail.getCode().equals(code)) {
+            log.error("이메일 인증 코드가 올바르지 않습니다.");
             throw new IllegalValueException("이메일 인증 코드가 올바르지 않습니다.");
         }
     }
@@ -72,6 +79,7 @@ public class AuthService {
         final List<Member> validateMemberByNickname = memberRepository.findValidateMemberByNickname(request.nickname());
 
         if (!validateMemberByEmail.isEmpty() || !validateMemberByNickname.isEmpty()) {
+            log.error("중복 회원 발생 : 이미 존재하는 회원입니다.");
             throw new DuplicateMemberException("중복 회원 발생 : 이미 존재하는 회원입니다.");
         }
     }
@@ -83,10 +91,28 @@ public class AuthService {
                 .orElseThrow(NullMemberException::new);
 
         if (!encryptHelper.isMatch(request.password(), member.getPassword())) {
+            log.error("비밀번호가 일치하지 않습니다.");
             throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
         }
 
+        log.info(member.getNickname() + "님이 로그인 하셨습니다.");
         return jwtTokenProvider.createToken(member.getNickname());
+    }
+
+
+    /** 로그아웃 */
+    public boolean logout(final HttpServletRequest request) {
+
+        final String token = authExtractor.extract(request, "Bearer");
+
+        try {
+            jwtTokenProvider.addBlackList(token);
+            log.info(jwtTokenProvider.getSubject(token) + "님이 로그아웃 하셨습니다.");
+            return true;
+        } catch (IllegalAccessException exception) {
+            /* do nothing */
+            return false;
+        }
     }
 
 
@@ -111,6 +137,7 @@ public class AuthService {
                 .build();
 
         staffRepository.save(staff);
+        log.info(staff.getName() + "님이 가입 하셨습니다.");
         return staff.getId();
     }
 
@@ -128,9 +155,11 @@ public class AuthService {
         final Staff staff = staffRepository.findStaffByEmail(request.email()).orElseThrow(NullStaffException::new);
 
         if (!encryptHelper.isMatch(request.password(), staff.getPassword())) {
+            log.error("비밀번호가 일치하지 않습니다.");
             throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
         }
 
+        log.info(staff.getName() + "님이 로그인 하셨습니다.");
         return jwtTokenProvider.createToken(staff.getName());
     }
 }

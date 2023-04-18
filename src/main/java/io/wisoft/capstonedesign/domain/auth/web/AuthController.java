@@ -9,6 +9,7 @@ import io.wisoft.capstonedesign.domain.auth.web.dto.TokenResponse;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffResponse;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,22 @@ public class AuthController {
     public ResponseEntity<TokenResponse> loginMember(@RequestBody @Valid final LoginRequest request) {
         final String token = authService.loginMember(request);
         return ResponseEntity.ok(new TokenResponse(token, "bearer"));
+    }
+
+
+    /**
+     * 로그아웃
+     */
+    @PostMapping("/api/auth/logout")
+    public ResponseEntity<String> logoutMember(HttpServletRequest request) {
+        //TODO
+        boolean result = authService.logout(request);
+
+        if (result) {
+            return ResponseEntity.ok("logout success");
+        } else {
+            return ResponseEntity.badRequest().body("bad request");
+        }
     }
 
 
