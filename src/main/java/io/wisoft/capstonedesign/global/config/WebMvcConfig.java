@@ -19,9 +19,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry){
-        logger.info(">>> 인터셉터 등록");
+        logger.info("인터셉터 등록");
 
         registry.addInterceptor(bearerAuthInterceptor)
+
+                .addPathPatterns("api/auth/logout")
+
                 .addPathPatterns("/api/members")
                 .addPathPatterns("/api/members/**") //마이페이지가 여기에 같이 포함
 
