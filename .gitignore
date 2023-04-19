@@ -14,8 +14,7 @@ h2
 *application-jwt.yml*
 *application-mail.yml*
 *.sql*
-*chatgpt*
-
+*ChatGptConfig*
 
 ### STS ###
 .apt_generated
