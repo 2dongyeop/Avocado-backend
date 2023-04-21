@@ -28,4 +28,18 @@ public class BusInfoRepositoryTest {
         //then -- 검증
         assertThat(list.size()).isEqualTo(1);
     }
+
+
+    @Test
+    public void findByArea_fail() throws Exception {
+        //given -- 조건
+        String area = "DAAAJEON";
+
+        //when -- 동작
+        assertThrows(IllegalArgumentException.class, () -> {
+            busInfoRepository.findByArea(BusArea.valueOf(area));
+        });
+
+        //then -- 검증
+    }
 }

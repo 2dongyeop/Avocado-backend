@@ -24,15 +24,29 @@ public class HospitalServiceTest {
     @Test
     public void 병원_저장() throws Exception {
         //given -- 조건
-        CreateHospitalRequest request = new CreateHospitalRequest("avocado", "042", "대전", "연중무휴");
+        final CreateHospitalRequest request = new CreateHospitalRequest("avocado", "042", "대전", "연중무휴");
 
         //when -- 동작
-        Long saveId = hospitalService.save(request);
+        final Long saveId = hospitalService.save(request);
 
         //then -- 검증
-        Hospital hospital = hospitalService.findById(saveId);
+        final Hospital hospital = hospitalService.findById(saveId);
         Assertions.assertThat(hospital.getName()).isEqualTo(request.name());
     }
+
+
+    @Test
+    public void 병원_단건_조회() throws Exception {
+        //given -- 조건
+
+        //when -- 동작
+        Hospital hospital = hospitalService.findById(1L);
+
+        //then -- 검증
+        Assertions.assertThat(hospital).isNotNull();
+        Assertions.assertThat(hospital.getName()).isEqualTo("을지대학병원");
+    }
+
 
     @Test(expected = NullHospitalException.class)
     public void 병원_단건_조회_실패() throws Exception {
@@ -49,8 +63,8 @@ public class HospitalServiceTest {
     public void 병원_중복_저장() throws Exception {
         //given -- 조건
 
-        CreateHospitalRequest request1 = new CreateHospitalRequest("avocado", "02", "서울", "연중무휴");
-        CreateHospitalRequest request2 = new CreateHospitalRequest("avocado", "042", "대전", "연중무휴");
+        final CreateHospitalRequest request1 = new CreateHospitalRequest("avocado", "02", "서울", "연중무휴");
+        final CreateHospitalRequest request2 = new CreateHospitalRequest("avocado", "042", "대전", "연중무휴");
 
         //when -- 동작
         hospitalService.save(request1);

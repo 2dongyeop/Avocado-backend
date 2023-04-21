@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.domain.board.persistence;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,5 +39,17 @@ public class BoardRepositoryTest {
         assertThat(page.isFirst()).isTrue();
         assertThat(page.hasNext()).isFalse();
 //        assertThat(board1.getCreateAt()).isBefore(board2.getCreateAt());
+    }
+
+
+    @Test
+    public void findAllByMember() throws Exception {
+        //given -- 조건
+
+        //when -- 동작
+        List<Board> boardList = boardRepository.findAllByMember();
+
+        //then -- 검증
+        Assertions.assertThat(boardList.size()).isEqualTo(3);
     }
 }

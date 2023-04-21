@@ -16,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -207,5 +209,19 @@ public class ReviewReplyServiceTest {
 
         //then -- 검증
         fail("reply가 비어있어 예외가 발생해야 한다.");
+    }
+
+
+    @Test
+    public void 특정_리뷰의_리뷰댓글_목록_조회() throws Exception {
+        //given -- 조건
+
+
+        //when -- 동작
+        List<ReviewReply> list = reviewReplyService.findByReviewId(1L);
+
+        //then -- 검증
+        Assertions.assertThat(list).isNotNull();
+        Assertions.assertThat(list.size()).isEqualTo(2);
     }
 }
