@@ -14,10 +14,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -194,6 +197,32 @@ public class ReviewServiceTest {
 
         //then -- 검증
         fail("제목이 없어 예외가 발생해야 한다.");
+    }
+
+
+    @Test
+    public void 특정_병원의_리뷰_조회() throws Exception {
+
+        //회원 생성
+        Member member = Member.builder()
+                .nickname("nick1123")
+                .email("email1123")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
+        em.persist(member);
+
+        //리뷰생성
+        CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        Long saveId = reviewService.save(request1);
+        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
+
+        //when -- 동작
+        Page<Review> page = reviewService.findByTargetHospital("을지대학병원", request);
+        List<Review> list = page.getContent();
+
+        //then -- 검증
+        Assertions.assertThat(list.size()).isEqualTo(1);
     }
 
     @Test(expected = IllegalValueException.class)

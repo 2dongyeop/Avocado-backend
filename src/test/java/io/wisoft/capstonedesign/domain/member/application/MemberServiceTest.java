@@ -29,6 +29,20 @@ public class MemberServiceTest {
     @Autowired EncryptHelper encryptHelper;
     @Autowired MailAuthenticationRepository mailAuthenticationRepository;
 
+
+    @Test
+    public void 회원_단건_조회() throws Exception {
+        //given -- 조건
+
+
+        //when -- 동작
+        Member member = memberService.findById(1L);
+
+        //then -- 검증
+        Assertions.assertThat(member).isNotNull();
+        Assertions.assertThat(member.getNickname()).isEqualTo("이동엽");
+    }
+
     @Test(expected = NullMemberException.class)
     public void 회원_단건_조회_실패() throws Exception {
         //given -- 조건

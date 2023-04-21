@@ -30,13 +30,12 @@ public class BoardServiceTest {
     @Autowired EntityManager em;
     @Autowired BoardService boardService;
 
-    //게시글 작성
     @Test
     public void 게시글작성() throws Exception {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
+        final Member member = Member.builder()
                 .nickname("nick1")
                 .email("email1")
                 .password("pass1")
@@ -44,24 +43,23 @@ public class BoardServiceTest {
                 .build();
         em.persist(member);
 
-        CreateBoardRequest request = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
+        final CreateBoardRequest request = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
 
         //when -- 동작
-        Long saveId = boardService.save(request);
+        final Long saveId = boardService.save(request);
 
         //then -- 검증
-        Board getBoard = boardService.findById(saveId);
+        final Board getBoard = boardService.findById(saveId);
 
         Assertions.assertThat(getBoard.getStatus()).isEqualTo(BoardStatus.WRITE);
     }
 
-    //게시글 삭제
     @Test
     public void 게시글삭제() throws Exception {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
+        final Member member = Member.builder()
                 .nickname("nick1")
                 .email("email1")
                 .password("pass1")
@@ -71,14 +69,14 @@ public class BoardServiceTest {
 
         //게시글 생성 및 저장
 
-        CreateBoardRequest request = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
-        Long saveId = boardService.save(request);
+        final CreateBoardRequest request = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
+        final Long saveId = boardService.save(request);
 
         //when -- 동작
         boardService.deleteBoard(saveId);
 
         //then -- 검증
-        Board getBoard = boardService.findById(saveId);
+        final Board getBoard = boardService.findById(saveId);
 
         Assertions.assertThat(getBoard.getStatus()).isEqualTo(BoardStatus.DELETE);
     }
@@ -88,7 +86,7 @@ public class BoardServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
+        final Member member = Member.builder()
                 .nickname("nick1")
                 .email("email1")
                 .password("pass1")
@@ -97,8 +95,8 @@ public class BoardServiceTest {
         em.persist(member);
 
         //게시글 생성 및 저장
-        CreateBoardRequest request = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
-        Long saveId = boardService.save(request);
+        final CreateBoardRequest request = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
+        final Long saveId = boardService.save(request);
 
         //when -- 동작
         boardService.deleteBoard(saveId);
@@ -113,7 +111,7 @@ public class BoardServiceTest {
         //given -- 조건
 
         //when -- 동작
-        Board board = boardService.findById(100L);
+        final Board board = boardService.findById(100L);
 
         //then -- 검증
         fail("해당 boardId에 일치하는 게시글 정보가 없어 예외가 발생해야 한다.");
@@ -124,7 +122,7 @@ public class BoardServiceTest {
 
         //given -- 조건
         //회원 생성
-        Member member = Member.builder()
+        final Member member = Member.builder()
                 .nickname("nick1")
                 .email("email1")
                 .password("pass1")
@@ -133,13 +131,13 @@ public class BoardServiceTest {
         em.persist(member);
 
         //게시글 생성 및 저장
-        CreateBoardRequest request1 = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
-        Long saveId = boardService.save(request1);
+        final CreateBoardRequest request1 = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
+        final Long saveId = boardService.save(request1);
 
-        UpdateBoardRequest request2 = new UpdateBoardRequest("제목2", "본문2");
+        final UpdateBoardRequest request2 = new UpdateBoardRequest("제목2", "본문2");
 
         //when -- 동작
-        Board board = boardService.findById(saveId);
+        final Board board = boardService.findById(saveId);
         boardService.updateTitleBody(board.getId(), request2);
 
         //then -- 검증
@@ -153,7 +151,7 @@ public class BoardServiceTest {
 
         //given -- 조건
         //회원 생성
-        Member member = Member.builder()
+        final Member member = Member.builder()
                 .nickname("nick1")
                 .email("email1")
                 .password("pass1")
@@ -162,13 +160,13 @@ public class BoardServiceTest {
         em.persist(member);
 
         //게시글 생성 및 저장
-        CreateBoardRequest request1 = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
-        Long saveId = boardService.save(request1);
+        final CreateBoardRequest request1 = new CreateBoardRequest(member.getId(), "test code!", "I write test code!", "OBSTETRICS", "path");
+        final Long saveId = boardService.save(request1);
 
-        UpdateBoardRequest request2 = new UpdateBoardRequest(null, "본문2");
+        final UpdateBoardRequest request2 = new UpdateBoardRequest(null, "본문2");
 
         //when -- 동작
-        Board board = boardService.findById(saveId);
+        final Board board = boardService.findById(saveId);
         boardService.updateTitleBody(board.getId(), request2);
 
         //then - 검증
@@ -179,10 +177,10 @@ public class BoardServiceTest {
     @Test
     public void paging() throws Exception {
         //given -- 조건
-        PageRequest pageRequest = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
+        final PageRequest pageRequest = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
-        List<Board> page = boardService.findAllUsingPaging(pageRequest).getContent();
+        final List<Board> page = boardService.findAllUsingPaging(pageRequest).getContent();
 
         //then -- 검증
         Assertions.assertThat(page.size()).isEqualTo(3);

@@ -125,6 +125,21 @@ public class PickServiceTest {
         fail("중복 찜하기 취소 요청으로 인한 예외가 발생해야 한다.");
     }
 
+
+    @Test
+    public void 찜하기_단건_조회() throws Exception {
+        //given -- 조건
+
+
+        //when -- 동작
+        Pick pick = pickService.findById(1L);
+
+        //then -- 검증
+        Assertions.assertThat(pick).isNotNull();
+        Assertions.assertThat(pick.getMember().getNickname()).isEqualTo("이동엽");
+
+    }
+
     @Test(expected = NullPickException.class)
     public void 찜하기_단건_조회_실패() throws Exception {
         //given -- 조건

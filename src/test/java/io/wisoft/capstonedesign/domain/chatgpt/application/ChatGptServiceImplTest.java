@@ -2,37 +2,49 @@ package io.wisoft.capstonedesign.domain.chatgpt.application;
 
 import io.wisoft.capstonedesign.domain.chatgpt.web.dto.ChatGptRequest;
 import io.wisoft.capstonedesign.domain.chatgpt.web.dto.ChatGptResponse;
-import io.wisoft.capstonedesign.domain.chatgpt.web.dto.ChatRequest;
 import io.wisoft.capstonedesign.global.config.ChatGptConfig;
-import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-@Slf4j
-@Service
-public class ChatGptServiceImpl implements ChatGptService {
-    private static final RestTemplate restTemplate = new RestTemplate();
+import static org.junit.Assert.*;
 
-    @Override
-    public ChatGptResponse askQuestion(final ChatRequest chatRequest) {
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@Transactional
+public class ChatGptServiceImplTest {
+
+    @Autowired ChatGptServiceImpl chatGptService;
+
+    @Test
+    public void askQuestion() throws Exception {
+        String message = "안녕";
+
+        //given -- 조건
+        //when -- 동작
+
         ChatGptResponse response = this.getResponse(
                 this.buildHttpEntity(
                         new ChatGptRequest(
                                 ChatGptConfig.MODEL,
-                                chatRequest.message(),
+                                message,
                                 ChatGptConfig.MAX_TOKEN,
                                 ChatGptConfig.TEMPERATURE,
                                 ChatGptConfig.TOP_P)));
 
-        log.info("OpenAI 요청이 들어왔습니다 : {} ", chatRequest.message());
-        log.info("답변 : {}", response.choices().get(0).text());
-        return response;
-    }
+        //then -- 검증
+        Assertions.assertThat(response).isNotNull();
 
+    }
 
     //comment: Build headers
     private HttpEntity<ChatGptRequest> buildHttpEntity(final ChatGptRequest chatGptRequest) {
@@ -44,6 +56,7 @@ public class ChatGptServiceImpl implements ChatGptService {
 
     //comment: Generate response
     private ChatGptResponse getResponse(final HttpEntity<ChatGptRequest> chatGptRequestHttpEntity) {
+        RestTemplate restTemplate = new RestTemplate();
         final ResponseEntity<ChatGptResponse> responseEntity = restTemplate.postForEntity(
                 ChatGptConfig.URL,
                 chatGptRequestHttpEntity,
