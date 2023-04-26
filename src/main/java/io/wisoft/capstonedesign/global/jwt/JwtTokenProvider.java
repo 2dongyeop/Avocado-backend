@@ -2,25 +2,26 @@ package io.wisoft.capstonedesign.global.jwt;
 
 import io.jsonwebtoken.*;
 
+import io.wisoft.capstonedesign.global.exception.token.IllegalTokenException;
 import io.wisoft.capstonedesign.global.exception.token.NotExistTokenException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
-    private String secretKey;
-    private long validityInMilliseconds;
-    private final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+    private final String secretKey;
+    private final long validityInMilliseconds;
 
-    private Set<String> blackList = new HashSet<>();
+    @Autowired private BlackListRepository blackListRepository;
 
     public JwtTokenProvider(
             @Value("${security.jwt.token.secret-key}") final String secretKey,
@@ -34,8 +35,8 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
-        logger.info("now: {}", now);
-        logger.info("validity: {}", validity);
+        log.info("now: {}", now);
+        log.info("validity: {}", validity);
 
 
         String token = Jwts.builder()
@@ -45,11 +46,13 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
-        logger.info("생성된 JWT: {}", token);
+        log.info("생성된 JWT: {}", token);
         return token;
     }
 
-    /** 토큰에서 값 추출 */
+    /**
+     * 토큰에서 값 추출
+     */
     public String getSubject(final String token) {
         return Jwts.parser().setSigningKey(secretKey)
                 .parseClaimsJws(token)
@@ -57,7 +60,9 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    /** 유효한 토큰인지 확인 */
+    /**
+     * 유효한 토큰인지 확인
+     */
     public boolean validateToken(final String token) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
@@ -68,7 +73,8 @@ public class JwtTokenProvider {
             }
 
             /** 로그아웃 요청한 토큰(= 블랙리스트에 포함)일 경우 */
-            if (blackList.contains(token)) {
+//            if (blackList.contains(token)) {
+            if (blackListRepository.existsByToken(token)) {
                 return false;
             }
 
@@ -78,18 +84,23 @@ public class JwtTokenProvider {
         }
     }
 
-    public void addBlackList(final String token) throws IllegalAccessException {
+    public int addBlackList(final String token) throws IllegalAccessException {
 
-        if (blackList.contains(token)) {
-            logger.error("이미 로그아웃된 토큰입니다.");
-            throw new IllegalAccessException("이미 로그아웃된 토큰입니다.");
+        if (blackListRepository.existsByToken(token)) {
+
+            log.error("이미 로그아웃된 토큰입니다.");
+            throw new IllegalTokenException("이미 로그아웃된 토큰입니다.");
         }
 
         if (!validateToken(token)) {
-            logger.error("유효하지 않은 토큰");
+            log.error("유효하지 않은 토큰");
             throw new NotExistTokenException("토큰이 존재하지 않음");
         }
 
-        blackList.add(token);
+        blackListRepository.save(BlackList.builder()
+                .token(token)
+                .build());
+
+        return blackListRepository.findAll().size();
     }
 }

@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.config.bcrypt;
+package io.wisoft.capstonedesign.global.config.bcrypt;
 
 import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import org.assertj.core.api.Assertions;

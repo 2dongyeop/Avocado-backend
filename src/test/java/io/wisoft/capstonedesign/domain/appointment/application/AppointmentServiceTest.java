@@ -48,7 +48,14 @@ public class AppointmentServiceTest {
         em.persist(hospital);
 
         //임시 요청 생성
-        final CreateAppointmentRequest request = new CreateAppointmentRequest(member.getId(), hospital.getId(), "DENTAL", "눈이 건조해요", "이동엽", "01012345678");
+        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
+                .memberId(member.getId())
+                .hospitalId(hospital.getId())
+                .dept("DENTAL")
+                .comment("comment")
+                .appointName("name")
+                .appointPhonenumber("phone")
+                .build();
 
         //when -- 동작
         final Long saveId = appointmentService.save(request);
@@ -63,11 +70,41 @@ public class AppointmentServiceTest {
     public void 예약_취소() throws Exception {
         //given -- 조건
 
+        //회원 생성
+        final Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
+        em.persist(member);
+
+        //병원 생성
+        final Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
+        em.persist(hospital);
+
+        //임시 요청 생성
+        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
+                .memberId(member.getId())
+                .hospitalId(hospital.getId())
+                .dept("DENTAL")
+                .comment("comment")
+                .appointName("name")
+                .appointPhonenumber("phone")
+                .build();
+
+        final Long saveId = appointmentService.save(request);
+
         //when -- 동작
-        appointmentService.deleteAppointment(1L);
+        appointmentService.deleteAppointment(saveId);
 
         //then -- 검증
-        appointmentService.findById(1L);
+        appointmentService.findById(saveId);
         fail("1번 예약은 취소되었으니 결과가 없어 예외가 발생해야 한다.");
     }
 
@@ -75,6 +112,36 @@ public class AppointmentServiceTest {
     @Test(expected = NullAppointmentException.class)
     public void 예약_취소_실패() throws Exception {
         //given -- 조건
+
+        //회원 생성
+        final Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
+        em.persist(member);
+
+        //병원 생성
+        final Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
+        em.persist(hospital);
+
+        //임시 요청 생성
+        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
+                .memberId(member.getId())
+                .hospitalId(hospital.getId())
+                .dept("DENTAL")
+                .comment("comment")
+                .appointName("name")
+                .appointPhonenumber("phone")
+                .build();
+
+        final Long saveId = appointmentService.save(request);
 
         //when -- 동작
         appointmentService.deleteAppointment(100L);
@@ -107,7 +174,15 @@ public class AppointmentServiceTest {
         em.persist(hospital);
 
         //임시 요청 생성
-        final CreateAppointmentRequest request = new CreateAppointmentRequest(member.getId(), hospital.getId(), "DENTAL", "눈이 건조해요", "이동엽", "01012345678");
+        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
+                .memberId(member.getId())
+                .hospitalId(hospital.getId())
+                .dept("DENTAL")
+                .comment("comment")
+                .appointName("name")
+                .appointPhonenumber("phone")
+                .build();
+
         final Long saveId = appointmentService.save(request);
 
         //when -- 동작
@@ -152,8 +227,16 @@ public class AppointmentServiceTest {
         em.persist(hospital);
 
         //임시 요청 생성
-        final CreateAppointmentRequest request1 = new CreateAppointmentRequest(member.getId(), hospital.getId(), "DENTAL", "눈이 건조해요", "이동엽", "01012345678");
-        final Long saveId = appointmentService.save(request1);
+        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
+                .memberId(member.getId())
+                .hospitalId(hospital.getId())
+                .dept("DENTAL")
+                .comment("comment")
+                .appointName("name")
+                .appointPhonenumber("phone")
+                .build();
+
+        final Long saveId = appointmentService.save(request);
 
         final UpdateAppointmentRequest request2 = new UpdateAppointmentRequest("DENTAL", "코를 높이고 싶어요", "이동", "011");
 
@@ -189,8 +272,16 @@ public class AppointmentServiceTest {
         em.persist(hospital);
 
         //임시 요청 생성
-        final CreateAppointmentRequest request1 = new CreateAppointmentRequest(member.getId(), hospital.getId(), "DENTAL", "눈이 건조해요", "이동엽", "01012345678");
-        final Long saveId = appointmentService.save(request1);
+        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
+                .memberId(member.getId())
+                .hospitalId(hospital.getId())
+                .dept("DENTAL")
+                .comment("comment")
+                .appointName("name")
+                .appointPhonenumber("phone")
+                .build();
+
+        final Long saveId = appointmentService.save(request);
 
         final UpdateAppointmentRequest request2 = new UpdateAppointmentRequest("DENTAL", null, "이동", "011");
 
