@@ -11,6 +11,7 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import jakarta.persistence.EntityManager;
@@ -38,7 +39,15 @@ public class AuthServiceTest {
     @Test
     public void 회원_저장() throws Exception {
         //given -- 조건
-        CreateMemberRequest request = new CreateMemberRequest("test1", "email@naver.com", "1111", "1111", "0000", "ssss");
+        CreateMemberRequest request = CreateMemberRequest.builder()
+                .nickname("test1")
+                .email("email@naver.com")
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .code("ssss")
+                .build();
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email("email@naver.com")
                 .code("ssss")
@@ -56,10 +65,26 @@ public class AuthServiceTest {
     public void 회원_이메일_중복_검증() throws Exception {
 
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_1204@naver.com", "1111", "1111", "0000", "ssss");
-        CreateMemberRequest request2 = new CreateMemberRequest("test2", "ldy_1204@naver.com", "1111", "1111", "0000", "ssss");
+        CreateMemberRequest request1 = CreateMemberRequest.builder()
+                .nickname("test1")
+                .email("email@naver.com")
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .code("ssss")
+                .build();
+
+        CreateMemberRequest request2 = CreateMemberRequest.builder()
+                .nickname("test2")
+                .email("email@naver.com")
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .code("ssss")
+                .build();
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("ldy_1204@naver.com")
+                .email("email@naver.com")
                 .code("ssss")
                 .build());
 
@@ -75,14 +100,31 @@ public class AuthServiceTest {
     public void 회원_닉네임_중복_검증() throws Exception {
 
         //given -- 조건
-        CreateMemberRequest request1 = new CreateMemberRequest("test1", "ldy_111@naver.com", "1111", "1111", "0000", "ssss");
-        CreateMemberRequest request2 = new CreateMemberRequest("test1", "ldy_122@naver.com", "1111", "1111", "0000", "ssss");
+
+        CreateMemberRequest request1 = CreateMemberRequest.builder()
+                .nickname("test1")
+                .email("email1@naver.com")
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .code("ssss")
+                .build();
+
+        CreateMemberRequest request2 = CreateMemberRequest.builder()
+                .nickname("test1")
+                .email("email2@naver.com")
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .code("ssss")
+                .build();
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("ldy_111@naver.com")
+                .email("email1@naver.com")
                 .code("ssss")
                 .build());
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("ldy_122@naver.com")
+                .email("email2@naver.com")
                 .code("ssss")
                 .build());
 
@@ -98,7 +140,15 @@ public class AuthServiceTest {
     @Test
     public void member_login() throws Exception {
         //given -- 조건
-        CreateMemberRequest request = new CreateMemberRequest("test1", "email@naver.com", "1111", "1111", "0000", "ssss");
+        CreateMemberRequest request = CreateMemberRequest.builder()
+                .nickname("test1")
+                .email("email@naver.com")
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .code("ssss")
+                .build();
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email("email@naver.com")
                 .code("ssss")
@@ -112,6 +162,35 @@ public class AuthServiceTest {
         //then -- 검증
         Assertions.assertThat(token).isNotNull();
     }
+
+    @Test(expected = IllegalValueException.class)
+    public void member_login_fail() throws Exception {
+        //given -- 조건
+
+        CreateMemberRequest request = CreateMemberRequest.builder()
+                .nickname("test1")
+                .email("email@naver.com")
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .code("ssss")
+                .build();
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("email@naver.com")
+                .code("ssss")
+                .build());
+        authService.signUpMember(request);
+
+        //when -- 동작
+        LoginRequest loginRequest = new LoginRequest(request.email(), "fail-password");
+        String token = authService.loginMember(loginRequest);
+
+        //then -- 검증
+        fail("비밀번호가 일치하지 않아 예외가 발생해야 한다.");
+    }
+
+
 
     @Test
     public void member_createToken_isMatch() throws Exception {
@@ -154,16 +233,17 @@ public class AuthServiceTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request = new CreateStaffRequest(
-                hospital.getId(),
-                "staff1",
-                "email1",
-                "pw1",
-                "pw2",
-                "path1",
-                "DENTAL",
-                "ssss"
-        );
+        CreateStaffRequest request = CreateStaffRequest.builder()
+                .hospitalId(hospital.getId())
+                .name("staff1")
+                .email("email1")
+                .password1("password")
+                .password2("password")
+                .licensePath("license")
+                .dept("DENTAL")
+                .code("ssss")
+                .build();
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email("email1")
                 .code("ssss")
@@ -192,10 +272,31 @@ public class AuthServiceTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "email1@naver.com", "1111", "1111","hhhh", "DENTAL", "ssss");
-        CreateStaffRequest request2 = new CreateStaffRequest(hospital.getId(), "lee2", "email1@naver.com", "1111", "1111","hhhh", "DENTAL", "ssss");
+
+        CreateStaffRequest request1 = CreateStaffRequest.builder()
+                .hospitalId(hospital.getId())
+                .name("staff1")
+                .email("email1")
+                .password1("password")
+                .password2("password")
+                .licensePath("license")
+                .dept("DENTAL")
+                .code("ssss")
+                .build();
+
+        CreateStaffRequest request2 = CreateStaffRequest.builder()
+                .hospitalId(hospital.getId())
+                .name("staff2")
+                .email("email1")
+                .password1("password")
+                .password2("password")
+                .licensePath("license")
+                .dept("DENTAL")
+                .code("ssss")
+                .build();
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1@naver.com")
+                .email("email1")
                 .code("ssss")
                 .build());
 
@@ -211,13 +312,78 @@ public class AuthServiceTest {
     @Test
     public void staff_login() throws Exception {
         //given -- 조건
-        LoginRequest loginRequest = new LoginRequest("yjw9424@naver.com", "yoon1");
+
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
+        em.persist(hospital);
+
+        CreateStaffRequest request = new CreateStaffRequest(
+                hospital.getId(),
+                "staff1",
+                "email1",
+                "pw1",
+                "pw2",
+                "path1",
+                "DENTAL",
+                "ssss"
+        );
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("email1")
+                .code("ssss")
+                .build());
+
+        Long signUpId = authService.signUpStaff(request);
 
         //when -- 동작
+        LoginRequest loginRequest = new LoginRequest(request.email(), request.password1());
         String token = authService.loginStaff(loginRequest);
 
         //then -- 검증
         Assertions.assertThat(token).isNotNull();
+    }
+
+
+    @Test(expected = IllegalValueException.class)
+    public void staff_login_fail() throws Exception {
+        //given -- 조건
+
+        //병원 생성
+        Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
+        em.persist(hospital);
+
+        CreateStaffRequest request = new CreateStaffRequest(
+                hospital.getId(),
+                "staff1",
+                "email1",
+                "pw1",
+                "pw2",
+                "path1",
+                "DENTAL",
+                "ssss"
+        );
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("email1")
+                .code("ssss")
+                .build());
+
+        Long signUpId = authService.signUpStaff(request);
+
+        //when -- 동작
+        LoginRequest loginRequest = new LoginRequest(request.email(), "fail-password");
+        String token = authService.loginStaff(loginRequest);
+
+        //then -- 검증
+        fail("비밀번호가 일치하지 않아 예외가 발생해야 한다.");
     }
 
 

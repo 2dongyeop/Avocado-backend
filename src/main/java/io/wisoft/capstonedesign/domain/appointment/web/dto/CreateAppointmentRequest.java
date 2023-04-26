@@ -2,7 +2,9 @@ package io.wisoft.capstonedesign.domain.appointment.web.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
+@Builder
 public record CreateAppointmentRequest(
         @NotNull Long memberId,
         @NotNull Long hospitalId,
