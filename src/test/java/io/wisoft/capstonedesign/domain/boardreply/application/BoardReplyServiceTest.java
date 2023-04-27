@@ -35,7 +35,7 @@ public class BoardReplyServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
+        final Member member = Member.builder()
                 .nickname("nick1")
                 .email("email1")
                 .password("pass1")
@@ -44,7 +44,7 @@ public class BoardReplyServiceTest {
         em.persist(member);
 
         //게시글 생성
-        Board board = Board.builder()
+        final Board board = Board.builder()
                 .member(member)
                 .title("title1")
                 .body("body1")
@@ -53,7 +53,7 @@ public class BoardReplyServiceTest {
         em.persist(board);
 
         //병원 생성
-        Hospital hospital = Hospital.builder()
+        final Hospital hospital = Hospital.builder()
                 .name("name1")
                 .number("number1")
                 .address("address1")
@@ -62,7 +62,7 @@ public class BoardReplyServiceTest {
         em.persist(hospital);
 
         //의료진 생성
-        Staff staff = Staff.builder()
+        final Staff staff = Staff.builder()
                 .hospital(hospital)
                 .name("name1")
                 .email("email1")
@@ -72,13 +72,17 @@ public class BoardReplyServiceTest {
                 .build();
         em.persist(staff);
 
-        CreateBoardReplyRequest request = new CreateBoardReplyRequest(board.getId(), staff.getId(), "안과가세요");
+        final CreateBoardReplyRequest request = CreateBoardReplyRequest.builder()
+                .boardId(board.getId())
+                .staffId(staff.getId())
+                .reply("reply")
+                .build();
 
         //when -- 동작
-        Long saveId = boardReplyService.save(request);
+        final Long saveId = boardReplyService.save(request);
 
         //then -- 검증
-        BoardReply boardReply = boardReplyService.findById(saveId);
+        final BoardReply boardReply = boardReplyService.findById(saveId);
         Assertions.assertThat(boardReply.getReply()).isEqualTo(request.reply());
     }
 
@@ -87,7 +91,7 @@ public class BoardReplyServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
+        final Member member = Member.builder()
                 .nickname("nick1")
                 .email("email1")
                 .password("pass1")
@@ -96,7 +100,7 @@ public class BoardReplyServiceTest {
         em.persist(member);
 
         //게시글 생성
-        Board board = Board.builder()
+        final Board board = Board.builder()
                 .member(member)
                 .title("title1")
                 .body("body1")
@@ -105,7 +109,7 @@ public class BoardReplyServiceTest {
         em.persist(board);
 
         //병원 생성
-        Hospital hospital = Hospital.builder()
+        final Hospital hospital = Hospital.builder()
                 .name("name1")
                 .number("number1")
                 .address("address1")
@@ -114,7 +118,7 @@ public class BoardReplyServiceTest {
         em.persist(hospital);
 
         //의료진 생성
-        Staff staff = Staff.builder()
+        final Staff staff = Staff.builder()
                 .hospital(hospital)
                 .name("name1")
                 .email("email1")
@@ -126,20 +130,70 @@ public class BoardReplyServiceTest {
 
 
         //게시글 댓글 생성
-        CreateBoardReplyRequest request = new CreateBoardReplyRequest(board.getId(), staff.getId(), "안과가세요");
-        Long saveId = boardReplyService.save(request);
+        final CreateBoardReplyRequest request = CreateBoardReplyRequest.builder()
+                .boardId(board.getId())
+                .staffId(staff.getId())
+                .reply("reply")
+                .build();
+        final Long saveId = boardReplyService.save(request);
 
         //when -- 동작
         boardReplyService.deleteBoardReply(saveId);
 
         //then -- 검증
-        BoardReply boardReply = boardReplyService.findById(saveId);
+        boardReplyService.findById(saveId);
         fail("해당 아이디의 댓글은 삭제되어 존재하지 않아 예외가 발생해야 한다.");
     }
 
     @Test(expected = NullBoardReplyException.class)
     public void 게시글_댓글_조회_실패() throws Exception {
         //given -- 조건
+
+        //회원 생성
+        final Member member = Member.builder()
+                .nickname("nick1")
+                .email("email1")
+                .password("pass1")
+                .phoneNumber("0000")
+                .build();
+        em.persist(member);
+
+        //게시글 생성
+        final Board board = Board.builder()
+                .member(member)
+                .title("title1")
+                .body("body1")
+                .dept(HospitalDept.OBSTETRICS)
+                .build();
+        em.persist(board);
+
+        //병원 생성
+        final Hospital hospital = Hospital.builder()
+                .name("name1")
+                .number("number1")
+                .address("address1")
+                .operatingTime("oper1")
+                .build();
+        em.persist(hospital);
+
+        //의료진 생성
+        final Staff staff = Staff.builder()
+                .hospital(hospital)
+                .name("name1")
+                .email("email1")
+                .password("pass1")
+                .license_path("licen1")
+                .dept(HospitalDept.DENTAL)
+                .build();
+        em.persist(staff);
+
+        //게시글 댓글 생성
+        final CreateBoardReplyRequest request = CreateBoardReplyRequest.builder()
+                .boardId(board.getId())
+                .staffId(staff.getId())
+                .reply("reply")
+                .build();
+        final Long saveId = boardReplyService.save(request);
 
         //when -- 동작
         boardReplyService.findById(100L);
@@ -154,7 +208,7 @@ public class BoardReplyServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
+        final Member member = Member.builder()
                 .nickname("nick1")
                 .email("email1")
                 .password("pass1")
@@ -163,7 +217,7 @@ public class BoardReplyServiceTest {
         em.persist(member);
 
         //게시글 생성
-        Board board = Board.builder()
+        final Board board = Board.builder()
                 .member(member)
                 .title("title1")
                 .body("body1")
@@ -172,7 +226,7 @@ public class BoardReplyServiceTest {
         em.persist(board);
 
         //병원 생성
-        Hospital hospital = Hospital.builder()
+        final Hospital hospital = Hospital.builder()
                 .name("name1")
                 .number("number1")
                 .address("address1")
@@ -181,7 +235,7 @@ public class BoardReplyServiceTest {
         em.persist(hospital);
 
         //의료진 생성
-        Staff staff = Staff.builder()
+        final Staff staff = Staff.builder()
                 .hospital(hospital)
                 .name("name1")
                 .email("email1")
@@ -192,8 +246,12 @@ public class BoardReplyServiceTest {
         em.persist(staff);
 
         //게시글 댓글 생성
-        CreateBoardReplyRequest request = new CreateBoardReplyRequest(board.getId(), staff.getId(), "안과가세요");
-        Long saveId = boardReplyService.save(request);
+        final CreateBoardReplyRequest request = CreateBoardReplyRequest.builder()
+                .boardId(board.getId())
+                .staffId(staff.getId())
+                .reply("reply")
+                .build();
+        final Long saveId = boardReplyService.save(request);
 
         //when -- 동작
         boardReplyService.deleteBoardReply(saveId);
@@ -208,7 +266,7 @@ public class BoardReplyServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
+        final Member member = Member.builder()
                 .nickname("nick1")
                 .email("email1")
                 .password("pass1")
@@ -217,7 +275,7 @@ public class BoardReplyServiceTest {
         em.persist(member);
 
         //게시글 생성
-        Board board = Board.builder()
+        final Board board = Board.builder()
                 .member(member)
                 .title("title1")
                 .body("body1")
@@ -226,7 +284,7 @@ public class BoardReplyServiceTest {
         em.persist(board);
 
         //병원 생성
-        Hospital hospital = Hospital.builder()
+        final Hospital hospital = Hospital.builder()
                 .name("name1")
                 .number("number1")
                 .address("address1")
@@ -235,7 +293,7 @@ public class BoardReplyServiceTest {
         em.persist(hospital);
 
         //의료진 생성
-        Staff staff = Staff.builder()
+        final Staff staff = Staff.builder()
                 .hospital(hospital)
                 .name("name1")
                 .email("email1")
@@ -246,17 +304,21 @@ public class BoardReplyServiceTest {
         em.persist(staff);
 
         //게시글 댓글 생성
-        CreateBoardReplyRequest request1 = new CreateBoardReplyRequest(board.getId(), staff.getId(), "걱정말아요");
-        Long saveId = boardReplyService.save(request1);
+        final CreateBoardReplyRequest request1 = CreateBoardReplyRequest.builder()
+                .boardId(board.getId())
+                .staffId(staff.getId())
+                .reply("reply")
+                .build();
+        final Long saveId = boardReplyService.save(request1);
 
-        UpdateBoardReplyRequest request2 = new UpdateBoardReplyRequest("걱정말긴 뭘 말아요!");
+        final UpdateBoardReplyRequest request2 = new UpdateBoardReplyRequest("걱정말긴 뭘 말아요!");
 
         //when -- 동작
-        BoardReply boardReply = boardReplyService.findById(saveId);
+        final BoardReply boardReply = boardReplyService.findById(saveId);
         boardReplyService.update(boardReply.getId(), request2);
 
         //then -- 검증
-        BoardReply getBoardReply = boardReplyService.findById(boardReply.getId());
+        final BoardReply getBoardReply = boardReplyService.findById(boardReply.getId());
         Assertions.assertThat(getBoardReply.getReply()).isEqualTo("걱정말긴 뭘 말아요!");
         Assertions.assertThat(getBoardReply.getUpdatedAt()).isNotNull();
     }
@@ -266,7 +328,7 @@ public class BoardReplyServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
+        final Member member = Member.builder()
                 .nickname("nick1")
                 .email("email1")
                 .password("pass1")
@@ -275,7 +337,7 @@ public class BoardReplyServiceTest {
         em.persist(member);
 
         //게시글 생성
-        Board board = Board.builder()
+        final Board board = Board.builder()
                 .member(member)
                 .title("title1")
                 .body("body1")
@@ -284,7 +346,7 @@ public class BoardReplyServiceTest {
         em.persist(board);
 
         //병원 생성
-        Hospital hospital = Hospital.builder()
+        final Hospital hospital = Hospital.builder()
                 .name("name1")
                 .number("number1")
                 .address("address1")
@@ -293,7 +355,7 @@ public class BoardReplyServiceTest {
         em.persist(hospital);
 
         //의료진 생성
-        Staff staff = Staff.builder()
+        final Staff staff = Staff.builder()
                 .hospital(hospital)
                 .name("name1")
                 .email("email1")
@@ -304,14 +366,18 @@ public class BoardReplyServiceTest {
         em.persist(staff);
 
         //게시글 댓글 생성
-        CreateBoardReplyRequest request1 = new CreateBoardReplyRequest(board.getId(), staff.getId(), "걱정말아요");
-        Long saveId = boardReplyService.save(request1);
+        final CreateBoardReplyRequest request1 = CreateBoardReplyRequest.builder()
+                .boardId(board.getId())
+                .staffId(staff.getId())
+                .reply("reply")
+                .build();
+        final Long saveId = boardReplyService.save(request1);
 
 
-        UpdateBoardReplyRequest request2 = new UpdateBoardReplyRequest(null);
+        final UpdateBoardReplyRequest request2 = new UpdateBoardReplyRequest(null);
 
         //when -- 동작
-        BoardReply boardReply = boardReplyService.findById(saveId);
+        final BoardReply boardReply = boardReplyService.findById(saveId);
         boardReplyService.update(boardReply.getId(), request2);
 
         //then -- 검증
