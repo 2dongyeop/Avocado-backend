@@ -71,9 +71,9 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Transactional
     public void sendResetMemberPassword(final String to) {
+        final Member member = memberRepository.findByEmail(to).orElseThrow(NullMemberException::new);
         final String temporaryPassword = sendEmail(to, PASSWORD_RESET_SUBJECT);
 
-        final Member member = memberRepository.findByEmail(to).orElseThrow(NullMemberException::new);
         member.updatePassword(encryptHelper.encrypt(temporaryPassword));
 
         log.info(to + "으로 임시 비밀번호를 발급합니다.");
@@ -82,9 +82,9 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Transactional
     public void sendResetStaffPassword(final String to) {
+        final Staff staff = staffRepository.findByEmail(to).orElseThrow(NullStaffException::new);
         final String temporaryPassword = sendEmail(to, PASSWORD_RESET_SUBJECT);
 
-        final Staff staff = staffRepository.findByEmail(to).orElseThrow(NullStaffException::new);
         staff.updatePassword(encryptHelper.encrypt(temporaryPassword));
 
         log.info(to + "으로 임시 비밀번호를 발급합니다.");
