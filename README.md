@@ -26,17 +26,30 @@
   - [프로젝트 노션 링크](https://leedongyeop.notion.site/Avocado-287972df87fa4a8bb976bba7649919ca)
     - [요구사항 설게](https://www.notion.so/leedongyeop/d7c5da5175b14c71b6cbe21650607ebd)
     - [데이터베이스 설계](https://www.notion.so/leedongyeop/0badd5357d8a41bfb9b78db729c24ed7)
+    - [시퀀스 다이어그램 및 ERD](https://www.notion.so/leedongyeop/204db9578a2b44be877399d3e5d0b6b4)
     - [API 설계도](https://www.notion.so/leedongyeop/API-102a2f25e370479195fa616572f369ff)
+    - [트러블슈팅](https://www.notion.so/leedongyeop/0459864398e84439bfa679d2470aeb8e)
   - [프론트 웹 서버 레포](https://github.com/HBNU-Avocado/Avocado-frontend)
   - [백엔드 API 서버 레포](https://github.com/HBNU-Avocado/Avocado-backend)
   
+
+<br/>
+
+<br/>
+
+
+> ### *Sequence Diagram*
+
+<img src="https://github.com/HBNU-Avocado/Avocado-backend/blob/main/document/image/Sequence-diagram.png" width = 800/>
+
+
 <br/>
 
 <br/>
 
 > ### *Environment.*
 - OS
-  - macOS Ventury `13.2.1`
+  - macOS Ventura `13.2.1`
 - Language
   - Java 17
 - Framework
