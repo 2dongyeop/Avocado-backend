@@ -34,11 +34,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
                 .addPathPatterns("/api/health-infos/new")
                 .addPathPatterns("/api/health-infos/{id}")
+                .excludePathPatterns("/api/health-infos/{id}/details")
+                .excludePathPatterns("/api/health-infos")
                 .excludePathPatterns("/api/health-infos/department")
 
                 .addPathPatterns("/api/reviews/**")
                 .excludePathPatterns("/api/reviews/{id}/details")
                 .excludePathPatterns("/api/reviews/hospital")
+                .excludePathPatterns("/api/reviews")
 
                 .addPathPatterns("/api/boards/**")
                 .excludePathPatterns("/api/boards/{id}/details")
@@ -58,6 +61,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/bus-info/**")
                 .excludePathPatterns("/api/bus-info/{id}/details")
                 .excludePathPatterns("/api/bus-info/area/{area}/details")
+
         ;
 
     }

@@ -1,6 +1,13 @@
 package io.wisoft.capstonedesign.domain.auth.web;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.wisoft.capstonedesign.domain.appointment.web.dto.CreateAppointmentResponse;
 import io.wisoft.capstonedesign.domain.auth.application.AuthService;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberResponse;
@@ -17,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "인증")
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -24,7 +32,15 @@ public class AuthController {
     private final AuthService authService;
 
 
-    /** 회원 가입 */
+    @Operation(summary = "회원 가입")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(schema = @Schema(implementation = Error.class)))
+    })
     @PostMapping("/api/auth/signup/members")
     public CreateMemberResponse signupMember(@RequestBody @Valid final CreateMemberRequest request) {
 
@@ -35,7 +51,15 @@ public class AuthController {
     }
 
 
-    /** 회원 로그인 */
+    @Operation(summary = "회원 로그인")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(schema = @Schema(implementation = Error.class)))
+    })
     @PostMapping("/api/auth/login/members")
     public ResponseEntity<TokenResponse> loginMember(@RequestBody @Valid final LoginRequest request) {
         final String token = authService.loginMember(request);
@@ -43,9 +67,21 @@ public class AuthController {
     }
 
 
-    /**
-     * 로그아웃
-     */
+    @Operation(summary = "로그아웃")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(schema = @Schema(implementation = Error.class))),
+            @ApiResponse(
+                    responseCode = "401",
+                    content = @Content(schema = @Schema(implementation = Error.class))),
+            @ApiResponse(
+                    responseCode = "403",
+                    content = @Content(schema = @Schema(implementation = Error.class)))
+    })
     @PostMapping("/api/auth/logout")
     public ResponseEntity<String> logoutMember(HttpServletRequest request) {
         //TODO
@@ -59,7 +95,15 @@ public class AuthController {
     }
 
 
-    /** 의료진 가입 */
+    @Operation(summary = "의료진 가입")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(schema = @Schema(implementation = Error.class)))
+    })
     @PostMapping("/api/auth/signup/staff")
     public CreateStaffResponse signupStaff(
             @RequestBody @Valid final CreateStaffRequest request) {
@@ -72,7 +116,15 @@ public class AuthController {
     }
 
 
-    /** 의료진 로그인 */
+    @Operation(summary = "의료진 로그인")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(schema = @Schema(implementation = Error.class)))
+    })
     @PostMapping("/api/auth/login/staff")
     public ResponseEntity<TokenResponse> loginStaff(@RequestBody @Valid final LoginRequest request) {
         final String token = authService.loginStaff(request);
