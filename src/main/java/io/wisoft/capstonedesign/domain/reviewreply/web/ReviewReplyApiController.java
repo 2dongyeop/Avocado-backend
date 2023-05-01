@@ -1,15 +1,12 @@
 package io.wisoft.capstonedesign.domain.reviewreply.web;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.wisoft.capstonedesign.domain.appointment.web.dto.CreateAppointmentResponse;
 import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
 import io.wisoft.capstonedesign.domain.reviewreply.application.ReviewReplyService;
 import io.wisoft.capstonedesign.domain.reviewreply.web.dto.*;
+import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
+import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
+import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,21 +21,8 @@ public class ReviewReplyApiController {
     private final ReviewReplyService reviewReplyService;
 
 
-    @Operation(summary = "리뷰댓글 저장")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "401",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "403",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "리뷰댓글 저장", implementation = CreateReviewReplyResponse.class)
+    @SwaggerApiFailWithAuth
     @PostMapping("/api/review-reply/new")
     public CreateReviewReplyResponse createReviewReply(
             @RequestBody @Valid final CreateReviewReplyRequest request) {
@@ -49,21 +33,8 @@ public class ReviewReplyApiController {
     }
 
 
-    @Operation(summary = "리뷰댓글 삭제")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "401",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "403",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "리뷰댓글 삭제", implementation = DeleteReviewReplyResponse.class)
+    @SwaggerApiFailWithAuth
     @DeleteMapping("/api/review-reply/{id}")
     public DeleteReviewReplyResponse deleteReviewReply(
             @PathVariable("id") final Long id) {
@@ -73,21 +44,8 @@ public class ReviewReplyApiController {
     }
 
 
-    @Operation(summary = "리뷰댓글 수정")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "401",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "403",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "리뷰댓글 수정", implementation = UpdateReviewReplyResponse.class)
+    @SwaggerApiFailWithAuth
     @PatchMapping("/api/review-reply/{id}")
     public UpdateReviewReplyResponse updateReviewReply(
             @PathVariable("id") final Long id,
@@ -99,36 +57,16 @@ public class ReviewReplyApiController {
     }
 
 
-    @Operation(summary = "리뷰댓글 단건 조회")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "401",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "403",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "리뷰댓글 단건 조회", implementation = Result.class)
+    @SwaggerApiFailWithoutAuth
     @GetMapping("/api/review-reply/{id}/details")
     public Result reviewReply(@PathVariable("id") final Long id) {
         return new Result(new ReviewReplyDto(reviewReplyService.findDetailById(id)));
     }
 
 
-    @Operation(summary = "특정 리뷰의 댓글목록 조회")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "특정 리뷰의 댓글목록 조회", implementation = Result.class)
+    @SwaggerApiFailWithoutAuth
     @GetMapping("/api/review-reply/review/{review-id}")
     public Result reviewReplyByReview(
             @PathVariable("review-id") final Long reviewId) {
@@ -139,15 +77,9 @@ public class ReviewReplyApiController {
     }
 
 
-    @Operation(summary = "특정 리뷰의 댓글목록 오름차순 조회")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "특정 리뷰의 댓글목록 오름차순 조회", implementation = Result.class)
+    @SwaggerApiFailWithoutAuth
+
     @GetMapping("/api/review-reply/review/{review-id}/create-asc")
     public Result reviewReplyByReviewOrderByCreateAsc(
             @PathVariable("review-id") final Long reviewId) {
@@ -158,15 +90,8 @@ public class ReviewReplyApiController {
     }
 
 
-    @Operation(summary = "특정 리뷰의 댓글목록 내림차순 조회")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "특정 리뷰의 댓글목록 내림차순 조회", implementation = Result.class)
+    @SwaggerApiFailWithoutAuth
     @GetMapping("/api/review-reply/review/{review-id}/create-desc")
     public Result reviewReplyByReviewOrderByCreateDesc(
             @PathVariable("review-id") final Long reviewId) {

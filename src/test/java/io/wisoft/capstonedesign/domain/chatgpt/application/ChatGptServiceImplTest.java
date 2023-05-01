@@ -4,26 +4,24 @@ import io.wisoft.capstonedesign.domain.chatgpt.web.dto.ChatGptRequest;
 import io.wisoft.capstonedesign.domain.chatgpt.web.dto.ChatGptResponse;
 import io.wisoft.capstonedesign.global.config.ChatGptConfig;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class ChatGptServiceImplTest {
 
-    @Autowired ChatGptServiceImpl chatGptService;
+    @Autowired
+    ChatGptServiceImpl chatGptService;
 
     @Test
     public void askQuestion() throws Exception {

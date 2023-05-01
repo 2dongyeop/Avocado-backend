@@ -1,18 +1,15 @@
 package io.wisoft.capstonedesign.domain.hospital.web;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.wisoft.capstonedesign.domain.appointment.web.dto.CreateAppointmentResponse;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalRequest;
 import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalResponse;
 import io.wisoft.capstonedesign.domain.hospital.web.dto.HospitalDto;
 import io.wisoft.capstonedesign.domain.hospital.web.dto.Result;
+import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
+import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
+import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -44,15 +41,8 @@ public class HospitalApiController {
     }
 
 
-    @Operation(summary = "병원 목록 조회")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "병원 목록 조회", implementation = Result.class)
+    @SwaggerApiFailWithoutAuth
     @GetMapping("/api/hospitals")
     public Result hospitals() {
         return new Result(hospitalService.findAll()

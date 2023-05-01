@@ -1,13 +1,7 @@
 package io.wisoft.capstonedesign.domain.auth.web;
 
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.wisoft.capstonedesign.domain.appointment.web.dto.CreateAppointmentResponse;
 import io.wisoft.capstonedesign.domain.auth.application.AuthService;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberResponse;
@@ -15,6 +9,9 @@ import io.wisoft.capstonedesign.domain.auth.web.dto.LoginRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.TokenResponse;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffResponse;
+import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
+import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
+import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -32,15 +29,8 @@ public class AuthController {
     private final AuthService authService;
 
 
-    @Operation(summary = "회원 가입")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "회원 가입", implementation = CreateMemberResponse.class)
+    @SwaggerApiFailWithoutAuth
     @PostMapping("/api/auth/signup/members")
     public CreateMemberResponse signupMember(@RequestBody @Valid final CreateMemberRequest request) {
 
@@ -51,15 +41,8 @@ public class AuthController {
     }
 
 
-    @Operation(summary = "회원 로그인")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "회원 로그인", implementation = ResponseEntity.class)
+    @SwaggerApiFailWithoutAuth
     @PostMapping("/api/auth/login/members")
     public ResponseEntity<TokenResponse> loginMember(@RequestBody @Valid final LoginRequest request) {
         final String token = authService.loginMember(request);
@@ -67,21 +50,8 @@ public class AuthController {
     }
 
 
-    @Operation(summary = "로그아웃")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "401",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "403",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "로그아웃", implementation = ResponseEntity.class)
+    @SwaggerApiFailWithAuth
     @PostMapping("/api/auth/logout")
     public ResponseEntity<String> logoutMember(HttpServletRequest request) {
         //TODO
@@ -95,15 +65,8 @@ public class AuthController {
     }
 
 
-    @Operation(summary = "의료진 가입")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "의료진 가입", implementation = CreateStaffResponse.class)
+    @SwaggerApiFailWithoutAuth
     @PostMapping("/api/auth/signup/staff")
     public CreateStaffResponse signupStaff(
             @RequestBody @Valid final CreateStaffRequest request) {
@@ -116,15 +79,8 @@ public class AuthController {
     }
 
 
-    @Operation(summary = "의료진 로그인")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "의료진 로그인", implementation = ResponseEntity.class)
+    @SwaggerApiFailWithoutAuth
     @PostMapping("/api/auth/login/staff")
     public ResponseEntity<TokenResponse> loginStaff(@RequestBody @Valid final LoginRequest request) {
         final String token = authService.loginStaff(request);
