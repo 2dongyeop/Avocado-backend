@@ -1,15 +1,12 @@
 package io.wisoft.capstonedesign.domain.review.web;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.wisoft.capstonedesign.domain.appointment.web.dto.CreateAppointmentResponse;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.domain.review.application.ReviewService;
 import io.wisoft.capstonedesign.domain.review.web.dto.*;
+import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
+import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
+import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,45 +21,24 @@ public class ReviewApiController {
 
     private final ReviewService reviewService;
 
-    @Operation(summary = "리뷰 단건 조회")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "리뷰 단건 조회", implementation = Result.class)
+    @SwaggerApiFailWithoutAuth
     @GetMapping("/api/reviews/{id}/details")
     public Result review(@PathVariable("id") final Long id) {
         return new Result(new ReviewDto(reviewService.findDetailById(id)));
     }
 
 
-    @Operation(summary = "리뷰 목록 페이징 조회")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "리뷰 목록 페이징 조회", implementation = Page.class)
+    @SwaggerApiFailWithoutAuth
     @GetMapping("/api/reviews")
     public Page<ReviewListDto> reviewsUsingPaging(final Pageable pageable) {
         return reviewService.findByUsingPaging(pageable).map(ReviewListDto::new);
     }
 
 
-    @Operation(summary = "특정 병원의 리뷰 목록 페이징 조회")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "특정 병원의 리뷰 목록 페이징 조회", implementation = Page.class)
+    @SwaggerApiFailWithoutAuth
     @GetMapping("/api/reviews/hospital")
     public Page<ReviewListDto> reviewsByTargetHospital(
             @RequestBody @Valid final ReviewsByTargetHospitalRequest request,
@@ -73,21 +49,8 @@ public class ReviewApiController {
     }
 
 
-    @Operation(summary = "리뷰 저장")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "401",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "403",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "리뷰 저장", implementation = CreateReviewResponse.class)
+    @SwaggerApiFailWithAuth
     @PostMapping("/api/reviews/new")
     public CreateReviewResponse createReview(
             @RequestBody @Valid final CreateReviewRequest request) {
@@ -99,21 +62,8 @@ public class ReviewApiController {
     }
 
 
-    @Operation(summary = "리뷰 수정")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "401",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "403",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "리뷰 수정", implementation = UpdateReviewResponse.class)
+    @SwaggerApiFailWithAuth
     @PatchMapping("/api/reviews/{id}")
     public UpdateReviewResponse updateReview(
             @PathVariable("id") final Long id,
@@ -126,21 +76,8 @@ public class ReviewApiController {
     }
 
 
-    @Operation(summary = "리뷰 삭제")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = CreateAppointmentResponse.class))),
-            @ApiResponse(
-                    responseCode = "400",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "401",
-                    content = @Content(schema = @Schema(implementation = Error.class))),
-            @ApiResponse(
-                    responseCode = "403",
-                    content = @Content(schema = @Schema(implementation = Error.class)))
-    })
+    @SwaggerApi(summary = "리뷰 삭제", implementation = DeleteReviewResponse.class)
+    @SwaggerApiFailWithAuth
     @DeleteMapping("/api/reviews/{id}")
     public DeleteReviewResponse deleteReview(@PathVariable("id") final Long id) {
 
