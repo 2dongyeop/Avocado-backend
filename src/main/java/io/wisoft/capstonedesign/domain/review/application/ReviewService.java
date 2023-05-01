@@ -31,6 +31,8 @@ public class ReviewService {
     @Transactional
     public Long save(final CreateReviewRequest request) {
 
+        validateStarPoint(request.starPoint());
+
         //엔티티 조회
         final Member member = memberService.findById(request.memberId());
 
@@ -45,6 +47,12 @@ public class ReviewService {
 
         reviewRepository.save(review);
         return review.getId();
+    }
+
+    private void validateStarPoint(final int starPoint) {
+        if (starPoint <= 0 || starPoint >= 6) {
+            throw new IllegalValueException("별점의 범위는 1~5 사이여야 합니다.");
+        }
     }
 
 

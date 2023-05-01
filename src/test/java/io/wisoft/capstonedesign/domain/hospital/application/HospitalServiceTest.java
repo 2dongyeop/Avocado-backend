@@ -1,25 +1,24 @@
 package io.wisoft.capstonedesign.domain.hospital.application;
 
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
+import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalRequest;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateHospitalException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
-import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalRequest;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class HospitalServiceTest {
 
-    @Autowired HospitalService hospitalService;
+    @Autowired
+    HospitalService hospitalService;
 
     @Test
     public void 병원_저장() throws Exception {
@@ -38,28 +37,32 @@ public class HospitalServiceTest {
     @Test
     public void 병원_단건_조회() throws Exception {
         //given -- 조건
+        final CreateHospitalRequest request = new CreateHospitalRequest("avocado", "042", "대전", "연중무휴");
+        final Long saveId = hospitalService.save(request);
 
         //when -- 동작
-        Hospital hospital = hospitalService.findById(1L);
+        final Hospital hospital = hospitalService.findById(saveId);
 
         //then -- 검증
         Assertions.assertThat(hospital).isNotNull();
-        Assertions.assertThat(hospital.getName()).isEqualTo("을지대학병원");
+        Assertions.assertThat(hospital.getName()).isEqualTo("avocado");
     }
 
 
-    @Test(expected = NullHospitalException.class)
+    @Test
     public void 병원_단건_조회_실패() throws Exception {
         //given -- 조건
+        final CreateHospitalRequest request = new CreateHospitalRequest("avocado", "042", "대전", "연중무휴");
+        final Long saveId = hospitalService.save(request);
 
         //when -- 동작
-        hospitalService.findById(100L);
-
         //then -- 검증
-        fail("해당 hospitalId에 일치하는 병원이 없어 오류가 발생해야 한다.");
+        assertThrows(NullHospitalException.class, () -> {
+            hospitalService.findById(100L);
+        });
     }
 
-    @Test(expected = DuplicateHospitalException.class)
+    @Test
     public void 병원_중복_저장() throws Exception {
         //given -- 조건
 
@@ -67,10 +70,10 @@ public class HospitalServiceTest {
         final CreateHospitalRequest request2 = new CreateHospitalRequest("avocado", "042", "대전", "연중무휴");
 
         //when -- 동작
-        hospitalService.save(request1);
-        hospitalService.save(request2);
-
         //then -- 검증
-        fail("병원 이름이 중복되어 예외가 발생해야 한다.");
+        assertThrows(DuplicateHospitalException.class, () -> {
+            hospitalService.save(request1);
+            hospitalService.save(request2);
+        });
     }
 }

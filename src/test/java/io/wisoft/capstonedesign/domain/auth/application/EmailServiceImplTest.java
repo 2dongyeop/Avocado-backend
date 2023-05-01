@@ -6,18 +6,15 @@ import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class EmailServiceImplTest {
@@ -27,7 +24,6 @@ public class EmailServiceImplTest {
     @Autowired StaffRepository staffRepository;
     @Autowired MailAuthenticationRepository mailAuthenticationRepository;
     @Autowired EncryptHelper encryptHelper;
-
 
     @Test
     public void sendCertificationCode() throws Exception {
@@ -52,7 +48,7 @@ public class EmailServiceImplTest {
         //given -- 조건
 
         //when -- 동작
-        String result = createCertificationCode();
+        final String result = createCertificationCode();
 
         //then -- 검증
         Assertions.assertThat(result.length()).isEqualTo(8);

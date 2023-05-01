@@ -4,18 +4,15 @@ import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class StaffMyPageServiceTest {
@@ -28,7 +25,7 @@ public class StaffMyPageServiceTest {
         //given -- 조건
 
         //when -- 동작
-        List<Review> reviewListByHospitalName = staffMyPageService.findReviewByStaffHospitalName(1L);
+        final List<Review> reviewListByHospitalName = staffMyPageService.findReviewByStaffHospitalName(1L);
 
         //then -- 검증
         Assertions.assertThat(reviewListByHospitalName.size()).isEqualTo(1);
@@ -39,7 +36,7 @@ public class StaffMyPageServiceTest {
         //given -- 조건
 
         //when -- 동작
-        List<Board> boardList = staffMyPageService.findBoardListByStaffId(1L);
+        final List<Board> boardList = staffMyPageService.findBoardListByStaffId(1L);
 
         //then -- 검증
         Assertions.assertThat(boardList.size()).isEqualTo(2L);

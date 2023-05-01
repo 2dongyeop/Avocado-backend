@@ -3,27 +3,25 @@ package io.wisoft.capstonedesign.domain.board.application;
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.board.web.dto.CreateBoardRequest;
 import io.wisoft.capstonedesign.domain.board.web.dto.UpdateBoardRequest;
-import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
+import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class BoardServiceTest {
@@ -61,7 +59,7 @@ public class BoardServiceTest {
         Assertions.assertThat(getBoard.getStatus()).isEqualTo(BoardStatus.WRITE);
     }
 
-    @Test(expected = NullMemberException.class)
+    @Test
     public void save_fail_notFoundMember() throws Exception {
         //given -- 조건
 
@@ -83,10 +81,10 @@ public class BoardServiceTest {
                 .build();
 
         //when -- 동작
-        boardService.save(request);
-
         //then -- 검증
-        fail("해당 id의 회원이 존재하지 않아 예외가 발생해야 한다.");
+        assertThrows(NullMemberException.class, () -> {
+            boardService.save(request);
+        });
     }
 
     @Test
@@ -123,7 +121,7 @@ public class BoardServiceTest {
     }
 
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void deleteBoard_fail_duplicate_request() throws Exception {
         //given -- 조건
 
@@ -147,11 +145,11 @@ public class BoardServiceTest {
         final Long saveId = boardService.save(request);
 
         //when -- 동작
-        boardService.deleteBoard(saveId);
-        boardService.deleteBoard(saveId);
-
         //then -- 검증
-        fail("중복 삭제 요청으로 인한 예외가 발생해야 한다.");
+        assertThrows(IllegalStateException.class, () -> {
+            boardService.deleteBoard(saveId);
+            boardService.deleteBoard(saveId);
+        });
     }
 
 
@@ -184,7 +182,7 @@ public class BoardServiceTest {
         Assertions.assertThat(getBoard.getTitle()).isEqualTo(request.title());
     }
 
-    @Test(expected = NullBoardException.class)
+    @Test
     public void findById_fail() throws Exception {
         //given -- 조건
         //회원 생성
@@ -207,10 +205,10 @@ public class BoardServiceTest {
         boardService.save(request);
 
         //when -- 동작
-        boardService.findById(11293218L);
-
         //then -- 검증
-        fail("해당 boardId에 일치하는 게시글 정보가 없어 예외가 발생해야 한다.");
+        assertThrows(NullBoardException.class, () -> {
+            boardService.findById(11293218L);
+        });
     }
 
     @Test
@@ -249,7 +247,7 @@ public class BoardServiceTest {
         Assertions.assertThat(board.getUpdatedAt()).isNotNull();
     }
 
-    @Test(expected = IllegalValueException.class)
+    @Test
     public void 게시글_수정_실패() throws Exception {
 
         //given -- 조건
@@ -275,11 +273,11 @@ public class BoardServiceTest {
         final UpdateBoardRequest request2 = new UpdateBoardRequest(null, "본문2");
 
         //when -- 동작
-        final Board board = boardService.findById(saveId);
-        boardService.updateTitleBody(board.getId(), request2);
-
         //then - 검증
-        fail("제목이 비어있어 예외가 발생해야 한다.");
+        assertThrows(IllegalValueException.class, () -> {
+            final Board board = boardService.findById(saveId);
+            boardService.updateTitleBody(board.getId(), request2);
+        });
     }
 
 

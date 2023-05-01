@@ -4,25 +4,22 @@ import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
 import io.wisoft.capstonedesign.domain.boardreply.web.dto.CreateBoardReplyRequest;
 import io.wisoft.capstonedesign.domain.boardreply.web.dto.UpdateBoardReplyRequest;
-import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardReplyException;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardReplyException;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
-
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class BoardReplyServiceTest {
@@ -86,7 +83,7 @@ public class BoardReplyServiceTest {
         Assertions.assertThat(boardReply.getReply()).isEqualTo(request.reply());
     }
 
-    @Test(expected = NullBoardReplyException.class)
+    @Test
     public void 게시글_댓글_삭제() throws Exception {
         //given -- 조건
 
@@ -141,11 +138,12 @@ public class BoardReplyServiceTest {
         boardReplyService.deleteBoardReply(saveId);
 
         //then -- 검증
-        boardReplyService.findById(saveId);
-        fail("해당 아이디의 댓글은 삭제되어 존재하지 않아 예외가 발생해야 한다.");
+        assertThrows(NullBoardReplyException.class, () -> {
+            boardReplyService.findById(saveId);
+        });
     }
 
-    @Test(expected = NullBoardReplyException.class)
+    @Test
     public void 게시글_댓글_조회_실패() throws Exception {
         //given -- 조건
 
@@ -196,14 +194,13 @@ public class BoardReplyServiceTest {
         final Long saveId = boardReplyService.save(request);
 
         //when -- 동작
-        boardReplyService.findById(100L);
-
         //then -- 검증
-        fail("예외가 발생해야 한다.");
+        assertThrows(NullBoardReplyException.class, () -> {
+            boardReplyService.findById(100L);
+        });
     }
 
-    //게시글 중복 삭제 요청
-    @Test(expected = NullBoardReplyException.class)
+    @Test
     public void 게시글_댓글_삭제_중복_요청() throws Exception {
         //given -- 조건
 
@@ -254,11 +251,11 @@ public class BoardReplyServiceTest {
         final Long saveId = boardReplyService.save(request);
 
         //when -- 동작
-        boardReplyService.deleteBoardReply(saveId);
-        boardReplyService.deleteBoardReply(saveId);
-
         //then -- 검증
-        fail("삭제 요청 중복으로 인해 오류가 발생해야 한다.");
+        assertThrows(NullBoardReplyException.class, () -> {
+            boardReplyService.deleteBoardReply(saveId);
+            boardReplyService.deleteBoardReply(saveId);
+        });
     }
 
     @Test
@@ -323,7 +320,7 @@ public class BoardReplyServiceTest {
         Assertions.assertThat(getBoardReply.getUpdatedAt()).isNotNull();
     }
 
-    @Test(expected = IllegalValueException.class)
+    @Test
     public void 게시글댓글_수정_실패() throws Exception {
         //given -- 조건
 
@@ -377,10 +374,10 @@ public class BoardReplyServiceTest {
         final UpdateBoardReplyRequest request2 = new UpdateBoardReplyRequest(null);
 
         //when -- 동작
-        final BoardReply boardReply = boardReplyService.findById(saveId);
-        boardReplyService.update(boardReply.getId(), request2);
-
         //then -- 검증
-        fail("댓글이 비어있어 예외가 발생해야 한다.");
+        assertThrows(IllegalValueException.class, () -> {
+            final BoardReply boardReply = boardReplyService.findById(saveId);
+            boardReplyService.update(boardReply.getId(), request2);
+        });
     }
 }

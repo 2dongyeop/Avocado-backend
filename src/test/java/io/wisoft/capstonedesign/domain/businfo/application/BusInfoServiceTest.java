@@ -5,19 +5,17 @@ import io.wisoft.capstonedesign.domain.businfo.web.dto.CreateBusInfoRequest;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBusInfoException;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class BusInfoServiceTest {
@@ -40,7 +38,7 @@ public class BusInfoServiceTest {
         Assertions.assertThat(busInfo.getArea().toString()).isEqualTo(request.area());
     }
 
-    @Test(expected = NullBusInfoException.class)
+    @Test
     public void 버스정보_삭제() throws Exception {
         //given -- 조건
 
@@ -51,22 +49,23 @@ public class BusInfoServiceTest {
         busInfoService.delete(saveId);
 
         //then -- 검증
-        busInfoService.findById(saveId);
-        fail("존재하지 않는 아이디로 인해 예외가 발샐");
+        assertThrows(NullBusInfoException.class, () -> {
+            busInfoService.findById(saveId);
+        });
     }
 
-    @Test(expected = NullBusInfoException.class)
+    @Test
     public void 버스정보_단건_조회_실패() throws Exception {
         //given -- 조건
 
         //when -- 동작
-        busInfoService.findById(100L);
-
         //then -- 검증
-        fail("단건 조회 실패로 인해 예외가 발생해야 한다.");
+        assertThrows(NullBusInfoException.class, () -> {
+            busInfoService.findById(100L);
+        });
     }
 
-    @Test(expected = NullBusInfoException.class)
+    @Test
     public void 버스정보_삭제요청_중복() throws Exception {
         //given -- 조건
 
@@ -74,11 +73,11 @@ public class BusInfoServiceTest {
         Long saveId = busInfoService.save(request);
 
         //when -- 동작
-        busInfoService.delete(saveId);
-        busInfoService.delete(saveId);
-
         //then -- 검증
-        fail("중복 삭제 요청으로 인해 예외가 발생해야 한다.");
+        assertThrows(NullBusInfoException.class, () -> {
+            busInfoService.delete(saveId);
+            busInfoService.delete(saveId);
+        });
     }
 
     @Test
@@ -92,16 +91,16 @@ public class BusInfoServiceTest {
         Assertions.assertThat(list.size()).isEqualTo(1);
     }
 
-    @Test(expected = IllegalValueException.class)
+    @Test
     @DisplayName("Enum이 아닌 값을 넣어 찾을 수 없는 경우")
     public void findByArea_fail_NotEnum() throws Exception {
         //given -- 조건
         String area = "HANBAT";
 
         //when -- 동작
-        List<BusInfo> list = busInfoService.findByArea(area);
-
         //then -- 검증
-        fail();
+        assertThrows(IllegalValueException.class, () -> {
+            List<BusInfo> list = busInfoService.findByArea(area);
+        });
     }
 }
