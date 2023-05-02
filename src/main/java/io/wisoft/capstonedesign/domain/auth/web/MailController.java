@@ -1,7 +1,7 @@
 package io.wisoft.capstonedesign.domain.auth.web;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberResponse;
+import io.wisoft.capstonedesign.domain.auth.web.dto.CertificateMailRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.MailObject;
 import io.wisoft.capstonedesign.domain.auth.application.EmailService;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
@@ -19,11 +19,19 @@ public class MailController {
 
     private final EmailService emailService;
 
+    @SwaggerApi(summary = "이메일 인증 코드 전송", implementation = ResponseEntity.class)
+    @SwaggerApiFailWithoutAuth
+    @PostMapping("/mail/certification-code")
+    public ResponseEntity<String> sendCertificationCode(@RequestBody final MailObject mailObject) {
+        final String code = emailService.sendCertificationCode(mailObject.email());
+        return ResponseEntity.ok(code);
+    }
+
     @SwaggerApi(summary = "이메일 인증", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
-    @PostMapping("/mail/certification")
-    public ResponseEntity<String> certificateEmail(@RequestBody final MailObject mailObject) {
-        emailService.sendCertificationCode(mailObject.email());
+    @PostMapping("/mail/certification-email")
+    public ResponseEntity<String> certificateEmail(@RequestBody final CertificateMailRequest request) {
+        emailService.certificateEmail(request);
         return ResponseEntity.ok("success");
     }
 

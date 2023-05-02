@@ -28,17 +28,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class AuthServiceTest {
 
-    @Autowired
-    EntityManager em;
+    @Autowired EntityManager em;
     @Autowired AuthService authService;
-    @Autowired
-    MemberService memberService;
-    @Autowired
-    StaffService staffService;
-    @Autowired
-    EncryptHelper encryptHelper;
-    @Autowired
-    MailAuthenticationRepository mailAuthenticationRepository;
+    @Autowired MemberService memberService;
+    @Autowired StaffService staffService;
+    @Autowired EncryptHelper encryptHelper;
+    @Autowired MailAuthenticationRepository mailAuthenticationRepository;
 
     @Test
     public void 회원_저장() throws Exception {
@@ -49,12 +44,14 @@ public class AuthServiceTest {
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
-                .code("ssss")
                 .build();
 
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email@naver.com")
-                .code("ssss")
+                .email(request.email())
+                .code(code)
+                .isVerified(true)
                 .build());
 
         //when -- 동작
@@ -75,7 +72,6 @@ public class AuthServiceTest {
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
-                .code("ssss")
                 .build();
 
         final CreateMemberRequest request2 = CreateMemberRequest.builder()
@@ -84,12 +80,14 @@ public class AuthServiceTest {
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
-                .code("ssss")
                 .build();
 
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email@naver.com")
-                .code("ssss")
+                .email(request1.email())
+                .code(code)
+                .isVerified(false)
                 .build());
 
         //when -- 동작
@@ -111,7 +109,6 @@ public class AuthServiceTest {
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
-                .code("ssss")
                 .build();
 
         final CreateMemberRequest request2 = CreateMemberRequest.builder()
@@ -120,16 +117,19 @@ public class AuthServiceTest {
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
-                .code("ssss")
                 .build();
 
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1@naver.com")
-                .code("ssss")
+                .email(request1.email())
+                .code(code)
+                .isVerified(false)
                 .build());
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email2@naver.com")
-                .code("ssss")
+                .email(request2.email())
+                .code(code)
+                .isVerified(false)
                 .build());
 
         //when -- 동작
@@ -150,13 +150,16 @@ public class AuthServiceTest {
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
-                .code("ssss")
                 .build();
 
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email@naver.com")
-                .code("ssss")
+                .email(request.email())
+                .code(code)
+                .isVerified(false)
                 .build());
+
         authService.signUpMember(request);
 
         //when -- 동작
@@ -177,13 +180,17 @@ public class AuthServiceTest {
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
-                .code("ssss")
                 .build();
 
+
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email@naver.com")
-                .code("ssss")
+                .email(request.email())
+                .code(code)
+                .isVerified(false)
                 .build());
+
         authService.signUpMember(request);
 
         //when -- 동작
@@ -246,12 +253,14 @@ public class AuthServiceTest {
                 .password2("password")
                 .licensePath("license")
                 .dept("DENTAL")
-                .code("ssss")
                 .build();
 
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1")
-                .code("ssss")
+                .email(request.email())
+                .code(code)
+                .isVerified(false)
                 .build());
 
         //when -- 동작
@@ -286,7 +295,6 @@ public class AuthServiceTest {
                 .password2("password")
                 .licensePath("license")
                 .dept("DENTAL")
-                .code("ssss")
                 .build();
 
         final CreateStaffRequest request2 = CreateStaffRequest.builder()
@@ -297,12 +305,14 @@ public class AuthServiceTest {
                 .password2("password")
                 .licensePath("license")
                 .dept("DENTAL")
-                .code("ssss")
                 .build();
+
+        String code = "ssss";
 
         mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email("email1")
-                .code("ssss")
+                .code(code)
+                .isVerified(false)
                 .build());
 
         //when -- 동작
@@ -335,12 +345,15 @@ public class AuthServiceTest {
                 "pw1",
                 "pw2",
                 "path1",
-                "DENTAL",
-                "ssss"
+                "DENTAL"
         );
+
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1")
-                .code("ssss")
+                .email(request.email())
+                .code(code)
+                .isVerified(false)
                 .build());
 
         final Long signUpId = authService.signUpStaff(request);
@@ -374,12 +387,15 @@ public class AuthServiceTest {
                 "pw1",
                 "pw2",
                 "path1",
-                "DENTAL",
-                "ssss"
+                "DENTAL"
         );
+
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1")
-                .code("ssss")
+                .email(request.email())
+                .code(code)
+                .isVerified(false)
                 .build());
 
         final Long signUpId = authService.signUpStaff(request);

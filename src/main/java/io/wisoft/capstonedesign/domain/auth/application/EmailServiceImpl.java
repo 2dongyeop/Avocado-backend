@@ -2,13 +2,16 @@ package io.wisoft.capstonedesign.domain.auth.application;
 
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthentication;
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
+import io.wisoft.capstonedesign.domain.auth.web.dto.CertificateMailRequest;
 import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullMailException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import lombok.RequiredArgsConstructor;
@@ -39,21 +42,23 @@ public class EmailServiceImpl implements EmailService {
     private final MailAuthenticationRepository mailAuthenticationRepository;
     private final EncryptHelper encryptHelper;
 
-    private static final String EMAIL_CERTIFICATION_SUBJECT = "AVOCADO 이메일 인증 코드입니다.";
-    private static final String PASSWORD_RESET_SUBJECT = "AVOCADO 임시 비밀번호입니다.";
+    private static final String EMAIL_CERTIFICATION_SUBJECT = "🥑 AVOCADO 이메일 인증 코드입니다.";
+    private static final String PASSWORD_RESET_SUBJECT = "🥑 AVOCADO 임시 비밀번호입니다.";
 
     @Async
-    public void sendCertificationCode(final String to) {
+    public String sendCertificationCode(final String to) {
         validateDuplicateMemberOrStaff(to);
-        String authenticateCode = sendEmail(to, EMAIL_CERTIFICATION_SUBJECT);
+        final String authenticateCode = sendEmail(to, EMAIL_CERTIFICATION_SUBJECT);
 
         mailAuthenticationRepository.save(
                 MailAuthentication.builder()
                         .email(to)
                         .code(authenticateCode)
+                        .isVerified(false)
                         .build());
 
         log.info(to + "으로 인증 코드를 발송합니다.");
+        return authenticateCode;
     }
 
     private void validateDuplicateMemberOrStaff(final String to) {
@@ -65,6 +70,28 @@ public class EmailServiceImpl implements EmailService {
         }
         if (staff.isPresent()) {
             throw new DuplicateStaffException();
+        }
+    }
+
+    @Transactional
+    public void certificateEmail(final CertificateMailRequest request) {
+
+        //메일 정보 조회
+        MailAuthentication mailAuthentication = mailAuthenticationRepository.findByEmail(request.email())
+                .orElseThrow(NullMailException::new);
+
+        //메일 정보 검증
+        validateBeforeCertificateEmail(mailAuthentication, request);
+        mailAuthentication.update();
+    }
+
+    private void validateBeforeCertificateEmail(final MailAuthentication mailAuthentication, final CertificateMailRequest request) {
+        if (mailAuthentication.isVerified()) { //true이면
+            throw new IllegalStateException("이미 메일 인증이 완료되었습니다.");
+        }
+
+        if (!mailAuthentication.getCode().equals(request.code())) {
+            throw new IllegalValueException("인증 코드가 달라 인증에 실패하였습니다.");
         }
     }
 

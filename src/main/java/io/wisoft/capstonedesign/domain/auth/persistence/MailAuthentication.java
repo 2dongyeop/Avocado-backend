@@ -1,9 +1,6 @@
 package io.wisoft.capstonedesign.domain.auth.persistence;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,10 +16,16 @@ public class MailAuthentication {
 
     private String email;
     private String code;
+    private boolean isVerified;
 
     @Builder
-    public MailAuthentication(final String email, final String code) {
+    public MailAuthentication(final String email, final String code, final boolean isVerified) {
         this.email = email;
         this.code = code;
+        this.isVerified = false;
+    }
+
+    public void update() {
+        this.isVerified = true;
     }
 }

@@ -31,7 +31,7 @@ dependencies {
 
 
 	//java mail
-	implementation 'jakarta.activation:jakarta.activation-api'
+	implementation 'jakarta.activation:jakarta.activation-api:2.0.0'
 	implementation ('org.springframework.boot:spring-boot-starter-mail') {
 		exclude group: 'com.sun.activation', module: 'javax.activation'
 	}

@@ -15,8 +15,7 @@ import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
-import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullMailException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import io.wisoft.capstonedesign.global.jwt.AuthorizationExtractor;
@@ -27,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Slf4j
 @Service
@@ -49,8 +47,7 @@ public class AuthService {
     @Transactional
     public Long signUpMember(final CreateMemberRequest request) {
 
-        validateAuthenticateCode(request.email(), request.code());
-        validateDuplicateMember(request);
+        validateEmailVerified(request.email());
 
         final Member member = Member.builder()
                 .nickname(request.nickname())
@@ -65,24 +62,14 @@ public class AuthService {
         return member.getId();
     }
 
-    private void validateAuthenticateCode(final String email, final String code) {
-        MailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(IllegalValueException::new);
+    private void validateEmailVerified(final String email) {
+        MailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(NullMailException::new);
 
-        if (!mail.getCode().equals(code)) {
-            log.error("이메일 인증 코드가 올바르지 않습니다.");
-            throw new IllegalValueException("이메일 인증 코드가 올바르지 않습니다.");
+        if (!mail.isVerified()) {
+            throw new IllegalStateException("이메일 인증을 완료해주세요.");
         }
     }
 
-    private void validateDuplicateMember(final CreateMemberRequest request) {
-        final List<Member> validateMemberByEmail = memberRepository.findValidateMemberByEmail(request.email());
-        final List<Member> validateMemberByNickname = memberRepository.findValidateMemberByNickname(request.nickname());
-
-        if (!validateMemberByEmail.isEmpty() || !validateMemberByNickname.isEmpty()) {
-            log.error("중복 회원 발생 : 이미 존재하는 회원입니다.");
-            throw new DuplicateMemberException("중복 회원 발생 : 이미 존재하는 회원입니다.");
-        }
-    }
 
     /** 로그인 */
     public String loginMember(final LoginRequest request) {
@@ -121,8 +108,7 @@ public class AuthService {
      */
     @Transactional
     public Long signUpStaff(final CreateStaffRequest request) {
-        validateAuthenticateCode(request.email(), request.code());
-        validateDuplicateStaff(request);
+        validateEmailVerified(request.email());
 
         //엔티티 조회
         final Hospital hospital = hospitalService.findById(request.hospitalId());
@@ -139,11 +125,6 @@ public class AuthService {
         staffRepository.save(staff);
         log.info(staff.getName() + "님이 가입 하셨습니다.");
         return staff.getId();
-    }
-
-    private void validateDuplicateStaff(final CreateStaffRequest request) {
-        final List<Staff> staffList = staffRepository.findValidateByEmail(request.email());
-        if (!staffList.isEmpty()) throw new DuplicateStaffException();
     }
 
 

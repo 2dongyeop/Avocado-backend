@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -39,12 +38,14 @@ public class MemberServiceTest {
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
-                .code("ssss")
                 .build();
 
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email@naver.com")
-                .code("ssss")
+                .email(request.email())
+                .code(code)
+                .isVerified(false)
                 .build());
 
         final Long signUpId = authService.signUpMember(request);
@@ -67,12 +68,14 @@ public class MemberServiceTest {
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
-                .code("ssss")
                 .build();
 
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email@naver.com")
-                .code("ssss")
+                .email(request.email())
+                .code(code)
+                .isVerified(false)
                 .build());
 
         //when -- 동작
@@ -88,10 +91,14 @@ public class MemberServiceTest {
     @Test
     public void 회원_비밀번호_수정() throws Exception {
         //given -- 조건
-        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000", "ssss");
+        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1@naver.com")
-                .code("ssss")
+                .email(request1.email())
+                .code(code)
+                .isVerified(false)
                 .build());
 
         final Long signUpId = authService.signUpMember(request1);
@@ -109,13 +116,16 @@ public class MemberServiceTest {
     @Test
     public void 회원_비밀번호_수정_실패() throws Exception {
         //given -- 조건
-        final MailAuthentication mail = mailAuthenticationRepository.save(
-                MailAuthentication.builder()
-                        .email("email1@naver.com")
-                        .code("ssss")
-                        .build());
 
-        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000", "ssss");
+        String code = "ssss";
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("email1@naver.com")
+                .code(code)
+                .isVerified(false)
+                .build());
+
+        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
         final Long signUpId = authService.signUpMember(request1);
 
         //when -- 동작
@@ -132,11 +142,15 @@ public class MemberServiceTest {
     @Test
     public void 회원_프로필사진_수정() throws Exception {
         //given -- 조건
-        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000", "ssss");
+        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+
+        String code = "ssss";
         mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email("email1@naver.com")
-                .code("ssss")
+                .code(code)
+                .isVerified(false)
                 .build());
+
 
         final Long signUpId = authService.signUpMember(request1);
 
@@ -152,10 +166,13 @@ public class MemberServiceTest {
     @Test
     public void updateMemberNickname() throws Exception {
         //given -- 조건
-        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000", "ssss");
+        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+
+        String code = "ssss";
         mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email("email1@naver.com")
-                .code("ssss")
+                .code(code)
+                .isVerified(false)
                 .build());
 
         final Long signUpId = authService.signUpMember(request1);
@@ -172,10 +189,13 @@ public class MemberServiceTest {
     @Test
     public void 회원_탈퇴() throws Exception {
         //given -- 조건
-        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000", "ssss");
+        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+
+        String code = "ssss";
         mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email("email1@naver.com")
-                .code("ssss")
+                .code(code)
+                .isVerified(false)
                 .build());
 
         final Long signUpId = authService.signUpMember(request1);
