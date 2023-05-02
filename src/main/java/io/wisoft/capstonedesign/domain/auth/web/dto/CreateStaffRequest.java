@@ -18,6 +18,5 @@ public record CreateStaffRequest(
                 message = "비밀번호는 영문과 숫자가 포함된 4자 ~ 20자의 비밀번호여야 합니다.")
         @NotBlank String password2,
         @NotBlank String licensePath,
-        @NotBlank String dept,
-        @NotBlank String code
+        @NotBlank String dept
 ) { }

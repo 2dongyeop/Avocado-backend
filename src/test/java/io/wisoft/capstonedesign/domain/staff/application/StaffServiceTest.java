@@ -54,12 +54,15 @@ public class StaffServiceTest {
                 .password2("password")
                 .licensePath("license")
                 .dept("DENTAL")
-                .code("ssss")
                 .build();
 
+
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1")
-                .code("ssss")
+                .email(request.email())
+                .code(code)
+                .isVerified(false)
                 .build());
 
         final Long signUpId = authService.signUpStaff(request);
@@ -93,12 +96,15 @@ public class StaffServiceTest {
                 .password2("password")
                 .licensePath("license")
                 .dept("DENTAL")
-                .code("ssss")
                 .build();
 
+
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1")
-                .code("ssss")
+                .email(request.email())
+                .code(code)
+                .isVerified(false)
                 .build());
 
         final Long signUpId = authService.signUpStaff(request);
@@ -125,10 +131,14 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        final CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL", "ssss");
+        final CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL");
+
+        String code = "ssss";
+
         mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email("ldy_1204@naver.com")
-                .code("ssss")
+                .code(code)
+                .isVerified(false)
                 .build());
 
         final Long id = authService.signUpStaff(request1);
@@ -148,11 +158,13 @@ public class StaffServiceTest {
     public void 의료진_비밀번호_수정_실패() throws Exception {
 
         //given -- 조건
-        final MailAuthentication mail = mailAuthenticationRepository.save(
-                MailAuthentication.builder()
-                        .email("ldy_1112@naver.com")
-                        .code("ssss")
-                        .build());
+        final String code = "ssss";
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("ldy_1204@naver.com")
+                .code(code)
+                .isVerified(false)
+                .build());
 
         //병원 생성
         final Hospital hospital = Hospital.builder()
@@ -163,7 +175,7 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        final CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1112@naver.com", "1111", "1111","hhhh", "DENTAL", "ssss");
+        final CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1112@naver.com", "1111", "1111","hhhh", "DENTAL");
         final Long id = authService.signUpStaff(request1);
         final Staff staff = staffService.findById(id);
 
@@ -190,12 +202,15 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        final CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL", "ssss");
-        mailAuthenticationRepository.save(
-                MailAuthentication.builder()
-                        .email("ldy_1204@naver.com")
-                        .code("ssss")
-                        .build());
+        final CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL");
+
+        String code = "ssss";
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("ldy_1204@naver.com")
+                .code(code)
+                .isVerified(false)
+                .build());
 
         final Long id = authService.signUpStaff(request1);
         final Staff staff = staffService.findById(id);
@@ -222,12 +237,15 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        final CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL", "ssss");
-        mailAuthenticationRepository.save(
-                MailAuthentication.builder()
-                        .email("ldy_1204@naver.com")
-                        .code("ssss")
-                        .build());
+        final CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL");
+
+        String code = "ssss";
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("ldy_1204@naver.com")
+                .code(code)
+                .isVerified(false)
+                .build());
 
         final Long id = authService.signUpStaff(request1);
 
@@ -253,12 +271,15 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        final CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL", "ssss");
-        mailAuthenticationRepository.save(
-                MailAuthentication.builder()
-                        .email("ldy_1204@naver.com")
-                        .code("ssss")
-                        .build());
+        final CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL");
+
+        String code = "ssss";
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("ldy_1204@naver.com")
+                .code(code)
+                .isVerified(false)
+                .build());
 
         final Long id = authService.signUpStaff(request1);
         final Staff staff = staffService.findById(id);
@@ -285,12 +306,16 @@ public class StaffServiceTest {
                 .build();
         em.persist(hospital);
 
-        final CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL", "ssss");
-        mailAuthenticationRepository.save(
-                MailAuthentication.builder()
-                        .email("ldy_1204@naver.com")
-                        .code("ssss")
-                        .build());
+        final CreateStaffRequest request1 = new CreateStaffRequest(hospital.getId(), "lee1", "ldy_1204@naver.com", "1111", "1111","hhhh", "DENTAL");
+
+        String code = "ssss";
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email("ldy_1204@naver.com")
+                .code(code)
+                .isVerified(false)
+                .build());
+
         final Long id = authService.signUpStaff(request1);
 
         //when -- 동작

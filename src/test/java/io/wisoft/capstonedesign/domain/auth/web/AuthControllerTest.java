@@ -24,51 +24,62 @@ public class AuthControllerTest {
     @Autowired EntityManager em;
     @Autowired AuthController authController;
     @Autowired MailAuthenticationRepository mailAuthenticationRepository;
+    @Autowired MailController mailController;
 
     @Test
     public void signupMember_success() throws Exception {
         //given -- 조건
-        CreateMemberRequest request = CreateMemberRequest.builder()
+
+        String email = "test-email@naver.com";
+
+        //인증 코드 전송
+        MailObject mailObject = new MailObject(email);
+        String code = mailController.sendCertificationCode(mailObject).getBody();
+
+        //이메일 인증
+        CertificateMailRequest emailRequest = new CertificateMailRequest(email, code);
+        mailController.certificateEmail(emailRequest);
+
+
+        final CreateMemberRequest request = CreateMemberRequest.builder()
                 .nickname("test")
-                .email("email@naver.com")
+                .email(email)
                 .password1("password1")
                 .password2("password1")
                 .phonenumber("phonenumber")
-                .code("code")
                 .build();
 
-        MailAuthentication mailAuthentication = MailAuthentication.builder()
+        mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email(request.email())
-                .code(request.code())
-                .build();
-
-        mailAuthenticationRepository.save(mailAuthentication);
+                .code(code)
+                .isVerified(false)
+                .build());
 
         //when -- 동작
-        CreateMemberResponse response = authController.signupMember(request);
+        final CreateMemberResponse response = authController.signupMember(request);
 
         //then -- 검증
         Assertions.assertThat(response.id()).isNotNull();
     }
 
     @Test
-    public void signupMember_fail_passowrd_isNotMatch() throws Exception {
+    public void signupMember_fail_password_isNotMatch() throws Exception {
         //given -- 조건
-        CreateMemberRequest request = CreateMemberRequest.builder()
+        final CreateMemberRequest request = CreateMemberRequest.builder()
                 .nickname("test")
                 .email("email@naver.com")
                 .password1("password1")
                 .password2("password2")
                 .phonenumber("phonenumber")
-                .code("code")
                 .build();
 
-        MailAuthentication mailAuthentication = MailAuthentication.builder()
+        final String code = "ssss";
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email(request.email())
-                .code(request.code())
-                .build();
-
-        mailAuthenticationRepository.save(mailAuthentication);
+                .code(code)
+                .isVerified(false)
+                .build());
 
         //when -- 동작
         //then -- 검증
@@ -81,21 +92,21 @@ public class AuthControllerTest {
     @Test
     public void signupMember_fail_code_isNotMatch() throws Exception {
         //given -- 조건
-        CreateMemberRequest request = CreateMemberRequest.builder()
+        final CreateMemberRequest request = CreateMemberRequest.builder()
                 .nickname("test")
                 .email("email@naver.com")
                 .password1("password1")
                 .password2("password1")
                 .phonenumber("phonenumber")
-                .code("code")
                 .build();
 
-        MailAuthentication mailAuthentication = MailAuthentication.builder()
+        final String code = "ssss";
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email(request.email())
                 .code("fail-code")
-                .build();
-
-        mailAuthenticationRepository.save(mailAuthentication);
+                .isVerified(false)
+                .build());
 
         //when -- 동작
         //then -- 검증
@@ -108,27 +119,27 @@ public class AuthControllerTest {
     @Test
     public void loginMember_success() throws Exception {
         //given -- 조건
-        CreateMemberRequest request = CreateMemberRequest.builder()
+        final CreateMemberRequest request = CreateMemberRequest.builder()
                 .nickname("test")
                 .email("email@naver.com")
                 .password1("password1")
                 .password2("password1")
                 .phonenumber("phonenumber")
-                .code("code")
                 .build();
 
-        MailAuthentication mailAuthentication = MailAuthentication.builder()
+        final String code = "ssss";
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email(request.email())
-                .code(request.code())
-                .build();
-
-        mailAuthenticationRepository.save(mailAuthentication);
+                .code(code)
+                .isVerified(false)
+                .build());
         authController.signupMember(request);
 
-        LoginRequest loginRequest = new LoginRequest("email@naver.com", "password1");
+        final LoginRequest loginRequest = new LoginRequest("email@naver.com", "password1");
 
         //when -- 동작
-        ResponseEntity<TokenResponse> tokenResponseResponseEntity = authController.loginMember(loginRequest);
+        final ResponseEntity<TokenResponse> tokenResponseResponseEntity = authController.loginMember(loginRequest);
 
         //then -- 검증
         Assertions.assertThat(tokenResponseResponseEntity.getBody().accessToken()).isNotNull();
@@ -138,24 +149,24 @@ public class AuthControllerTest {
     public void loginMember_fail_password_isNotMatch() throws Exception {
         //given -- 조건
         //given -- 조건
-        CreateMemberRequest request = CreateMemberRequest.builder()
+        final CreateMemberRequest request = CreateMemberRequest.builder()
                 .nickname("test")
                 .email("email@naver.com")
                 .password1("password1")
                 .password2("password1")
                 .phonenumber("phonenumber")
-                .code("code")
                 .build();
 
-        MailAuthentication mailAuthentication = MailAuthentication.builder()
+        final String code = "ssss";
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email(request.email())
-                .code(request.code())
-                .build();
-
-        mailAuthenticationRepository.save(mailAuthentication);
+                .code(code)
+                .isVerified(false)
+                .build());
         authController.signupMember(request);
 
-        LoginRequest loginRequest = new LoginRequest("email@naver.com", "fail-password");
+        final LoginRequest loginRequest = new LoginRequest("email@naver.com", "fail-password");
 
 
         //when -- 동작
@@ -169,24 +180,24 @@ public class AuthControllerTest {
     public void loginMember_fail_email_NotFound() throws Exception {
         //given -- 조건
         //given -- 조건
-        CreateMemberRequest request = CreateMemberRequest.builder()
+        final CreateMemberRequest request = CreateMemberRequest.builder()
                 .nickname("test")
                 .email("email@naver.com")
                 .password1("password1")
                 .password2("password1")
                 .phonenumber("phonenumber")
-                .code("code")
                 .build();
 
-        MailAuthentication mailAuthentication = MailAuthentication.builder()
+        final String code = "ssss";
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
                 .email(request.email())
-                .code(request.code())
-                .build();
-
-        mailAuthenticationRepository.save(mailAuthentication);
+                .code(code)
+                .isVerified(false)
+                .build());
         authController.signupMember(request);
 
-        LoginRequest loginRequest = new LoginRequest("fail-email@naver.com", "password1");
+        final LoginRequest loginRequest = new LoginRequest("fail-email@naver.com", "password1");
 
 
         //when -- 동작
@@ -200,7 +211,7 @@ public class AuthControllerTest {
     public void signUpStaff_success() throws Exception {
         //given -- 조건
 
-        Hospital hospital = Hospital.builder()
+        final Hospital hospital = Hospital.builder()
                 .name("name")
                 .number("number")
                 .address("address")
@@ -208,7 +219,7 @@ public class AuthControllerTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request = CreateStaffRequest.builder()
+        final CreateStaffRequest request = CreateStaffRequest.builder()
                 .hospitalId(hospital.getId())
                 .name("name")
                 .email("email@naver.com")
@@ -216,18 +227,18 @@ public class AuthControllerTest {
                 .password2("password")
                 .licensePath("license")
                 .dept("DENTAL")
-                .code("ssss")
                 .build();
 
-        MailAuthentication mailAuthentication = MailAuthentication.builder()
-                .email("email@naver.com")
-                .code("ssss")
-                .build();
+        final String code = "ssss";
 
-        mailAuthenticationRepository.save(mailAuthentication);
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email(request.email())
+                .code(code)
+                .isVerified(false)
+                .build());
 
         //when -- 동작
-        CreateStaffResponse response = authController.signupStaff(request);
+        final CreateStaffResponse response = authController.signupStaff(request);
 
         //then -- 검증
         Assertions.assertThat(response.id()).isNotNull();
@@ -236,7 +247,7 @@ public class AuthControllerTest {
     @Test
     public void signUpStaff_fail_hospital_notFound() throws Exception {
         //given -- 조건
-        Hospital hospital = Hospital.builder()
+        final Hospital hospital = Hospital.builder()
                 .name("name")
                 .number("number")
                 .address("address")
@@ -244,7 +255,7 @@ public class AuthControllerTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request = CreateStaffRequest.builder()
+        final CreateStaffRequest request = CreateStaffRequest.builder()
                 .hospitalId(100L)
                 .name("name")
                 .email("email@naver.com")
@@ -252,15 +263,15 @@ public class AuthControllerTest {
                 .password2("password")
                 .licensePath("license")
                 .dept("DENTAL")
-                .code("ssss")
                 .build();
 
-        MailAuthentication mailAuthentication = MailAuthentication.builder()
-                .email("email@naver.com")
-                .code("ssss")
-                .build();
+        final String code = "ssss";
 
-        mailAuthenticationRepository.save(mailAuthentication);
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email(request.email())
+                .code(code)
+                .isVerified(false)
+                .build());
 
         //when -- 동작
         //then -- 검증
@@ -272,7 +283,7 @@ public class AuthControllerTest {
     @Test
     public void signUpStaff_fail_password_isNotMatch() throws Exception {
         //given -- 조건
-        Hospital hospital = Hospital.builder()
+        final Hospital hospital = Hospital.builder()
                 .name("name")
                 .number("number")
                 .address("address")
@@ -280,7 +291,7 @@ public class AuthControllerTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request = CreateStaffRequest.builder()
+        final CreateStaffRequest request = CreateStaffRequest.builder()
                 .hospitalId(hospital.getId())
                 .name("name")
                 .email("email@naver.com")
@@ -288,15 +299,15 @@ public class AuthControllerTest {
                 .password2("password22222")
                 .licensePath("license")
                 .dept("DENTAL")
-                .code("ssss")
                 .build();
 
-        MailAuthentication mailAuthentication = MailAuthentication.builder()
-                .email("email@naver.com")
-                .code("ssss")
-                .build();
+        final String code = "ssss";
 
-        mailAuthenticationRepository.save(mailAuthentication);
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email(request.email())
+                .code(code)
+                .isVerified(false)
+                .build());
 
         //when -- 동작
         //then -- 검증
@@ -308,7 +319,7 @@ public class AuthControllerTest {
     @Test
     public void signUpStaff_fail_code_isNotMatch() throws Exception {
         //given -- 조건
-        Hospital hospital = Hospital.builder()
+        final Hospital hospital = Hospital.builder()
                 .name("name")
                 .number("number")
                 .address("address")
@@ -316,7 +327,7 @@ public class AuthControllerTest {
                 .build();
         em.persist(hospital);
 
-        CreateStaffRequest request = CreateStaffRequest.builder()
+        final CreateStaffRequest request = CreateStaffRequest.builder()
                 .hospitalId(100L)
                 .name("name")
                 .email("email@naver.com")
@@ -324,15 +335,16 @@ public class AuthControllerTest {
                 .password2("password")
                 .licensePath("license")
                 .dept("DENTAL")
-                .code("not - match - code")
                 .build();
 
-        MailAuthentication mailAuthentication = MailAuthentication.builder()
-                .email("email@naver.com")
-                .code("ssss")
-                .build();
+        final String code = "ssss";
 
-        mailAuthenticationRepository.save(mailAuthentication);
+
+        mailAuthenticationRepository.save(MailAuthentication.builder()
+                .email(request.email())
+                .code("not-match-code")
+                .isVerified(false)
+                .build());
 
         //when -- 동작
         //then -- 검증
