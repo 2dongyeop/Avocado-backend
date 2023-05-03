@@ -21,7 +21,7 @@ public class BusInfoApiController {
 
     @SwaggerApi(summary = "셔틀버스 정보 등록", implementation = CreateBusInfoResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/bus-info/new")
+    @PostMapping("/api/bus-info")
     public CreateBusInfoResponse createBusInfo(
             @RequestBody @Valid final CreateBusInfoRequest request) {
         return new CreateBusInfoResponse(busInfoService.save(request));
