@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CompletableFuture;
+
 @Tag(name = "이메일 인증")
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +27,11 @@ public class MailController {
     public ResponseEntity<String> sendCertificationCode(@RequestBody final MailObject mailObject) {
         final String code = emailService.sendCertificationCode(mailObject.email());
         return ResponseEntity.ok(code);
+    }
+
+    @PostMapping("/mail/certification-code2")
+    public CompletableFuture<String> sendCertificationCode2(@RequestBody final MailObject mailObject) {
+        return CompletableFuture.supplyAsync(() -> emailService.sendCertificationCode(mailObject.email()));
     }
 
     @SwaggerApi(summary = "이메일 인증", implementation = ResponseEntity.class)
