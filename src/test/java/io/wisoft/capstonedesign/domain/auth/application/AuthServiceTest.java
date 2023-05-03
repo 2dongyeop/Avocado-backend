@@ -1,16 +1,12 @@
 package io.wisoft.capstonedesign.domain.auth.application;
 
-import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthentication;
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
-import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberRequest;
-import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
-import io.wisoft.capstonedesign.domain.auth.web.dto.LoginRequest;
+import io.wisoft.capstonedesign.domain.auth.web.dto.*;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
-import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
@@ -21,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -30,29 +25,32 @@ public class AuthServiceTest {
 
     @Autowired EntityManager em;
     @Autowired AuthService authService;
+    @Autowired EmailServiceImpl emailService;
     @Autowired MemberService memberService;
     @Autowired StaffService staffService;
-    @Autowired EncryptHelper encryptHelper;
     @Autowired MailAuthenticationRepository mailAuthenticationRepository;
 
     @Test
-    public void 회원_저장() throws Exception {
+    public void 회원가입() throws Exception {
         //given -- 조건
+
+        final String email = "email@naver.com";
+
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+
+        //회원가입 요청
         final CreateMemberRequest request = CreateMemberRequest.builder()
                 .nickname("test1")
-                .email("email@naver.com")
+                .email(email)
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
                 .build();
-
-        String code = "ssss";
-
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email(request.email())
-                .code(code)
-                .isVerified(true)
-                .build());
 
         //when -- 동작
         final Long signUpId = authService.signUpMember(request);
@@ -66,9 +64,19 @@ public class AuthServiceTest {
     public void 회원_이메일_중복_검증() throws Exception {
 
         //given -- 조건
+        final String email = "email@naver.com";
+
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+
+        //회원가입 요청
         final CreateMemberRequest request1 = CreateMemberRequest.builder()
                 .nickname("test1")
-                .email("email@naver.com")
+                .email(email)
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
@@ -76,19 +84,11 @@ public class AuthServiceTest {
 
         final CreateMemberRequest request2 = CreateMemberRequest.builder()
                 .nickname("test2")
-                .email("email@naver.com")
+                .email(email)
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
                 .build();
-
-        String code = "ssss";
-
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email(request1.email())
-                .code(code)
-                .isVerified(false)
-                .build());
 
         //when -- 동작
         //then -- 검증
@@ -102,10 +102,24 @@ public class AuthServiceTest {
     public void 회원_닉네임_중복_검증() throws Exception {
 
         //given -- 조건
+        final String email1 = "email@naver.com";
+        final String email2 = "email@naver.com + 2";
 
+        //이메일 인증 코드 보내기
+        final String code1 = emailService.sendCertificationCode(email1);
+        final String code2 = emailService.sendCertificationCode(email2);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email1, code1);
+        emailService.certificateEmail(mailRequest);
+
+        final CertificateMailRequest mailRequest2 = new CertificateMailRequest(email2, code2);
+        emailService.certificateEmail(mailRequest2);
+
+        //회원가입 요청
         final CreateMemberRequest request1 = CreateMemberRequest.builder()
                 .nickname("test1")
-                .email("email1@naver.com")
+                .email(email1)
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
@@ -113,24 +127,11 @@ public class AuthServiceTest {
 
         final CreateMemberRequest request2 = CreateMemberRequest.builder()
                 .nickname("test1")
-                .email("email2@naver.com")
+                .email(email2)
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
                 .build();
-
-        String code = "ssss";
-
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email(request1.email())
-                .code(code)
-                .isVerified(false)
-                .build());
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email(request2.email())
-                .code(code)
-                .isVerified(false)
-                .build());
 
         //when -- 동작
         //then -- 검증
@@ -144,23 +145,27 @@ public class AuthServiceTest {
     @Test
     public void member_login() throws Exception {
         //given -- 조건
+        final String email = "email@naver.com";
+
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+
+        //회원가입 요청
         final CreateMemberRequest request = CreateMemberRequest.builder()
                 .nickname("test1")
-                .email("email@naver.com")
+                .email(email)
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
                 .build();
 
-        String code = "ssss";
+        //회원가입
+        final Long signUpId = authService.signUpMember(request);
 
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email(request.email())
-                .code(code)
-                .isVerified(false)
-                .build());
-
-        authService.signUpMember(request);
 
         //when -- 동작
         final LoginRequest loginRequest = new LoginRequest(request.email(), request.password1());
@@ -174,24 +179,26 @@ public class AuthServiceTest {
     public void member_login_fail() throws Exception {
         //given -- 조건
 
+        final String email = "email@naver.com";
+
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+
+        //회원가입 요청
         final CreateMemberRequest request = CreateMemberRequest.builder()
                 .nickname("test1")
-                .email("email@naver.com")
+                .email(email)
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
                 .build();
 
-
-        String code = "ssss";
-
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email(request.email())
-                .code(code)
-                .isVerified(false)
-                .build());
-
-        authService.signUpMember(request);
+        //회원가입
+        final Long signUpId = authService.signUpMember(request);
 
         //when -- 동작
         //then -- 검증
@@ -203,38 +210,18 @@ public class AuthServiceTest {
     }
 
 
-
-    @Test
-    public void member_createToken_isMatch() throws Exception {
-        //given -- 조건
-        final String password = "1234";
-        final String hashedPassword = encryptHelper.encrypt(password);
-
-        //when -- 동작
-        final boolean result = encryptHelper.isMatch(password, hashedPassword);
-
-        //then -- 검증
-        Assertions.assertThat(result).isTrue();
-    }
-
-    @Test
-    public void member_createToken_isMatch_Fail() throws Exception {
-        //given -- 조건
-        final String password = "1234";
-        final String hashedPassword = encryptHelper.encrypt(password);
-
-        //when -- 동작
-        final String failPassword = "1233";
-        final boolean result = encryptHelper.isMatch(failPassword, hashedPassword);
-
-        //then -- 검증
-        Assertions.assertThat(result).isFalse();
-    }
-
-
     @Test
     public void 의료진가입() throws Exception {
         //given -- 조건
+
+        final String email = "email@naver.com";
+
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
 
         //병원 생성
         final Hospital hospital = Hospital.builder()
@@ -245,23 +232,16 @@ public class AuthServiceTest {
                 .build();
         em.persist(hospital);
 
+        //의료진 가입 요청
         final CreateStaffRequest request = CreateStaffRequest.builder()
                 .hospitalId(hospital.getId())
                 .name("staff1")
-                .email("email1")
+                .email(email)
                 .password1("password")
                 .password2("password")
                 .licensePath("license")
                 .dept("DENTAL")
                 .build();
-
-        String code = "ssss";
-
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email(request.email())
-                .code(code)
-                .isVerified(false)
-                .build());
 
         //when -- 동작
         final Long signUpId = authService.signUpStaff(request);
@@ -277,6 +257,15 @@ public class AuthServiceTest {
     public void 의료진중복검증() throws Exception {
         //given -- 조건
 
+        final String email = "email@naver.com";
+
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+
         //병원 생성
         final Hospital hospital = Hospital.builder()
                 .name("name1")
@@ -286,11 +275,11 @@ public class AuthServiceTest {
                 .build();
         em.persist(hospital);
 
-
+        //의료진 가입 요청
         final CreateStaffRequest request1 = CreateStaffRequest.builder()
                 .hospitalId(hospital.getId())
                 .name("staff1")
-                .email("email1")
+                .email(email)
                 .password1("password")
                 .password2("password")
                 .licensePath("license")
@@ -299,21 +288,13 @@ public class AuthServiceTest {
 
         final CreateStaffRequest request2 = CreateStaffRequest.builder()
                 .hospitalId(hospital.getId())
-                .name("staff2")
-                .email("email1")
+                .name("staff1")
+                .email(email)
                 .password1("password")
                 .password2("password")
                 .licensePath("license")
                 .dept("DENTAL")
                 .build();
-
-        String code = "ssss";
-
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1")
-                .code(code)
-                .isVerified(false)
-                .build());
 
         //when -- 동작
         //then -- 검증
@@ -329,6 +310,15 @@ public class AuthServiceTest {
     public void staff_login() throws Exception {
         //given -- 조건
 
+        final String email = "email@naver.com";
+
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+
         //병원 생성
         final Hospital hospital = Hospital.builder()
                 .name("name1")
@@ -338,24 +328,18 @@ public class AuthServiceTest {
                 .build();
         em.persist(hospital);
 
-        final CreateStaffRequest request = new CreateStaffRequest(
-                hospital.getId(),
-                "staff1",
-                "email1",
-                "pw1",
-                "pw2",
-                "path1",
-                "DENTAL"
-        );
+        //의료진 가입 요청
+        final CreateStaffRequest request = CreateStaffRequest.builder()
+                .hospitalId(hospital.getId())
+                .name("staff1")
+                .email(email)
+                .password1("password")
+                .password2("password")
+                .licensePath("license")
+                .dept("DENTAL")
+                .build();
 
-        String code = "ssss";
-
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email(request.email())
-                .code(code)
-                .isVerified(false)
-                .build());
-
+        //when -- 동작
         final Long signUpId = authService.signUpStaff(request);
 
         //when -- 동작
@@ -370,6 +354,14 @@ public class AuthServiceTest {
     @Test
     public void staff_login_fail() throws Exception {
         //given -- 조건
+        final String email = "email@naver.com";
+
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
 
         //병원 생성
         final Hospital hospital = Hospital.builder()
@@ -380,24 +372,18 @@ public class AuthServiceTest {
                 .build();
         em.persist(hospital);
 
-        final CreateStaffRequest request = new CreateStaffRequest(
-                hospital.getId(),
-                "staff1",
-                "email1",
-                "pw1",
-                "pw2",
-                "path1",
-                "DENTAL"
-        );
+        //의료진 가입 요청
+        final CreateStaffRequest request = CreateStaffRequest.builder()
+                .hospitalId(hospital.getId())
+                .name("staff1")
+                .email(email)
+                .password1("password")
+                .password2("password")
+                .licensePath("license")
+                .dept("DENTAL")
+                .build();
 
-        String code = "ssss";
-
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email(request.email())
-                .code(code)
-                .isVerified(false)
-                .build());
-
+        //when -- 동작
         final Long signUpId = authService.signUpStaff(request);
 
         //when -- 동작
@@ -406,35 +392,6 @@ public class AuthServiceTest {
             LoginRequest loginRequest = new LoginRequest(request.email(), "fail-password");
             String token = authService.loginStaff(loginRequest);
         });
-    }
-
-
-    @Test
-    public void staff_createToken_isMatch() throws Exception {
-        //given -- 조건
-        final String password = "1234";
-        final String hashedPassword = encryptHelper.encrypt(password);
-
-        //when -- 동작
-        final boolean result = encryptHelper.isMatch(password, hashedPassword);
-
-        //then -- 검증
-        Assertions.assertThat(result).isTrue();
-    }
-
-
-    @Test
-    public void staff_createToken_isMatch_Fail() throws Exception {
-        //given -- 조건
-        final String password = "1234";
-        final String hashedPassword = encryptHelper.encrypt(password);
-
-        //when -- 동작
-        final String failPassword = "1233";
-        final boolean result = encryptHelper.isMatch(failPassword, hashedPassword);
-
-        //then -- 검증
-        Assertions.assertThat(result).isFalse();
     }
 
 }

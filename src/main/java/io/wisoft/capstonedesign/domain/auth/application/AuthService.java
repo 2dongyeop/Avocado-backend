@@ -15,6 +15,8 @@ import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
+import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMailException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
@@ -25,6 +27,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -56,10 +61,31 @@ public class AuthService {
                 .phoneNumber(request.phonenumber())
                 .build();
 
+        validateDuplicateEmail(request.email());
+        validateDuplicateNickname(request.nickname());
         memberRepository.save(member);
 
         log.info(member.getNickname() + "님이 회원가입을 하셨습니다.");
         return member.getId();
+    }
+
+    private void validateDuplicateNickname(final String nickname) {
+        List<Member> memberList = memberRepository.findValidateMemberByNickname(nickname);
+        if (memberList.size() > 0) {
+            throw new DuplicateMemberException("닉네임 중복");
+        }
+    }
+
+    private void validateDuplicateEmail(final String email) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if (member.isPresent()) {
+            throw new DuplicateMemberException("이메일 중복.");
+        }
+
+        Optional<Staff> staff = staffRepository.findByEmail(email);
+        if (staff.isPresent()) {
+            throw new DuplicateStaffException("이메일 중복");
+        }
     }
 
     private void validateEmailVerified(final String email) {
@@ -122,7 +148,9 @@ public class AuthService {
                 .dept(HospitalDept.valueOf(request.dept()))
                 .build();
 
+        validateDuplicateEmail(request.email());
         staffRepository.save(staff);
+
         log.info(staff.getName() + "님이 가입 하셨습니다.");
         return staff.getId();
     }
