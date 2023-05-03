@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Tag(name = "이메일 인증")
 @RestController
@@ -24,14 +25,11 @@ public class MailController {
     @SwaggerApi(summary = "이메일 인증 코드 전송", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
     @PostMapping("/mail/certification-code")
-    public ResponseEntity<String> sendCertificationCode(@RequestBody final MailObject mailObject) {
-        final String code = emailService.sendCertificationCode(mailObject.email());
-        return ResponseEntity.ok(code);
-    }
+    public ResponseEntity<String> sendCertificationCode(@RequestBody final MailObject mailObject) throws ExecutionException, InterruptedException {
+        final String code = CompletableFuture.supplyAsync(
+                () -> emailService.sendCertificationCode(mailObject.email())).get();
 
-    @PostMapping("/mail/certification-code2")
-    public CompletableFuture<String> sendCertificationCode2(@RequestBody final MailObject mailObject) {
-        return CompletableFuture.supplyAsync(() -> emailService.sendCertificationCode(mailObject.email()));
+        return ResponseEntity.ok(code);
     }
 
     @SwaggerApi(summary = "이메일 인증", implementation = ResponseEntity.class)
