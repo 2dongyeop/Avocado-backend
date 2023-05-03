@@ -1,14 +1,14 @@
 package io.wisoft.capstonedesign.domain.member.application;
 
 import io.wisoft.capstonedesign.domain.auth.application.AuthService;
-import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthentication;
+import io.wisoft.capstonedesign.domain.auth.application.EmailServiceImpl;
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
+import io.wisoft.capstonedesign.domain.auth.web.dto.CertificateMailRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberRequest;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberNicknameRequest;
 import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPasswordRequest;
 import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPhotoPathRequest;
-import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import org.assertj.core.api.Assertions;
@@ -25,28 +25,31 @@ public class MemberServiceTest {
 
     @Autowired AuthService authService;
     @Autowired MemberService memberService;
-    @Autowired EncryptHelper encryptHelper;
+    @Autowired EmailServiceImpl emailService;
     @Autowired MailAuthenticationRepository mailAuthenticationRepository;
 
 
     @Test
     public void 회원_단건_조회() throws Exception {
         //given -- 조건
+
+        final String email = "email@naver.com";
+
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+
+        //회원가입 요청
         final CreateMemberRequest request = CreateMemberRequest.builder()
                 .nickname("test1")
-                .email("email@naver.com")
+                .email(email)
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
                 .build();
-
-        String code = "ssss";
-
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email(request.email())
-                .code(code)
-                .isVerified(false)
-                .build());
 
         final Long signUpId = authService.signUpMember(request);
 
@@ -61,24 +64,24 @@ public class MemberServiceTest {
     @Test
     public void 회원_단건_조회_실패() throws Exception {
         //given -- 조건
+        final String email = "email@naver.com";
 
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+
+        //회원가입 요청
         final CreateMemberRequest request = CreateMemberRequest.builder()
                 .nickname("test1")
-                .email("email@naver.com")
+                .email(email)
                 .password1("1111")
                 .password2("1111")
                 .phonenumber("0000")
                 .build();
 
-        String code = "ssss";
-
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email(request.email())
-                .code(code)
-                .isVerified(false)
-                .build());
-
-        //when -- 동작
         final Long signUpId = authService.signUpMember(request);
 
         //when -- 동작
@@ -91,20 +94,29 @@ public class MemberServiceTest {
     @Test
     public void 회원_비밀번호_수정() throws Exception {
         //given -- 조건
-        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+        final String email = "email@naver.com";
 
-        String code = "ssss";
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
 
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email(request1.email())
-                .code(code)
-                .isVerified(false)
-                .build());
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
 
-        final Long signUpId = authService.signUpMember(request1);
+        //회원가입 요청
+        final CreateMemberRequest request = CreateMemberRequest.builder()
+                .nickname("test1")
+                .email(email)
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .build();
+
+        final Long signUpId = authService.signUpMember(request);
 
         //when -- 동작
         final Member getMember = memberService.findById(signUpId);
+
         final UpdateMemberPasswordRequest request2 = new UpdateMemberPasswordRequest("1111", "2222");
         memberService.updatePassword(getMember.getId(), request2);
 
@@ -117,16 +129,25 @@ public class MemberServiceTest {
     public void 회원_비밀번호_수정_실패() throws Exception {
         //given -- 조건
 
-        String code = "ssss";
+        final String email = "email@naver.com";
 
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1@naver.com")
-                .code(code)
-                .isVerified(false)
-                .build());
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
 
-        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
-        final Long signUpId = authService.signUpMember(request1);
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+
+        //회원가입 요청
+        final CreateMemberRequest request = CreateMemberRequest.builder()
+                .nickname("test1")
+                .email(email)
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .build();
+
+        final Long signUpId = authService.signUpMember(request);
 
         //when -- 동작
         final Member getMember = memberService.findById(signUpId);
@@ -142,17 +163,25 @@ public class MemberServiceTest {
     @Test
     public void 회원_프로필사진_수정() throws Exception {
         //given -- 조건
-        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+        final String email = "email@naver.com";
 
-        String code = "ssss";
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1@naver.com")
-                .code(code)
-                .isVerified(false)
-                .build());
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
 
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
 
-        final Long signUpId = authService.signUpMember(request1);
+        //회원가입 요청
+        final CreateMemberRequest request = CreateMemberRequest.builder()
+                .nickname("test1")
+                .email(email)
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .build();
+
+        final Long signUpId = authService.signUpMember(request);
 
         //when -- 동작
         final UpdateMemberPhotoPathRequest request2 = new UpdateMemberPhotoPathRequest("새로운 사진 경로");
@@ -166,39 +195,57 @@ public class MemberServiceTest {
     @Test
     public void updateMemberNickname() throws Exception {
         //given -- 조건
-        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+        final String email = "email@naver.com";
 
-        String code = "ssss";
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1@naver.com")
-                .code(code)
-                .isVerified(false)
-                .build());
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
 
-        final Long signUpId = authService.signUpMember(request1);
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+
+        //회원가입 요청
+        final CreateMemberRequest request = CreateMemberRequest.builder()
+                .nickname("test1")
+                .email(email)
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .build();
+
+        final Long signUpId = authService.signUpMember(request);
 
         //when -- 동작
-        final UpdateMemberNicknameRequest request = new UpdateMemberNicknameRequest("newNickname");
-        memberService.updateMemberNickname(signUpId, request);
+        final UpdateMemberNicknameRequest request2 = new UpdateMemberNicknameRequest("newNickname");
+        memberService.updateMemberNickname(signUpId, request2);
 
         //then -- 검증
         final Member member = memberService.findById(signUpId);
-        Assertions.assertThat(member.getNickname()).isEqualTo(request.nickname());
+        Assertions.assertThat(member.getNickname()).isEqualTo(request2.nickname());
     }
 
     @Test
     public void 회원_탈퇴() throws Exception {
         //given -- 조건
-        final CreateMemberRequest request1 = new CreateMemberRequest("test1", "email1@naver.com", "1111", "1111", "0000");
+        final String email = "email@naver.com";
 
-        String code = "ssss";
-        mailAuthenticationRepository.save(MailAuthentication.builder()
-                .email("email1@naver.com")
-                .code(code)
-                .isVerified(false)
-                .build());
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
 
-        final Long signUpId = authService.signUpMember(request1);
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+
+        //회원가입 요청
+        final CreateMemberRequest request = CreateMemberRequest.builder()
+                .nickname("test1")
+                .email(email)
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .build();
+
+        final Long signUpId = authService.signUpMember(request);
 
         //when -- 동작
         memberService.deleteMember(signUpId);

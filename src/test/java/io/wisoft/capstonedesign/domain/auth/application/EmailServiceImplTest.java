@@ -4,7 +4,6 @@ import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthentication;
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
-import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ public class EmailServiceImplTest {
     @Autowired MemberRepository memberRepository;
     @Autowired StaffRepository staffRepository;
     @Autowired MailAuthenticationRepository mailAuthenticationRepository;
-    @Autowired EncryptHelper encryptHelper;
 
     @Test
     public void sendCertificationCode() throws Exception {
