@@ -19,7 +19,7 @@ public class PickApiController {
 
     @SwaggerApi(summary = "찜하기 생성", implementation = CreatePickResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/picks/new")
+    @PostMapping("/api/picks")
     public CreatePickResponse createPick(@RequestBody @Valid final CreatePickRequest request) {
         return new CreatePickResponse(pickService.save(request));
     }

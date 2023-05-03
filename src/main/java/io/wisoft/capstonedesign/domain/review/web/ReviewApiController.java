@@ -51,7 +51,7 @@ public class ReviewApiController {
 
     @SwaggerApi(summary = "리뷰 저장", implementation = CreateReviewResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/reviews/new")
+    @PostMapping("/api/reviews")
     public CreateReviewResponse createReview(
             @RequestBody @Valid final CreateReviewRequest request) {
 

@@ -24,7 +24,7 @@ public class HospitalApiController {
     private final HospitalService hospitalService;
 
     /* 병원 저장 */
-    @PostMapping("/api/hospitals/new")
+    @PostMapping("/api/hospitals")
     public CreateHospitalResponse createHospitalRequest(
             @RequestBody @Valid final CreateHospitalRequest request) {
 

@@ -23,7 +23,7 @@ public class ReviewReplyApiController {
 
     @SwaggerApi(summary = "리뷰댓글 저장", implementation = CreateReviewReplyResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/review-reply/new")
+    @PostMapping("/api/review-reply")
     public CreateReviewReplyResponse createReviewReply(
             @RequestBody @Valid final CreateReviewReplyRequest request) {
 

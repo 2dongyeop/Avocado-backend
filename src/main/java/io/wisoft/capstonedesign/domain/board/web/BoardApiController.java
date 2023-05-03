@@ -40,7 +40,7 @@ public class BoardApiController {
 
     @SwaggerApi(summary = "게시글 작성", implementation = CreateBoardResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/boards/new")
+    @PostMapping("/api/boards")
     public CreateBoardResponse createBoard(
             @RequestBody @Valid final CreateBoardRequest request) {
 

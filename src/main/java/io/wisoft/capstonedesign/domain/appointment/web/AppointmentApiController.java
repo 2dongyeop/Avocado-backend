@@ -19,7 +19,7 @@ public class AppointmentApiController {
 
     @SwaggerApi(summary = "예약 저장", implementation = CreateAppointmentResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/appointments/new")
+    @PostMapping("/api/appointments")
     public CreateAppointmentResponse createAppointment(
             @RequestBody @Valid final CreateAppointmentRequest request) {
         return new CreateAppointmentResponse(appointmentService.save(request));

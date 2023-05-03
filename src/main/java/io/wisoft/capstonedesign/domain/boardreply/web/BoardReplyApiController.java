@@ -22,7 +22,7 @@ public class BoardReplyApiController {
 
     @SwaggerApi(summary = "게시판댓글 저장", implementation = CreateBoardReplyResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/board-reply/new")
+    @PostMapping("/api/board-reply")
     public CreateBoardReplyResponse createBoardReply(
             @RequestBody @Valid final CreateBoardReplyRequest request) {
 

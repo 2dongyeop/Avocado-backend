@@ -24,7 +24,7 @@ public class HealthInfoApiController {
 
     @SwaggerApi(summary = "건강 정보 등록", implementation = CreateHealthInfoResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/health-infos/new")
+    @PostMapping("/api/health-infos")
     public CreateHealthInfoResponse createHealthInfo(
             @RequestBody @Valid final CreateHealthInfoRequest request) {
 
