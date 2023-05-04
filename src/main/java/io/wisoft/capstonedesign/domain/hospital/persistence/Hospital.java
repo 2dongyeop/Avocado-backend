@@ -32,6 +32,7 @@ public class Hospital extends BaseEntity {
     private String address;
 
     @Column(name = "hosp_operatingtime", nullable = false, columnDefinition="TEXT")
+//    @Column(name = "hosp_operatingtime", columnDefinition="TEXT")
     private String operatingTime;
 
     @OneToMany(mappedBy = "hospital")

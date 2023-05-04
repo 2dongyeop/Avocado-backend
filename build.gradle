@@ -41,6 +41,10 @@ dependencies {
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
+	//OPEN API의 공공데이터를 JSON으로 파싱 후 저장
+	implementation 'io.github.openfeign:feign-soap:12.3'
+
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 

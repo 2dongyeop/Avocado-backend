@@ -13,8 +13,10 @@ h2
 *application-chatgpt.yml*
 *application-jwt.yml*
 *application-mail.yml*
+*application-openapi.yml*
 *.sql*
 *ChatGptConfig*
+*OpenAPIConfig*
 
 ### STS ###
 .apt_generated
