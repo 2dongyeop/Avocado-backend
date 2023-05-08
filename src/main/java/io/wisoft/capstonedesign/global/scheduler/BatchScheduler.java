@@ -46,7 +46,7 @@ public class BatchScheduler {
         log.info("BatchScheduler Finished At : {}", LocalDateTime.now());
     }
 
-    @Scheduled(fixedDelay = 1000)
+//    @Scheduled(fixedDelay = 1000)
     public void scheduleTask() {
 
         // 1 ~ 10 page를 가져오기
