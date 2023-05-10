@@ -1,6 +1,6 @@
 package io.wisoft.capstonedesign.domain.auth.application;
 
-import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthentication;
+import io.wisoft.capstonedesign.domain.auth.persistence.DBMailAuthentication;
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CertificateMailRequest;
 import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
@@ -17,6 +17,8 @@ import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -35,12 +37,14 @@ public class EmailServiceImpl implements EmailService {
 
     @Value("${spring.mail.username}")
     private String AVOCADO_ADDRESS;
+    private final int EXPIRED_TIME = 3 * 60;
 
     private final JavaMailSender emailSender;
-    private final MemberRepository memberRepository;
-    private final StaffRepository staffRepository;
-    private final MailAuthenticationRepository mailAuthenticationRepository;
     private final EncryptHelper encryptHelper;
+    private final StaffRepository staffRepository;
+    private final MemberRepository memberRepository;
+    private final StringRedisTemplate redisTemplate;
+    private final MailAuthenticationRepository mailAuthenticationRepository;
 
     private static final String EMAIL_CERTIFICATION_SUBJECT = "🥑 AVOCADO 이메일 인증 코드입니다.";
     private static final String PASSWORD_RESET_SUBJECT = "🥑 AVOCADO 임시 비밀번호입니다.";
@@ -50,12 +54,9 @@ public class EmailServiceImpl implements EmailService {
         validateDuplicateMemberOrStaff(to);
         final String authenticateCode = sendEmail(to, EMAIL_CERTIFICATION_SUBJECT);
 
-        mailAuthenticationRepository.save(
-                MailAuthentication.builder()
-                        .email(to)
-                        .code(authenticateCode)
-                        .isVerified(false)
-                        .build());
+        final ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(to, authenticateCode, EXPIRED_TIME);
+        log.info("redis :  " + to + " 를 3분간 저장합니다.");
 
         log.info(to + "으로 인증 코드를 발송합니다.");
         return authenticateCode;
@@ -66,9 +67,11 @@ public class EmailServiceImpl implements EmailService {
         final Optional<Staff> staff = staffRepository.findByEmail(to);
 
         if (member.isPresent()) {
+            log.info("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.");
             throw new DuplicateMemberException();
         }
         if (staff.isPresent()) {
+            log.info("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.");
             throw new DuplicateStaffException();
         }
     }
@@ -77,20 +80,33 @@ public class EmailServiceImpl implements EmailService {
     public void certificateEmail(final CertificateMailRequest request) {
 
         //메일 정보 조회
-        MailAuthentication mailAuthentication = mailAuthenticationRepository.findByEmail(request.email())
-                .orElseThrow(NullMailException::new);
+        final String codeByRedis = getRedisValue(request.email());
 
         //메일 정보 검증
-        validateBeforeCertificateEmail(mailAuthentication, request);
-        mailAuthentication.update();
+        validateBeforeCertificateEmail(codeByRedis, request);
+
+        //Redis에서 메일 정보 삭제
+        redisTemplate.delete(request.email());
+
+        //인증된 이메일 목록으로 DB에 저장 - 회원가입 성공시 삭제
+        mailAuthenticationRepository.save(DBMailAuthentication.builder()
+                .email(request.email())
+                .isVerified(true)
+                .build());
     }
 
-    private void validateBeforeCertificateEmail(final MailAuthentication mailAuthentication, final CertificateMailRequest request) {
-        if (mailAuthentication.isVerified()) { //true이면
-            throw new IllegalStateException("이미 메일 인증이 완료되었습니다.");
-        }
+    public String getRedisValue(final String key) {
+        final ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        final String code = valueOperations.get(key);
 
-        if (!mailAuthentication.getCode().equals(request.code())) {
+        if (code == null) {
+            throw new NullMailException("이메일 정보가 잘못되었습니다.");
+        }
+        return code;
+    }
+
+    private void validateBeforeCertificateEmail(final String code, final CertificateMailRequest request) {
+        if (request.code() == (code)) {
             throw new IllegalValueException("인증 코드가 달라 인증에 실패하였습니다.");
         }
     }

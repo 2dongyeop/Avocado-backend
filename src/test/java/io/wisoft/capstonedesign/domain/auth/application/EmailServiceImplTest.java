@@ -1,6 +1,6 @@
 package io.wisoft.capstonedesign.domain.auth.application;
 
-import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthentication;
+import io.wisoft.capstonedesign.domain.auth.persistence.DBMailAuthentication;
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
@@ -8,11 +8,11 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -22,22 +22,22 @@ public class EmailServiceImplTest {
     @Autowired MemberRepository memberRepository;
     @Autowired StaffRepository staffRepository;
     @Autowired MailAuthenticationRepository mailAuthenticationRepository;
+    @Autowired StringRedisTemplate redisTemplate;
 
     @Test
     public void sendCertificationCode() throws Exception {
         //given -- 조건
+
+        final String to = "email";
         final String authenticateCode = createCertificationCode();
 
         //when -- 동작
-        final MailAuthentication mail = mailAuthenticationRepository.save(
-                MailAuthentication.builder()
-                        .email(null)
-                        .code(authenticateCode)
-                        .build());
+        final ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(to, authenticateCode);
 
         //then -- 검증
-        final MailAuthentication getMail= mailAuthenticationRepository.findById(mail.getId()).orElseThrow();
-        Assertions.assertThat(mail.getCode()).isEqualTo(getMail.getCode());
+        final String value = valueOperations.get(to);
+        Assertions.assertThat(value.equals(authenticateCode)).isTrue();
     }
 
 

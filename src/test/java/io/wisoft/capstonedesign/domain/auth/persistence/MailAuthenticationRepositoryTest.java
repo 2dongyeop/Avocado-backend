@@ -14,39 +14,38 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class MailAuthenticationRepositoryTest {
 
-    @Autowired MailAuthenticationRepository mailAuthenticationRepository;
+    @Autowired
+    MailAuthenticationRepository mailAuthenticationRepository;
 
     @Test
     public void findByEmail() throws Exception {
 
-        String email = "test_email";
-        String code = "test_code";
+        final String email = "test_email";
         //given -- 조건
 
-        MailAuthentication saved = mailAuthenticationRepository.save(MailAuthentication.builder()
+        final DBMailAuthentication saved = mailAuthenticationRepository.save(DBMailAuthentication.builder()
                 .email(email)
-                .code(code)
+                .isVerified(true)
                 .build());
 
         //when -- 동작
-        MailAuthentication getMail = mailAuthenticationRepository.findByEmail(email).orElseThrow();
+        final DBMailAuthentication getMail = mailAuthenticationRepository.findByEmail(email).orElseThrow();
 
         //then -- 검증
         Assertions.assertThat(saved).isEqualTo(getMail);
         Assertions.assertThat(saved.getEmail()).isEqualTo(getMail.getEmail());
-        Assertions.assertThat(saved.getCode()).isEqualTo(getMail.getCode());
+        Assertions.assertThat(saved.isVerified()).isTrue();
     }
 
     @Test
     public void findByEmail_fail() throws Exception {
 
-        String email = "test_email";
-        String code = "test_code";
+        final String email = "test_email";
         //given -- 조건
 
-        MailAuthentication saved = mailAuthenticationRepository.save(MailAuthentication.builder()
+        final DBMailAuthentication saved = mailAuthenticationRepository.save(DBMailAuthentication.builder()
                 .email(email)
-                .code(code)
+                .isVerified(true)
                 .build());
 
         //when -- 동작
