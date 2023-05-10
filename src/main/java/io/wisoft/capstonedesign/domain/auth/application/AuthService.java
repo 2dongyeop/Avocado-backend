@@ -1,7 +1,7 @@
 package io.wisoft.capstonedesign.domain.auth.application;
 
 
-import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthentication;
+import io.wisoft.capstonedesign.domain.auth.persistence.DBMailAuthentication;
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
 import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberRequest;
@@ -28,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -63,33 +62,38 @@ public class AuthService {
 
         validateDuplicateEmail(request.email());
         validateDuplicateNickname(request.nickname());
+
+        //회원 저장
         memberRepository.save(member);
+
+        //인증을 위해 저장했던 이메일 삭제
+        final DBMailAuthentication mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
+        mailAuthenticationRepository.delete(mailAuthentication);
 
         log.info(member.getNickname() + "님이 회원가입을 하셨습니다.");
         return member.getId();
     }
 
     private void validateDuplicateNickname(final String nickname) {
-        List<Member> memberList = memberRepository.findValidateMemberByNickname(nickname);
-        if (memberList.size() > 0) {
+        if (memberRepository.findValidateMemberByNickname(nickname).size() > 0) {
             throw new DuplicateMemberException("닉네임 중복");
         }
     }
 
     private void validateDuplicateEmail(final String email) {
-        Optional<Member> member = memberRepository.findByEmail(email);
+        final Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
             throw new DuplicateMemberException("이메일 중복.");
         }
 
-        Optional<Staff> staff = staffRepository.findByEmail(email);
+        final Optional<Staff> staff = staffRepository.findByEmail(email);
         if (staff.isPresent()) {
             throw new DuplicateStaffException("이메일 중복");
         }
     }
 
     private void validateEmailVerified(final String email) {
-        MailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(NullMailException::new);
+        final DBMailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(NullMailException::new);
 
         if (!mail.isVerified()) {
             throw new IllegalStateException("이메일 인증을 완료해주세요.");
@@ -149,7 +153,13 @@ public class AuthService {
                 .build();
 
         validateDuplicateEmail(request.email());
+
+        //의료진 저장
         staffRepository.save(staff);
+
+        //이메일 인증을 위해 저장했던 이메일 삭제
+        final DBMailAuthentication mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
+        mailAuthenticationRepository.delete(mailAuthentication);
 
         log.info(staff.getName() + "님이 가입 하셨습니다.");
         return staff.getId();
