@@ -47,6 +47,8 @@ dependencies {
 	//OPEN API의 공공데이터를 JSON으로 파싱 후 저장
 	implementation 'io.github.openfeign:feign-soap:12.3'
 
+	implementation 'org.json:json:20211205'
+
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
