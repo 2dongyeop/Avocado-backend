@@ -2,7 +2,6 @@ package io.wisoft.capstonedesign.domain.staff.application;
 
 import io.wisoft.capstonedesign.domain.auth.application.AuthService;
 import io.wisoft.capstonedesign.domain.auth.application.EmailServiceImpl;
-import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthentication;
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CertificateMailRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
@@ -11,7 +10,6 @@ import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffHospitalRequest;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPasswordRequest;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPhotoPathRequest;
-import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;

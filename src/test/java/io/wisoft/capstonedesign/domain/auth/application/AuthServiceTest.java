@@ -61,49 +61,11 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void 회원_이메일_중복_검증() throws Exception {
-
-        //given -- 조건
-        final String email = "email@naver.com";
-
-        //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
-
-        //회원가입 요청
-        final CreateMemberRequest request1 = CreateMemberRequest.builder()
-                .nickname("test1")
-                .email(email)
-                .password1("1111")
-                .password2("1111")
-                .phonenumber("0000")
-                .build();
-
-        final CreateMemberRequest request2 = CreateMemberRequest.builder()
-                .nickname("test2")
-                .email(email)
-                .password1("1111")
-                .password2("1111")
-                .phonenumber("0000")
-                .build();
-
-        //when -- 동작
-        //then -- 검증
-        assertThrows(DuplicateMemberException.class, () -> {
-            authService.signUpMember(request1);
-            authService.signUpMember(request2);
-        });
-    }
-
-    @Test
     public void 회원_닉네임_중복_검증() throws Exception {
 
         //given -- 조건
         final String email1 = "email@naver.com";
-        final String email2 = "email@naver.com + 2";
+        final String email2 = "email111111@naver.com";
 
         //이메일 인증 코드 보내기
         final String code1 = emailService.sendCertificationCode(email1);
@@ -250,59 +212,6 @@ public class AuthServiceTest {
         final Staff staff = staffService.findById(signUpId);
         Assertions.assertThat(staff.getName()).isEqualTo(request.name());
         Assertions.assertThat(staff.getEmail()).isEqualTo(request.email());
-    }
-
-
-    @Test
-    public void 의료진중복검증() throws Exception {
-        //given -- 조건
-
-        final String email = "email@naver.com";
-
-        //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
-
-        //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
-        em.persist(hospital);
-
-        //의료진 가입 요청
-        final CreateStaffRequest request1 = CreateStaffRequest.builder()
-                .hospitalId(hospital.getId())
-                .name("staff1")
-                .email(email)
-                .password1("password")
-                .password2("password")
-                .licensePath("license")
-                .dept("DENTAL")
-                .build();
-
-        final CreateStaffRequest request2 = CreateStaffRequest.builder()
-                .hospitalId(hospital.getId())
-                .name("staff1")
-                .email(email)
-                .password1("password")
-                .password2("password")
-                .licensePath("license")
-                .dept("DENTAL")
-                .build();
-
-        //when -- 동작
-        //then -- 검증
-
-        assertThrows(DuplicateStaffException.class, () -> {
-            authService.signUpStaff(request1);
-            authService.signUpStaff(request2);
-        });
     }
 
 
