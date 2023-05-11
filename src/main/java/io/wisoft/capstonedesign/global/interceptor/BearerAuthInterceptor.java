@@ -36,13 +36,11 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
         final String token = authExtractor.extract(request, "Bearer");
 
         if (!StringUtils.hasText(token)) {
-            logger.error("토큰이 존재하지 않음");
-            throw new NotExistTokenException("토큰이 존재하지 않음");
+            logger.error("토큰이 적재되지 않음");
+            throw new NotExistTokenException("토큰이 적재되지 않음");
         }
-        if (!jwtTokenProvider.validateToken(token)) {
-            logger.error("유효하지 않은 토큰");
-            throw new NotValidTokenException("유효하지 않은 토큰");
-        }
+
+        jwtTokenProvider.validateToken(token);
 
         //토큰을 디코딩
         final String name = jwtTokenProvider.getSubject(token);
