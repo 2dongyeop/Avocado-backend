@@ -13,6 +13,8 @@ import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.jwt.AuthorizationExtractor;
+import io.wisoft.capstonedesign.global.jwt.RedisJwtBlackList;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final AuthorizationExtractor authExtractor;
+    private final RedisJwtBlackList redisJwtBlackList;
 
 
     @SwaggerApi(summary = "회원 가입", implementation = CreateMemberResponse.class)
@@ -53,15 +57,12 @@ public class AuthController {
     @SwaggerApi(summary = "로그아웃", implementation = ResponseEntity.class)
     @SwaggerApiFailWithAuth
     @PostMapping("/api/auth/logout")
-    public ResponseEntity<String> logoutMember(HttpServletRequest request) {
-        //TODO
-        boolean result = authService.logout(request);
+    public ResponseEntity<String> logoutMember(HttpServletRequest request) throws IllegalAccessException {
 
-        if (result) {
-            return ResponseEntity.ok("logout success");
-        } else {
-            return ResponseEntity.badRequest().body("bad request");
-        }
+        final String token = authExtractor.extract(request, "Bearer");
+        redisJwtBlackList.addToBlackList(token);
+
+        return ResponseEntity.ok("logout success");
     }
 
 
