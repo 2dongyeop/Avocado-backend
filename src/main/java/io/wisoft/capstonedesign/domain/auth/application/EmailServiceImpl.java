@@ -95,7 +95,7 @@ public class EmailServiceImpl implements EmailService {
                 .build());
     }
 
-    public String getRedisValue(final String key) {
+    private String getRedisValue(final String key) {
         final ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         final String code = valueOperations.get(key);
 
