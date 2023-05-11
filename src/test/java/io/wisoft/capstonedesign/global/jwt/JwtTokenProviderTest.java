@@ -1,11 +1,12 @@
 package io.wisoft.capstonedesign.global.jwt;
 
-import io.wisoft.capstonedesign.global.exception.token.IllegalTokenException;
 import io.wisoft.capstonedesign.global.exception.token.NotExistTokenException;
+import io.wisoft.capstonedesign.global.exception.token.NotValidTokenException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class JwtTokenProviderTest {
 
     @Autowired JwtTokenProvider jwtTokenProvider;
+    @Autowired RedisJwtBlackList redisJwtBlackList;
+    @Autowired private StringRedisTemplate stringRedisTemplate;
 
     @Test
     public void createToken_success() throws Exception {
@@ -47,6 +50,8 @@ public class JwtTokenProviderTest {
         String subject = "test-token-subject";
         String token = jwtTokenProvider.createToken(subject);
 
+        stringRedisTemplate.opsForValue().set(token, "123");
+
         //when -- 동작
         boolean result = jwtTokenProvider.validateToken(token);
 
@@ -54,60 +59,18 @@ public class JwtTokenProviderTest {
         Assertions.assertThat(result).isTrue();
     }
 
-
     @Test
-    public void validateToken_fail_isBlackList() throws Exception {
+    public void validateToken_fail() throws Exception {
         //given -- 조건
         String subject = "test-token-subject";
         String token = jwtTokenProvider.createToken(subject);
 
-        jwtTokenProvider.addBlackList(token);
-
-        //when -- 동작
-        boolean result = jwtTokenProvider.validateToken(token);
-
-        //then -- 검증
-        Assertions.assertThat(result).isFalse();
-    }
-
-
-    @Test
-    public void addBlackList_success() throws Exception {
-        //given -- 조건
-        String subject = "test-token-subject";
-        String token = jwtTokenProvider.createToken(subject);
-
-        //when -- 동작
-        int blackListCount = jwtTokenProvider.addBlackList(token);
-
-        //then -- 검증
-        Assertions.assertThat(blackListCount).isEqualTo(1);
-    }
-
-
-    @Test
-    public void addBlackList_fail_isContains() throws Exception {
-        //given -- 조건
-        String subject = "test-token-subject";
-        String token = jwtTokenProvider.createToken(subject);
-
-        //when -- 동작
-        //then -- 검증
-        assertThrows(IllegalTokenException.class, () -> {
-            jwtTokenProvider.addBlackList(token);
-            jwtTokenProvider.addBlackList(token);
-        });
-    }
-
-    @Test
-    public void addBlackList_fail_isNotValidate() throws Exception {
-        //given -- 조건
-        String token = "not validate token";
+        stringRedisTemplate.opsForValue().set(token, "123");
 
         //when -- 동작
         //then -- 검증
         assertThrows(NotExistTokenException.class, () -> {
-            jwtTokenProvider.addBlackList(token);
+            boolean result = jwtTokenProvider.validateToken("not-valid-token");
         });
     }
 }
