@@ -40,7 +40,7 @@
 
 > ### *Sequence Diagram*
 
-<img src="https://github.com/HBNU-Avocado/Avocado-backend/blob/main/document/image/Sequence-diagram.png" width = 800/>
+<img src="https://github.com/HBNU-Avocado/Avocado-backend/blob/main/document/image/Sequence-diagram-v2.png" width = 800/>
 
 
 <br/>
