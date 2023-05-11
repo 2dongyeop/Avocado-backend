@@ -20,15 +20,16 @@ import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffExcepti
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMailException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
-import io.wisoft.capstonedesign.global.jwt.AuthorizationExtractor;
 import io.wisoft.capstonedesign.global.jwt.JwtTokenProvider;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 
 @Slf4j
@@ -37,13 +38,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final int LOGIN_EXPIRED_TIME = 1 * 60 * 60; //1 hour
+
     private final MemberRepository memberRepository;
     private final StaffRepository staffRepository;
     private final HospitalService hospitalService;
     private final EncryptHelper encryptHelper;
     private final JwtTokenProvider jwtTokenProvider;
     private final MailAuthenticationRepository mailAuthenticationRepository;
-    private final AuthorizationExtractor authExtractor;
+    private final StringRedisTemplate redisTemplate;
 
     /*
      * 회원가입
@@ -112,24 +115,13 @@ public class AuthService {
             throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
         }
 
+        final String token = jwtTokenProvider.createToken(member.getNickname());
         log.info(member.getNickname() + "님이 로그인 하셨습니다.");
-        return jwtTokenProvider.createToken(member.getNickname());
-    }
 
+        redisTemplate.opsForValue().set(token, member.getNickname(), LOGIN_EXPIRED_TIME, TimeUnit.SECONDS);
+        log.info("redis : 토큰(" + token + ")을 1시간동안 저장합니다.");
 
-    /** 로그아웃 */
-    public boolean logout(final HttpServletRequest request) {
-
-        final String token = authExtractor.extract(request, "Bearer");
-
-        try {
-            jwtTokenProvider.addBlackList(token);
-            log.info(jwtTokenProvider.getSubject(token) + "님이 로그아웃 하셨습니다.");
-            return true;
-        } catch (IllegalAccessException exception) {
-            /* do nothing */
-            return false;
-        }
+        return token;
     }
 
 
@@ -178,7 +170,13 @@ public class AuthService {
             throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
         }
 
+        final String token = jwtTokenProvider.createToken(staff.getName());
         log.info(staff.getName() + "님이 로그인 하셨습니다.");
-        return jwtTokenProvider.createToken(staff.getName());
+
+        final ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(token, staff.getName(), LOGIN_EXPIRED_TIME, TimeUnit.SECONDS);
+        log.info("redis : 토큰(" + token + ")을 1시간동안 저장합니다.");
+
+        return token;
     }
 }
