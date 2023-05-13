@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service("EmailService")
@@ -54,8 +55,7 @@ public class EmailServiceImpl implements EmailService {
         validateDuplicateMemberOrStaff(to);
         final String authenticateCode = sendEmail(to, EMAIL_CERTIFICATION_SUBJECT);
 
-        final ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        valueOperations.set(to, authenticateCode, EXPIRED_TIME);
+        redisTemplate.opsForValue().set(to, authenticateCode, EXPIRED_TIME, TimeUnit.SECONDS);
         log.info("redis :  " + to + " 를 3분간 저장합니다.");
 
         log.info(to + "으로 인증 코드를 발송합니다.");
@@ -96,8 +96,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private String getRedisValue(final String key) {
-        final ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        final String code = valueOperations.get(key);
+        final String code = redisTemplate.opsForValue().get(key);
 
         if (code == null) {
             throw new NullMailException("이메일 정보가 잘못되었습니다.");
