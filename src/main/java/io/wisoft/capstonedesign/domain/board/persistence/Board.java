@@ -25,8 +25,6 @@ public class Board extends BaseEntity {
     @Column(name = "board_title", nullable = false)
     private String title;
 
-    //pg 사용시 @Lob 지우고, @Column(nullable = false, columnDefinition="TEXT")로 바꾸기
-    @Lob
     @Column(name = "board_body", nullable = false, columnDefinition="TEXT")
     private String body;
 
