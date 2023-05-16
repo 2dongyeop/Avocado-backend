@@ -25,10 +25,11 @@ public class MailController {
     @SwaggerApi(summary = "이메일 인증 코드 전송", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
     @PostMapping("/mail/certification-code")
-    public ResponseEntity<String> sendCertificationCode(@RequestBody final MailObject mailObject) throws ExecutionException, InterruptedException {
-        final String code = CompletableFuture.supplyAsync(
-                () -> emailService.sendCertificationCode(mailObject.email())).get();
+    public ResponseEntity<String> sendCertificationCode(@RequestBody final MailObject mailObject) {
+        final CompletableFuture<String> future = CompletableFuture.supplyAsync(
+                () -> emailService.sendCertificationCode(mailObject.email()));
 
+        final String code = future.join();
         return ResponseEntity.ok(code);
     }
 
