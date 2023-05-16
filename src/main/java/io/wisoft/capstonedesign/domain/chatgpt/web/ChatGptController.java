@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CompletableFuture;
+
 @Tag(name = "메인화면 검색")
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +24,10 @@ public class ChatGptController {
     @SwaggerApiFailWithAuth
     @PostMapping("/api/search")
     public ChatGptResponse sendMessage(@RequestBody final ChatRequest chatRequest) {
-        return chatGptService.askQuestion(chatRequest);
+        final CompletableFuture<ChatGptResponse> future = CompletableFuture.supplyAsync(
+                () -> chatGptService.askQuestion(chatRequest));
+
+        final ChatGptResponse response = future.join();
+        return response;
     }
 }
