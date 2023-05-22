@@ -18,9 +18,9 @@ public class HospitalDeptTest {
     public void transformDept(final HospitalDept hospitalDept) throws Exception {
 
         switch (hospitalDept) {
-            case DENTAL -> Assertions.assertEquals(DENTAL, hospitalDept);
-            case OPHTHALMOLOGY -> Assertions.assertEquals(OPHTHALMOLOGY, hospitalDept);
-            case DERMATOLOGY -> Assertions.assertEquals(DERMATOLOGY, hospitalDept);
+            case DENTAL -> Assertions.assertEquals(DENTAL.getDescription(), hospitalDept.getDescription());
+            case OPHTHALMOLOGY -> Assertions.assertEquals(OPHTHALMOLOGY.getDescription(), hospitalDept.getDescription());
+            case DERMATOLOGY -> Assertions.assertEquals(DERMATOLOGY.getDescription(), hospitalDept.getDescription());
             default -> Assertions.fail("Unexpected enum value: " + hospitalDept);
         }
     }
