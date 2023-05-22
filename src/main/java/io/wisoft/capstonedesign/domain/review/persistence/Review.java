@@ -32,7 +32,7 @@ public class Review extends BaseEntity {
     private String reviewPhotoPath;
 
     @Column(name = "star_point", nullable = false)
-    private int starPoint;  //TODO: 1~5의 정수만 들어가도록 유효성 검사 추가요망
+    private int starPoint;
 
     @Column(name = "target_hospital", nullable = false)
     private String targetHospital;

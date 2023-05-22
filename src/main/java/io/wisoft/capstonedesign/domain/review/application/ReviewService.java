@@ -1,11 +1,13 @@
 package io.wisoft.capstonedesign.domain.review.application;
 
+import io.wisoft.capstonedesign.domain.hospital.persistence.HospitalRepository;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.domain.review.persistence.ReviewRepository;
 import io.wisoft.capstonedesign.domain.review.web.dto.CreateReviewRequest;
 import io.wisoft.capstonedesign.domain.review.web.dto.UpdateReviewRequest;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewException;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final MemberService memberService;
+    private final HospitalRepository hospitalRepository;
 
     /**
      * 리뷰 작성
@@ -32,6 +35,7 @@ public class ReviewService {
     public Long save(final CreateReviewRequest request) {
 
         validateStarPoint(request.starPoint());
+        validateExistHospital(request.targetHospital());
 
         //엔티티 조회
         final Member member = memberService.findById(request.memberId());
@@ -47,6 +51,12 @@ public class ReviewService {
 
         reviewRepository.save(review);
         return review.getId();
+    }
+
+    private void validateExistHospital(final String targetHospital) {
+        if (hospitalRepository.findByName(targetHospital).size() == 0) {
+            throw new NullHospitalException("존재하지 않는 병원입니다.");
+        }
     }
 
     private void validateStarPoint(final int starPoint) {
