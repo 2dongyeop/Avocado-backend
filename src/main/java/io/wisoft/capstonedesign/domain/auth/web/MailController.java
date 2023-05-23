@@ -7,13 +7,14 @@ import io.wisoft.capstonedesign.domain.auth.application.EmailService;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 @Tag(name = "이메일 인증")
 @RestController
@@ -21,17 +22,28 @@ import java.util.concurrent.ExecutionException;
 public class MailController {
 
     private final EmailService emailService;
+    @Qualifier("asyncExecutor") private final ThreadPoolTaskExecutor executor;
 
     @SwaggerApi(summary = "이메일 인증 코드 전송", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
     @PostMapping("/mail/certification-code")
     public ResponseEntity<String> sendCertificationCode(@RequestBody final MailObject mailObject) {
         final CompletableFuture<String> future = CompletableFuture.supplyAsync(
+                () -> emailService.sendCertificationCode(mailObject.email()), executor);
+
+        final String code = future.join();
+        return ResponseEntity.ok(code);
+    }
+
+    @PostMapping("/mail/certification-code-with-basic-executor")
+    public ResponseEntity<String> sendCertificationCodeWithBasicExecutor(@RequestBody final MailObject mailObject) {
+        final CompletableFuture<String> future = CompletableFuture.supplyAsync(
                 () -> emailService.sendCertificationCode(mailObject.email()));
 
         final String code = future.join();
         return ResponseEntity.ok(code);
     }
+
 
     @SwaggerApi(summary = "이메일 인증", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
