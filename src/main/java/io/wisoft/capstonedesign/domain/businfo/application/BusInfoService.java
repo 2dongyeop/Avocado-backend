@@ -52,7 +52,6 @@ public class BusInfoService {
 
     public List<BusInfo> findByArea(final String area) {
 
-        validateArea(area);
         final List<BusInfo> busInfoList = busInfoRepository.findByArea(BusArea.valueOf(area));
 
         if (busInfoList.size() == 0) {
@@ -60,20 +59,4 @@ public class BusInfoService {
         }
         return busInfoList;
     }
-
-    private boolean validateArea(final String area) {
-
-        final Iterator<BusArea> iterator = Arrays.stream(BusArea.values()).iterator();
-
-        while (iterator.hasNext()) {
-            BusArea busArea = iterator.next();
-
-            if (busArea.getCode().equals(area.toUpperCase())) {
-                return true;
-            }
-        }
-        throw new IllegalValueException("일치하는 BusArea가 없습니다.");
-    }
-
-
 }

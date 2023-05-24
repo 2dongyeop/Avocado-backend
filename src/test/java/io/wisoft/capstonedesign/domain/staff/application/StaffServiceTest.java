@@ -7,11 +7,8 @@ import io.wisoft.capstonedesign.domain.auth.web.dto.CertificateMailRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
-import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffHospitalRequest;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPasswordRequest;
-import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPhotoPathRequest;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -211,7 +208,7 @@ public class StaffServiceTest {
     }
 
     @Test
-    public void 의료진_프로필사진_수정() throws Exception {
+    public void updateStaff_success() throws Exception {
 
         //given -- 조건
 
@@ -244,110 +241,20 @@ public class StaffServiceTest {
                 .dept("DENTAL")
                 .build();
 
-        //when -- 동작
         final Long signUpId = authService.signUpStaff(request);
         final Staff staff = staffService.findById(signUpId);
 
         //when -- 동작
-        final String newPhotoPath = "새로운사진경로";
-        final UpdateStaffPhotoPathRequest request2 = new UpdateStaffPhotoPathRequest(newPhotoPath);
-        staffService.uploadPhotoPath(staff.getId(), request2);
+        final String newHospital = "";
+        final String newPhotoPath = "newPhotoPath";
+
+        staffService.updateStaff(staff.getId(), newHospital, newPhotoPath);
 
         //then -- 검증
+        Assertions.assertThat(staff.getHospital().getName()).isNotEqualTo(newHospital);
         Assertions.assertThat(staff.getStaffPhotoPath()).isEqualTo(newPhotoPath);
     }
 
-    @Test
-    public void 의료진_병원_수정() throws Exception {
-
-        //given -- 조건
-        final String email = "email@naver.com";
-
-        //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
-
-        //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
-        em.persist(hospital);
-
-        //의료진 가입 요청
-        final CreateStaffRequest request = CreateStaffRequest.builder()
-                .hospitalId(hospital.getId())
-                .name("staff1")
-                .email(email)
-                .password1("password")
-                .password2("password")
-                .licensePath("license")
-                .dept("DENTAL")
-                .build();
-
-        //when -- 동작
-        final Long signUpId = authService.signUpStaff(request);
-
-        //when -- 동작
-        String hospitalName = "서울대병원";
-        final UpdateStaffHospitalRequest request2 = new UpdateStaffHospitalRequest(hospitalName);
-        staffService.updateStaffHospital(signUpId, request2);
-
-        //then -- 검증
-        final Staff getStaff = staffService.findById(signUpId);
-        Assertions.assertThat(getStaff.getHospital().getName()).isEqualTo(hospitalName);
-    }
-
-    @Test
-    public void 의료진_병원_수정_실패() throws Exception {
-
-        //given -- 조건
-        final String email = "email@naver.com";
-
-        //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
-
-        //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
-        em.persist(hospital);
-
-        //의료진 가입 요청
-        final CreateStaffRequest request = CreateStaffRequest.builder()
-                .hospitalId(hospital.getId())
-                .name("staff1")
-                .email(email)
-                .password1("password")
-                .password2("password")
-                .licensePath("license")
-                .dept("DENTAL")
-                .build();
-
-        final Long signUpId = authService.signUpStaff(request);
-        final Staff staff = staffService.findById(signUpId);
-
-        //when -- 동작
-        String hospitalName = "not-exist-hospital";
-        final UpdateStaffHospitalRequest request2 = new UpdateStaffHospitalRequest(hospitalName);
-
-        //then -- 검증
-        assertThrows(NullHospitalException.class, () -> {
-            staffService.updateStaffHospital(staff.getId(), request2);
-        });
-    }
 
     @Test
     public void 의료진_탈퇴() throws Exception {
