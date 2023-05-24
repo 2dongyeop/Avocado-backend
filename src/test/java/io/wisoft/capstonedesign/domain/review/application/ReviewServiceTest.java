@@ -41,7 +41,7 @@ public class ReviewServiceTest {
                 .build();
         em.persist(member);
 
-        final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
 
         //when -- 동작
         final Long saveId = reviewService.save(request);
@@ -67,7 +67,7 @@ public class ReviewServiceTest {
         em.persist(member);
 
         //리뷰 생성
-        final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
         final Long saveId = reviewService.save(request);
 
         //when -- 동작
@@ -94,7 +94,7 @@ public class ReviewServiceTest {
         em.persist(member);
 
         //리뷰 생성
-        final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
         final Long saveId = reviewService.save(request);
 
         //when -- 동작
@@ -142,7 +142,7 @@ public class ReviewServiceTest {
                 .build();
         em.persist(member);
 
-        final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
         final Long saveId = reviewService.save(request);
 
         //when -- 동작
@@ -166,7 +166,7 @@ public class ReviewServiceTest {
                 .build();
         em.persist(member);
 
-        final CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        final CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
         final Long saveId = reviewService.save(request1);
         final Review review = reviewService.findById(saveId);
 
@@ -222,7 +222,7 @@ public class ReviewServiceTest {
         em.persist(member);
 
         //리뷰생성
-        final CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        final CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
         final Long saveId = reviewService.save(request1);
         final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
@@ -249,7 +249,7 @@ public class ReviewServiceTest {
         em.persist(member);
 
         //리뷰생성
-        final CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        final CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
         final Long saveId = reviewService.save(request1);
         final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 

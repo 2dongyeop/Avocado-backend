@@ -6,13 +6,12 @@ import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPasswordRequest;
-import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPhotoPathRequest;
-import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffHospitalRequest;
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -44,24 +43,24 @@ public class StaffService {
         }
     }
 
+
     /**
-     * 의료진 프로필사진 수정 및 업로드
+     * 의료진 정보 수정 - 프로필사진 or 병원
      */
     @Transactional
-    public void uploadPhotoPath(final Long staffId, final UpdateStaffPhotoPathRequest request) {
+    public void updateStaff(final Long staffId, final String hospitalName, final String photoPath) {
 
         final Staff staff = findById(staffId);
-        staff.updatePhotoPath(request.photoPath());
+
+        if (StringUtils.hasText(hospitalName)) {
+            staff.updateHospital(hospitalService.findByHospitalName(hospitalName));
+        }
+
+        if (StringUtils.hasText(photoPath)) {
+            staff.updatePhotoPath(photoPath);
+        }
     }
 
-
-    /* 의료진 병원 업로드 */
-    @Transactional
-    public void updateStaffHospital(final Long staffId, final UpdateStaffHospitalRequest request) {
-
-        final Staff staff = findById(staffId);
-        staff.updateHospital(hospitalService.findByHospitalName(request.hospitalName()));
-    }
 
     /* 의료진 탈퇴 */
     @Transactional
@@ -69,7 +68,9 @@ public class StaffService {
         staffRepository.delete(findById(staffId));
     }
 
-    /** 상세 조회 */
+    /**
+     * 상세 조회
+     */
     public Staff findDetailById(final Long staffId) {
         return staffRepository.findDetailById(staffId).orElseThrow(NullStaffException::new);
     }

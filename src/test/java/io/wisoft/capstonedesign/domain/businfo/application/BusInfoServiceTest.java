@@ -98,7 +98,7 @@ public class BusInfoServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(IllegalValueException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             List<BusInfo> list = busInfoService.findByArea(area);
         });
     }

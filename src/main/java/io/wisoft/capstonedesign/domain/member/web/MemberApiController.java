@@ -36,7 +36,7 @@ public class MemberApiController {
     }
 
 
-    @SwaggerApi(summary = "회원 비밀번호 수정", implementation = UpdateMemberResponse.class)
+    @SwaggerApi(summary = "회원 비밀번호 변경", implementation = UpdateMemberResponse.class)
     @SwaggerApiFailWithAuth
     @PatchMapping("/api/members/{id}/password")
     public UpdateMemberResponse updateMemberPassword(
@@ -50,32 +50,20 @@ public class MemberApiController {
     }
 
 
-    @SwaggerApi(summary = "회원 닉네임 수정", implementation = UpdateMemberResponse.class)
+    @SwaggerApi(summary = "회원 정보 수정", implementation = UpdateMemberResponse.class)
     @SwaggerApiFailWithAuth
-    @PatchMapping("/api/members/{id}/nickname")
-    public UpdateMemberResponse updateMemberNickname(
+    @PatchMapping("/api/members/{id}")
+    public UpdateMemberResponse updateMember(
             @PathVariable("id") final Long id,
-            @RequestBody @Valid final UpdateMemberNicknameRequest request) {
+            @RequestParam(value = "photoPath", required = false) final String photoPath,
+            @RequestParam(value = "nickname", required = false) final String nickname) {
 
-        memberService.updateMemberNickname(id, request);
+        memberService.updateMember(id, photoPath, nickname);
         final Member member = memberService.findById(id);
 
         return new UpdateMemberResponse(member.getId());
     }
 
-
-    @SwaggerApi(summary = "회원 프로필사진 업로드 혹은 수정", implementation = UpdateMemberResponse.class)
-    @SwaggerApiFailWithAuth
-    @PatchMapping("/api/members/{id}/photo")
-    public UpdateMemberResponse updateMemberPhotoPath(
-            @PathVariable("id") final Long id,
-            @RequestBody @Valid final UpdateMemberPhotoPathRequest request) {
-
-        memberService.uploadPhotoPath(id, request);
-        final Member member = memberService.findById(id);
-
-        return new UpdateMemberResponse(member.getId());
-    }
 
 
     @SwaggerApi(summary = "회원 탈퇴", implementation = DeleteMemberResponse.class)

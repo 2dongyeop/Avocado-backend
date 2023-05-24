@@ -5,11 +5,14 @@ import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,14 +21,15 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
     private Long id;
 
     @Column(name = "board_title", nullable = false)
     private String title;
 
-    @Column(name = "board_body", nullable = false, columnDefinition="TEXT")
+    @Column(name = "board_body", nullable = false, columnDefinition = "TEXT")
     private String body;
 
     @Column(name = "board_photo_path")
@@ -98,7 +102,6 @@ public class Board extends BaseEntity {
      * 게시글 제목 및 본문 수정
      */
     public void updateTitleBody(final String newTitle, final String newBody) {
-
         this.title = newTitle;
         this.body = newBody;
         this.updateEntity();
