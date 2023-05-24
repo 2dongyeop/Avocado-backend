@@ -37,7 +37,7 @@ public class StaffApiController {
     }
 
 
-    @SwaggerApi(summary = "의료진 비밀번호 수정", implementation = UpdateStaffResponse.class)
+    @SwaggerApi(summary = "의료진 비밀번호 변경", implementation = UpdateStaffResponse.class)
     @SwaggerApiFailWithAuth
     @PatchMapping("/api/staff/{id}/password")
     public UpdateStaffResponse updateStaffPassword(
@@ -51,28 +51,15 @@ public class StaffApiController {
     }
 
 
-    @SwaggerApi(summary = "의료진 프로필사진 업로드", implementation = UpdateStaffResponse.class)
+    @SwaggerApi(summary = "의료진 정보 수정", implementation = UpdateStaffResponse.class)
     @SwaggerApiFailWithAuth
-    @PatchMapping("/api/staff/{id}/photo")
-    public UpdateStaffResponse uploadStaffPhotoPath(
+    @PatchMapping("/api/staff/{id}")
+    public UpdateStaffResponse updateStaff(
             @PathVariable("id") final Long id,
-            @RequestBody @Valid final UpdateStaffPhotoPathRequest request) {
+            @RequestParam(value = "hospitalName", required = false) final String hospitalName,
+            @RequestParam(value = "photoPath", required = false) final String photoPath) {
 
-        staffService.uploadPhotoPath(id, request);
-        final Staff staff = staffService.findById(id);
-
-        return new UpdateStaffResponse(staff.getId());
-    }
-
-
-    @SwaggerApi(summary = "의료진 병원 변경", implementation = UpdateStaffResponse.class)
-    @SwaggerApiFailWithAuth
-    @PatchMapping("/api/staff/{id}/hospital")
-    public UpdateStaffResponse updateStaffHospital(
-            @PathVariable("id") final Long id,
-            @RequestBody @Valid final UpdateStaffHospitalRequest request) {
-
-        staffService.updateStaffHospital(id, request);
+        staffService.updateStaff(id, hospitalName, photoPath);
         final Staff staff = staffService.findById(id);
 
         return new UpdateStaffResponse(staff.getId());

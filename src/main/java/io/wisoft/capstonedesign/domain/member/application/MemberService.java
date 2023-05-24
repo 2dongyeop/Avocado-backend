@@ -9,6 +9,7 @@ import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final EncryptHelper encryptHelper;
+
 
     /*
      * 회원 비밀번호 수정
@@ -31,7 +33,6 @@ public class MemberService {
 
         member.updatePassword(encryptHelper.encrypt(request.newPassword()));
     }
-
     private void validateMemberPassword(final Member member, final UpdateMemberPasswordRequest request) {
 
         if (!encryptHelper.isMatch(request.oldPassword(), member.getPassword())) {
@@ -40,25 +41,22 @@ public class MemberService {
     }
 
 
-    /* 회원 닉네임 수정 */
-    @Transactional
-    public void updateMemberNickname(final Long memberId, final UpdateMemberNicknameRequest request) {
-
-        final Member member = findById(memberId);
-        member.updateNickname(request.nickname());
-    }
-
-
-    /*
-     * 회원 프로필사진 업로드 혹은 수정
+    /**
+     * 회원 정보 수정 - 프로필 이미지 or 닉네임
      */
     @Transactional
-    public void uploadPhotoPath(final Long memberId, final UpdateMemberPhotoPathRequest request) {
+    public void updateMember(final Long memberId, final String photoPath, final String nickname) {
 
         final Member member = findById(memberId);
-        member.uploadPhotoPath(request.photoPath());
-    }
 
+        if (StringUtils.hasText(photoPath)) {
+            member.uploadPhotoPath(photoPath);
+        }
+
+        if (StringUtils.hasText(nickname)) {
+            member.updateNickname(nickname);
+        }
+    }
 
     /* 회원 탈퇴 */
     @Transactional
