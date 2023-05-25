@@ -21,14 +21,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 public class HealthInfoServiceTest {
-    @Autowired
-    StaffService staffService;
+    @Autowired StaffService staffService;
     @Autowired HealthInfoService healthInfoService;
 
     @Test
     public void 건강정보_저장() throws Exception {
         //given -- 조건
-        final CreateHealthInfoRequest request = new CreateHealthInfoRequest(1L, "안경 제대로 쓰기", "OPHTHALMOLOGY", "경로");
+        final CreateHealthInfoRequest request = getCreateHealthInfoRequest();
 
         //when -- 동작
         final Long saveId = healthInfoService.save(request);
@@ -43,7 +42,7 @@ public class HealthInfoServiceTest {
     @Test
     public void 건강정보_삭제() throws Exception {
         //given -- 조건
-        final CreateHealthInfoRequest request = new CreateHealthInfoRequest(1L, "안경 제대로 쓰기", "OPHTHALMOLOGY", "경로");
+        final CreateHealthInfoRequest request = getCreateHealthInfoRequest();
 
         final Long saveId = healthInfoService.save(request);
 
@@ -56,10 +55,12 @@ public class HealthInfoServiceTest {
         });
     }
 
+
+
     @Test
     public void 건강정보_삭제요청_중복() throws Exception {
         //given -- 조건
-        final CreateHealthInfoRequest request = new CreateHealthInfoRequest(1L, "안경 제대로 쓰기", "OPHTHALMOLOGY", "경로");
+        final CreateHealthInfoRequest request = getCreateHealthInfoRequest();
         final Long saveId = healthInfoService.save(request);
 
         //when -- 동작
@@ -73,7 +74,7 @@ public class HealthInfoServiceTest {
     @Test
     public void 건강정보_단건조회_실패() throws Exception {
         //given -- 조건
-        final CreateHealthInfoRequest request = new CreateHealthInfoRequest(1L, "안경 제대로 쓰기", "OPHTHALMOLOGY", "경로");
+        final CreateHealthInfoRequest request = getCreateHealthInfoRequest();
         final Long saveId = healthInfoService.save(request);
 
         //when -- 동작
@@ -123,5 +124,9 @@ public class HealthInfoServiceTest {
 
         //then -- 검증
         Assertions.assertThat(list.size()).isEqualTo(2);
+    }
+
+    private static CreateHealthInfoRequest getCreateHealthInfoRequest() {
+        return new CreateHealthInfoRequest(1L, "안경 제대로 쓰기", "OPHTHALMOLOGY", "경로");
     }
 }

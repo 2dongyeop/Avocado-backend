@@ -34,25 +34,15 @@ public class MemberServiceTest {
         final String email = "email@naver.com";
 
         //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
+        sendCertificationCodeAndCertificateCode(email);
 
         //회원가입 요청
-        final CreateMemberRequest request = CreateMemberRequest.builder()
-                .nickname("test1")
-                .email(email)
-                .password1("1111")
-                .password2("1111")
-                .phonenumber("0000")
-                .build();
+        final CreateMemberRequest request = getCreateMemberRequest(email);
 
         final Long signUpId = authService.signUpMember(request);
 
         //when -- 동작
-        Member member = memberService.findById(signUpId);
+        final Member member = memberService.findById(signUpId);
 
         //then -- 검증
         Assertions.assertThat(member).isNotNull();
@@ -65,20 +55,10 @@ public class MemberServiceTest {
         final String email = "email@naver.com";
 
         //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
+        sendCertificationCodeAndCertificateCode(email);
 
         //회원가입 요청
-        final CreateMemberRequest request = CreateMemberRequest.builder()
-                .nickname("test1")
-                .email(email)
-                .password1("1111")
-                .password2("1111")
-                .phonenumber("0000")
-                .build();
+        final CreateMemberRequest request = getCreateMemberRequest(email);
 
         final Long signUpId = authService.signUpMember(request);
 
@@ -95,20 +75,10 @@ public class MemberServiceTest {
         final String email = "email@naver.com";
 
         //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
+        sendCertificationCodeAndCertificateCode(email);
 
         //회원가입 요청
-        final CreateMemberRequest request = CreateMemberRequest.builder()
-                .nickname("test1")
-                .email(email)
-                .password1("1111")
-                .password2("1111")
-                .phonenumber("0000")
-                .build();
+        final CreateMemberRequest request = getCreateMemberRequest(email);
 
         final Long signUpId = authService.signUpMember(request);
 
@@ -129,21 +99,10 @@ public class MemberServiceTest {
 
         final String email = "email@naver.com";
 
-        //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
+        sendCertificationCodeAndCertificateCode(email);
 
         //회원가입 요청
-        final CreateMemberRequest request = CreateMemberRequest.builder()
-                .nickname("test1")
-                .email(email)
-                .password1("1111")
-                .password2("1111")
-                .phonenumber("0000")
-                .build();
+        final CreateMemberRequest request = getCreateMemberRequest(email);
 
         final Long signUpId = authService.signUpMember(request);
 
@@ -165,20 +124,10 @@ public class MemberServiceTest {
         final String email = "email@naver.com";
 
         //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
+        sendCertificationCodeAndCertificateCode(email);
 
         //회원가입 요청
-        final CreateMemberRequest request = CreateMemberRequest.builder()
-                .nickname("test1")
-                .email(email)
-                .password1("1111")
-                .password2("1111")
-                .phonenumber("0000")
-                .build();
+        final CreateMemberRequest request = getCreateMemberRequest(email);
 
         final Long signUpId = authService.signUpMember(request);
 
@@ -199,20 +148,10 @@ public class MemberServiceTest {
         final String email = "email@naver.com";
 
         //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
+        sendCertificationCodeAndCertificateCode(email);
 
         //회원가입 요청
-        final CreateMemberRequest request = CreateMemberRequest.builder()
-                .nickname("test1")
-                .email(email)
-                .password1("1111")
-                .password2("1111")
-                .phonenumber("0000")
-                .build();
+        final CreateMemberRequest request = getCreateMemberRequest(email);
 
         final Long signUpId = authService.signUpMember(request);
 
@@ -224,4 +163,24 @@ public class MemberServiceTest {
             Member member1 = memberService.findById(signUpId);
         });
     }
+
+    private void sendCertificationCodeAndCertificateCode(final String email) {
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+    }
+
+    private static CreateMemberRequest getCreateMemberRequest(final String email) {
+        return CreateMemberRequest.builder()
+                .nickname("test1")
+                .email(email)
+                .password1("1111")
+                .password2("1111")
+                .phonenumber("0000")
+                .build();
+    }
+
 }

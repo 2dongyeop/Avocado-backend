@@ -24,11 +24,11 @@ public class ReviewRepositoryTest {
     @Test
     public void paging() throws Exception {
         //given -- 조건
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
+        final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
-        Page<Review> page = reviewRepository.findByUsingPaging(request);
-        List<Review> content = page.getContent();
+        final Page<Review> page = reviewRepository.findByUsingPaging(request);
+        final List<Review> content = page.getContent();
 
         //then -- 검증
         assertThat(content.size()).isEqualTo(3); //콘텐트 사이즈

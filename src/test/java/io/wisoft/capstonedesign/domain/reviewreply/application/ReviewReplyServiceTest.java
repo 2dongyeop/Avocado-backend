@@ -8,6 +8,7 @@ import io.wisoft.capstonedesign.domain.reviewreply.web.dto.UpdateReviewReplyRequ
 import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewReplyException;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.GeneratedValue;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static io.wisoft.capstonedesign.global.data.MemberTestData.getDefaultMember;
+import static io.wisoft.capstonedesign.global.data.ReviewTestData.getDefaultReview;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -30,31 +33,20 @@ public class ReviewReplyServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Review review = Review.builder()
-                .member(member)
-                .title("good")
-                .body("good hospital")
-                .starPoint(5)
-                .target_hospital("아보카도")
-                .build();
+        final Review review = getDefaultReview(member);
         em.persist(review);
 
-        CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "저도 가봐야겠네요");
+        final CreateReviewReplyRequest request = getCreateReviewReplyRequest(member, review, "저도 가봐야겠네요");
 
         //when -- 동작
-        Long saveId = reviewReplyService.save(request);
+        final Long saveId = reviewReplyService.save(request);
 
         //then -- 검증
-        ReviewReply reviewReply = reviewReplyService.findById(saveId);
+        final ReviewReply reviewReply = reviewReplyService.findById(saveId);
         Assertions.assertThat(reviewReply.getReply()).isEqualTo(request.reply());
     }
 
@@ -63,26 +55,15 @@ public class ReviewReplyServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Review review = Review.builder()
-                .member(member)
-                .title("good")
-                .body("good hospital")
-                .starPoint(5)
-                .target_hospital("아보카도")
-                .build();
+        final Review review = getDefaultReview(member);
         em.persist(review);
 
-        CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "저도 가봐야겠네요");
-        Long saveId = reviewReplyService.save(request);
+        final CreateReviewReplyRequest request = getCreateReviewReplyRequest(member, review, "저도 가봐야겠네요");
+        final Long saveId = reviewReplyService.save(request);
 
         //when -- 동작
         reviewReplyService.deleteReviewReply(saveId);
@@ -98,26 +79,15 @@ public class ReviewReplyServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Review review = Review.builder()
-                .member(member)
-                .title("good")
-                .body("good hospital")
-                .starPoint(5)
-                .target_hospital("아보카도")
-                .build();
+        final Review review = getDefaultReview(member);
         em.persist(review);
 
-        CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "저도 가봐야겠네요");
-        Long saveId = reviewReplyService.save(request);
+        final CreateReviewReplyRequest request = getCreateReviewReplyRequest(member, review, "저도 가봐야겠네요");
+        final Long saveId = reviewReplyService.save(request);
 
         //when -- 동작
         //then -- 검증
@@ -133,7 +103,7 @@ public class ReviewReplyServiceTest {
 
         //given -- 조건
         //회원 생성
-        Member member = Member.builder()
+        final Member member = Member.builder()
                 .nickname("nick1")
                 .email("email1")
                 .password("pass1")
@@ -142,22 +112,16 @@ public class ReviewReplyServiceTest {
         em.persist(member);
 
         //병원 생성
-        Review review = Review.builder()
-                .member(member)
-                .title("good")
-                .body("good hospital")
-                .starPoint(5)
-                .target_hospital("아보카도")
-                .build();
+        final Review review = getDefaultReview(member);
         em.persist(review);
 
-        CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "저도 가봐야겠네요");
+        final CreateReviewReplyRequest request = getCreateReviewReplyRequest(member, review, "저도 가봐야겠네요");
 
         //when -- 동작
-        Long saveId = reviewReplyService.save(request);
+        final Long saveId = reviewReplyService.save(request);
 
         //when -- 동작
-        ReviewReply reviewReply = reviewReplyService.findById(saveId);
+        final ReviewReply reviewReply = reviewReplyService.findById(saveId);
 
         //then -- 검증
         Assertions.assertThat(reviewReply.getReply()).isEqualTo("저도 가봐야겠네요");
@@ -168,28 +132,16 @@ public class ReviewReplyServiceTest {
     public void 리뷰_댓글_단건조회_실패() throws Exception {
         //given -- 조건
         //회원 생성
-        Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Review review = Review.builder()
-                .member(member)
-                .title("good")
-                .body("good hospital")
-                .starPoint(5)
-                .target_hospital("아보카도")
-                .build();
+        final Review review = getDefaultReview(member);
         em.persist(review);
 
-        CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "저도 가봐야겠네요");
+        final CreateReviewReplyRequest request = getCreateReviewReplyRequest(member, review, "저도 가봐야겠네요");
 
-        //when -- 동작
-        Long saveId = reviewReplyService.save(request);
+        final Long saveId = reviewReplyService.save(request);
 
         //when -- 동작
         //then -- 검증
@@ -203,30 +155,19 @@ public class ReviewReplyServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Review review = Review.builder()
-                .member(member)
-                .title("good")
-                .body("good hospital")
-                .starPoint(5)
-                .target_hospital("아보카도")
-                .build();
+        final Review review = getDefaultReview(member);
         em.persist(review);
 
-        CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "멋져요");
-        Long saveId = reviewReplyService.save(request);
+        final CreateReviewReplyRequest request = getCreateReviewReplyRequest(member, review, "멋져요");
+        final Long saveId = reviewReplyService.save(request);
 
         //when -- 동작
-        ReviewReply reviewReply = reviewReplyService.findById(saveId);
-        UpdateReviewReplyRequest request2 = new UpdateReviewReplyRequest("짱 멋져요");
+        final ReviewReply reviewReply = reviewReplyService.findById(saveId);
+        final UpdateReviewReplyRequest request2 = new UpdateReviewReplyRequest("짱 멋져요");
         reviewReplyService.updateReply(reviewReply.getId(), request2);
 
         //then -- 검증
@@ -239,30 +180,19 @@ public class ReviewReplyServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Review review = Review.builder()
-                .member(member)
-                .title("good")
-                .body("good hospital")
-                .starPoint(5)
-                .target_hospital("아보카도")
-                .build();
+        final Review review = getDefaultReview(member);
         em.persist(review);
 
-        CreateReviewReplyRequest request = new CreateReviewReplyRequest(member.getId(), review.getId(), "멋져요");
-        Long saveId = reviewReplyService.save(request);
+        final CreateReviewReplyRequest request = getCreateReviewReplyRequest(member, review, "멋져요");
+        final Long saveId = reviewReplyService.save(request);
 
         //when -- 동작
-        ReviewReply reviewReply = reviewReplyService.findById(saveId);
-        UpdateReviewReplyRequest request2 = new UpdateReviewReplyRequest(null);
+        final ReviewReply reviewReply = reviewReplyService.findById(saveId);
+        final UpdateReviewReplyRequest request2 = new UpdateReviewReplyRequest(null);
 
 
         //then -- 검증
@@ -278,10 +208,15 @@ public class ReviewReplyServiceTest {
 
 
         //when -- 동작
-        List<ReviewReply> list = reviewReplyService.findByReviewId(1L);
+        final List<ReviewReply> list = reviewReplyService.findByReviewId(1L);
 
         //then -- 검증
         Assertions.assertThat(list).isNotNull();
         Assertions.assertThat(list.size()).isEqualTo(2);
     }
+
+    private static CreateReviewReplyRequest getCreateReviewReplyRequest(final Member member, final Review review, final String comment) {
+        return new CreateReviewReplyRequest(member.getId(), review.getId(), comment);
+    }
+
 }

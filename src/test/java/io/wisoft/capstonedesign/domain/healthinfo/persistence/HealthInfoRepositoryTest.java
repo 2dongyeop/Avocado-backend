@@ -22,11 +22,11 @@ public class HealthInfoRepositoryTest {
     @Test
     public void findByAllDept() throws Exception {
         //given -- 조건
-        HospitalDept hospitalDept = HospitalDept.DENTAL;
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
+        final HospitalDept hospitalDept = HospitalDept.DENTAL;
+        final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
-        List<HealthInfo> list = healthInfoRepository.findAllByDeptUsingPaging(hospitalDept, request).getContent();
+        final List<HealthInfo> list = healthInfoRepository.findAllByDeptUsingPaging(hospitalDept, request).getContent();
 
         //then -- 검증
         assertThat(list.size()).isEqualTo(2);
@@ -35,11 +35,11 @@ public class HealthInfoRepositoryTest {
     @Test
     public void paging() throws Exception {
         //given -- 조건
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
+        final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
-        Page<HealthInfo> page = healthInfoRepository.findByUsingPaging(request);
-        List<HealthInfo> content = page.getContent();
+        final Page<HealthInfo> page = healthInfoRepository.findByUsingPaging(request);
+        final List<HealthInfo> content = page.getContent();
 
         //then -- 검증
         assertThat(content.size()).isEqualTo(2); //콘텐트 사이즈

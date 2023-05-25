@@ -26,11 +26,11 @@ public class MemberMyPageRepositoryTest {
     @Test
     public void findReviewsByMemberIdUsingPaging() throws Exception {
         //given -- 조건
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
+        final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
-        Page<Review> page = memberMyPageRepository.findReviewsByMemberIdUsingPaging(1L, request);
-        List<Review> list = page.getContent();
+        final Page<Review> page = memberMyPageRepository.findReviewsByMemberIdUsingPaging(1L, request);
+        final List<Review> list = page.getContent();
 
         //then -- 검증
         assertThat(list.size()).isEqualTo(1);
@@ -44,11 +44,11 @@ public class MemberMyPageRepositoryTest {
     @Test
     public void findBoardsByMemberIdUsingPaging() throws Exception {
         //given -- 조건
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
+        final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
-        Page<Board> page = memberMyPageRepository.findBoardsByMemberIdUsingPaging(1L, request);
-        List<Board> list = page.getContent();
+        final Page<Board> page = memberMyPageRepository.findBoardsByMemberIdUsingPaging(1L, request);
+        final List<Board> list = page.getContent();
 
         //then -- 검증
         assertThat(list.size()).isEqualTo(1);
@@ -62,10 +62,10 @@ public class MemberMyPageRepositoryTest {
     @Test
     public void findAppointmentsByMemberId() throws Exception {
         //given -- 조건
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
+        final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
-        List<Appointment> list = memberMyPageRepository.findAppointmentsByMemberId(1L);
+        final List<Appointment> list = memberMyPageRepository.findAppointmentsByMemberId(1L);
 
         //then -- 검증
         assertThat(list.size()).isEqualTo(2);
@@ -74,11 +74,11 @@ public class MemberMyPageRepositoryTest {
     @Test
     public void findPicksByMemberIdUsingPaging() throws Exception {
         //given -- 조건
-        PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
+        final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
-        Page<Pick> page = memberMyPageRepository.findPicksByMemberIdUsingPaging(1L, request);
-        List<Pick> list = page.getContent();
+        final Page<Pick> page = memberMyPageRepository.findPicksByMemberIdUsingPaging(1L, request);
+        final List<Pick> list = page.getContent();
 
         //then -- 검증
         assertThat(list.size()).isEqualTo(2);

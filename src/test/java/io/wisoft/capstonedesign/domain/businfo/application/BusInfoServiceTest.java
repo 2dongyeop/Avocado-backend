@@ -2,7 +2,6 @@ package io.wisoft.capstonedesign.domain.businfo.application;
 
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfo;
 import io.wisoft.capstonedesign.domain.businfo.web.dto.CreateBusInfoRequest;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBusInfoException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -25,13 +24,13 @@ public class BusInfoServiceTest {
     @Test
     public void 버스정보_등록() throws Exception {
         //given -- 조건
-        CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
+        final CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
 
         //when -- 동작
-        Long saveId = busInfoService.save(request);
+        final Long saveId = busInfoService.save(request);
 
         //then -- 검증
-        BusInfo busInfo = busInfoService.findById(saveId);
+        final BusInfo busInfo = busInfoService.findById(saveId);
 
         Assertions.assertThat(busInfo.getBusInfoPath()).isEqualTo(request.busInfoPath());
         Assertions.assertThat(busInfo.getArea().toString()).isEqualTo(request.area());
@@ -41,8 +40,8 @@ public class BusInfoServiceTest {
     public void 버스정보_삭제() throws Exception {
         //given -- 조건
 
-        CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
-        Long saveId = busInfoService.save(request);
+        final CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
+        final Long saveId = busInfoService.save(request);
 
         //when -- 동작
         busInfoService.delete(saveId);
@@ -68,7 +67,7 @@ public class BusInfoServiceTest {
     public void 버스정보_삭제요청_중복() throws Exception {
         //given -- 조건
 
-        CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
+        final CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
         Long saveId = busInfoService.save(request);
 
         //when -- 동작
@@ -84,7 +83,7 @@ public class BusInfoServiceTest {
         //given -- 조건
 
         //when -- 동작
-        List<BusInfo> list = busInfoService.findByArea("DAEJEON");
+        final List<BusInfo> list = busInfoService.findByArea("DAEJEON");
 
         //then -- 검증
         Assertions.assertThat(list.size()).isEqualTo(1);
@@ -94,12 +93,12 @@ public class BusInfoServiceTest {
     @DisplayName("Enum이 아닌 값을 넣어 찾을 수 없는 경우")
     public void findByArea_fail_NotEnum() throws Exception {
         //given -- 조건
-        String area = "HANBAT";
+        final String area = "HANBAT";
 
         //when -- 동작
         //then -- 검증
         assertThrows(IllegalArgumentException.class, () -> {
-            List<BusInfo> list = busInfoService.findByArea(area);
+            busInfoService.findByArea(area);
         });
     }
 }

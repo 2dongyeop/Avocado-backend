@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static io.wisoft.capstonedesign.global.data.HospitalTestData.getDefaultHospital;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -35,32 +36,14 @@ public class StaffServiceTest {
         //given -- 조건
         final String email = "email@naver.com";
 
-        //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
+        sendCertificationCodeAndCertificateCode(email);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //의료진 가입 요청
-        final CreateStaffRequest request = CreateStaffRequest.builder()
-                .hospitalId(hospital.getId())
-                .name("staff1")
-                .email(email)
-                .password1("password")
-                .password2("password")
-                .licensePath("license")
-                .dept("DENTAL")
-                .build();
+        final CreateStaffRequest request = getCreateStaffRequest(email, hospital);
 
         final Long signUpId = authService.signUpStaff(request);
 
@@ -78,31 +61,14 @@ public class StaffServiceTest {
         final String email = "email@naver.com";
 
         //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
+        sendCertificationCodeAndCertificateCode(email);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //의료진 가입 요청
-        final CreateStaffRequest request = CreateStaffRequest.builder()
-                .hospitalId(hospital.getId())
-                .name("staff1")
-                .email(email)
-                .password1("password")
-                .password2("password")
-                .licensePath("license")
-                .dept("DENTAL")
-                .build();
+        final CreateStaffRequest request = getCreateStaffRequest(email, hospital);
 
         final Long signUpId = authService.signUpStaff(request);
 
@@ -121,31 +87,14 @@ public class StaffServiceTest {
         final String email = "email@naver.com";
 
         //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
+        sendCertificationCodeAndCertificateCode(email);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //의료진 가입 요청
-        final CreateStaffRequest request = CreateStaffRequest.builder()
-                .hospitalId(hospital.getId())
-                .name("staff1")
-                .email(email)
-                .password1("password")
-                .password2("password")
-                .licensePath("license")
-                .dept("DENTAL")
-                .build();
+        final CreateStaffRequest request = getCreateStaffRequest(email, hospital);
 
         //when -- 동작
         final Long signUpId = authService.signUpStaff(request);
@@ -168,31 +117,14 @@ public class StaffServiceTest {
         final String email = "email@naver.com";
 
         //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
+        sendCertificationCodeAndCertificateCode(email);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //의료진 가입 요청
-        final CreateStaffRequest request = CreateStaffRequest.builder()
-                .hospitalId(hospital.getId())
-                .name("staff1")
-                .email(email)
-                .password1("password")
-                .password2("password")
-                .licensePath("license")
-                .dept("DENTAL")
-                .build();
+        final CreateStaffRequest request = getCreateStaffRequest(email, hospital);
 
         //when -- 동작
         final Long signUpId = authService.signUpStaff(request);
@@ -215,31 +147,14 @@ public class StaffServiceTest {
         final String email = "email@naver.com";
 
         //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
+        sendCertificationCodeAndCertificateCode(email);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //의료진 가입 요청
-        final CreateStaffRequest request = CreateStaffRequest.builder()
-                .hospitalId(hospital.getId())
-                .name("staff1")
-                .email(email)
-                .password1("password")
-                .password2("password")
-                .licensePath("license")
-                .dept("DENTAL")
-                .build();
+        final CreateStaffRequest request = getCreateStaffRequest(email, hospital);
 
         final Long signUpId = authService.signUpStaff(request);
         final Staff staff = staffService.findById(signUpId);
@@ -263,31 +178,14 @@ public class StaffServiceTest {
         final String email = "email@naver.com";
 
         //이메일 인증 코드 보내기
-        final String code = emailService.sendCertificationCode(email);
-
-        //이메일 인증
-        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
-        emailService.certificateEmail(mailRequest);
+        sendCertificationCodeAndCertificateCode(email);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //의료진 가입 요청
-        final CreateStaffRequest request = CreateStaffRequest.builder()
-                .hospitalId(hospital.getId())
-                .name("staff1")
-                .email(email)
-                .password1("password")
-                .password2("password")
-                .licensePath("license")
-                .dept("DENTAL")
-                .build();
+        final CreateStaffRequest request = getCreateStaffRequest(email, hospital);
 
         final Long signUpId = authService.signUpStaff(request);
 
@@ -299,4 +197,26 @@ public class StaffServiceTest {
             staffService.findById(signUpId);
         });
     }
+
+    private void sendCertificationCodeAndCertificateCode(final String email) {
+        //이메일 인증 코드 보내기
+        final String code = emailService.sendCertificationCode(email);
+
+        //이메일 인증
+        final CertificateMailRequest mailRequest = new CertificateMailRequest(email, code);
+        emailService.certificateEmail(mailRequest);
+    }
+
+    private static CreateStaffRequest getCreateStaffRequest(final String email, final Hospital hospital) {
+        return CreateStaffRequest.builder()
+                .hospitalId(hospital.getId())
+                .name("staff1")
+                .email(email)
+                .password1("password")
+                .password2("password")
+                .licensePath("license")
+                .dept("DENTAL")
+                .build();
+    }
+
 }
