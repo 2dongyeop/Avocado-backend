@@ -20,10 +20,10 @@ public class MemberRepositoryTest {
     @Test
     public void findByEmail() throws Exception {
         //given -- 조건
-        String email = "ldy_1204@naver.com";
+        final String email = "ldy_1204@naver.com";
 
         //when -- 동작
-        Member member = memberRepository.findByEmail(email).get();
+        final Member member = memberRepository.findByEmail(email).get();
 
         //then -- 검증
         assertThat(member.getNickname()).isEqualTo("이동엽");

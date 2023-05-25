@@ -19,35 +19,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static io.wisoft.capstonedesign.global.data.MemberTestData.getDefaultMember;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
 public class BoardServiceTest {
 
-    @Autowired EntityManager em;
-    @Autowired BoardService boardService;
+    @Autowired
+    EntityManager em;
+    @Autowired
+    BoardService boardService;
 
     @Test
     public void save_success() throws Exception {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
-        final CreateBoardRequest request = CreateBoardRequest.builder()
-                .memberId(member.getId())
-                .title("title")
-                .body("body")
-                .dept("OBSTETRICS")
-                .boardPhotoPath("path")
-                .build();
+        final CreateBoardRequest request = getCreateBoardRequest(member.getId());
 
         //when -- 동작
         final Long saveId = boardService.save(request);
@@ -63,21 +55,10 @@ public class BoardServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
-        final CreateBoardRequest request = CreateBoardRequest.builder()
-                .memberId(10102021L)  //Not Found Member
-                .title("title")
-                .body("body")
-                .dept("OBSTETRICS")
-                .boardPhotoPath("path")
-                .build();
+        final CreateBoardRequest request = getCreateBoardRequest(10102021L);
 
         //when -- 동작
         //then -- 검증
@@ -91,22 +72,11 @@ public class BoardServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //게시글 생성 및 저장
-        final CreateBoardRequest request = CreateBoardRequest.builder()
-                .memberId(member.getId())
-                .title("title")
-                .body("body")
-                .dept("OBSTETRICS")
-                .boardPhotoPath("path")
-                .build();
+        final CreateBoardRequest request = getCreateBoardRequest(member.getId());
 
         final Long saveId = boardService.save(request);
 
@@ -125,22 +95,11 @@ public class BoardServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //게시글 생성 및 저장
-        final CreateBoardRequest request = CreateBoardRequest.builder()
-                .memberId(member.getId())
-                .title("title")
-                .body("body")
-                .dept("OBSTETRICS")
-                .boardPhotoPath("path")
-                .build();
+        final CreateBoardRequest request = getCreateBoardRequest(member.getId());
         final Long saveId = boardService.save(request);
 
         //when -- 동작
@@ -156,22 +115,11 @@ public class BoardServiceTest {
     public void findById() throws Exception {
         //given -- 조건
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //게시글 생성 및 저장
-        final CreateBoardRequest request = CreateBoardRequest.builder()
-                .memberId(member.getId())
-                .title("title")
-                .body("body")
-                .dept("OBSTETRICS")
-                .boardPhotoPath("path")
-                .build();
+        final CreateBoardRequest request = getCreateBoardRequest(member.getId());
         final Long saveId = boardService.save(request);
 
         //when -- 동작
@@ -185,22 +133,11 @@ public class BoardServiceTest {
     public void findById_fail() throws Exception {
         //given -- 조건
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //게시글 생성 및 저장
-        final CreateBoardRequest request = CreateBoardRequest.builder()
-                .memberId(member.getId())
-                .title("title")
-                .body("body")
-                .dept("OBSTETRICS")
-                .boardPhotoPath("path")
-                .build();
+        final CreateBoardRequest request = getCreateBoardRequest(member.getId());
         boardService.save(request);
 
         //when -- 동작
@@ -215,22 +152,11 @@ public class BoardServiceTest {
 
         //given -- 조건
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //게시글 생성 및 저장
-        final CreateBoardRequest request1 = CreateBoardRequest.builder()
-                .memberId(member.getId())
-                .title("title")
-                .body("body")
-                .dept("OBSTETRICS")
-                .boardPhotoPath("path")
-                .build();
+        final CreateBoardRequest request1 = getCreateBoardRequest(member.getId());
         final Long saveId = boardService.save(request1);
 
         final UpdateBoardRequest request2 = new UpdateBoardRequest("newTitle", "newBody");
@@ -251,22 +177,11 @@ public class BoardServiceTest {
 
         //given -- 조건
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //게시글 생성 및 저장
-        final CreateBoardRequest request1 = CreateBoardRequest.builder()
-                .memberId(member.getId())
-                .title("title")
-                .body("body")
-                .dept("OBSTETRICS")
-                .boardPhotoPath("path")
-                .build();
+        final CreateBoardRequest request1 = getCreateBoardRequest(member.getId());
         final Long saveId = boardService.save(request1);
 
         final UpdateBoardRequest request2 = new UpdateBoardRequest(null, "본문2");
@@ -290,5 +205,9 @@ public class BoardServiceTest {
 
         //then -- 검증
         Assertions.assertThat(page.size()).isEqualTo(3);
+    }
+
+    private static CreateBoardRequest getCreateBoardRequest(final Long memberId) {
+        return CreateBoardRequest.builder().memberId(memberId).title("title").body("body").dept("OBSTETRICS").boardPhotoPath("path").build();
     }
 }

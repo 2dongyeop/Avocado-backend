@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static io.wisoft.capstonedesign.global.data.MemberTestData.getDefaultMember;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -33,15 +34,10 @@ public class ReviewServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
-        final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
+        final CreateReviewRequest request = getCreateReviewRequest(member, 5, "서울대병원");
 
         //when -- 동작
         final Long saveId = reviewService.save(request);
@@ -52,22 +48,16 @@ public class ReviewServiceTest {
         Assertions.assertThat(getReview.getStatus()).isEqualTo(ReviewStatus.WRITE);
     }
 
-    //리뷰삭제
     @Test
     public void 리뷰삭제() throws Exception {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //리뷰 생성
-        final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
+        final CreateReviewRequest request = getCreateReviewRequest(member, 5, "서울대병원");
         final Long saveId = reviewService.save(request);
 
         //when -- 동작
@@ -85,16 +75,11 @@ public class ReviewServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //리뷰 생성
-        final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
+        final CreateReviewRequest request = getCreateReviewRequest(member, 5, "서울대병원");
         final Long saveId = reviewService.save(request);
 
         //when -- 동작
@@ -111,12 +96,7 @@ public class ReviewServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
 
@@ -124,7 +104,7 @@ public class ReviewServiceTest {
         //then -- 검증
 
         assertThrows(IllegalValueException.class, () -> {
-            final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 10, "아보카도 병원", "사진_링크");
+            final CreateReviewRequest request = getCreateReviewRequest(member, 10, "아보카도 병원");
             Long saveId = reviewService.save(request);
         });
     }
@@ -134,15 +114,10 @@ public class ReviewServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
-        final CreateReviewRequest request = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
+        final CreateReviewRequest request = getCreateReviewRequest(member, 5, "서울대병원");
         final Long saveId = reviewService.save(request);
 
         //when -- 동작
@@ -158,15 +133,10 @@ public class ReviewServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
-        final CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
+        final CreateReviewRequest request1 = getCreateReviewRequest(member, 5, "서울대병원");
         final Long saveId = reviewService.save(request1);
         final Review review = reviewService.findById(saveId);
 
@@ -187,15 +157,10 @@ public class ReviewServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
-        final CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "아보카도 병원", "사진_링크");
+        final CreateReviewRequest request1 = getCreateReviewRequest(member, 5, "아보카도 병원");
         final Long saveId = reviewService.save(request1);
         final Review review = reviewService.findById(saveId);
 
@@ -213,16 +178,11 @@ public class ReviewServiceTest {
     public void 특정_병원의_리뷰_조회() throws Exception {
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1123")
-                .email("email1123")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //리뷰생성
-        final CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
+        final CreateReviewRequest request1 = getCreateReviewRequest(member, 5, "서울대병원");
         final Long saveId = reviewService.save(request1);
         final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
@@ -240,16 +200,11 @@ public class ReviewServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1123")
-                .email("email1123")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //리뷰생성
-        final CreateReviewRequest request1 = new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", 5, "서울대병원", "사진_링크");
+        final CreateReviewRequest request1 = getCreateReviewRequest(member, 5, "서울대병원");
         final Long saveId = reviewService.save(request1);
         final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
@@ -258,5 +213,9 @@ public class ReviewServiceTest {
         assertThrows(IllegalValueException.class, () -> {
             reviewService.findByTargetHospital("아보카두두병원", request);
         });
+    }
+
+    private static CreateReviewRequest getCreateReviewRequest(final Member member, final int starPoint, final String hospitalName) {
+        return new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", starPoint, hospitalName, "사진_링크");
     }
 }

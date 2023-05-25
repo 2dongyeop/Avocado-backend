@@ -13,19 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class AppointmentApiControllerTest {
 
-    @Autowired AppointmentApiController appointmentApiController;
+    @Autowired
+    AppointmentApiController appointmentApiController;
 
     @Test
     public void createAppointment_success() throws Exception {
         //given -- 조건
-        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
-                .memberId(1L)
-                .hospitalId(1L)
-                .dept("DENTAL")
-                .comment("test-comment")
-                .appointName("test-appointName")
-                .appointPhonenumber("test-phonenumber")
-                .build();
+        final CreateAppointmentRequest request = getCreateAppointmentRequest();
 
         //when -- 동작
         final CreateAppointmentResponse appointment = appointmentApiController.createAppointment(request);
@@ -34,17 +28,11 @@ public class AppointmentApiControllerTest {
         Assertions.assertThat(appointment.id()).isNotNull();
     }
 
+
     @Test
     public void deleteAppointment_success() throws Exception {
         //given -- 조건
-        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
-                .memberId(1L)
-                .hospitalId(1L)
-                .dept("DENTAL")
-                .comment("test-comment")
-                .appointName("test-appointName")
-                .appointPhonenumber("test-phonenumber")
-                .build();
+        final CreateAppointmentRequest request = getCreateAppointmentRequest();
 
         final CreateAppointmentResponse appointment = appointmentApiController.createAppointment(request);
 
@@ -58,24 +46,20 @@ public class AppointmentApiControllerTest {
     @Test
     public void updateAppointment_success() throws Exception {
         //given -- 조건
-        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
-                .memberId(1L)
-                .hospitalId(1L)
-                .dept("DENTAL")
-                .comment("test-comment")
-                .appointName("test-appointName")
-                .appointPhonenumber("test-phonenumber")
-                .build();
+        final CreateAppointmentRequest request = getCreateAppointmentRequest();
 
         final CreateAppointmentResponse appointment = appointmentApiController.createAppointment(request);
 
         //when -- 동작
-        UpdateAppointmentResponse response = appointmentApiController.updateAppointment(appointment.id(), UpdateAppointmentRequest.builder()
-                .dept("DENTAL")
-                .comment("update-comment")
-                .appointName("update-name")
-                .appointPhonenumber("update-phonenumber")
-                .build());
+        final UpdateAppointmentResponse response = appointmentApiController.updateAppointment(
+                appointment.id(),
+                UpdateAppointmentRequest.builder()
+                        .dept("DENTAL")
+                        .comment("update-comment")
+                        .appointName("update-name")
+                        .appointPhonenumber("update-phonenumber")
+                        .build()
+        );
 
 
         //then -- 검증
@@ -87,7 +71,19 @@ public class AppointmentApiControllerTest {
     public void appointment_success() throws Exception {
         //given -- 조건
 
-        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
+        final CreateAppointmentRequest request = getCreateAppointmentRequest();
+
+        final CreateAppointmentResponse appointment = appointmentApiController.createAppointment(request);
+
+        //when -- 동작
+        final Result result = appointmentApiController.appointment(appointment.id());
+
+        //then -- 검증
+        Assertions.assertThat(result).isNotNull();
+    }
+
+    private static CreateAppointmentRequest getCreateAppointmentRequest() {
+        return CreateAppointmentRequest.builder()
                 .memberId(1L)
                 .hospitalId(1L)
                 .dept("DENTAL")
@@ -95,13 +91,5 @@ public class AppointmentApiControllerTest {
                 .appointName("test-appointName")
                 .appointPhonenumber("test-phonenumber")
                 .build();
-
-        final CreateAppointmentResponse appointment = appointmentApiController.createAppointment(request);
-
-        //when -- 동작
-        Result result = appointmentApiController.appointment(appointment.id());
-
-        //then -- 검증
-        Assertions.assertThat(result).isNotNull();
     }
 }

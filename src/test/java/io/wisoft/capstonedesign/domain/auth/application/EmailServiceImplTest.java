@@ -1,6 +1,5 @@
 package io.wisoft.capstonedesign.domain.auth.application;
 
-import io.wisoft.capstonedesign.domain.auth.persistence.DBMailAuthentication;
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;

@@ -22,9 +22,8 @@ public class ReviewReplyRepositoryTest {
     public void findReviewReplyByReviewId() throws Exception {
         //given -- 조건
 
-
         //when -- 동작
-        List<ReviewReply> list = reviewReplyRepository.findByReviewId(1L);
+        final List<ReviewReply> list = reviewReplyRepository.findByReviewId(1L);
 
         //then -- 검증
         assertThat(list.size()).isEqualTo(2);
@@ -36,9 +35,8 @@ public class ReviewReplyRepositoryTest {
     public void findAllOrderByCreatedAtDesc() throws Exception {
         //given -- 조건
 
-
         //when -- 동작
-        List<ReviewReply> list = reviewReplyRepository.findAllOrderByCreatedAtDesc(1L);
+        final List<ReviewReply> list = reviewReplyRepository.findAllOrderByCreatedAtDesc(1L);
 
         //then -- 검증
         Assertions.assertThat(list).isNotNull();

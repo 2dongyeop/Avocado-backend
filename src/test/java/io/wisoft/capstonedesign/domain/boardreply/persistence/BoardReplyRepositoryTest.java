@@ -21,7 +21,7 @@ public class BoardReplyRepositoryTest {
         //given -- 조건
 
         //when -- 동작
-        List<BoardReply> list = boardReplyRepository.findByBoardIdOrderByCreateAsc();
+        final List<BoardReply> list = boardReplyRepository.findByBoardIdOrderByCreateAsc();
 
         //then -- 검증
         Assertions.assertThat(list.size()).isEqualTo(5);

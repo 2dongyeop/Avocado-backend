@@ -12,14 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static io.wisoft.capstonedesign.global.data.HospitalTestData.getDefaultHospital;
+import static io.wisoft.capstonedesign.global.data.MemberTestData.getDefaultMember;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
 public class PickServiceTest {
 
-    @Autowired
-    EntityManager em;
+    @Autowired EntityManager em;
     @Autowired PickService pickService;
 
     @Test
@@ -27,21 +28,11 @@ public class PickServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
@@ -60,21 +51,11 @@ public class PickServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
@@ -95,21 +76,11 @@ public class PickServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
@@ -129,21 +100,11 @@ public class PickServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
@@ -163,21 +124,11 @@ public class PickServiceTest {
     public void 찜하기_단건_조회_실패() throws Exception {
         //given -- 조건
         //회원 생성
-        Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());

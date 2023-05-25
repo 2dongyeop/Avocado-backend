@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static io.wisoft.capstonedesign.global.data.MemberTestData.getDefaultMember;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -26,21 +27,10 @@ public class BoardApiControllerTest {
     public void createBoard_success() throws Exception {
         //given -- 조건
 
-        final Member member = Member.builder()
-                .nickname("nickname")
-                .email("email")
-                .password("password")
-                .phoneNumber("phonenumber")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
-        final CreateBoardRequest request = CreateBoardRequest.builder()
-                .memberId(member.getId())
-                .title("title")
-                .body("body")
-                .dept("DENTAL")
-                .boardPhotoPath("path")
-                .build();
+        final CreateBoardRequest request = getCreateBoardRequest(member);
 
         //when -- 동작
         final CreateBoardResponse response = boardApiController.createBoard(request);
@@ -49,26 +39,16 @@ public class BoardApiControllerTest {
         Assertions.assertThat(response.id()).isNotNull();
     }
 
+
     @Test
     public void updateBoardTitleBody_success() throws Exception {
         //given -- 조건
-        final Member member = Member.builder()
-                .nickname("nickname")
-                .email("email")
-                .password("password")
-                .phoneNumber("phonenumber")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
-        final CreateBoardRequest request1 = CreateBoardRequest.builder()
-                .memberId(member.getId())
-                .title("title")
-                .body("body")
-                .dept("DENTAL")
-                .boardPhotoPath("path")
-                .build();
+        final CreateBoardRequest request1 = getCreateBoardRequest(member);
 
-        CreateBoardResponse response = boardApiController.createBoard(request1);
+        final CreateBoardResponse response = boardApiController.createBoard(request1);
 
         final UpdateBoardRequest request2 = new UpdateBoardRequest("newTitle", "newBody");
 
@@ -82,26 +62,15 @@ public class BoardApiControllerTest {
     @Test
     public void deleteBoard_success() throws Exception {
         //given -- 조건
-        final Member member = Member.builder()
-                .nickname("nickname")
-                .email("email")
-                .password("password")
-                .phoneNumber("phonenumber")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
-        final CreateBoardRequest request1 = CreateBoardRequest.builder()
-                .memberId(member.getId())
-                .title("title")
-                .body("body")
-                .dept("DENTAL")
-                .boardPhotoPath("path")
-                .build();
+        final CreateBoardRequest request1 = getCreateBoardRequest(member);
 
         final CreateBoardResponse createBoardResponse = boardApiController.createBoard(request1);
 
         //when -- 동작
-        DeleteBoardResponse deleteBoardResponse = boardApiController.deleteBoard(createBoardResponse.id());
+        final DeleteBoardResponse deleteBoardResponse = boardApiController.deleteBoard(createBoardResponse.id());
 
         //then -- 검증
         Assertions.assertThat(deleteBoardResponse.id()).isNotNull();
@@ -110,21 +79,10 @@ public class BoardApiControllerTest {
     @Test
     public void boardsUsingPaging_success() throws Exception {
         //given -- 조건
-        final Member member = Member.builder()
-                .nickname("nickname")
-                .email("email")
-                .password("password")
-                .phoneNumber("phonenumber")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
-        final CreateBoardRequest request1 = CreateBoardRequest.builder()
-                .memberId(member.getId())
-                .title("title")
-                .body("body")
-                .dept("DENTAL")
-                .boardPhotoPath("path")
-                .build();
+        final CreateBoardRequest request1 = getCreateBoardRequest(member);
 
         boardApiController.createBoard(request1);
 
@@ -137,5 +95,15 @@ public class BoardApiControllerTest {
         Assertions.assertThat(content.size()).isGreaterThan(1);
         Assertions.assertThat(page.getTotalPages()).isEqualTo(1);
         Assertions.assertThat(page.hasNext()).isFalse();
+    }
+
+    private static CreateBoardRequest getCreateBoardRequest(final Member member) {
+        return CreateBoardRequest.builder()
+                .memberId(member.getId())
+                .title("title")
+                .body("body")
+                .dept("DENTAL")
+                .boardPhotoPath("path")
+                .build();
     }
 }

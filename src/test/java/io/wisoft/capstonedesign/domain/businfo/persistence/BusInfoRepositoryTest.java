@@ -20,10 +20,10 @@ public class BusInfoRepositoryTest {
     @Test
     public void findByArea() throws Exception {
         //given -- 조건
-        BusArea busArea = BusArea.DAEJEON;
+        final BusArea busArea = BusArea.DAEJEON;
 
         //when -- 동작
-        List<BusInfo> list = busInfoRepository.findByArea(busArea);
+        final List<BusInfo> list = busInfoRepository.findByArea(busArea);
 
         //then -- 검증
         assertThat(list.size()).isEqualTo(1);
@@ -33,7 +33,7 @@ public class BusInfoRepositoryTest {
     @Test
     public void findByArea_fail() throws Exception {
         //given -- 조건
-        String area = "DAAAJEON";
+        final String area = "DAAAJEON";
 
         //when -- 동작
         assertThrows(IllegalArgumentException.class, () -> {

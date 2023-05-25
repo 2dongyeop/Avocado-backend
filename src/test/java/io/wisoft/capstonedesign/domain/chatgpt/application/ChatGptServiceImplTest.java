@@ -25,16 +25,16 @@ public class ChatGptServiceImplTest {
 
     @Test
     public void askQuestion() throws Exception {
-        String message = "안녕";
+        final String MESSAGE = "안녕";
 
         //given -- 조건
         //when -- 동작
 
-        ChatGptResponse response = this.getResponse(
+        final ChatGptResponse response = this.getResponse(
                 this.buildHttpEntity(
                         new ChatGptRequest(
                                 ChatGptConfig.MODEL,
-                                message,
+                                MESSAGE,
                                 ChatGptConfig.MAX_TOKEN,
                                 ChatGptConfig.TEMPERATURE,
                                 ChatGptConfig.TOP_P)));
@@ -54,7 +54,7 @@ public class ChatGptServiceImplTest {
 
     //comment: Generate response
     private ChatGptResponse getResponse(final HttpEntity<ChatGptRequest> chatGptRequestHttpEntity) {
-        RestTemplate restTemplate = new RestTemplate();
+        final RestTemplate restTemplate = new RestTemplate();
         final ResponseEntity<ChatGptResponse> responseEntity = restTemplate.postForEntity(
                 ChatGptConfig.URL,
                 chatGptRequestHttpEntity,

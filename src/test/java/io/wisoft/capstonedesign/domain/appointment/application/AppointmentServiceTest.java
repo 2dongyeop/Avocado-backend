@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import static io.wisoft.capstonedesign.global.data.HospitalTestData.getDefaultHospital;
+import static io.wisoft.capstonedesign.global.data.MemberTestData.getDefaultMember;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -28,32 +30,16 @@ public class AppointmentServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //임시 요청 생성
-        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
-                .memberId(member.getId())
-                .hospitalId(hospital.getId())
-                .dept("DENTAL")
-                .comment("comment")
-                .appointName("name")
-                .appointPhonenumber("phone")
-                .build();
+        final CreateAppointmentRequest request = getCreateAppointmentRequest(member, hospital);
 
         //when -- 동작
         final Long saveId = appointmentService.save(request);
@@ -69,32 +55,15 @@ public class AppointmentServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //임시 요청 생성
-        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
-                .memberId(member.getId())
-                .hospitalId(hospital.getId())
-                .dept("DENTAL")
-                .comment("comment")
-                .appointName("name")
-                .appointPhonenumber("phone")
-                .build();
+        final CreateAppointmentRequest request = getCreateAppointmentRequest(member, hospital);
 
         final Long saveId = appointmentService.save(request);
 
@@ -113,32 +82,15 @@ public class AppointmentServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //임시 요청 생성
-        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
-                .memberId(member.getId())
-                .hospitalId(hospital.getId())
-                .dept("DENTAL")
-                .comment("comment")
-                .appointName("name")
-                .appointPhonenumber("phone")
-                .build();
+        final CreateAppointmentRequest request = getCreateAppointmentRequest(member, hospital);
 
         final Long saveId = appointmentService.save(request);
 
@@ -155,32 +107,15 @@ public class AppointmentServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //임시 요청 생성
-        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
-                .memberId(member.getId())
-                .hospitalId(hospital.getId())
-                .dept("DENTAL")
-                .comment("comment")
-                .appointName("name")
-                .appointPhonenumber("phone")
-                .build();
+        final CreateAppointmentRequest request = getCreateAppointmentRequest(member, hospital);
 
         final Long saveId = appointmentService.save(request);
 
@@ -198,32 +133,15 @@ public class AppointmentServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //임시 요청 생성
-        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
-                .memberId(member.getId())
-                .hospitalId(hospital.getId())
-                .dept("DENTAL")
-                .comment("comment")
-                .appointName("name")
-                .appointPhonenumber("phone")
-                .build();
+        final CreateAppointmentRequest request = getCreateAppointmentRequest(member, hospital);
 
         final Long saveId = appointmentService.save(request);
 
@@ -239,36 +157,23 @@ public class AppointmentServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //임시 요청 생성
-        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
-                .memberId(member.getId())
-                .hospitalId(hospital.getId())
-                .dept("DENTAL")
-                .comment("comment")
-                .appointName("name")
-                .appointPhonenumber("phone")
-                .build();
+        final CreateAppointmentRequest request = getCreateAppointmentRequest(member, hospital);
 
         final Long saveId = appointmentService.save(request);
 
-        final UpdateAppointmentRequest request2 = new UpdateAppointmentRequest("DENTAL", "코를 높이고 싶어요", "이동", "011");
+        final UpdateAppointmentRequest request2 = new UpdateAppointmentRequest(
+                "DENTAL",
+                "코를 높이고 싶어요",
+                "이동",
+                "011");
 
         //when -- 동작
         final Appointment appointment = appointmentService.findById(saveId);
@@ -284,36 +189,23 @@ public class AppointmentServiceTest {
         //given -- 조건
 
         //회원 생성
-        final Member member = Member.builder()
-                .nickname("nick1")
-                .email("email1")
-                .password("pass1")
-                .phoneNumber("0000")
-                .build();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        final Hospital hospital = Hospital.builder()
-                .name("name1")
-                .number("number1")
-                .address("address1")
-                .operatingTime("oper1")
-                .build();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         //임시 요청 생성
-        final CreateAppointmentRequest request = CreateAppointmentRequest.builder()
-                .memberId(member.getId())
-                .hospitalId(hospital.getId())
-                .dept("DENTAL")
-                .comment("comment")
-                .appointName("name")
-                .appointPhonenumber("phone")
-                .build();
+        final CreateAppointmentRequest request = getCreateAppointmentRequest(member, hospital);
 
         final Long saveId = appointmentService.save(request);
 
-        final UpdateAppointmentRequest request2 = new UpdateAppointmentRequest("DENTAL", null, "이동", "011");
+        final UpdateAppointmentRequest request2 = new UpdateAppointmentRequest(
+                "DENTAL",
+                null,
+                "이동",
+                "011");
 
         //when -- 동작
         //then -- 검증
@@ -322,5 +214,16 @@ public class AppointmentServiceTest {
             final Appointment appointment = appointmentService.findById(saveId);
             appointmentService.update(appointment.getId(), request2);
         });
+    }
+
+    private static CreateAppointmentRequest getCreateAppointmentRequest(final Member member, final Hospital hospital) {
+        return CreateAppointmentRequest.builder()
+                .memberId(member.getId())
+                .hospitalId(hospital.getId())
+                .dept("DENTAL")
+                .comment("comment")
+                .appointName("name")
+                .appointPhonenumber("phone")
+                .build();
     }
 }
