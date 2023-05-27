@@ -8,7 +8,7 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMailException;
@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -67,11 +66,11 @@ public class EmailServiceImpl implements EmailService {
         final Optional<Staff> staff = staffRepository.findByEmail(to);
 
         if (member.isPresent()) {
-            log.info("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.");
+            log.error("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.");
             throw new DuplicateMemberException();
         }
         if (staff.isPresent()) {
-            log.info("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.");
+            log.error("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.");
             throw new DuplicateStaffException();
         }
     }

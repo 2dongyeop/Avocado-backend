@@ -3,7 +3,7 @@ package io.wisoft.capstonedesign.domain.healthinfo.application;
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import io.wisoft.capstonedesign.domain.healthinfo.web.dto.CreateHealthInfoRequest;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHealthInfoException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

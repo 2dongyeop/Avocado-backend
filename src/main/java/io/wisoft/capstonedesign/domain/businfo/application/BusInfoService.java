@@ -3,15 +3,12 @@ package io.wisoft.capstonedesign.domain.businfo.application;
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfo;
 import io.wisoft.capstonedesign.domain.businfo.web.dto.CreateBusInfoRequest;
 import io.wisoft.capstonedesign.global.enumeration.BusArea;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBusInfoException;
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 @Service

@@ -14,7 +14,7 @@ import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMailException;
@@ -54,48 +54,43 @@ public class AuthService {
     @Transactional
     public Long signUpMember(final CreateMemberRequest request) {
 
-        validateEmailVerified(request.email());
+        try {
+            validateEmailVerified(request.email());
+            validateDuplicateNickname(request.nickname());
 
-        final Member member = Member.builder()
-                .nickname(request.nickname())
-                .email(request.email())
-                .password(encryptHelper.encrypt(request.password1()))
-                .phoneNumber(request.phonenumber())
-                .build();
+            final Member member = Member.builder()
+                    .nickname(request.nickname())
+                    .email(request.email())
+                    .password(encryptHelper.encrypt(request.password1()))
+                    .phoneNumber(request.phonenumber())
+                    .build();
 
-        validateDuplicateEmail(request.email());
-        validateDuplicateNickname(request.nickname());
 
-        //회원 저장
-        memberRepository.save(member);
+            //회원 저장
+            memberRepository.save(member);
 
-        //인증을 위해 저장했던 이메일 삭제
-        final DBMailAuthentication mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
-        mailAuthenticationRepository.delete(mailAuthentication);
+            //인증을 위해 저장했던 이메일 삭제
+            final DBMailAuthentication mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
+            mailAuthenticationRepository.delete(mailAuthentication);
 
-        log.info(member.getNickname() + "님이 회원가입을 하셨습니다.");
-        return member.getId();
+            log.info(member.getNickname() + "님이 회원가입을 하셨습니다.");
+            return member.getId();
+        } catch (DuplicateMemberException duplicateMemberException) {
+            duplicateMemberException.printStackTrace();
+            return null;
+        } catch (DuplicateStaffException duplicateStaffException) {
+            duplicateStaffException.printStackTrace();
+            return null;
+        }
     }
 
-    private void validateDuplicateNickname(final String nickname) {
+    private void validateDuplicateNickname(final String nickname) throws DuplicateMemberException {
         if (memberRepository.findValidateMemberByNickname(nickname).size() > 0) {
             throw new DuplicateMemberException("닉네임 중복");
         }
     }
 
-    private void validateDuplicateEmail(final String email) {
-        final Optional<Member> member = memberRepository.findByEmail(email);
-        if (member.isPresent()) {
-            throw new DuplicateMemberException("이메일 중복.");
-        }
-
-        final Optional<Staff> staff = staffRepository.findByEmail(email);
-        if (staff.isPresent()) {
-            throw new DuplicateStaffException("이메일 중복");
-        }
-    }
-
-    private void validateEmailVerified(final String email) {
+    private void validateEmailVerified(final String email) throws IllegalStateException {
         final DBMailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(NullMailException::new);
 
         if (!mail.isVerified()) {
@@ -104,24 +99,37 @@ public class AuthService {
     }
 
 
-    /** 로그인 */
+    /**
+     * 로그인
+     */
     public String loginMember(final LoginRequest request) {
 
-        final Member member = memberRepository.findMemberByEmail(request.email())
-                .orElseThrow(NullMemberException::new);
+        String token = null;
 
-        if (!encryptHelper.isMatch(request.password(), member.getPassword())) {
+        try {
+
+            final Member member = memberRepository.findMemberByEmail(request.email())
+                    .orElseThrow(NullMemberException::new);
+
+            validatePassowrd(request, member.getPassword());
+
+            token = jwtTokenProvider.createToken(member.getNickname());
+            log.info(member.getNickname() + "님이 로그인 하셨습니다.");
+
+            redisTemplate.opsForValue().set(token, member.getNickname(), LOGIN_EXPIRED_TIME, TimeUnit.SECONDS);
+            log.info("redis : 토큰(" + token + ")을 1시간동안 저장합니다.");
+
+        } catch (IllegalValueException e) {
+            e.printStackTrace();
+        }
+        return token;
+    }
+
+    private void validatePassowrd(final LoginRequest request, final String member) throws IllegalValueException {
+        if (!encryptHelper.isMatch(request.password(), member)) {
             log.error("비밀번호가 일치하지 않습니다.");
             throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
         }
-
-        final String token = jwtTokenProvider.createToken(member.getNickname());
-        log.info(member.getNickname() + "님이 로그인 하셨습니다.");
-
-        redisTemplate.opsForValue().set(token, member.getNickname(), LOGIN_EXPIRED_TIME, TimeUnit.SECONDS);
-        log.info("redis : 토큰(" + token + ")을 1시간동안 저장합니다.");
-
-        return token;
     }
 
 
@@ -144,8 +152,6 @@ public class AuthService {
                 .dept(HospitalDept.valueOf(request.dept()))
                 .build();
 
-        validateDuplicateEmail(request.email());
-
         //의료진 저장
         staffRepository.save(staff);
 
@@ -165,10 +171,7 @@ public class AuthService {
 
         final Staff staff = staffRepository.findStaffByEmail(request.email()).orElseThrow(NullStaffException::new);
 
-        if (!encryptHelper.isMatch(request.password(), staff.getPassword())) {
-            log.error("비밀번호가 일치하지 않습니다.");
-            throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
-        }
+        validatePassowrd(request, staff.getPassword());
 
         final String token = jwtTokenProvider.createToken(staff.getName());
         log.info(staff.getName() + "님이 로그인 하셨습니다.");

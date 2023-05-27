@@ -7,7 +7,7 @@ import io.wisoft.capstonedesign.domain.boardreply.web.dto.UpdateBoardReplyReques
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardReplyException;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;

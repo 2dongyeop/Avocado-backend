@@ -7,7 +7,7 @@ import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReplyReposito
 import io.wisoft.capstonedesign.domain.boardreply.web.dto.CreateBoardReplyRequest;
 import io.wisoft.capstonedesign.domain.boardreply.web.dto.UpdateBoardReplyRequest;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardReplyException;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import lombok.RequiredArgsConstructor;

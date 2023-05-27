@@ -7,11 +7,13 @@ import io.wisoft.capstonedesign.domain.appointment.web.dto.UpdateAppointmentRequ
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalDeptException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullAppointmentException;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -19,6 +21,7 @@ import org.springframework.util.StringUtils;
 import java.util.Arrays;
 import java.util.Iterator;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -68,22 +71,18 @@ public class AppointmentService {
     @Transactional
     public void update(final Long appointmentId, final UpdateAppointmentRequest request) {
 
-        validateParameter(request);
-        validateDept(request.dept());
-        final Appointment appointment = findById(appointmentId);
+        try {
+            validateDept(request.dept());
 
-        appointment.update(HospitalDept.valueOf(request.dept()), request.comment(), request.appointName(), request.appointPhonenumber());
-    }
-
-    private void validateParameter(final UpdateAppointmentRequest request) {
-
-        if (!StringUtils.hasText(request.appointName()) || !StringUtils.hasText(request.dept())
-                || !StringUtils.hasText(request.comment()) || !StringUtils.hasText(request.appointPhonenumber())) {
-            throw new IllegalValueException("파라미터가 비어있어 업데이트할 수 없습니다.");
+            final Appointment appointment = findById(appointmentId);
+            appointment.update(HospitalDept.valueOf(request.dept()), request.comment(), request.appointName(), request.appointPhonenumber());
+        } catch (IllegalDeptException e) {
+            log.error("일치하는 dept가 존재하지 않습니다.");
+            e.printStackTrace();
         }
     }
 
-    private void validateDept(final String dept) {
+    private void validateDept(final String dept) throws IllegalDeptException {
         final HospitalDept[] values = HospitalDept.values();
         final Iterator<HospitalDept> iterator = Arrays.stream(values).iterator();
 
@@ -95,7 +94,7 @@ public class AppointmentService {
             }
         }
 
-        throw new IllegalValueException("일치하는 dept가 존재하지 않습니다.");
+        throw new IllegalDeptException("일치하는 dept가 존재하지 않습니다.");
     }
 
 

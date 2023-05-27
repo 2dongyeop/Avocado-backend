@@ -3,7 +3,6 @@ package io.wisoft.capstonedesign.domain.board.persistence;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

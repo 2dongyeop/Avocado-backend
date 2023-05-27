@@ -32,7 +32,7 @@ public class MailController {
     public ResponseEntity<String> sendCertificationCode(@RequestBody final MailObject mailObject) {
         final CompletableFuture<String> future = CompletableFuture.supplyAsync(
                         () -> emailService.sendCertificationCode(mailObject.email()), executor)
-                .orTimeout(3, TimeUnit.SECONDS);
+                .orTimeout(5, TimeUnit.SECONDS);
 
         final String code = future.join();
         return ResponseEntity.ok(code);
