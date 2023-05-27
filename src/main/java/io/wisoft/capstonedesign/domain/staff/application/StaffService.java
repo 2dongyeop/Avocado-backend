@@ -6,7 +6,7 @@ import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPasswordRequest;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.global.exception;
+package io.wisoft.capstonedesign.global.exception.illegal;
 
 public class IllegalValueException extends RuntimeException {
     public IllegalValueException() {

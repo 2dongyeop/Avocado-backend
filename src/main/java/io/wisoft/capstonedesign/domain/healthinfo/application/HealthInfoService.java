@@ -2,7 +2,7 @@ package io.wisoft.capstonedesign.domain.healthinfo.application;
 
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHealthInfoException;
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfoRepository;
 import io.wisoft.capstonedesign.domain.healthinfo.web.dto.CreateHealthInfoRequest;

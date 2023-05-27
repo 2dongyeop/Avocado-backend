@@ -6,7 +6,7 @@ import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.domain.review.persistence.ReviewRepository;
 import io.wisoft.capstonedesign.domain.review.web.dto.CreateReviewRequest;
 import io.wisoft.capstonedesign.domain.review.web.dto.UpdateReviewRequest;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewException;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;

@@ -5,7 +5,7 @@ import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.domain.review.web.dto.CreateReviewRequest;
 import io.wisoft.capstonedesign.domain.review.web.dto.UpdateReviewRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewStatus;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewException;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;

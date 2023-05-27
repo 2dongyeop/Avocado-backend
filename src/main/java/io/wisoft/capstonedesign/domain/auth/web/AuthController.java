@@ -12,7 +12,7 @@ import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffResponse;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.jwt.AuthorizationExtractor;
 import io.wisoft.capstonedesign.global.jwt.RedisJwtBlackList;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,9 +38,7 @@ public class AuthController {
     @PostMapping("/api/auth/signup/members")
     public CreateMemberResponse signupMember(@RequestBody @Valid final CreateMemberRequest request) {
 
-        if (!request.password1().equals(request.password2())) {
-            throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.");
-        }
+        validatePassword(request.password1(), request.password2());
         return new CreateMemberResponse(authService.signUpMember(request));
     }
 
@@ -72,10 +70,7 @@ public class AuthController {
     public CreateStaffResponse signupStaff(
             @RequestBody @Valid final CreateStaffRequest request) {
 
-        if (!request.password1().equals(request.password2())) {
-            throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.");
-        }
-
+        validatePassword(request.password1(), request.password2());
         return new CreateStaffResponse(authService.signUpStaff(request));
     }
 
@@ -86,5 +81,11 @@ public class AuthController {
     public ResponseEntity<TokenResponse> loginStaff(@RequestBody @Valid final LoginRequest request) {
         final String token = authService.loginStaff(request);
         return ResponseEntity.ok(new TokenResponse(token, "bearer"));
+    }
+
+    private static void validatePassword(final String password1, final String confirmPassword) throws IllegalValueException {
+        if (!password1.equals(confirmPassword)) {
+            throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.");
+        }
     }
 }

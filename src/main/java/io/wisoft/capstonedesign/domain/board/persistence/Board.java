@@ -5,13 +5,11 @@ import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

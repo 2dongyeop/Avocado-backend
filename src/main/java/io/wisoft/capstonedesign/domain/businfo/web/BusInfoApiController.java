@@ -7,7 +7,7 @@ import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import io.wisoft.capstonedesign.global.enumeration.BusArea;
-import io.wisoft.capstonedesign.global.exception.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
