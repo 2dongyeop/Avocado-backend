@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @Tag(name = "메인화면 검색")
 @RestController
@@ -28,7 +29,8 @@ public class ChatGptController {
     @PostMapping("/api/search")
     public ChatGptResponse sendMessage(@RequestBody final ChatRequest chatRequest) {
         final CompletableFuture<ChatGptResponse> future = CompletableFuture.supplyAsync(
-                () -> chatGptService.askQuestion(chatRequest), executor);
+                () -> chatGptService.askQuestion(chatRequest), executor)
+                .orTimeout(3, TimeUnit.SECONDS);
 
         final ChatGptResponse response = future.join();
         return response;
