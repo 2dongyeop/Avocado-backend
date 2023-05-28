@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static io.wisoft.capstonedesign.global.data.MemberTestData.getDefaultMember;
+import static io.wisoft.capstonedesign.setting.data.MemberTestData.getDefaultMember;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest

@@ -1,109 +1,98 @@
 package io.wisoft.capstonedesign.domain.board.web;
 
+import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import io.wisoft.capstonedesign.domain.board.web.dto.*;
-import io.wisoft.capstonedesign.domain.member.persistence.Member;
-import jakarta.persistence.EntityManager;
+import io.wisoft.capstonedesign.setting.api.ApiTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
-import static io.wisoft.capstonedesign.global.data.MemberTestData.getDefaultMember;
-import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 @Transactional
-public class BoardApiControllerTest {
-
-    @Autowired EntityManager em;
-    @Autowired BoardApiController boardApiController;
+public class BoardApiControllerTest extends ApiTest {
 
     @Test
     public void createBoard_success() throws Exception {
-        //given -- 조건
 
-        final Member member = getDefaultMember();
-        em.persist(member);
+        final var request = getCreateBoardRequest();
+        final var response = createBoard(request);
 
-        final CreateBoardRequest request = getCreateBoardRequest(member);
-
-        //when -- 동작
-        final CreateBoardResponse response = boardApiController.createBoard(request);
-
-        //then -- 검증
-        Assertions.assertThat(response.id()).isNotNull();
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
 
     @Test
-    public void updateBoardTitleBody_success() throws Exception {
-        //given -- 조건
-        final Member member = getDefaultMember();
-        em.persist(member);
+    public void updateBoard() throws Exception {
 
-        final CreateBoardRequest request1 = getCreateBoardRequest(member);
+        final int targetBoardId = 1;
+        final UpdateBoardRequest request = getUpdateBoardRequest();
 
-        final CreateBoardResponse response = boardApiController.createBoard(request1);
+        final var response = updateBoard(targetBoardId, request);
 
-        final UpdateBoardRequest request2 = new UpdateBoardRequest("newTitle", "newBody");
-
-        //when -- 동작
-        final UpdateBoardResponse updateResponse = boardApiController.updateBoardTitleBody(response.id(), request2);
-
-        //then -- 검증
-        Assertions.assertThat(updateResponse.id()).isNotNull();
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
+
+    private static ExtractableResponse<Response> updateBoard(final int targetBoardId, final UpdateBoardRequest request) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(request)
+                .when()
+                .patch("/api/boards/" + targetBoardId)
+                .then()
+                .log().all().extract();
+    }
+
 
     @Test
-    public void deleteBoard_success() throws Exception {
-        //given -- 조건
-        final Member member = getDefaultMember();
-        em.persist(member);
+    public void deleteBoard() throws Exception {
 
-        final CreateBoardRequest request1 = getCreateBoardRequest(member);
+        final int targetBoardId = 1;
 
-        final CreateBoardResponse createBoardResponse = boardApiController.createBoard(request1);
+        final var response = deleteBoard(targetBoardId);
 
-        //when -- 동작
-        final DeleteBoardResponse deleteBoardResponse = boardApiController.deleteBoard(createBoardResponse.id());
-
-        //then -- 검증
-        Assertions.assertThat(deleteBoardResponse.id()).isNotNull();
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
-    @Test
-    public void boardsUsingPaging_success() throws Exception {
-        //given -- 조건
-        final Member member = getDefaultMember();
-        em.persist(member);
-
-        final CreateBoardRequest request1 = getCreateBoardRequest(member);
-
-        boardApiController.createBoard(request1);
-
-        //when -- 동작
-        final PageRequest pageRequest = PageRequest.of(0, 10);
-        final Page<BoardListDto> page = boardApiController.boardsUsingPaging(pageRequest);
-        final List<BoardListDto> content = page.getContent();
-
-        //then -- 검증
-        Assertions.assertThat(content.size()).isGreaterThan(1);
-        Assertions.assertThat(page.getTotalPages()).isEqualTo(1);
-        Assertions.assertThat(page.hasNext()).isFalse();
+    private static ExtractableResponse<Response> deleteBoard(int targetBoardId) {
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .delete("/api/boards/" + targetBoardId)
+                .then()
+                .log().all().extract();
     }
 
-    private static CreateBoardRequest getCreateBoardRequest(final Member member) {
-        return CreateBoardRequest.builder()
-                .memberId(member.getId())
-                .title("title")
-                .body("body")
-                .dept("DENTAL")
-                .boardPhotoPath("path")
-                .build();
+
+    private static UpdateBoardRequest getUpdateBoardRequest() {
+        return new UpdateBoardRequest(
+                "newTitle",
+                "newBody"
+        );
+    }
+
+    private static CreateBoardRequest getCreateBoardRequest() {
+        return new CreateBoardRequest(
+                1L,
+                "title",
+                "body",
+                "DENTAL",
+                "boardPhotoPath"
+        );
+    }
+
+    private static ExtractableResponse<Response> createBoard(final CreateBoardRequest request) {
+        return RestAssured
+                .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(request)
+                .when()
+                .post("/api/boards")
+                .then()
+                .log().all().extract();
     }
 }

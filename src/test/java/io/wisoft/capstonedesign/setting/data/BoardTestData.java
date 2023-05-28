@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.global.data;
+package io.wisoft.capstonedesign.setting.data;
 
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
