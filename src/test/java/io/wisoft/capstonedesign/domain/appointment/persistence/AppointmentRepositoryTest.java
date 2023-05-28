@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static io.wisoft.capstonedesign.global.data.AppointmentTestData.getDefaultAppointment;
-import static io.wisoft.capstonedesign.global.data.HospitalTestData.getDefaultHospital;
-import static io.wisoft.capstonedesign.global.data.MemberTestData.getDefaultMember;
+import static io.wisoft.capstonedesign.setting.data.AppointmentTestData.getDefaultAppointment;
+import static io.wisoft.capstonedesign.setting.data.HospitalTestData.getDefaultHospital;
+import static io.wisoft.capstonedesign.setting.data.MemberTestData.getDefaultMember;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest

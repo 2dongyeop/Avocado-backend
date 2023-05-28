@@ -1,159 +1,125 @@
 package io.wisoft.capstonedesign.domain.boardreply.web;
 
-import io.wisoft.capstonedesign.domain.board.persistence.Board;
-import io.wisoft.capstonedesign.domain.boardreply.web.dto.*;
-import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
-import io.wisoft.capstonedesign.domain.member.persistence.Member;
-import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
-import jakarta.persistence.EntityManager;
+import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import io.wisoft.capstonedesign.domain.boardreply.web.dto.CreateBoardReplyRequest;
+import io.wisoft.capstonedesign.domain.boardreply.web.dto.UpdateBoardReplyRequest;
+import io.wisoft.capstonedesign.setting.api.ApiTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
-import static io.wisoft.capstonedesign.global.data.BoardTestData.getDefaultBoard;
-import static io.wisoft.capstonedesign.global.data.HospitalTestData.getDefaultHospital;
-import static io.wisoft.capstonedesign.global.data.MemberTestData.getDefaultMember;
-import static io.wisoft.capstonedesign.global.data.StaffTestData.getDefaultStaff;
 
-@SpringBootTest
 @Transactional
-public class BoardReplyApiControllerTest {
+public class BoardReplyApiControllerTest extends ApiTest {
 
-    @Autowired EntityManager em;
-    @Autowired BoardReplyApiController boardReplyApiController;
 
     @Test
     public void createBoardReply_success() throws Exception {
-        //given -- 조건
-        //회원 생성
-        final Member member = getDefaultMember();
-        em.persist(member);
 
-        //게시글 생성
-        final Board board = getDefaultBoard(member);
-        em.persist(board);
+        final CreateBoardReplyRequest request = getCreateBoardReplyRequest();
 
-        //병원 생성
-        final Hospital hospital = getDefaultHospital();
-        em.persist(hospital);
+        final var response = createBoardReply(request);
 
-        //의료진 생성
-        final Staff staff = getDefaultStaff(hospital);
-        em.persist(staff);
-
-        final CreateBoardReplyRequest request = getCreateBoardReplyRequest(board, staff);
-
-        //when -- 동작
-        CreateBoardReplyResponse createBoardReplyResponse = boardReplyApiController.createBoardReply(request);
-
-        //then -- 검증
-        Assertions.assertThat(createBoardReplyResponse.id()).isNotNull();
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
-
 
     @Test
     public void updateBoardReply() throws Exception {
-        //given -- 조건
 
-        //회원 생성
-        final Member member = getDefaultMember();
-        em.persist(member);
+        final int targetBoardReplyId = 1;
+        final UpdateBoardReplyRequest request = getUpdateBoardReplyRequest();
 
-        //게시글 생성
-        final Board board = getDefaultBoard(member);
-        em.persist(board);
+        final var response = updateBoardReply(targetBoardReplyId, request);
 
-        //병원 생성
-        final Hospital hospital = getDefaultHospital();
-        em.persist(hospital);
-
-        //의료진 생성
-        final Staff staff = getDefaultStaff(hospital);
-        em.persist(staff);
-
-        final CreateBoardReplyRequest request = getCreateBoardReplyRequest(board, staff);
-
-        final CreateBoardReplyResponse createBoardReplyResponse = boardReplyApiController.createBoardReply(request);
-
-        final UpdateBoardReplyRequest updateBoardReplyRequest = new UpdateBoardReplyRequest("newReply");
-
-        //when -- 동작
-        final UpdateBoardReplyResponse updateBoardReplyResponse = boardReplyApiController.updateBoardReply(createBoardReplyResponse.id(), updateBoardReplyRequest);
-
-        //then -- 검증
-        Assertions.assertThat(updateBoardReplyResponse.id()).isNotNull();
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
+
 
     @Test
-    public void deleteBoardReply_success() throws Exception {
-        //given -- 조건
+    public void deleteBoardReply() throws Exception {
 
-        //회원 생성
-        final Member member = getDefaultMember();
-        em.persist(member);
+        final int targetBoardReplyId = 1;
 
-        //게시글 생성
-        final Board board = getDefaultBoard(member);
-        em.persist(board);
+        final var response = deleteBoardReply(targetBoardReplyId);
 
-        //병원 생성
-        final Hospital hospital = getDefaultHospital();
-        em.persist(hospital);
-
-        //의료진 생성
-        final Staff staff = getDefaultStaff(hospital);
-        em.persist(staff);
-
-        final CreateBoardReplyRequest request = getCreateBoardReplyRequest(board, staff);
-
-        final CreateBoardReplyResponse createBoardReplyResponse = boardReplyApiController.createBoardReply(request);
-
-        //when -- 동작
-        DeleteBoardReplyResponse deleteBoardReplyResponse = boardReplyApiController.deleteBoardReply(createBoardReplyResponse.id());
-
-        //then -- 검증
-        Assertions.assertThat(deleteBoardReplyResponse.id()).isNotNull();
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
+
 
     @Test
-    public void boardReply_success() throws Exception {
-        //given -- 조건
+    public void readBoardReply() throws Exception {
 
-        //회원 생성
-        final Member member = getDefaultMember();
-        em.persist(member);
+        final int targetBoardReplyId = 1;
+        final var response = readBoardReply(targetBoardReplyId);
 
-        //게시글 생성
-        final Board board = getDefaultBoard(member);
-        em.persist(board);
+        String string = response.body().toString();
+        System.out.println("string = " + string);
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
-        //병원 생성
-        final Hospital hospital = getDefaultHospital();
-        em.persist(hospital);
-
-        //의료진 생성
-        final Staff staff = getDefaultStaff(hospital);
-        em.persist(staff);
-
-        final CreateBoardReplyRequest request = getCreateBoardReplyRequest(board, staff);
-
-        final CreateBoardReplyResponse createBoardReplyResponse = boardReplyApiController.createBoardReply(request);
-
-        //when -- 동작
-        Result result = boardReplyApiController.boardReply(createBoardReplyResponse.id());
-
-        //then -- 검증
-        Assertions.assertThat(result.data()).isNotNull();
     }
 
-    private static CreateBoardReplyRequest getCreateBoardReplyRequest(final Board board, final Staff staff) {
-        return CreateBoardReplyRequest.builder()
-                .boardId(board.getId())
-                .staffId(staff.getId())
-                .reply("reply")
-                .build();
+    private static ExtractableResponse<Response> readBoardReply(int targetBoardReplyId) {
+        return RestAssured
+                .given()
+                .log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/api/board-reply/" + targetBoardReplyId + "/details")
+                .then()
+                .log().all().extract();
     }
 
+
+    private static ExtractableResponse<Response> deleteBoardReply(int targetBoardReplyId) {
+        return RestAssured
+                .given()
+                .log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .delete("/api/board-reply/" + targetBoardReplyId)
+                .then()
+                .log().all().extract();
+    }
+
+    private static ExtractableResponse<Response> updateBoardReply(final int targetBoardReplyId, final UpdateBoardReplyRequest request) {
+        return RestAssured
+                .given()
+                .log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(request)
+                .when()
+                .patch("/api/board-reply/" + targetBoardReplyId)
+                .then()
+                .log().all().extract();
+    }
+
+    private static UpdateBoardReplyRequest getUpdateBoardReplyRequest() {
+        return new UpdateBoardReplyRequest(
+                "update-reply"
+        );
+    }
+
+    private static ExtractableResponse<Response> createBoardReply(final CreateBoardReplyRequest request) {
+        return RestAssured
+                .given()
+                .log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(request)
+                .when()
+                .post("/api/board-reply")
+                .then()
+                .log().all().extract();
+    }
+
+    private static CreateBoardReplyRequest getCreateBoardReplyRequest() {
+        return new CreateBoardReplyRequest(
+                1L,
+                1L,
+                "reply"
+        );
+    }
 }

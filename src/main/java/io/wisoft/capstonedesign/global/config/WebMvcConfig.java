@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.wisoft.capstonedesign.global.interceptor.BearerAuthInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -15,6 +16,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     public WebMvcConfig(final BearerAuthInterceptor bearerAuthInterceptor) {
         this.bearerAuthInterceptor = bearerAuthInterceptor;
+    }
+
+    @Override
+    public void addCorsMappings(final CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 
     @Override

@@ -34,8 +34,8 @@ dependencies {
 
 
 	//java mail
-//	implementation 'jakarta.activation:jakarta.activation-api'         //애플리케이션 실행 x / 테스트 실행 o
-	implementation 'jakarta.activation:jakarta.activation-api:2.0.0'   //애플리케이션 실행 o / 테스트 실행 x
+	implementation 'jakarta.activation:jakarta.activation-api'         //애플리케이션 실행 x / 테스트 실행 o
+//	implementation 'jakarta.activation:jakarta.activation-api:2.0.0'   //애플리케이션 실행 o / 테스트 실행 x
 	implementation ('org.springframework.boot:spring-boot-starter-mail') {
 		exclude group: 'com.sun.activation', module: 'javax.activation'
 	}
@@ -50,6 +50,9 @@ dependencies {
 
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	//E2E test를 위한 의존성
+	testImplementation 'io.rest-assured:rest-assured'
 
 
 	compileOnly 'org.projectlombok:lombok'

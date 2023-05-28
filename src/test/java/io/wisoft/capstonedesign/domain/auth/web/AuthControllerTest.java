@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
-import static io.wisoft.capstonedesign.global.data.HospitalTestData.getDefaultHospital;
+import static io.wisoft.capstonedesign.setting.data.HospitalTestData.getDefaultHospital;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
