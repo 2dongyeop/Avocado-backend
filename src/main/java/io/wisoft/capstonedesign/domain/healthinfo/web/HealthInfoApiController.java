@@ -52,25 +52,19 @@ public class HealthInfoApiController {
 
 
     /**
-     * ex) /api/health-infos/department?page=0&size=5&sort=createAt,desc
+     * ex) /api/health-infos?dept=1&page=0&size=5&sort=createAt,desc
+     * ex) /api/health-infos?page=0&size=5&sort=createAt,desc
      */
     @SwaggerApi(summary = "특정 병과의 건강 정보 목록 페이징 조회", implementation = Page.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/health-infos/department")
-    public Page<HealthInfoDto> healthInfosByDepartmentUsingPaging(
-            @RequestBody @Valid final HealthInfoByDepartmentRequest request, final Pageable pageable) {
-
-        return healthInfoService.findAllByDeptUsingPaging(request.department(), pageable).map(HealthInfoDto::new);
-    }
-
-
-    /**
-     * ex) /api/health-infos?page=0&size=5&sort=createAt,desc
-     */
-    @SwaggerApi(summary = "건강정보 목록을 페이지별로 조회하기", implementation = Page.class)
-    @SwaggerApiFailWithoutAuth
     @GetMapping("/api/health-infos")
-    public Page<HealthInfoDto> healthInfosUsingPaging(final Pageable pageable) {
-        return healthInfoService.findByUsingPaging(pageable).map(HealthInfoDto::new);
+    public Page<HealthInfoDto> healthInfosByDepartmentUsingPaging(
+            @RequestParam(name = "dept", required = false) final String deptNumber, final Pageable pageable) {
+
+        if (deptNumber == null) {
+            return healthInfoService.findByUsingPaging(pageable).map(HealthInfoDto::new);
+        }
+
+        return healthInfoService.findAllByDeptUsingPaging(deptNumber, pageable).map(HealthInfoDto::new);
     }
 }

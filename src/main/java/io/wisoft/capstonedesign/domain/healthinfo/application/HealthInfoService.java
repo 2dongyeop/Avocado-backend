@@ -8,6 +8,7 @@ import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfoReposito
 import io.wisoft.capstonedesign.domain.healthinfo.web.dto.CreateHealthInfoRequest;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
+import io.wisoft.capstonedesign.global.mapper.DeptMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -67,26 +68,17 @@ public class HealthInfoService {
     }
 
 
-    /** 특정 병과의 건강정보 목록을 페이지별로 조회하기 */
-    public Page<HealthInfo> findAllByDeptUsingPaging(final String dept, final Pageable pageable) {
+    /**
+     * 특정 병과의 건강정보 목록을 페이지별로 조회하기
+     */
+    public Page<HealthInfo> findAllByDeptUsingPaging(final String deptNumber, final Pageable pageable) {
 
-        validateDept(dept);
-        return healthInfoRepository.findAllByDeptUsingPaging(HospitalDept.valueOf(dept), pageable);
+        return healthInfoRepository.findAllByDeptUsingPaging(DeptMapper.numberToDept(deptNumber), pageable);
     }
 
-    private boolean validateDept(final String dept) {
-
-        final Iterator<HospitalDept> iterator = Arrays.stream(HospitalDept.values()).iterator();
-
-        while (iterator.hasNext()) {
-            if (iterator.next().getCode().equals(dept.toUpperCase())) {
-                return true;
-            }
-        }
-        throw new IllegalValueException("일치하는 hospitalDept가 없습니다.");
-    }
-
-    /** 건강정보 목록을 페이지별로 조회하기 */
+    /**
+     * 건강정보 목록을 페이지별로 조회하기
+     */
     public Page<HealthInfo> findByUsingPaging(final Pageable pageable) {
         return healthInfoRepository.findByUsingPaging(pageable);
     }
