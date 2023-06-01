@@ -18,6 +18,7 @@ h2
 *application-redis.yml*
 docker-compose.yml
 *a_test*
+*templates*
 *.sql*
 *ChatGptConfig*
 *OpenAPIConfig*

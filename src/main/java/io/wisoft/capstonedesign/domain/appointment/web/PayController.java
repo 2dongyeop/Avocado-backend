@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -30,6 +31,12 @@ public class PayController {
     @Value("${iamport.api-secret}")
     private String API_SECRET;
 //    private final String API_SECRET = IamportConfig.API_SECRET;
+
+    @GetMapping("/payment")
+    public String payment() {
+        return "payment";
+    }
+
 
     @PostMapping("/payment/callback")
     public ResponseEntity<?> callbackReceived(@RequestBody final Map<String, Object> model) {

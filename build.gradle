@@ -48,6 +48,9 @@ dependencies {
 	//JSONObject
 	implementation group: 'org.json', name: 'json', version: '20090211'
 
+	//Thymeleaf - 프론트 화면을 임시 대체
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 	//iamport
 	implementation 'com.github.iamport:iamport-rest-client-java:0.2.22'
 
