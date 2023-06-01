@@ -26,15 +26,19 @@ public class HospitalService {
 
         validateDuplicateHospital(request);
 
-        final Hospital hospital = Hospital.builder()
+        final Hospital hospital = createHospital(request);
+
+        hospitalRepository.save(hospital);
+        return hospital.getId();
+    }
+
+    private Hospital createHospital(final CreateHospitalRequest request) {
+        return Hospital.builder()
                 .name(request.name())
                 .number(request.number())
                 .address(request.address())
                 .operatingTime(request.operatingTime())
                 .build();
-
-        hospitalRepository.save(hospital);
-        return hospital.getId();
     }
 
     private void validateDuplicateHospital(final CreateHospitalRequest request) {

@@ -16,6 +16,7 @@ import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.MailException;
@@ -54,7 +55,12 @@ public class EmailServiceImpl implements EmailService {
         validateDuplicateMemberOrStaff(to);
         final String authenticateCode = sendEmail(to, EMAIL_CERTIFICATION_SUBJECT);
 
-        redisTemplate.opsForValue().set(to, authenticateCode, EXPIRED_TIME, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(
+                to,
+                authenticateCode,
+                EXPIRED_TIME,
+                TimeUnit.SECONDS
+        );
         log.info("redis :  " + to + " 를 3분간 저장합니다.");
 
         log.info(to + "으로 인증 코드를 발송합니다.");
@@ -88,10 +94,12 @@ public class EmailServiceImpl implements EmailService {
         redisTemplate.delete(request.email());
 
         //인증된 이메일 목록으로 DB에 저장 - 회원가입 성공시 삭제
-        mailAuthenticationRepository.save(DBMailAuthentication.builder()
-                .email(request.email())
-                .isVerified(true)
-                .build());
+        mailAuthenticationRepository.save(
+                DBMailAuthentication.builder()
+                        .email(request.email())
+                        .isVerified(true)
+                        .build()
+        );
     }
 
     private String getRedisValue(final String key) {
@@ -135,11 +143,7 @@ public class EmailServiceImpl implements EmailService {
         final String code = createCertificationCode();
 
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(AVOCADO_ADDRESS);
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(code);
+            final SimpleMailMessage message = createMessage(to, subject, code);
 
             emailSender.send(message);
         } catch (MailException exception) {
@@ -147,6 +151,16 @@ public class EmailServiceImpl implements EmailService {
         }
 
         return code;
+    }
+
+    @NotNull
+    private SimpleMailMessage createMessage(final String to, final String subject, final String code) {
+        final SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(AVOCADO_ADDRESS);
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(code);
+        return message;
     }
 
     private String createCertificationCode() {

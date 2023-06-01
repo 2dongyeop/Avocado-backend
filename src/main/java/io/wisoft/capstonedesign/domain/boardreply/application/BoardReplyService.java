@@ -36,14 +36,19 @@ public class BoardReplyService {
         final Board board = boardService.findById(request.boardId());
         final Staff staff = staffService.findById(request.staffId());
 
+        final BoardReply boardReply = createBoardReply(request, board, staff);
+
+        boardReplyRepository.save(boardReply);
+        return boardReply.getId();
+    }
+
+    private BoardReply createBoardReply(final CreateBoardReplyRequest request, final Board board, final Staff staff) {
         final BoardReply boardReply = BoardReply.builder()
                 .board(board)
                 .staff(staff)
                 .reply(request.reply())
                 .build();
-
-        boardReplyRepository.save(boardReply);
-        return boardReply.getId();
+        return boardReply;
     }
 
 

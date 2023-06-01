@@ -33,6 +33,8 @@ public class MemberService {
 
         member.updatePassword(encryptHelper.encrypt(request.newPassword()));
     }
+
+
     private void validateMemberPassword(final Member member, final UpdateMemberPasswordRequest request) {
 
         if (!encryptHelper.isMatch(request.oldPassword(), member.getPassword())) {

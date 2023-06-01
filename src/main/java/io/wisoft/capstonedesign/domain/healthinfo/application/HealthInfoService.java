@@ -35,15 +35,19 @@ public class HealthInfoService {
 
         final Staff staff = staffService.findById(request.staffId());
 
-        final HealthInfo healthInfo = HealthInfo.builder()
+        final HealthInfo healthInfo = createHealthInfo(request, staff);
+
+        healthInfoRepository.save(healthInfo);
+        return healthInfo.getId();
+    }
+
+    private HealthInfo createHealthInfo(final CreateHealthInfoRequest request, final Staff staff) {
+        return HealthInfo.builder()
                 .staff(staff)
                 .healthInfoPath(request.healthInfoPath())
                 .title(request.title())
                 .dept(HospitalDept.valueOf(request.dept()))
                 .build();
-
-        healthInfoRepository.save(healthInfo);
-        return healthInfo.getId();
     }
 
     /**

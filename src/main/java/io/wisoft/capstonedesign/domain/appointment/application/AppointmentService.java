@@ -74,7 +74,7 @@ public class AppointmentService {
         }
     }
 
-    private static Appointment createAppointment(
+    private Appointment createAppointment(
             final CreateAppointmentRequest request, final Member member, final Hospital hospital) {
 
         return Appointment.builder()
