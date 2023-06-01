@@ -14,9 +14,11 @@ h2
 *application-jwt.yml*
 *application-mail.yml*
 *application-openapi.yml*
+*application-iamport.yml*
 *application-redis.yml*
 docker-compose.yml
 *a_test*
+*templates*
 *.sql*
 *ChatGptConfig*
 *OpenAPIConfig*

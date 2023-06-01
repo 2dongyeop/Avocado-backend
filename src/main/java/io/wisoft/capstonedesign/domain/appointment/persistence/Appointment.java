@@ -4,6 +4,7 @@ import io.wisoft.capstonedesign.global.BaseEntity;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.enumeration.status.PayStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,6 +33,10 @@ public class Appointment extends BaseEntity {
 
     @Column(name = "appt_phonenumber", nullable = false)
     private String appointPhonenumber;
+
+    @Column(name = "appt_pay_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PayStatus payStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -78,7 +83,8 @@ public class Appointment extends BaseEntity {
             final HospitalDept dept,
             final String comment,
             final String appointName,
-            final String appointPhonenumber) {
+            final String appointPhonenumber,
+            final PayStatus payStatus) {
 
         Appointment appointment = new Appointment();
         appointment.setMember(member);
@@ -87,6 +93,7 @@ public class Appointment extends BaseEntity {
         appointment.comment = comment;
         appointment.appointName = appointName;
         appointment.appointPhonenumber = appointPhonenumber;
+        appointment.payStatus = payStatus;
 
         appointment.createEntity();
         return appointment;
