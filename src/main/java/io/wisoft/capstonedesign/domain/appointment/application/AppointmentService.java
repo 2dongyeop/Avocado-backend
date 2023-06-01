@@ -7,8 +7,8 @@ import io.wisoft.capstonedesign.domain.appointment.web.dto.UpdateAppointmentRequ
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.enumeration.status.PayStatus;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalDeptException;
-import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullAppointmentException;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -43,14 +42,7 @@ public class AppointmentService {
         final Hospital hospital = hospitalService.findById(request.hospitalId());
 
         //예약 정보 생성
-        final Appointment appointment = Appointment.builder()
-                .member(member)
-                .hospital(hospital)
-                .dept(HospitalDept.valueOf(request.dept()))
-                .comment(request.comment())
-                .appointName(request.appointName())
-                .appointPhonenumber(request.appointPhonenumber())
-                .build();
+        final Appointment appointment = createAppointment(request, member, hospital);
 
         appointmentRepository.save(appointment);
         return appointment.getId();
@@ -80,6 +72,20 @@ public class AppointmentService {
             log.error("일치하는 dept가 존재하지 않습니다.");
             e.printStackTrace();
         }
+    }
+
+    private static Appointment createAppointment(
+            final CreateAppointmentRequest request, final Member member, final Hospital hospital) {
+
+        return Appointment.builder()
+                .member(member)
+                .hospital(hospital)
+                .dept(HospitalDept.valueOf(request.dept()))
+                .comment(request.comment())
+                .appointName(request.appointName())
+                .appointPhonenumber(request.appointPhonenumber())
+                .payStatus(PayStatus.NONE)
+                .build();
     }
 
     private void validateDept(final String dept) throws IllegalDeptException {
