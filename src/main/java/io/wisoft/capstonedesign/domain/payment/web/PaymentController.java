@@ -4,9 +4,9 @@ package io.wisoft.capstonedesign.domain.appointment.web;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.Payment;
+import io.wisoft.capstonedesign.domain.appointment.application.PaymentService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,20 +17,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.Map;
 
 @Slf4j
 @Controller
-public class PayController {
+@RequiredArgsConstructor
+public class PaymentController {
 
-//    private final String API_KEY = IamportConfig.API_KEY;
+    private final PaymentService paymentService;
+
     @Value("${iamport.api-key}")
     private String API_KEY;
 
     @Value("${iamport.api-secret}")
     private String API_SECRET;
-//    private final String API_SECRET = IamportConfig.API_SECRET;
 
     @GetMapping("/payment")
     public String payment() {
@@ -43,8 +43,6 @@ public class PayController {
 
         //응답 header 생성
         final HttpHeaders responseHeaders = makeHttpHeader();
-
-        final JSONObject responseObj = new JSONObject();
 
         try {
 
@@ -60,26 +58,21 @@ public class PayController {
                 final IamportClient iamportClient = new IamportClient(API_KEY, API_SECRET);
                 final Payment payment = iamportClient.paymentByImpUid(imp_uid).getResponse();
 
-                //TODO 결제 정보 저장 로직 작성하기
-//                response.getResponse().getBuyerEmail()
-
-                responseObj.put("process_result", "결제성공");
+                final Long savedId = paymentService.save(payment);
+                return new ResponseEntity<>(savedId, responseHeaders, HttpStatus.OK);
 
             } else {
-                System.out.println("errorMsg = " + errorMsg);
-                responseObj.put("process_result", "결제실패 : " + errorMsg);
+                log.error(errorMsg);
+                return new ResponseEntity<>(errorMsg, responseHeaders, HttpStatus.OK);
             }
 
         } catch (IamportResponseException e) {
-            throw new RuntimeException(e);
-        } catch (JSONException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
 
-        return new ResponseEntity<>(responseObj.toString(), responseHeaders, HttpStatus.OK);
     }
 
     private void printLogByRequest(final String imp_uid, final String merchant_uid, final boolean success) {

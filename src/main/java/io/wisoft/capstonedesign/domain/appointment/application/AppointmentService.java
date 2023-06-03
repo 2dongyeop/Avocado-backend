@@ -9,6 +9,7 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.enumeration.status.PayStatus;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalDeptException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullAppointmentException;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -36,6 +38,8 @@ public class AppointmentService {
     @Transactional
     public Long save(
             final CreateAppointmentRequest request) {
+
+        validateAppointmentDate(request.appointmentDate());
 
         //엔티티 조회
         final Member member = memberService.findById(request.memberId());
@@ -74,6 +78,12 @@ public class AppointmentService {
         }
     }
 
+    private void validateAppointmentDate(final LocalDateTime appointmentDate) {
+        if (appointmentDate.isBefore(LocalDateTime.now())) {
+            throw new IllegalValueException("요청된 예약일자가 현재 날짜보다 이전입니다.");
+        }
+    }
+
     private Appointment createAppointment(
             final CreateAppointmentRequest request, final Member member, final Hospital hospital) {
 
@@ -85,6 +95,7 @@ public class AppointmentService {
                 .appointName(request.appointName())
                 .appointPhonenumber(request.appointPhonenumber())
                 .payStatus(PayStatus.NONE)
+                .appointmentDate(request.appointmentDate())
                 .build();
     }
 
