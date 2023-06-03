@@ -24,11 +24,9 @@ import io.wisoft.capstonedesign.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 
@@ -58,19 +56,14 @@ public class AuthService {
             validateEmailVerified(request.email());
             validateDuplicateNickname(request.nickname());
 
-            final Member member = Member.builder()
-                    .nickname(request.nickname())
-                    .email(request.email())
-                    .password(encryptHelper.encrypt(request.password1()))
-                    .phoneNumber(request.phonenumber())
-                    .build();
+            final Member member = createMember(request);
 
 
             //회원 저장
             memberRepository.save(member);
 
             //인증을 위해 저장했던 이메일 삭제
-            final DBMailAuthentication mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
+            final var mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
             mailAuthenticationRepository.delete(mailAuthentication);
 
             log.info(member.getNickname() + "님이 회원가입을 하셨습니다.");
@@ -81,20 +74,6 @@ public class AuthService {
         } catch (DuplicateStaffException duplicateStaffException) {
             duplicateStaffException.printStackTrace();
             return null;
-        }
-    }
-
-    private void validateDuplicateNickname(final String nickname) throws DuplicateMemberException {
-        if (memberRepository.findValidateMemberByNickname(nickname).size() > 0) {
-            throw new DuplicateMemberException("닉네임 중복");
-        }
-    }
-
-    private void validateEmailVerified(final String email) throws IllegalStateException {
-        final DBMailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(NullMailException::new);
-
-        if (!mail.isVerified()) {
-            throw new IllegalStateException("이메일 인증을 완료해주세요.");
         }
     }
 
@@ -116,20 +95,17 @@ public class AuthService {
             token = jwtTokenProvider.createToken(member.getNickname());
             log.info(member.getNickname() + "님이 로그인 하셨습니다.");
 
-            redisTemplate.opsForValue().set(token, member.getNickname(), LOGIN_EXPIRED_TIME, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(
+                    token, member.getNickname(),
+                    LOGIN_EXPIRED_TIME,
+                    TimeUnit.SECONDS
+            );
             log.info("redis : 토큰(" + token + ")을 1시간동안 저장합니다.");
 
         } catch (IllegalValueException e) {
             e.printStackTrace();
         }
         return token;
-    }
-
-    private void validatePassowrd(final LoginRequest request, final String member) throws IllegalValueException {
-        if (!encryptHelper.isMatch(request.password(), member)) {
-            log.error("비밀번호가 일치하지 않습니다.");
-            throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
-        }
     }
 
 
@@ -143,20 +119,13 @@ public class AuthService {
         //엔티티 조회
         final Hospital hospital = hospitalService.findById(request.hospitalId());
 
-        final Staff staff = Staff.builder()
-                .hospital(hospital)
-                .name(request.name())
-                .email(request.email())
-                .password(encryptHelper.encrypt(request.password1()))
-                .license_path(request.licensePath())
-                .dept(HospitalDept.valueOf(request.dept()))
-                .build();
+        final Staff staff = createStaff(request, hospital);
 
         //의료진 저장
         staffRepository.save(staff);
 
         //이메일 인증을 위해 저장했던 이메일 삭제
-        final DBMailAuthentication mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
+        final var mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
         mailAuthenticationRepository.delete(mailAuthentication);
 
         log.info(staff.getName() + "님이 가입 하셨습니다.");
@@ -176,10 +145,54 @@ public class AuthService {
         final String token = jwtTokenProvider.createToken(staff.getName());
         log.info(staff.getName() + "님이 로그인 하셨습니다.");
 
-        final ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        valueOperations.set(token, staff.getName(), LOGIN_EXPIRED_TIME, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(
+                token, staff.getName(),
+                LOGIN_EXPIRED_TIME,
+                TimeUnit.SECONDS
+        );
         log.info("redis : 토큰(" + token + ")을 1시간동안 저장합니다.");
 
         return token;
+    }
+
+    private Member createMember(final CreateMemberRequest request) {
+        return Member.builder()
+                .nickname(request.nickname())
+                .email(request.email())
+                .password(encryptHelper.encrypt(request.password1()))
+                .phoneNumber(request.phonenumber())
+                .build();
+    }
+
+    private void validateDuplicateNickname(final String nickname) throws DuplicateMemberException {
+        if (memberRepository.findValidateMemberByNickname(nickname).size() > 0) {
+            throw new DuplicateMemberException("닉네임 중복");
+        }
+    }
+
+    private void validateEmailVerified(final String email) throws IllegalStateException {
+        final DBMailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(NullMailException::new);
+
+        if (!mail.isVerified()) {
+            throw new IllegalStateException("이메일 인증을 완료해주세요.");
+        }
+    }
+
+    private void validatePassowrd(final LoginRequest request, final String member) throws IllegalValueException {
+        if (!encryptHelper.isMatch(request.password(), member)) {
+            log.error("비밀번호가 일치하지 않습니다.");
+            throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
+        }
+    }
+
+    private Staff createStaff(final CreateStaffRequest request, final Hospital hospital) {
+        return Staff.builder()
+                .hospital(hospital)
+                .name(request.name())
+                .email(request.email())
+                .password(encryptHelper.encrypt(request.password1()))
+                .license_path(request.licensePath())
+                .dept(HospitalDept.valueOf(request.dept()))
+                .build();
     }
 }

@@ -21,10 +21,6 @@ public class MemberMyPageService {
     private final MemberMyPageRepository memberMyPageRepository;
 
     /**
-     *  회원 마이페이지 기능
-     */
-
-    /**
      * 자신이 쓴 리뷰 목록 페이징 조회
      */
     public Page<Review> findReviewsByMemberIdUsingPaging(final Long memberId, final Pageable pageable) {

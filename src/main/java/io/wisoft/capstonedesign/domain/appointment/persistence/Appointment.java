@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 @Getter
@@ -37,6 +39,9 @@ public class Appointment extends BaseEntity {
     @Column(name = "appt_pay_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private PayStatus payStatus;
+
+    @Column(name = "appt_date", nullable = false)
+    private LocalDateTime appointmentDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -84,7 +89,8 @@ public class Appointment extends BaseEntity {
             final String comment,
             final String appointName,
             final String appointPhonenumber,
-            final PayStatus payStatus) {
+            final PayStatus payStatus,
+            final LocalDateTime appointmentDate) {
 
         Appointment appointment = new Appointment();
         appointment.setMember(member);
@@ -94,6 +100,7 @@ public class Appointment extends BaseEntity {
         appointment.appointName = appointName;
         appointment.appointPhonenumber = appointPhonenumber;
         appointment.payStatus = payStatus;
+        appointment.appointmentDate = appointmentDate;
 
         appointment.createEntity();
         return appointment;
@@ -113,5 +120,9 @@ public class Appointment extends BaseEntity {
         this.appointPhonenumber = appointPhonenumber;
 
         this.updateEntity();
+    }
+
+    public void payment() {
+        this.payStatus = PayStatus.COMPLETED;
     }
 }

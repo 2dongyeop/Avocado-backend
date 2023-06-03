@@ -33,15 +33,19 @@ public class BoardService {
         //엔티티 조회
         final Member member = memberService.findById(request.memberId());
 
-        final Board board = Board.builder()
+        final Board board = createBoard(request, member);
+
+        boardRepository.save(board);
+        return board.getId();
+    }
+
+    private Board createBoard(final CreateBoardRequest request, final Member member) {
+        return Board.builder()
                 .member(member)
                 .title(request.title())
                 .body(request.body())
                 .dept(HospitalDept.valueOf(request.dept()))
                 .build();
-
-        boardRepository.save(board);
-        return board.getId();
     }
 
     /**

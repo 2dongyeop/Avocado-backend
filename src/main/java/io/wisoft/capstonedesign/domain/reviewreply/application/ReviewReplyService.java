@@ -36,14 +36,19 @@ public class ReviewReplyService {
         final Member member = memberService.findById(request.memberId());
         final Review review = reviewService.findById(request.reviewId());
 
+        final ReviewReply reviewReply = createReviewReply(request, member, review);
+
+        reviewReplyRepository.save(reviewReply);
+        return reviewReply.getId();
+    }
+
+    private ReviewReply createReviewReply(final CreateReviewReplyRequest request, final Member member, final Review review) {
         final ReviewReply reviewReply = ReviewReply.builder()
                 .member(member)
                 .review(review)
                 .reply(request.reply())
                 .build();
-
-        reviewReplyRepository.save(reviewReply);
-        return reviewReply.getId();
+        return reviewReply;
     }
 
 
