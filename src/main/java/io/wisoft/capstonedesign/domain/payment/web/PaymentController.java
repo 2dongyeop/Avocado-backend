@@ -1,10 +1,10 @@
-package io.wisoft.capstonedesign.domain.appointment.web;
+package io.wisoft.capstonedesign.domain.payment.web;
 
 
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.Payment;
-import io.wisoft.capstonedesign.domain.appointment.application.PaymentService;
+import io.wisoft.capstonedesign.domain.payment.application.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
