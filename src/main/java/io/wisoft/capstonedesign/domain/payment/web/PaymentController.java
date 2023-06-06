@@ -4,7 +4,11 @@ package io.wisoft.capstonedesign.domain.payment.web;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.Payment;
+import io.wisoft.capstonedesign.domain.appointment.application.AppointmentService;
+import io.wisoft.capstonedesign.domain.appointment.persistence.Appointment;
 import io.wisoft.capstonedesign.domain.payment.application.PaymentService;
+import io.wisoft.capstonedesign.global.enumeration.status.PayStatus;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +29,7 @@ import java.util.Map;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final AppointmentService appointmentService;
 
     @Value("${iamport.api-key}")
     private String API_KEY;
@@ -51,6 +56,8 @@ public class PaymentController {
             final boolean success = (boolean) model.get("success");
             final String errorMsg = (String) model.get("error_msg");
 
+            validateAppointmentPayStatus(Long.valueOf(merchant_uid));
+
             printLogByRequest(imp_uid, merchant_uid, success);
 
             if (success == true) {
@@ -75,11 +82,19 @@ public class PaymentController {
 
     }
 
+    private void validateAppointmentPayStatus(final Long appointmentId) {
+        final Appointment appointment = appointmentService.findById(appointmentId);
+
+        if (appointment.getPayStatus() == PayStatus.COMPLETED) {
+            throw new IllegalValueException("이미 결제된 예약입니다.");
+        }
+    }
+
     private void printLogByRequest(final String imp_uid, final String merchant_uid, final boolean success) {
-        log.info("-----payment callback received-----" +
-                "\nimp_uid = " + imp_uid +
-                "\nmerchant_uid = " + merchant_uid +
-                "\nsuccess = " + success);
+        log.info("-----payment callback received-----");
+        log.info("imp_uid = " + imp_uid);
+        log.info("merchant_uid = " + merchant_uid);
+        log.info("success = " + success);
     }
 
     private HttpHeaders makeHttpHeader() {
