@@ -75,9 +75,13 @@ public class HealthInfoService {
     /**
      * 특정 병과의 건강정보 목록을 페이지별로 조회하기
      */
-    public Page<HealthInfo> findAllByDeptUsingPaging(final String deptNumber, final Pageable pageable) {
+    public Page<HealthInfo> findAllByDeptUsingPagingMultiValue(final List<String> deptList, final Pageable pageable) {
 
-        return healthInfoRepository.findAllByDeptUsingPaging(DeptMapper.numberToDept(deptNumber), pageable);
+        List<HospitalDept> list = deptList.stream()
+                .map(DeptMapper::numberToDept)
+                .toList();
+
+        return healthInfoRepository.findAllByDeptUsingPagingMultiValue(list, pageable);
     }
 
     /**

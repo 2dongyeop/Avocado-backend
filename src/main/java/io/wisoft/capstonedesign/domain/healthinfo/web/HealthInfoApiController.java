@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Tag(name = "건강정보")
 @RestController
@@ -52,19 +54,20 @@ public class HealthInfoApiController {
 
 
     /**
-     * ex) /api/health-infos?dept=1&page=0&size=5&sort=createAt,desc
-     * ex) /api/health-infos?page=0&size=5&sort=createAt,desc
+     * ex) /api/health-infos?dept=1&dept=2&page=0&size=5&sort=createAt,desc -> 다중 dept 조회
+     * ex) /api/health-infos?dept=1&page=0&size=5&sort=createAt,desc        -> dept 하나 조회
+     * ex) /api/health-infos?page=0&size=5&sort=createAt,desc               -> dept 없으면 모든 건강정보 조회
      */
     @SwaggerApi(summary = "특정 병과의 건강 정보 목록 페이징 조회", implementation = Page.class)
     @SwaggerApiFailWithoutAuth
     @GetMapping("/api/health-infos")
     public Page<HealthInfoDto> healthInfosByDepartmentUsingPaging(
-            @RequestParam(name = "dept", required = false) final String deptNumber, final Pageable pageable) {
+            @RequestParam(name = "dept", required = false) final List<String> deptNumberList, final Pageable pageable) {
 
-        if (deptNumber == null) {
+        if (deptNumberList.isEmpty()) {
             return healthInfoService.findByUsingPaging(pageable).map(HealthInfoDto::new);
         }
 
-        return healthInfoService.findAllByDeptUsingPaging(deptNumber, pageable).map(HealthInfoDto::new);
+        return healthInfoService.findAllByDeptUsingPagingMultiValue(deptNumberList, pageable).map(HealthInfoDto::new);
     }
 }
