@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.domain.board.persistence;
 
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,6 +30,15 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
      */
     @Query(value = "select b from Board b where b.status = 'WRITE'", countQuery = "select count(b) from Board b")
     Page<Board> findAllUsingPaging(final Pageable pageable);
+
+
+    /**
+     * 특정 병과의 게시글 목록 페이징 조회
+     */
+    @Query(value = "select b from Board b where b.dept in :list",
+            countQuery = "select count(b) from Board b")
+    Page<Board> findAllUsingPagingMultiValue(@Param("list") final List<HospitalDept> list, final Pageable pageable);
+
 
     @Query("select b from Board b join fetch b.member m")
     List<Board> findAllByMember();

@@ -77,7 +77,7 @@ public class HealthInfoService {
      */
     public Page<HealthInfo> findAllByDeptUsingPagingMultiValue(final List<String> deptList, final Pageable pageable) {
 
-        List<HospitalDept> list = deptList.stream()
+        final List<HospitalDept> list = deptList.stream()
                 .map(DeptMapper::numberToDept)
                 .toList();
 

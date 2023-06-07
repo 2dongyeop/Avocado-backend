@@ -8,6 +8,7 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
+import io.wisoft.capstonedesign.global.mapper.DeptMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -86,6 +87,16 @@ public class BoardService {
     /** 게시글 목록을 페이징 조회 */
     public Page<Board> findAllUsingPaging(final Pageable pageable) {
         return boardRepository.findAllUsingPaging(pageable);
+    }
+
+    /** 특정 병과의 게시글 목록 페이징 조회 */
+    public Page<Board> findAllByDeptUsingPagingMultiValue(final List<String> deptList, final Pageable pageable) {
+
+        final List<HospitalDept> list = deptList.stream()
+                .map(DeptMapper::numberToDept)
+                .toList();
+
+        return boardRepository.findAllUsingPagingMultiValue(list, pageable);
     }
 
     public List<Board> findAllByMember() {
