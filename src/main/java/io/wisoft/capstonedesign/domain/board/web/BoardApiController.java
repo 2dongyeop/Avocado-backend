@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Tag(name = "게시판")
 @RestController
@@ -30,11 +32,17 @@ public class BoardApiController {
     }
 
 
-    @SwaggerApi(summary = "게시글 목록 조회 - 페이징 사용", implementation = Page.class)
+    @SwaggerApi(summary = "게시글 목록 조회 및 특정 병과 조회", implementation = Page.class)
     @SwaggerApiFailWithoutAuth
     @GetMapping("/api/boards")
-    public Page<BoardListDto> boardsUsingPaging(final Pageable pageable) {
-        return boardService.findAllUsingPaging(pageable).map(BoardListDto::new);
+    public Page<BoardListDto> boardsByDepartmentUsingPaging(
+            @RequestParam(name = "dept", required = false) final List<String> deptNumberList, final Pageable pageable) {
+
+        if (deptNumberList.isEmpty()) {
+            return boardService.findAllUsingPaging(pageable).map(BoardListDto::new);
+        }
+
+        return boardService.findAllByDeptUsingPagingMultiValue(deptNumberList, pageable).map(BoardListDto::new);
     }
 
 

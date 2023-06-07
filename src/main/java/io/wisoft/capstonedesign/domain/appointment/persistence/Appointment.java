@@ -123,6 +123,18 @@ public class Appointment extends BaseEntity {
     }
 
     public void payment() {
+    if (this.payStatus == PayStatus.COMPLETED) {
+            throw new IllegalStateException("이미 결제된 예약건입니다.");
+        }
+
         this.payStatus = PayStatus.COMPLETED;
+    }
+
+    public void refund() {
+        if (this.payStatus == PayStatus.REFUND) {
+            throw new IllegalStateException("이미 환불된 예약건입니다.");
+        }
+
+        this.payStatus = PayStatus.REFUND;
     }
 }

@@ -18,9 +18,8 @@ public class PaymentService {
     private final AppointmentService appointmentService;
 
     @Transactional
-    public Long save(final Payment payment) {
+    public Long save(final Long appointmentId, final Payment payment) {
         //예약 정보 조회
-        final Long appointmentId = Long.valueOf(payment.getMerchantUid());
         final Appointment appointment = appointmentService.findById(appointmentId);
 
         //해당 예약건 결제
@@ -41,5 +40,21 @@ public class PaymentService {
                 payment.getBuyerName()
         );
         return paymentEntity;
+    }
+
+    @Transactional
+    public Long refund(final Long appointmentId) {
+
+        //예약 정보 조회
+        final Appointment appointment = appointmentService.findById(appointmentId);
+
+        //해당 예약건 결제 취소 상태로 바꾸기
+        appointment.refund();
+
+        //결제 정보 조회
+        final PaymentEntity paymentEntity = paymentRepository.findByAppointment(appointment);
+        paymentEntity.refund();
+
+        return paymentEntity.getId();
     }
 }

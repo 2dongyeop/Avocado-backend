@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.domain.payment.persistence;
 
 import io.wisoft.capstonedesign.domain.appointment.persistence.Appointment;
+import io.wisoft.capstonedesign.global.enumeration.status.PayStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class PaymentEntity {
     private String paymentName;
     private String buyerEmail;
     private String buyerName;
+    private PayStatus payStatus;
 
     @OneToOne
     @JoinColumn(name = "appt_id")
@@ -38,7 +40,12 @@ public class PaymentEntity {
         payment.paymentName = paymentName;
         payment.buyerEmail = buyerEmail;
         payment.buyerName = buyerName;
+        payment.payStatus = PayStatus.COMPLETED;
 
         return payment;
+    }
+
+    public void refund() {
+        this.payStatus = PayStatus.REFUND;
     }
 }
