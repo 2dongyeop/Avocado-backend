@@ -56,30 +56,24 @@ public class PaymentController {
             final boolean success = (boolean) model.get("success");
             final String errorMsg = (String) model.get("error_msg");
 
-            validateAppointmentPayStatus(Long.valueOf(merchant_uid));
-
-            printLogByRequest(imp_uid, merchant_uid, success);
-
-            if (success == true) {
-
-                final IamportClient iamportClient = new IamportClient(API_KEY, API_SECRET);
-                final Payment payment = iamportClient.paymentByImpUid(imp_uid).getResponse();
-
-                final Long savedId = paymentService.save(payment);
-                return new ResponseEntity<>(savedId, responseHeaders, HttpStatus.OK);
-
-            } else {
+            if (!success) {
                 log.error(errorMsg);
                 return new ResponseEntity<>(errorMsg, responseHeaders, HttpStatus.OK);
             }
 
-        } catch (IamportResponseException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+            validateAppointmentPayStatus(Long.valueOf(merchant_uid));
+            printLogByRequest(imp_uid, merchant_uid, success);
+
+
+            final IamportClient iamportClient = new IamportClient(API_KEY, API_SECRET);
+            final Payment payment = iamportClient.paymentByImpUid(imp_uid).getResponse();
+
+            final Long savedId = paymentService.save(payment);
+            return new ResponseEntity<>(savedId, responseHeaders, HttpStatus.OK);
+
+        } catch (IamportResponseException | IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     private void validateAppointmentPayStatus(final Long appointmentId) {
