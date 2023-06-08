@@ -2,20 +2,17 @@ package io.wisoft.capstonedesign.domain.staff.application;
 
 import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
+import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-public class StaffMyPageServiceTest {
+public class StaffMyPageServiceTest extends ServiceTest {
 
     @Autowired EntityManager em;
     @Autowired StaffMyPageService staffMyPageService;

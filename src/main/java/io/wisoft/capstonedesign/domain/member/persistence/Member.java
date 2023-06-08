@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,9 @@ public class Member extends BaseEntity {
             final String password,
             final String phoneNumber) {
 
-        Member member = new Member();
+        validateParam(nickname, email, password, phoneNumber);
+
+        final Member member = new Member();
         member.nickname = nickname;
         member.email = email;
         member.password = password;
@@ -73,21 +76,28 @@ public class Member extends BaseEntity {
         return member;
     }
 
+    private static void validateParam(final String nickname, final String email, final String password, final String phoneNumber) {
+        Assert.hasText(nickname, "nickname은 필수입니다.");
+        Assert.hasText(email, "email은 필수입니다.");
+        Assert.hasText(password, "password는 필수입니다.");
+        Assert.hasText(phoneNumber, "phoneNumber는 필수입니다.");
+    }
+
 
     /**
      * 수정 로직
      */
-    public void updatePassword(String newPassword) {
+    public void updatePassword(final String newPassword) {
         this.password = newPassword;
         this.updateEntity();
     }
 
-    public void updateNickname(String newNickname) {
+    public void updateNickname(final String newNickname) {
         this.nickname = newNickname;
         this.updateEntity();
     }
 
-    public void uploadPhotoPath(String newPhotoPath) {
+    public void uploadPhotoPath(final String newPhotoPath) {
         this.memberPhotoPath = newPhotoPath;
         this.updateEntity();
     }

@@ -5,14 +5,12 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.wisoft.capstonedesign.domain.review.web.dto.CreateReviewRequest;
 import io.wisoft.capstonedesign.domain.review.web.dto.UpdateReviewRequest;
-import io.wisoft.capstonedesign.setting.api.ApiTest;
+import io.wisoft.capstonedesign.setting.common.ApiTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 class ReviewApiControllerTest extends ApiTest {
@@ -62,7 +60,7 @@ class ReviewApiControllerTest extends ApiTest {
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
-    private static ExtractableResponse<Response> deleteReview(final int targetReviewId) {
+    private ExtractableResponse<Response> deleteReview(final int targetReviewId) {
         return RestAssured
                 .given()
                 .log().all()
@@ -74,7 +72,7 @@ class ReviewApiControllerTest extends ApiTest {
     }
 
 
-    private static ExtractableResponse<Response> updateReview(final int targetReviewId, final UpdateReviewRequest request) {
+    private ExtractableResponse<Response> updateReview(final int targetReviewId, final UpdateReviewRequest request) {
         return RestAssured
                 .given()
                 .log().all()
@@ -86,11 +84,11 @@ class ReviewApiControllerTest extends ApiTest {
                 .log().all().extract();
     }
 
-    private static UpdateReviewRequest getUpdateReviewRequest() {
+    private UpdateReviewRequest getUpdateReviewRequest() {
         return new UpdateReviewRequest("new Title", "new Body");
     }
 
-    private static CreateReviewRequest getCreateReviewRequest() {
+    private CreateReviewRequest getCreateReviewRequest() {
         return new CreateReviewRequest(
                 1L,
                 "title",
@@ -101,7 +99,7 @@ class ReviewApiControllerTest extends ApiTest {
         );
     }
 
-    private static ExtractableResponse<Response> createReview(final CreateReviewRequest request) {
+    private ExtractableResponse<Response> createReview(final CreateReviewRequest request) {
         return RestAssured
                 .given()
                 .log().all()
@@ -113,7 +111,7 @@ class ReviewApiControllerTest extends ApiTest {
                 .log().all().extract();
     }
 
-    private static ExtractableResponse<Response> readReview(final int targetReviewId) {
+    private ExtractableResponse<Response> readReview(final int targetReviewId) {
         return RestAssured
                 .given()
                 .log().all()

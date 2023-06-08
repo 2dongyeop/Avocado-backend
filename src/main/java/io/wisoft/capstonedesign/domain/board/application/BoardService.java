@@ -6,6 +6,7 @@ import io.wisoft.capstonedesign.domain.board.web.dto.CreateBoardRequest;
 import io.wisoft.capstonedesign.domain.board.web.dto.UpdateBoardRequest;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import io.wisoft.capstonedesign.global.mapper.DeptMapper;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -64,8 +66,16 @@ public class BoardService {
     @Transactional
     public void updateTitleBody(final Long boardId, final UpdateBoardRequest request) {
 
+        validateUpdateParam(request);
+
         final Board board = findById(boardId);
         board.updateTitleBody(request.newTitle(), request.newBody());
+    }
+
+    private void validateUpdateParam(final UpdateBoardRequest request) {
+        if (!StringUtils.hasText(request.newTitle()) || !StringUtils.hasText(request.newBody())) {
+            throw new IllegalValueException("파라미터가 비어있어 게시글을 수정할 수 없습니다.");
+        }
     }
 
     /* 조회 로직 */

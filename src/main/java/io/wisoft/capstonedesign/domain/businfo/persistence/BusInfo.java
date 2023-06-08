@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 @Entity
 @Getter
@@ -29,11 +30,18 @@ public class BusInfo extends BaseEntity {
             final String busInfoPath,
             final BusArea area) {
 
-        BusInfo busInfo = new BusInfo();
+        validateParam(busInfoPath, area);
+
+        final BusInfo busInfo = new BusInfo();
         busInfo.busInfoPath = busInfoPath;
         busInfo.area = area;
 
         busInfo.createEntity();
         return busInfo;
+    }
+
+    private static void validateParam(final String busInfoPath, final BusArea area) {
+        Assert.hasText(busInfoPath, "busInfoPath는 필수입니다.");
+        Assert.notNull(area, "area는 필수입니다.");
     }
 }

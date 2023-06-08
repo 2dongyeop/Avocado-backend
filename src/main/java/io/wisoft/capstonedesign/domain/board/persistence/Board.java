@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,9 @@ public class Board extends BaseEntity {
             final String body,
             final HospitalDept dept) {
 
-        Board board = new Board();
+        validateParam(member, title, body, dept);
+
+        final Board board = new Board();
         board.setMember(member);
         board.title = title;
         board.body = body;
@@ -81,6 +84,13 @@ public class Board extends BaseEntity {
         board.createEntity();
 
         return board;
+    }
+
+    private static void validateParam(final Member member, final String title, final String body, final HospitalDept dept) {
+        Assert.notNull(member, "member는 필수입니다.");
+        Assert.hasText(title, "title은 필수");
+        Assert.hasText(body, "body은 필수");
+        Assert.notNull(dept, "dept는 필수");
     }
 
     /**

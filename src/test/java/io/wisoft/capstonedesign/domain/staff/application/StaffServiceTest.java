@@ -10,19 +10,16 @@ import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPasswordRequest;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
+import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static io.wisoft.capstonedesign.setting.data.HospitalTestData.getDefaultHospital;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-public class StaffServiceTest {
+public class StaffServiceTest extends ServiceTest {
 
     @Autowired EntityManager em;
     @Autowired StaffService staffService;
@@ -207,7 +204,7 @@ public class StaffServiceTest {
         emailService.certificateEmail(mailRequest);
     }
 
-    private static CreateStaffRequest getCreateStaffRequest(final String email, final Hospital hospital) {
+    private CreateStaffRequest getCreateStaffRequest(final String email, final Hospital hospital) {
         return CreateStaffRequest.builder()
                 .hospitalId(hospital.getId())
                 .name("staff1")

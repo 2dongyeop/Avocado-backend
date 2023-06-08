@@ -28,8 +28,8 @@ public class BoardRepositoryTest {
         //when -- 동작
         final Page<Board> page = boardRepository.findAllUsingPaging(pageRequest);
         final List<Board> content = page.getContent();
-//        Board board1 = content.get(0);
-//        Board board2 = content.get(1);
+//        Board board1 = body.get(0);
+//        Board board2 = body.get(1);
 
         //then -- 검증
         assertThat(content.size()).isEqualTo(3);

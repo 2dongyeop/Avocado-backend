@@ -3,20 +3,18 @@ package io.wisoft.capstonedesign.domain.staff.web;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.wisoft.capstonedesign.setting.api.ApiTest;
+import io.wisoft.capstonedesign.setting.common.ApiTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class StaffApiControllerTest extends ApiTest {
 
     @Test
     public void updateStaff() throws Exception {
 
-        final int targetStaffId = 1;
+        final int targetStaffId = 2;
         final String photoPath = "newPhotoPath";
 
         final var response = updateStaff(targetStaffId, photoPath);
@@ -35,7 +33,7 @@ class StaffApiControllerTest extends ApiTest {
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
-    private static ExtractableResponse<Response> deleteStaff(int targetStaffId) {
+    private ExtractableResponse<Response> deleteStaff(int targetStaffId) {
         return RestAssured
                 .given()
                 .log().all()
@@ -46,7 +44,7 @@ class StaffApiControllerTest extends ApiTest {
                 .log().all().extract();
     }
 
-    private static ExtractableResponse<Response> updateStaff(final int targetStaffId, final String photoPath) {
+    private ExtractableResponse<Response> updateStaff(final int targetStaffId, final String photoPath) {
         return RestAssured
                 .given()
                 .log().all()

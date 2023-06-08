@@ -8,28 +8,23 @@ import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
+import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static io.wisoft.capstonedesign.setting.data.MemberTestData.getDefaultMember;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-public class BoardServiceTest {
+public class BoardServiceTest extends ServiceTest {
 
-    @Autowired
-    EntityManager em;
-    @Autowired
-    BoardService boardService;
+    @Autowired EntityManager em;
+    @Autowired BoardService boardService;
 
     @Test
     public void save_success() throws Exception {
@@ -207,7 +202,7 @@ public class BoardServiceTest {
         Assertions.assertThat(page.size()).isEqualTo(3);
     }
 
-    private static CreateBoardRequest getCreateBoardRequest(final Long memberId) {
+    private CreateBoardRequest getCreateBoardRequest(final Long memberId) {
         return CreateBoardRequest.builder().memberId(memberId).title("title").body("body").dept("OBSTETRICS").boardPhotoPath("path").build();
     }
 }

@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 @Entity
 @Getter
@@ -53,7 +54,9 @@ public class HealthInfo extends BaseEntity {
             final String title,
             final HospitalDept dept) {
 
-        HealthInfo healthInfo = new HealthInfo();
+        validateParam(staff, healthInfoPath, title, dept);
+
+        final HealthInfo healthInfo = new HealthInfo();
         healthInfo.setStaff(staff);
         healthInfo.healthInfoPath = healthInfoPath;
         healthInfo.title = title;
@@ -61,5 +64,12 @@ public class HealthInfo extends BaseEntity {
 
         healthInfo.createEntity();
         return healthInfo;
+    }
+
+    private static void validateParam(final Staff staff, final String healthInfoPath, final String title, final HospitalDept dept) {
+        Assert.notNull(staff, "staff는 필수입니다.");
+        Assert.hasText(healthInfoPath, "healthInfoPath는 필수입니다.");
+        Assert.hasText(title, "title은 필수입니다.");
+        Assert.notNull(dept, "dept는 필수입니다.");
     }
 }

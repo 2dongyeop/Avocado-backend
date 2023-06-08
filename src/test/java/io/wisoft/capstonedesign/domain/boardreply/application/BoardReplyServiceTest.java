@@ -9,12 +9,11 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardReplyException;
+import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static io.wisoft.capstonedesign.setting.data.BoardTestData.getDefaultBoard;
 import static io.wisoft.capstonedesign.setting.data.HospitalTestData.getDefaultHospital;
@@ -23,9 +22,7 @@ import static io.wisoft.capstonedesign.setting.data.StaffTestData.getDefaultStaf
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@SpringBootTest
-@Transactional
-public class BoardReplyServiceTest {
+public class BoardReplyServiceTest extends ServiceTest {
 
     @Autowired EntityManager em;
     @Autowired BoardReplyService boardReplyService;
@@ -229,7 +226,7 @@ public class BoardReplyServiceTest {
         });
     }
 
-    private static CreateBoardReplyRequest getCreateBoardReplyRequest(final Board board, final Staff staff) {
+    private CreateBoardReplyRequest getCreateBoardReplyRequest(final Board board, final Staff staff) {
         return CreateBoardReplyRequest.builder()
                 .boardId(board.getId())
                 .staffId(staff.getId())

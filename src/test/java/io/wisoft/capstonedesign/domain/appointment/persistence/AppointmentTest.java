@@ -5,13 +5,9 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
 class AppointmentTest {
 
     @Test
@@ -25,7 +21,7 @@ class AppointmentTest {
                 "update-comment",
                 "update-name",
                 "update-phonenumber"
-                );
+        );
 
         //then -- 검증
         Assertions.assertThat(appointment.getComment()).isEqualTo("update-comment");

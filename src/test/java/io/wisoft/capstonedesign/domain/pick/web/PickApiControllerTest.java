@@ -4,16 +4,12 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.wisoft.capstonedesign.domain.pick.web.dto.CreatePickRequest;
-import io.wisoft.capstonedesign.setting.api.ApiTest;
+import io.wisoft.capstonedesign.setting.common.ApiTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@Transactional
 class PickApiControllerTest extends ApiTest {
 
     @Test
@@ -47,7 +43,7 @@ class PickApiControllerTest extends ApiTest {
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
-    private static ExtractableResponse<Response> readPick(final int targetPickId) {
+    private ExtractableResponse<Response> readPick(final int targetPickId) {
         return RestAssured
                 .given()
                 .log().all()
@@ -59,7 +55,7 @@ class PickApiControllerTest extends ApiTest {
     }
 
 
-    private static ExtractableResponse<Response> deletePick(final int targetPickId) {
+    private ExtractableResponse<Response> deletePick(final int targetPickId) {
         return RestAssured
                 .given()
                 .log().all()
@@ -70,7 +66,7 @@ class PickApiControllerTest extends ApiTest {
                 .log().all().extract();
     }
 
-    private static ExtractableResponse<Response> createPick(final CreatePickRequest request) {
+    private ExtractableResponse<Response> createPick(final CreatePickRequest request) {
         return RestAssured
                 .given()
                 .log().all()
@@ -82,7 +78,7 @@ class PickApiControllerTest extends ApiTest {
                 .log().all().extract();
     }
 
-    private static CreatePickRequest getCreatePickRequest() {
+    private CreatePickRequest getCreatePickRequest() {
         return new CreatePickRequest(1L, 1L);
     }
 }

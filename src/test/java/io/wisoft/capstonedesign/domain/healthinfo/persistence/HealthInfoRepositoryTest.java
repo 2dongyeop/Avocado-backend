@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -17,19 +18,22 @@ import static org.assertj.core.api.Assertions.*;
 @Transactional
 public class HealthInfoRepositoryTest {
 
-    @Autowired HealthInfoRepository healthInfoRepository;
+    @Autowired
+    HealthInfoRepository healthInfoRepository;
 
     @Test
-    public void findByAllDept() throws Exception {
+    public void findByUsingPaging() throws Exception {
         //given -- 조건
         final HospitalDept hospitalDept = HospitalDept.DENTAL;
+        List<HospitalDept> hospitalDeptListlist = new ArrayList<>();
+        hospitalDeptListlist.add(hospitalDept);
         final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
-        final List<HealthInfo> list = healthInfoRepository.findAllByDeptUsingPaging(hospitalDept, request).getContent();
+        final List<HealthInfo> list = healthInfoRepository.findAllByDeptUsingPagingMultiValue(hospitalDeptListlist, request).getContent();
 
         //then -- 검증
-        assertThat(list.size()).isEqualTo(2);
+        assertThat(list.size()).isEqualTo(1);
     }
 
     @Test

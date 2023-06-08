@@ -1,4 +1,4 @@
-package io.wisoft.capstonedesign.setting.api;
+package io.wisoft.capstonedesign.setting.common;
 
 
 import io.restassured.RestAssured;

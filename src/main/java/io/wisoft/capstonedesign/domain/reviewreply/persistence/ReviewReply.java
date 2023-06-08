@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 /**
  * 리뷰댓글
@@ -68,14 +69,21 @@ public class ReviewReply extends BaseEntity {
             final Review review,
             final String reply) {
 
-        ReviewReply reviewReply = new ReviewReply();
+        validateParam(member, review, reply);
 
+        final ReviewReply reviewReply = new ReviewReply();
         reviewReply.setMember(member);
         reviewReply.setReview(review);
         reviewReply.reply = reply;
 
         reviewReply.createEntity();
         return reviewReply;
+    }
+
+    private static void validateParam(final Member member, final Review review, final String reply) {
+        Assert.notNull(member, "member는 필수입니다.");
+        Assert.notNull(review, "review는 필수입니다.");
+        Assert.hasText(reply, "review는 필수입니다.");
     }
 
     /**

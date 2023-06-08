@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,9 @@ public class Review extends BaseEntity {
             final int starPoint,
             final String target_hospital) {
 
-        Review review = new Review();
+        validateParam(member, title, body, reviewPhotoPath, starPoint, target_hospital);
+
+        final Review review = new Review();
         review.setMember(member);
         review.title = title;
         review.body = body;
@@ -85,6 +88,15 @@ public class Review extends BaseEntity {
         review.createEntity();
 
         return review;
+    }
+
+    private static void validateParam(final Member member, final String title, final String body, final String reviewPhotoPath, final int starPoint, final String target_hospital) {
+        Assert.notNull(member, "member는 필수입니다.");
+        Assert.hasText(title, "title은 필수입니다.");
+        Assert.hasText(body, "body는 필수입니다.");
+        Assert.hasText(reviewPhotoPath, "reviewPhotoPath는 필수입니다.");
+        Assert.notNull(starPoint, "starPoint는 필수입니다.");
+        Assert.hasText(target_hospital, "target_hospital은 필수입니다.");
     }
 
 
