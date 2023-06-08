@@ -7,12 +7,11 @@ import io.wisoft.capstonedesign.domain.reviewreply.web.dto.CreateReviewReplyRequ
 import io.wisoft.capstonedesign.domain.reviewreply.web.dto.UpdateReviewReplyRequest;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewReplyException;
+import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,9 +19,7 @@ import static io.wisoft.capstonedesign.setting.data.MemberTestData.getDefaultMem
 import static io.wisoft.capstonedesign.setting.data.ReviewTestData.getDefaultReview;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-public class ReviewReplyServiceTest {
+public class ReviewReplyServiceTest extends ServiceTest {
 
     @Autowired EntityManager em;
     @Autowired ReviewReplyService reviewReplyService;
@@ -214,7 +211,7 @@ public class ReviewReplyServiceTest {
         Assertions.assertThat(list.size()).isEqualTo(2);
     }
 
-    private static CreateReviewReplyRequest getCreateReviewReplyRequest(final Member member, final Review review, final String comment) {
+    private CreateReviewReplyRequest getCreateReviewReplyRequest(final Member member, final Review review, final String comment) {
         return new CreateReviewReplyRequest(member.getId(), review.getId(), comment);
     }
 

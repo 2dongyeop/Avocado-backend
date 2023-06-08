@@ -5,11 +5,13 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.wisoft.capstonedesign.domain.appointment.web.dto.CreateAppointmentRequest;
 import io.wisoft.capstonedesign.domain.appointment.web.dto.UpdateAppointmentRequest;
-import io.wisoft.capstonedesign.setting.api.ApiTest;
+import io.wisoft.capstonedesign.setting.common.ApiTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+
+import java.time.LocalDateTime;
 
 class AppointmentControllerTest extends ApiTest {
 
@@ -23,7 +25,7 @@ class AppointmentControllerTest extends ApiTest {
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
-    private static ExtractableResponse<Response> createAppointment(final CreateAppointmentRequest request) {
+    private ExtractableResponse<Response> createAppointment(final CreateAppointmentRequest request) {
         return RestAssured
                 .given()
                 .log().all()
@@ -47,7 +49,7 @@ class AppointmentControllerTest extends ApiTest {
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
-    private static ExtractableResponse<Response> deleteAppointment(final int deleteAppointmentId) {
+    private ExtractableResponse<Response> deleteAppointment(final int deleteAppointmentId) {
         return RestAssured
                 .given()
                 .log().all()
@@ -62,7 +64,7 @@ class AppointmentControllerTest extends ApiTest {
     @Test
     public void 예약수정() throws Exception {
 
-        final int updateAppointmentId = 1;
+        final int updateAppointmentId = 2;
 
         final UpdateAppointmentRequest request = 수정요청생성();
 
@@ -71,20 +73,20 @@ class AppointmentControllerTest extends ApiTest {
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
-    private static ExtractableResponse<Response> updateAppointment(final int updateAppointmentId, final UpdateAppointmentRequest request) {
+    private ExtractableResponse<Response> updateAppointment(final int updateAppointmentId, final UpdateAppointmentRequest request) {
         return RestAssured
                 .given()
                 .log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when()
                 .body(request)
+                .when()
                 .patch("/api/appointments/" + updateAppointmentId)
                 .then()
                 .log().all().extract();
     }
 
 
-    private static UpdateAppointmentRequest 수정요청생성() {
+    private UpdateAppointmentRequest 수정요청생성() {
         return new UpdateAppointmentRequest(
                 "DENTAL",
                 "comment",
@@ -94,14 +96,15 @@ class AppointmentControllerTest extends ApiTest {
     }
 
 
-    private static CreateAppointmentRequest 저장요청생성() {
+    private CreateAppointmentRequest 저장요청생성() {
         return new CreateAppointmentRequest(
                 1L,
                 1L,
                 "DENTAL",
                 "예약코멘트",
                 "이동엽",
-                "01012341234"
+                "01012341234",
+                LocalDateTime.now().plusMonths(1)
         );
     }
 }

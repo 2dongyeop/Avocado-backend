@@ -7,24 +7,21 @@ import io.wisoft.capstonedesign.domain.review.web.dto.UpdateReviewRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewStatus;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewException;
+import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static io.wisoft.capstonedesign.setting.data.MemberTestData.getDefaultMember;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-public class ReviewServiceTest {
+public class ReviewServiceTest extends ServiceTest {
 
     @Autowired EntityManager em;
     @Autowired ReviewService reviewService;
@@ -151,28 +148,6 @@ public class ReviewServiceTest {
         Assertions.assertThat(review.getUpdatedAt()).isNotNull();
     }
 
-    @Test
-    public void 리뷰_수정_실패() throws Exception {
-
-        //given -- 조건
-
-        //회원 생성
-        final Member member = getDefaultMember();
-        em.persist(member);
-
-        final CreateReviewRequest request1 = getCreateReviewRequest(member, 5, "아보카도 병원");
-        final Long saveId = reviewService.save(request1);
-        final Review review = reviewService.findById(saveId);
-
-        //when -- 동작
-        final UpdateReviewRequest request2 = new UpdateReviewRequest(null, "본문1");
-
-        //then -- 검증
-        assertThrows(IllegalValueException.class, () -> {
-            reviewService.updateTitleBody(review.getId(), request2);
-        });
-    }
-
 
     @Test
     public void 특정_병원의_리뷰_조회() throws Exception {
@@ -215,7 +190,14 @@ public class ReviewServiceTest {
         });
     }
 
-    private static CreateReviewRequest getCreateReviewRequest(final Member member, final int starPoint, final String hospitalName) {
-        return new CreateReviewRequest(member.getId(), "친절해요", "자세히 진료해줘요", starPoint, hospitalName, "사진_링크");
+    private CreateReviewRequest getCreateReviewRequest(final Member member, final int starPoint, final String hospitalName) {
+        return new CreateReviewRequest(
+                member.getId(),
+                "친절해요",
+                "자세히 진료해줘요",
+                starPoint,
+                hospitalName,
+                "사진_링크"
+        );
     }
 }

@@ -55,7 +55,7 @@ public class Pick extends BaseEntity {
 
     /* 정적 생성 메서드 */
     public static Pick createPick(final Member member, final Hospital hospital) {
-        Pick pick = new Pick();
+        final Pick pick = new Pick();
         pick.setMember(member);
         pick.setHospital(hospital);
 

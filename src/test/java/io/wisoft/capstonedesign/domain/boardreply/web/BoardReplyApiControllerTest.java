@@ -5,17 +5,14 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.wisoft.capstonedesign.domain.boardreply.web.dto.CreateBoardReplyRequest;
 import io.wisoft.capstonedesign.domain.boardreply.web.dto.UpdateBoardReplyRequest;
-import io.wisoft.capstonedesign.setting.api.ApiTest;
+import io.wisoft.capstonedesign.setting.common.ApiTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 
 
-@Transactional
 public class BoardReplyApiControllerTest extends ApiTest {
-
 
     @Test
     public void createBoardReply_success() throws Exception {
@@ -30,7 +27,7 @@ public class BoardReplyApiControllerTest extends ApiTest {
     @Test
     public void updateBoardReply() throws Exception {
 
-        final int targetBoardReplyId = 1;
+        final int targetBoardReplyId = 2;
         final UpdateBoardReplyRequest request = getUpdateBoardReplyRequest();
 
         final var response = updateBoardReply(targetBoardReplyId, request);
@@ -62,7 +59,7 @@ public class BoardReplyApiControllerTest extends ApiTest {
 
     }
 
-    private static ExtractableResponse<Response> readBoardReply(int targetBoardReplyId) {
+    private ExtractableResponse<Response> readBoardReply(int targetBoardReplyId) {
         return RestAssured
                 .given()
                 .log().all()
@@ -74,7 +71,7 @@ public class BoardReplyApiControllerTest extends ApiTest {
     }
 
 
-    private static ExtractableResponse<Response> deleteBoardReply(int targetBoardReplyId) {
+    private ExtractableResponse<Response> deleteBoardReply(int targetBoardReplyId) {
         return RestAssured
                 .given()
                 .log().all()
@@ -85,7 +82,7 @@ public class BoardReplyApiControllerTest extends ApiTest {
                 .log().all().extract();
     }
 
-    private static ExtractableResponse<Response> updateBoardReply(final int targetBoardReplyId, final UpdateBoardReplyRequest request) {
+    private ExtractableResponse<Response> updateBoardReply(final int targetBoardReplyId, final UpdateBoardReplyRequest request) {
         return RestAssured
                 .given()
                 .log().all()
@@ -97,13 +94,13 @@ public class BoardReplyApiControllerTest extends ApiTest {
                 .log().all().extract();
     }
 
-    private static UpdateBoardReplyRequest getUpdateBoardReplyRequest() {
+    private UpdateBoardReplyRequest getUpdateBoardReplyRequest() {
         return new UpdateBoardReplyRequest(
                 "update-reply"
         );
     }
 
-    private static ExtractableResponse<Response> createBoardReply(final CreateBoardReplyRequest request) {
+    private ExtractableResponse<Response> createBoardReply(final CreateBoardReplyRequest request) {
         return RestAssured
                 .given()
                 .log().all()
@@ -115,7 +112,7 @@ public class BoardReplyApiControllerTest extends ApiTest {
                 .log().all().extract();
     }
 
-    private static CreateBoardReplyRequest getCreateBoardReplyRequest() {
+    private CreateBoardReplyRequest getCreateBoardReplyRequest() {
         return new CreateBoardReplyRequest(
                 1L,
                 1L,

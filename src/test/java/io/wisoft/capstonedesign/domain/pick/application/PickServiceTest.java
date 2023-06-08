@@ -5,20 +5,17 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.pick.web.dto.CreatePickRequest;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullPickException;
+import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static io.wisoft.capstonedesign.setting.data.HospitalTestData.getDefaultHospital;
 import static io.wisoft.capstonedesign.setting.data.MemberTestData.getDefaultMember;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-public class PickServiceTest {
+public class PickServiceTest extends ServiceTest {
 
     @Autowired EntityManager em;
     @Autowired PickService pickService;
@@ -28,20 +25,20 @@ public class PickServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = getDefaultMember();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Hospital hospital = getDefaultHospital();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
-        CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
+        final CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
 
         //when -- 동작
-        Long saveId = pickService.save(request);
+        final Long saveId = pickService.save(request);
 
         //then -- 검증
-        Pick pick = pickService.findById(saveId);
+        final Pick pick = pickService.findById(saveId);
         Assertions.assertThat(pick.getHospital().getName()).isEqualTo(hospital.getName());
         Assertions.assertThat(pick.getMember().getNickname()).isEqualTo(member.getNickname());
     }
@@ -51,15 +48,15 @@ public class PickServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = getDefaultMember();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Hospital hospital = getDefaultHospital();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
-        CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
-        Long saveId = pickService.save(request);
+        final CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());
+        final Long saveId = pickService.save(request);
 
         //when -- 동작
         pickService.cancelPick(saveId);
@@ -76,11 +73,11 @@ public class PickServiceTest {
         //given -- 조건
 
         //회원 생성
-        Member member = getDefaultMember();
+        final Member member = getDefaultMember();
         em.persist(member);
 
         //병원 생성
-        Hospital hospital = getDefaultHospital();
+        final Hospital hospital = getDefaultHospital();
         em.persist(hospital);
 
         CreatePickRequest request = new CreatePickRequest(member.getId(), hospital.getId());

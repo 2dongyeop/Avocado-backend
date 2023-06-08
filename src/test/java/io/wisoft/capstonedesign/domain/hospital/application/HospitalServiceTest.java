@@ -4,17 +4,14 @@ import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalRequest;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateHospitalException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
+import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-public class HospitalServiceTest {
+public class HospitalServiceTest extends ServiceTest {
 
     @Autowired
     HospitalService hospitalService;
@@ -76,7 +73,7 @@ public class HospitalServiceTest {
             hospitalService.save(request2);
         });
     }
-    private static CreateHospitalRequest getCreateHospitalRequest(final String number, final String area) {
+    private CreateHospitalRequest getCreateHospitalRequest(final String number, final String area) {
         return new CreateHospitalRequest("avocado", number, area, "연중무휴");
     }
 }

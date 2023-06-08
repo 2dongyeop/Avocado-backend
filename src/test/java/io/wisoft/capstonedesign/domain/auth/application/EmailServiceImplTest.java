@@ -3,19 +3,16 @@ package io.wisoft.capstonedesign.domain.auth.application;
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
+import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
-@SpringBootTest
-@Transactional
-public class EmailServiceImplTest {
+public class EmailServiceImplTest extends ServiceTest {
 
     @Autowired EmailService emailService;
     @Autowired MemberRepository memberRepository;

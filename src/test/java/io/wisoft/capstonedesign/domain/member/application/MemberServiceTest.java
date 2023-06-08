@@ -9,17 +9,14 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPasswordRequest;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
+import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-public class MemberServiceTest {
+public class MemberServiceTest extends ServiceTest {
 
     @Autowired AuthService authService;
     @Autowired MemberService memberService;
@@ -173,7 +170,7 @@ public class MemberServiceTest {
         emailService.certificateEmail(mailRequest);
     }
 
-    private static CreateMemberRequest getCreateMemberRequest(final String email) {
+    private CreateMemberRequest getCreateMemberRequest(final String email) {
         return CreateMemberRequest.builder()
                 .nickname("test1")
                 .email(email)

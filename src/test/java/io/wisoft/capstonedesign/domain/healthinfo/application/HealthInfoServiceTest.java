@@ -5,22 +5,19 @@ import io.wisoft.capstonedesign.domain.healthinfo.web.dto.CreateHealthInfoReques
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullHealthInfoException;
+import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-public class HealthInfoServiceTest {
+public class HealthInfoServiceTest extends ServiceTest {
     @Autowired StaffService staffService;
     @Autowired HealthInfoService healthInfoService;
 
@@ -87,30 +84,13 @@ public class HealthInfoServiceTest {
     @Test
     public void findAllByDept() throws Exception {
         //given -- 조건
-        final String dept = "DENTAL";
         final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createdAt"));
 
         //when -- 동작
-        final List<HealthInfo> list = healthInfoService.findAllByDeptUsingPaging(dept, request).getContent();
+        final List<HealthInfo> list = healthInfoService.findByUsingPaging(request).getContent();
 
         //then -- 검증
         Assertions.assertThat(list.size()).isEqualTo(2);
-    }
-
-
-    @Test
-    @DisplayName("해당하는 dept가 없어 오류가 발생해야한다.")
-    public void findAllByDept_fail() throws Exception {
-        //given -- 조건
-        final String dept = "1231231";
-        final PageRequest request = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "createAt"));
-
-
-        //when -- 동작
-        //then -- 검증
-        assertThrows(IllegalValueException.class, () -> {
-            healthInfoService.findAllByDeptUsingPaging(dept, request).getContent();
-        });
     }
 
 
@@ -126,7 +106,7 @@ public class HealthInfoServiceTest {
         Assertions.assertThat(list.size()).isEqualTo(2);
     }
 
-    private static CreateHealthInfoRequest getCreateHealthInfoRequest() {
+    private CreateHealthInfoRequest getCreateHealthInfoRequest() {
         return new CreateHealthInfoRequest(1L, "안경 제대로 쓰기", "OPHTHALMOLOGY", "경로");
     }
 }

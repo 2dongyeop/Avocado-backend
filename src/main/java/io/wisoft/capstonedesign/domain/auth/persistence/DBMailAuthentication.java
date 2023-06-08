@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 @Entity
 @Getter
@@ -23,12 +24,16 @@ public class DBMailAuthentication {
 
     @Builder
     public DBMailAuthentication(final String email, final boolean isVerified) {
+        validateParam(email, isVerified);
+
         this.email = email;
         this.isVerified = isVerified;
     }
 
-    public void update() {
-        this.isVerified = true;
+    private void validateParam(final String email, final boolean isVerified) {
+        Assert.hasText(email, "email은 필수입니다.");
+        Assert.notNull(isVerified, "인증유무는 필수입니다.");
     }
+
 }
 

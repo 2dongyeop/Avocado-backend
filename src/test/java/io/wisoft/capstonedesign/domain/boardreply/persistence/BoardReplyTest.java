@@ -7,13 +7,9 @@ import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
 class BoardReplyTest {
 
     @Test
@@ -28,7 +24,7 @@ class BoardReplyTest {
         Assertions.assertThat(boardReply.getReply()).isEqualTo("updateReply");
     }
 
-    private static BoardReply getDefaultBoardReply() {
+    private BoardReply getDefaultBoardReply() {
         return BoardReply.builder()
                 .board(Board.builder()
                         .member(Member.builder()

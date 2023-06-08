@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 
@@ -92,7 +93,9 @@ public class Appointment extends BaseEntity {
             final PayStatus payStatus,
             final LocalDateTime appointmentDate) {
 
-        Appointment appointment = new Appointment();
+        validateParam(member, hospital, dept, comment, appointName, appointPhonenumber, payStatus, appointmentDate);
+
+        final Appointment appointment = new Appointment();
         appointment.setMember(member);
         appointment.setHospital(hospital);
         appointment.dept = dept;
@@ -104,6 +107,17 @@ public class Appointment extends BaseEntity {
 
         appointment.createEntity();
         return appointment;
+    }
+
+    private static void validateParam(Member member, Hospital hospital, HospitalDept dept, String comment, String appointName, String appointPhonenumber, PayStatus payStatus, LocalDateTime appointmentDate) {
+        Assert.notNull(member, "member는 필수입니다.");
+        Assert.notNull(hospital, "hospital는 필수입니다.");
+        Assert.notNull(dept, "dept는 필수입니다.");
+        Assert.hasText(comment, "comment는 필수입니다.");
+        Assert.hasText(appointName, "appointment는 필수입니다.");
+        Assert.hasText(appointPhonenumber, "appointPhonenumber는 필수입니다.");
+        Assert.notNull(payStatus, "payStatus는 필수입니다.");
+        Assert.notNull(appointmentDate, "예약 날짜는 필수입니다.");
     }
 
     /**

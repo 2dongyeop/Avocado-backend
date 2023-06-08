@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 @Entity
 @Getter
@@ -64,13 +65,22 @@ public class BoardReply extends BaseEntity {
             final Board board,
             final Staff staff,
             final String reply) {
-        BoardReply boardReply = new BoardReply();
+
+        validateParam(board, staff, reply);
+
+        final BoardReply boardReply = new BoardReply();
         boardReply.setBoard(board);
         boardReply.setStaff(staff);
         boardReply.reply = reply;
 
         boardReply.createEntity();
         return boardReply;
+    }
+
+    private static void validateParam(final Board board, final Staff staff, final String reply) {
+        Assert.notNull(board, "board는 필수입니다.");
+        Assert.notNull(staff, "staff 필수입니다.");
+        Assert.hasText(reply, "reply는 필수입니다.");
     }
 
 

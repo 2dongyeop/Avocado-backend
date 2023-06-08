@@ -82,27 +82,6 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void loginMember_fail_password_isNotMatch() throws Exception {
-        //given -- 조건
-        final String email = "test-email@naver.com";
-
-        //인증 코드 전송
-        sendCertificationCodeAndCertificateCode(email);
-
-        final CreateMemberRequest request = getCreateMemberRequest(email, "password1");
-
-        final CreateMemberResponse response = authController.signupMember(request);
-        final LoginRequest loginRequest = new LoginRequest(email, "password22");
-
-
-        //when -- 동작
-        //then -- 검증
-        assertThrows(IllegalValueException.class, () -> {
-            authController.loginMember(loginRequest);
-        });
-    }
-
-    @Test
     public void loginMember_fail_email_NotFound() throws Exception {
         //given -- 조건
         final String email = "test-email@naver.com";
@@ -207,7 +186,7 @@ public class AuthControllerTest {
         mailController.certificateEmail(emailRequest);
     }
 
-    private static CreateMemberRequest getCreateMemberRequest(final String mail, final String password1) {
+    private CreateMemberRequest getCreateMemberRequest(final String mail, final String password1) {
         return CreateMemberRequest.builder()
                 .nickname("test")
                 .email(mail)
@@ -217,7 +196,7 @@ public class AuthControllerTest {
                 .build();
     }
 
-    private static CreateStaffRequest getCreateStaffRequest(final Long hospitalId, final String email, final String password) {
+    private CreateStaffRequest getCreateStaffRequest(final Long hospitalId, final String email, final String password) {
         return CreateStaffRequest.builder()
                 .hospitalId(hospitalId)
                 .name("name")

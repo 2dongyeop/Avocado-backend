@@ -3,20 +3,17 @@ package io.wisoft.capstonedesign.domain.businfo.application;
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfo;
 import io.wisoft.capstonedesign.domain.businfo.web.dto.CreateBusInfoRequest;
 import io.wisoft.capstonedesign.global.exception.nullcheck.NullBusInfoException;
+import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-public class BusInfoServiceTest {
+public class BusInfoServiceTest extends ServiceTest {
 
     @Autowired
     BusInfoService busInfoService;

@@ -3,22 +3,18 @@ package io.wisoft.capstonedesign.domain.member.web;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.wisoft.capstonedesign.setting.api.ApiTest;
+import io.wisoft.capstonedesign.setting.common.ApiTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@Transactional
 class MemberApiControllerTest extends ApiTest {
 
     @Test
     public void readMember() throws Exception {
 
-        final int targetMemberId = 1;
+        final int targetMemberId = 2;
 
         final var response = readMember(targetMemberId);
 

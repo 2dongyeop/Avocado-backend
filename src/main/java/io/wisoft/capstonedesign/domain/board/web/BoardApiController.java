@@ -46,16 +46,16 @@ public class BoardApiController {
     }
 
 
-    @SwaggerApi(summary = "게시글 작성", implementation = CreateBoardResponse.class)
-    @SwaggerApiFailWithAuth
-    @PostMapping("/api/boards")
-    public CreateBoardResponse createBoard(
-            @RequestBody @Valid final CreateBoardRequest request) {
-
-        Long id = boardService.save(request);
-        Board board = boardService.findById(id);
-        return new CreateBoardResponse(board.getId());
-    }
+//    @SwaggerApi(summary = "게시글 작성", implementation = CreateBoardResponse.class)
+//    @SwaggerApiFailWithAuth
+//    @PostMapping("/api/boards")
+//    public CreateBoardResponse createBoard(
+//            @RequestBody @Valid final CreateBoardRequest request) {
+//
+//        Long id = boardService.save(request);
+//        Board board = boardService.findById(id);
+//        return new CreateBoardResponse(board.getId());
+//    }
 
 
     @SwaggerApi(summary = "게시글 제목 및 본문 수정", implementation = UpdateBoardResponse.class)
