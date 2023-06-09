@@ -12,6 +12,7 @@ import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffResponse;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.jwt.AuthorizationExtractor;
 import io.wisoft.capstonedesign.global.jwt.RedisJwtBlackList;
@@ -33,13 +34,19 @@ public class AuthController {
     private final RedisJwtBlackList redisJwtBlackList;
 
 
-    @SwaggerApi(summary = "회원 가입", implementation = CreateMemberResponse.class)
+    @SwaggerApi(summary = "회원 가입", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
     @PostMapping("/api/auth/signup/members")
-    public CreateMemberResponse signupMember(@RequestBody @Valid final CreateMemberRequest request) {
+    public ResponseEntity<CreateMemberResponse> signupMember(@RequestBody @Valid final CreateMemberRequest request) {
 
         validatePassword(request.password1(), request.password2());
-        return new CreateMemberResponse(authService.signUpMember(request));
+        final Long id = authService.signUpMember(request);
+
+        if (id == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(new CreateMemberResponse(id));
     }
 
 
@@ -85,7 +92,7 @@ public class AuthController {
 
     private static void validatePassword(final String password1, final String confirmPassword) throws IllegalValueException {
         if (!password1.equals(confirmPassword)) {
-            throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.");
+            throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.", ErrorCode.ILLEGAL_PASSWORD);
         }
     }
 }

@@ -1,22 +1,15 @@
 package io.wisoft.capstonedesign.global.exception.illegal;
 
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
+import lombok.Getter;
+
+@Getter
 public class IllegalDeptException extends RuntimeException {
-    public IllegalDeptException() {
-    }
 
-    public IllegalDeptException(String message) {
+    private final ErrorCode errorCode;
+
+    public IllegalDeptException(final String message, final ErrorCode errorCode) {
         super(message);
-    }
-
-    public IllegalDeptException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public IllegalDeptException(Throwable cause) {
-        super(cause);
-    }
-
-    public IllegalDeptException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+        this.errorCode = errorCode;
     }
 }

@@ -7,9 +7,10 @@ import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReplyReposito
 import io.wisoft.capstonedesign.domain.boardreply.web.dto.CreateBoardReplyRequest;
 import io.wisoft.capstonedesign.domain.boardreply.web.dto.UpdateBoardReplyRequest;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardReplyException;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,12 +44,11 @@ public class BoardReplyService {
     }
 
     private BoardReply createBoardReply(final CreateBoardReplyRequest request, final Board board, final Staff staff) {
-        final BoardReply boardReply = BoardReply.builder()
+        return BoardReply.builder()
                 .board(board)
                 .staff(staff)
                 .reply(request.reply())
                 .build();
-        return boardReply;
     }
 
 
@@ -75,7 +75,7 @@ public class BoardReplyService {
     private void validateParameter(final UpdateBoardReplyRequest request) {
 
         if (!StringUtils.hasText(request.reply())) {
-            throw new IllegalValueException();
+            throw new IllegalValueException("수정할 내용이 비어있습니다.", ErrorCode.ILLEGAL_PARAM);
         }
     }
 
@@ -83,14 +83,14 @@ public class BoardReplyService {
      * 게시글댓글 단건 조회
      */
     public BoardReply findById(final Long boardReplyId) {
-        return boardReplyRepository.findById(boardReplyId).orElseThrow(NullBoardReplyException::new);
+        return boardReplyRepository.findById(boardReplyId).orElseThrow(NotFoundException::new);
     }
 
     /**
      * 게시글댓글 단건 상세 조회
      */
     public BoardReply findDetailById(final Long boardReplyId) {
-        return boardReplyRepository.findDetailById(boardReplyId).orElseThrow(NullBoardReplyException::new);
+        return boardReplyRepository.findDetailById(boardReplyId).orElseThrow(NotFoundException::new);
     }
 
     /**

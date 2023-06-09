@@ -8,12 +8,10 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
+import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateEmailException;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
-import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullMailException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -71,13 +69,9 @@ public class EmailServiceImpl implements EmailService {
         final Optional<Member> member = memberRepository.findByEmail(to);
         final Optional<Staff> staff = staffRepository.findByEmail(to);
 
-        if (member.isPresent()) {
+        if (member.isPresent() || staff.isPresent()) {
             log.error("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.");
-            throw new DuplicateMemberException();
-        }
-        if (staff.isPresent()) {
-            log.error("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.");
-            throw new DuplicateStaffException();
+            throw new DuplicateEmailException("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.", ErrorCode.DUPLICATE_EMAIL);
         }
     }
 
@@ -106,21 +100,21 @@ public class EmailServiceImpl implements EmailService {
         final String code = redisTemplate.opsForValue().get(key);
 
         if (code == null) {
-            throw new NullMailException("이메일 정보가 잘못되었습니다.");
+            throw new NotFoundException("해당 이메일에 대한 응답코드 송신 기록이 없습니다.");
         }
         return code;
     }
 
     private void validateBeforeCertificateEmail(final String code, final CertificateMailRequest request) {
         if (request.code() == (code)) {
-            throw new IllegalValueException("인증 코드가 달라 인증에 실패하였습니다.");
+            throw new IllegalValueException("인증 코드가 달라 인증에 실패하였습니다.", ErrorCode.ILLEGAL_CODE);
         }
     }
 
     @Async
     @Transactional
     public void sendResetMemberPassword(final String to) {
-        final Member member = memberRepository.findByEmail(to).orElseThrow(NullMemberException::new);
+        final Member member = memberRepository.findByEmail(to).orElseThrow(NotFoundException::new);
         final String temporaryPassword = sendEmail(to, PASSWORD_RESET_SUBJECT);
 
         member.updatePassword(encryptHelper.encrypt(temporaryPassword));
@@ -131,7 +125,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Transactional
     public void sendResetStaffPassword(final String to) {
-        final Staff staff = staffRepository.findByEmail(to).orElseThrow(NullStaffException::new);
+        final Staff staff = staffRepository.findByEmail(to).orElseThrow(NotFoundException::new);
         final String temporaryPassword = sendEmail(to, PASSWORD_RESET_SUBJECT);
 
         staff.updatePassword(encryptHelper.encrypt(temporaryPassword));
@@ -167,8 +161,15 @@ public class EmailServiceImpl implements EmailService {
         final StringBuilder stringBuilder = new StringBuilder();
         final Random random = new Random();
 
+        final String code = randomProcess(stringBuilder, random);
+        log.info("code : " + code);
+        return code;
+    }
+
+    @NotNull
+    private String randomProcess(final StringBuilder stringBuilder, final Random random) {
         for (int i = 0; i < 8; i++) { // 인증코드 8자리
-            int index = random.nextInt(3); // 0~2 까지 랜덤
+            final int index = random.nextInt(3); // 0~2 까지 랜덤
 
             switch (index) {
                 //  a~z  (ex. 1+97=98 => (char)98 = 'b')
@@ -182,7 +183,6 @@ public class EmailServiceImpl implements EmailService {
             }
         }
         final String code = stringBuilder.toString();
-        log.info("code : " + code);
         return code;
     }
 }

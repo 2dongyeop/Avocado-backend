@@ -159,7 +159,7 @@ public class AuthServiceTest extends ServiceTest {
         emailService.certificateEmail(mailRequest);
     }
 
-    private static CreateMemberRequest getCreateMemberRequest(final String email) {
+    private CreateMemberRequest getCreateMemberRequest(final String email) {
         return CreateMemberRequest.builder()
                 .nickname("test1")
                 .email(email)
@@ -169,7 +169,7 @@ public class AuthServiceTest extends ServiceTest {
                 .build();
     }
 
-    private static CreateStaffRequest getCreateStaffRequest(final String email, final Hospital hospital) {
+    private CreateStaffRequest getCreateStaffRequest(final String email, final Hospital hospital) {
         return CreateStaffRequest.builder()
                 .hospitalId(hospital.getId())
                 .name("staff1")

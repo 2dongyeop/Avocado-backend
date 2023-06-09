@@ -8,8 +8,9 @@ import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
 import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReplyRepository;
 import io.wisoft.capstonedesign.domain.reviewreply.web.dto.CreateReviewReplyRequest;
 import io.wisoft.capstonedesign.domain.reviewreply.web.dto.UpdateReviewReplyRequest;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewReplyException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,12 +44,11 @@ public class ReviewReplyService {
     }
 
     private ReviewReply createReviewReply(final CreateReviewReplyRequest request, final Member member, final Review review) {
-        final ReviewReply reviewReply = ReviewReply.builder()
+        return ReviewReply.builder()
                 .member(member)
                 .review(review)
                 .reply(request.reply())
                 .build();
-        return reviewReply;
     }
 
 
@@ -76,7 +76,7 @@ public class ReviewReplyService {
     private void validateParameter(final UpdateReviewReplyRequest request) {
 
         if (!StringUtils.hasText(request.reply())) {
-            throw new IllegalValueException("reply가 비어있어 수정할 수 없습니다.");
+            throw new IllegalValueException("reply가 비어있어 수정할 수 없습니다.", ErrorCode.ILLEGAL_PARAM);
         }
     }
 
@@ -85,14 +85,14 @@ public class ReviewReplyService {
      * 리뷰댓글 단건조회
      */
     public ReviewReply findById(final Long reviewReplyId) {
-        return reviewReplyRepository.findById(reviewReplyId).orElseThrow(NullReviewReplyException::new);
+        return reviewReplyRepository.findById(reviewReplyId).orElseThrow(NotFoundException::new);
     }
 
     /**
      * 리뷰댓글 단건 상세조회
      */
     public ReviewReply findDetailById(final Long reviewReplyId) {
-        return reviewReplyRepository.findDetailById(reviewReplyId).orElseThrow(NullReviewReplyException::new);
+        return reviewReplyRepository.findDetailById(reviewReplyId).orElseThrow(NotFoundException::new);
     }
 
 

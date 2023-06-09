@@ -19,7 +19,7 @@ public class ChatGptServiceImpl implements ChatGptService {
 
     @Override
     public ChatGptResponse askQuestion(final ChatRequest chatRequest) {
-        ChatGptResponse response = this.getResponse(
+        final ChatGptResponse response = this.getResponse(
                 this.buildHttpEntity(
                         new ChatGptRequest(
                                 ChatGptConfig.MODEL,

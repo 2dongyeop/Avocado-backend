@@ -32,14 +32,13 @@ public class PaymentService {
     }
 
     private PaymentEntity paymentToPaymentEntity(final Payment payment) {
-        final PaymentEntity paymentEntity = PaymentEntity.createPaymentEntity(
+        return PaymentEntity.createPaymentEntity(
                 payment.getPgProvider(),
                 payment.getPayMethod(),
                 "아보카도 병원 예약금",
                 payment.getBuyerEmail(),
                 payment.getBuyerName()
         );
-        return paymentEntity;
     }
 
     @Transactional

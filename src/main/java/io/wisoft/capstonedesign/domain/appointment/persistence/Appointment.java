@@ -5,6 +5,8 @@ import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.enumeration.status.PayStatus;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -109,7 +111,7 @@ public class Appointment extends BaseEntity {
         return appointment;
     }
 
-    private static void validateParam(Member member, Hospital hospital, HospitalDept dept, String comment, String appointName, String appointPhonenumber, PayStatus payStatus, LocalDateTime appointmentDate) {
+    private static void validateParam(final Member member, final Hospital hospital, final HospitalDept dept, final String comment, final String appointName, final String appointPhonenumber, final PayStatus payStatus, final LocalDateTime appointmentDate) {
         Assert.notNull(member, "member는 필수입니다.");
         Assert.notNull(hospital, "hospital는 필수입니다.");
         Assert.notNull(dept, "dept는 필수입니다.");
@@ -138,7 +140,7 @@ public class Appointment extends BaseEntity {
 
     public void payment() {
     if (this.payStatus == PayStatus.COMPLETED) {
-            throw new IllegalStateException("이미 결제된 예약건입니다.");
+            throw new IllegalValueException("이미 결제된 예약건입니다.", ErrorCode.ILLEGAL_STATE);
         }
 
         this.payStatus = PayStatus.COMPLETED;
@@ -146,7 +148,7 @@ public class Appointment extends BaseEntity {
 
     public void refund() {
         if (this.payStatus == PayStatus.REFUND) {
-            throw new IllegalStateException("이미 환불된 예약건입니다.");
+            throw new IllegalValueException("이미 환불된 예약건입니다.", ErrorCode.ILLEGAL_STATE);
         }
 
         this.payStatus = PayStatus.REFUND;

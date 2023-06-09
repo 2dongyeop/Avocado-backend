@@ -32,7 +32,6 @@ public class ChatGptController {
                 () -> chatGptService.askQuestion(chatRequest), executor)
                 .orTimeout(5, TimeUnit.SECONDS);
 
-        final ChatGptResponse response = future.join();
-        return response;
+        return future.join();
     }
 }

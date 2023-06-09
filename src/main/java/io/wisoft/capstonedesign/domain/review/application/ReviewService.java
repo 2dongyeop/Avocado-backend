@@ -6,10 +6,10 @@ import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.domain.review.persistence.ReviewRepository;
 import io.wisoft.capstonedesign.domain.review.web.dto.CreateReviewRequest;
 import io.wisoft.capstonedesign.domain.review.web.dto.UpdateReviewRequest;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullReviewException;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +46,7 @@ public class ReviewService {
                 .body(request.body())
                 .starPoint(request.starPoint())
                 .target_hospital(request.targetHospital())
-//                .reviewPhotoPath("path1")
+                .reviewPhotoPath("path1")
                 .build();
 
         reviewRepository.save(review);
@@ -55,13 +55,13 @@ public class ReviewService {
 
     private void validateExistHospital(final String targetHospital) {
         if (hospitalRepository.findByName(targetHospital).size() == 0) {
-            throw new NullHospitalException("존재하지 않는 병원입니다.");
+            throw new NotFoundException("존재하지 않는 병원입니다.");
         }
     }
 
     private void validateStarPoint(final int starPoint) {
         if (starPoint <= 0 || starPoint >= 6) {
-            throw new IllegalValueException("별점의 범위는 1~5 사이여야 합니다.");
+            throw new IllegalValueException("별점의 범위는 1~5 사이여야 합니다.", ErrorCode.ILLEGAL_STAR_POINT);
         }
     }
 
@@ -90,21 +90,21 @@ public class ReviewService {
     private void validateTitleBody(final UpdateReviewRequest request) {
 
         if (!StringUtils.hasText(request.newTitle()) || !StringUtils.hasText(request.newBody())) {
-            throw new IllegalValueException("제목이나 본문이 비어있습니다.");
+            throw new IllegalValueException("제목이나 본문이 비어있습니다.", ErrorCode.ILLEGAL_PARAM);
         }
     }
 
 
     /* 조회 로직 */
     public Review findById(final Long reviewId) {
-        return reviewRepository.findById(reviewId).orElseThrow(NullReviewException::new);
+        return reviewRepository.findById(reviewId).orElseThrow(NotFoundException::new);
     }
 
     public List<Review> findAll() { return reviewRepository.findAll(); }
 
     /** 상세 조회 */
     public Review findDetailById(final Long reviewId) {
-        return reviewRepository.findDetailById(reviewId).orElseThrow(NullReviewException::new);
+        return reviewRepository.findDetailById(reviewId).orElseThrow(NotFoundException::new);
     }
 
     /** 리뷰 목록 페이징 조회 */
@@ -118,7 +118,7 @@ public class ReviewService {
         final Page<Review> page = reviewRepository.findByTargetHospitalUsingPaging(targetHospital, pageable);
 
         if (page.isEmpty()) {
-            throw new IllegalValueException("해당 병원에 대한 리뷰는 존재하지 않습니다.");
+            throw new NotFoundException("해당 병원에 대한 리뷰는 존재하지 않습니다.");
         }
         return page;
     }

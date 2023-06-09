@@ -2,12 +2,11 @@ package io.wisoft.capstonedesign.domain.healthinfo.application;
 
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
-import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullHealthInfoException;
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfoRepository;
 import io.wisoft.capstonedesign.domain.healthinfo.web.dto.CreateHealthInfoRequest;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.global.mapper.DeptMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -60,11 +57,11 @@ public class HealthInfoService {
 
     /* 조회 로직 */
     public HealthInfo findById(final Long healthInfoId) {
-        return healthInfoRepository.findById(healthInfoId).orElseThrow(NullHealthInfoException::new);
+        return healthInfoRepository.findById(healthInfoId).orElseThrow(NotFoundException::new);
     }
 
     public HealthInfo findDetailById(final Long healthInfoId) {
-        return healthInfoRepository.findDetailById(healthInfoId).orElseThrow(NullHealthInfoException::new);
+        return healthInfoRepository.findDetailById(healthInfoId).orElseThrow(NotFoundException::new);
     }
 
     public List<HealthInfo> findAll() {

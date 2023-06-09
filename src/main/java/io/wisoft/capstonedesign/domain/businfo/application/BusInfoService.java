@@ -3,8 +3,8 @@ package io.wisoft.capstonedesign.domain.businfo.application;
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfo;
 import io.wisoft.capstonedesign.domain.businfo.web.dto.CreateBusInfoRequest;
 import io.wisoft.capstonedesign.global.enumeration.BusArea;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullBusInfoException;
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfoRepository;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +40,7 @@ public class BusInfoService {
 
     /* 조회 로직 */
     public BusInfo findById(final Long busInfoId) {
-        return busInfoRepository.findById(busInfoId).orElseThrow(NullBusInfoException::new);
+        return busInfoRepository.findById(busInfoId).orElseThrow(NotFoundException::new);
     }
 
     public List<BusInfo> findAll() {
@@ -52,7 +52,7 @@ public class BusInfoService {
         final List<BusInfo> busInfoList = busInfoRepository.findByArea(BusArea.valueOf(area));
 
         if (busInfoList.size() == 0) {
-            throw new NullBusInfoException("해당 버스정보는 존재하지 않습니다.");
+            throw new NotFoundException("해당 버스정보는 존재하지 않습니다.");
         }
         return busInfoList;
     }

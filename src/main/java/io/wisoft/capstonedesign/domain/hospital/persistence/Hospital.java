@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +52,9 @@ public class Hospital extends BaseEntity {
             final String address,
             final String operatingTime) {
 
-        Hospital hospital = new Hospital();
+        validateParam(name, number, address, operatingTime);
 
+        final Hospital hospital = new Hospital();
         hospital.name = name;
         hospital.number = number;
         hospital.address = address;
@@ -60,5 +62,12 @@ public class Hospital extends BaseEntity {
         hospital.createEntity();
 
         return hospital;
+    }
+
+    private static void validateParam(final String name, final String number, final String address, final String operatingTime) {
+        Assert.hasText(name, "name은 필수입니다.");
+        Assert.hasText(number, "number는 필수입니다.");
+        Assert.hasText(address, "address는 필수입니다.");
+        Assert.hasText(operatingTime, "operatingTime은 필수입니다.");
     }
 }

@@ -8,6 +8,7 @@ import io.wisoft.capstonedesign.domain.appointment.application.AppointmentServic
 import io.wisoft.capstonedesign.domain.appointment.persistence.Appointment;
 import io.wisoft.capstonedesign.domain.payment.application.PaymentService;
 import io.wisoft.capstonedesign.global.enumeration.status.PayStatus;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +87,7 @@ public class PaymentController {
         final Appointment appointment = appointmentService.findById(appointmentId);
 
         if (appointment.getPayStatus() == PayStatus.COMPLETED) {
-            throw new IllegalValueException("이미 결제된 예약입니다.");
+            throw new IllegalValueException("이미 결제된 예약입니다.", ErrorCode.ILLEGAL_STATE);
         }
     }
 

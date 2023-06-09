@@ -5,9 +5,9 @@ import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.pick.persistence.PickRepository;
 import io.wisoft.capstonedesign.domain.pick.web.dto.CreatePickRequest;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullPickException;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,11 +46,11 @@ public class PickService {
 
     /* 조회 로직 */
     public Pick findById(final Long pickId) {
-        return pickRepository.findById(pickId).orElseThrow(NullPickException::new);
+        return pickRepository.findById(pickId).orElseThrow(NotFoundException::new);
     }
 
     /** 상세조회 */
     public Pick findDetailById(final Long pickId) {
-        return pickRepository.findDetailById(pickId).orElseThrow(NullPickException::new);
+        return pickRepository.findDetailById(pickId).orElseThrow(NotFoundException::new);
     }
 }
