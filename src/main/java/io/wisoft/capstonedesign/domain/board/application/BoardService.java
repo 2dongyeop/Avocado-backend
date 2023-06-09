@@ -6,9 +6,10 @@ import io.wisoft.capstonedesign.domain.board.web.dto.CreateBoardRequest;
 import io.wisoft.capstonedesign.domain.board.web.dto.UpdateBoardRequest;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullBoardException;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.global.mapper.DeptMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -74,19 +75,19 @@ public class BoardService {
 
     private void validateUpdateParam(final UpdateBoardRequest request) {
         if (!StringUtils.hasText(request.newTitle()) || !StringUtils.hasText(request.newBody())) {
-            throw new IllegalValueException("파라미터가 비어있어 게시글을 수정할 수 없습니다.");
+            throw new IllegalValueException("파라미터가 비어있어 게시글을 수정할 수 없습니다.", ErrorCode.ILLEGAL_PARAM);
         }
     }
 
     /* 조회 로직 */
     /** 게시글 단건 상세 조회 */
     public Board findDetailById(final Long boardId) {
-        return boardRepository.findDetailById(boardId).orElseThrow(NullBoardException::new);
+        return boardRepository.findDetailById(boardId).orElseThrow(NotFoundException::new);
     }
 
     /** 게시글 단건 조회 */
     public Board findById(final Long boardId) {
-        return boardRepository.findById(boardId).orElseThrow(NullBoardException::new);
+        return boardRepository.findById(boardId).orElseThrow(NotFoundException::new);
     }
 
     public List<Board> findAll() {
@@ -107,9 +108,5 @@ public class BoardService {
                 .toList();
 
         return boardRepository.findAllUsingPagingMultiValue(list, pageable);
-    }
-
-    public List<Board> findAllByMember() {
-        return boardRepository.findAllByMember();
     }
 }

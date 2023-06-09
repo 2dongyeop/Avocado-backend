@@ -7,6 +7,7 @@ import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import io.wisoft.capstonedesign.global.enumeration.BusArea;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,7 @@ public class BusInfoApiController {
                 .collect(Collectors.toList()));
     }
 
-    private boolean validateArea(final String area) {
+    private void validateArea(final String area) {
 
         final Iterator<BusArea> iterator = Arrays.stream(BusArea.values()).iterator();
 
@@ -61,10 +62,10 @@ public class BusInfoApiController {
             BusArea busArea = iterator.next();
 
             if (busArea.getCode().equals(area.toUpperCase())) {
-                return true;
+                return;
             }
         }
-        throw new IllegalValueException("일치하는 BusArea가 없습니다.");
+        throw new IllegalValueException("일치하는 BusArea가 없습니다.", ErrorCode.ILLEGAL_AREA);
     }
 
     @SwaggerApi(summary = "셔틀 버스 정보 삭제", implementation = Result.class)

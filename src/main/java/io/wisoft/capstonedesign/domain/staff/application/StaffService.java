@@ -6,8 +6,9 @@ import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPasswordRequest;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +40,7 @@ public class StaffService {
     private void validateStaffPassword(final Staff staff, final UpdateStaffPasswordRequest request) {
 
         if (!encryptHelper.isMatch(request.oldPassword(), staff.getPassword())) {
-            throw new IllegalValueException("의료진 비밀번호가 일치하지 않아 변경할 수 없습니다.");
+            throw new IllegalValueException("의료진 비밀번호가 일치하지 않아 변경할 수 없습니다.", ErrorCode.ILLEGAL_PASSWORD);
         }
     }
 
@@ -72,11 +73,11 @@ public class StaffService {
      * 상세 조회
      */
     public Staff findDetailById(final Long staffId) {
-        return staffRepository.findDetailById(staffId).orElseThrow(NullStaffException::new);
+        return staffRepository.findDetailById(staffId).orElseThrow(NotFoundException::new);
     }
 
     public Staff findById(final Long staffId) {
-        return staffRepository.findById(staffId).orElseThrow(NullStaffException::new);
+        return staffRepository.findById(staffId).orElseThrow(NotFoundException::new);
     }
 
     public List<Staff> findAll() {

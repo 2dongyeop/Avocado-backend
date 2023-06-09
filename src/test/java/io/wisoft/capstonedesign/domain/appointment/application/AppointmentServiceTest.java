@@ -5,7 +5,6 @@ import io.wisoft.capstonedesign.domain.appointment.web.dto.CreateAppointmentRequ
 import io.wisoft.capstonedesign.domain.appointment.web.dto.UpdateAppointmentRequest;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullAppointmentException;
 import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;

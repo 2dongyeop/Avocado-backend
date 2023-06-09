@@ -2,9 +2,10 @@ package io.wisoft.capstonedesign.domain.hospital.application;
 
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.hospital.persistence.HospitalRepository;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateHospitalException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
 import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalRequest;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,14 +44,14 @@ public class HospitalService {
 
     private void validateDuplicateHospital(final CreateHospitalRequest request) {
         final List<Hospital> hospitalList = hospitalRepository.findByName(request.name());
-        if (!hospitalList.isEmpty()) throw new DuplicateHospitalException();
+        if (!hospitalList.isEmpty()) throw new DuplicateHospitalException("해당 이름을 가진 병원은 이미 등록되어 있습니다.", ErrorCode.DUPLICATE_HOSPITAL);
     }
 
     /**
      * 병원 단건 조회
      */
     public Hospital findById(final Long hospitalId) {
-        return hospitalRepository.findById(hospitalId).orElseThrow(NullHospitalException::new);
+        return hospitalRepository.findById(hospitalId).orElseThrow(NotFoundException::new);
     }
 
     /* 병원 이름으로 조회 */
@@ -58,7 +59,7 @@ public class HospitalService {
         final List<Hospital> hospitalList = hospitalRepository.findByName(hospitalName);
 
         if (hospitalList.isEmpty()) {
-            throw new NullHospitalException();
+            throw new NotFoundException("해당 병원은 존재하지 않습니다.");
         }
         return hospitalList.get(0);
     }

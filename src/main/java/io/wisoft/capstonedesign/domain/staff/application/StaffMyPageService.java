@@ -4,7 +4,7 @@ import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffMyPageRepository;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +24,9 @@ public class StaffMyPageService {
     public List<Review> findReviewByStaffHospitalName(final Long staffId) {
 
         final Staff staff = staffMyPageRepository.findById(staffId)
-                .orElseThrow(NullStaffException::new);
+                .orElseThrow(NotFoundException::new);
 
-        String hospitalName = staff.getHospital().getName();
+        final String hospitalName = staff.getHospital().getName();
         return staffMyPageRepository.findReviewListByStaffHospitalName(hospitalName);
     }
 

@@ -4,8 +4,9 @@ import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.domain.member.web.dto.*;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,7 @@ public class MemberService {
     private void validateMemberPassword(final Member member, final UpdateMemberPasswordRequest request) {
 
         if (!encryptHelper.isMatch(request.oldPassword(), member.getPassword())) {
-            throw new IllegalValueException("비밀번호가 일치하지 않아 변경할 수 없습니다.");
+            throw new IllegalValueException("비밀번호가 일치하지 않아 변경할 수 없습니다.", ErrorCode.ILLEGAL_PASSWORD);
         }
     }
 
@@ -71,11 +72,11 @@ public class MemberService {
      * 회원 조회
      */
     public Member findById(final Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(NullMemberException::new);
+        return memberRepository.findById(memberId).orElseThrow(NotFoundException::new);
     }
 
     public Member findDetailById(final Long memberId) {
-        return memberRepository.findDetailById(memberId).orElseThrow(NullMemberException::new);
+        return memberRepository.findDetailById(memberId).orElseThrow(NotFoundException::new);
     }
 
     public List<Member> findAll() {

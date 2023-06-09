@@ -2,7 +2,6 @@ package io.wisoft.capstonedesign.domain.businfo.application;
 
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfo;
 import io.wisoft.capstonedesign.domain.businfo.web.dto.CreateBusInfoRequest;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullBusInfoException;
 import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

@@ -14,12 +14,11 @@ import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
+import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateEmailException;
+import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateNicknameException;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateMemberException;
-import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateStaffException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullMailException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullStaffException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,11 +67,8 @@ public class AuthService {
 
             log.info(member.getNickname() + "님이 회원가입을 하셨습니다.");
             return member.getId();
-        } catch (DuplicateMemberException duplicateMemberException) {
-            duplicateMemberException.printStackTrace();
-            return null;
-        } catch (DuplicateStaffException duplicateStaffException) {
-            duplicateStaffException.printStackTrace();
+        } catch (DuplicateEmailException duplicateException) {
+            duplicateException.printStackTrace();
             return null;
         }
     }
@@ -88,7 +84,7 @@ public class AuthService {
         try {
 
             final Member member = memberRepository.findMemberByEmail(request.email())
-                    .orElseThrow(NullMemberException::new);
+                    .orElseThrow(NotFoundException::new);
 
             validatePassowrd(request, member.getPassword());
 
@@ -138,7 +134,7 @@ public class AuthService {
      */
     public String loginStaff(final LoginRequest request) {
 
-        final Staff staff = staffRepository.findStaffByEmail(request.email()).orElseThrow(NullStaffException::new);
+        final Staff staff = staffRepository.findStaffByEmail(request.email()).orElseThrow(NotFoundException::new);
 
         validatePassowrd(request, staff.getPassword());
 
@@ -164,24 +160,24 @@ public class AuthService {
                 .build();
     }
 
-    private void validateDuplicateNickname(final String nickname) throws DuplicateMemberException {
+    private void validateDuplicateNickname(final String nickname) throws DuplicateNicknameException {
         if (memberRepository.findValidateMemberByNickname(nickname).size() > 0) {
-            throw new DuplicateMemberException("닉네임 중복");
+            throw new DuplicateNicknameException("닉네임 중복", ErrorCode.DUPLICATE_EMAIL);
         }
     }
 
     private void validateEmailVerified(final String email) throws IllegalStateException {
-        final DBMailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(NullMailException::new);
+        final DBMailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(NotFoundException::new);
 
         if (!mail.isVerified()) {
-            throw new IllegalStateException("이메일 인증을 완료해주세요.");
+            throw new IllegalValueException("이메일 인증을 완료해주세요.", ErrorCode.ILLEGAL_STATE);
         }
     }
 
     private void validatePassowrd(final LoginRequest request, final String member) throws IllegalValueException {
         if (!encryptHelper.isMatch(request.password(), member)) {
             log.error("비밀번호가 일치하지 않습니다.");
-            throw new IllegalValueException("비밀번호가 일치하지 않습니다.");
+            throw new IllegalValueException("비밀번호가 일치하지 않습니다.", ErrorCode.ILLEGAL_PASSWORD);
         }
     }
 

@@ -8,11 +8,12 @@ import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.enumeration.status.PayStatus;
+import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalDeptException;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullAppointmentException;
 import io.wisoft.capstonedesign.domain.hospital.application.HospitalService;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -80,7 +81,7 @@ public class AppointmentService {
 
     private void validateAppointmentDate(final LocalDateTime appointmentDate) {
         if (appointmentDate.isBefore(LocalDateTime.now())) {
-            throw new IllegalValueException("요청된 예약일자가 현재 날짜보다 이전입니다.");
+            throw new IllegalValueException("요청된 예약일자가 현재 날짜보다 이전 날짜입니다.", ErrorCode.ILLEGAL_DATE);
         }
     }
 
@@ -111,18 +112,18 @@ public class AppointmentService {
             }
         }
 
-        throw new IllegalDeptException("일치하는 dept가 존재하지 않습니다.");
+        throw new IllegalDeptException("일치하는 dept가 존재하지 않습니다.", ErrorCode.ILLEGAL_HOSPITAL_DEPT);
     }
 
 
     /* 조회 로직 */
 
     public Appointment findDetailById(final Long appointmentId) {
-        return appointmentRepository.findDetailById(appointmentId).orElseThrow(NullAppointmentException::new);
+        return appointmentRepository.findDetailById(appointmentId).orElseThrow(NotFoundException::new);
     }
 
     public Appointment findById(final Long appointmentId) {
-        return appointmentRepository.findById(appointmentId).orElseThrow(NullAppointmentException::new);
+        return appointmentRepository.findById(appointmentId).orElseThrow(NotFoundException::new);
     }
 }
 

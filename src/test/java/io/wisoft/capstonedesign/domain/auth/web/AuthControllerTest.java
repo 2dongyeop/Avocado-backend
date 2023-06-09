@@ -4,8 +4,6 @@ import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationReposi
 import io.wisoft.capstonedesign.domain.auth.web.dto.*;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullHospitalException;
-import io.wisoft.capstonedesign.global.exception.nullcheck.NullMemberException;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
