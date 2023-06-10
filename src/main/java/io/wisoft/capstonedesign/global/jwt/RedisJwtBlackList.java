@@ -24,7 +24,7 @@ public class RedisJwtBlackList {
         }
 
         redisTemplate.opsForValue().set(jwt, "blacklisted", TIME_OUT, TimeUnit.SECONDS);
-        log.info("redis : 토큰 (" + jwt + ")을 로그아웃 처리합니다.");
+        log.info("redis : 토큰 {}을 로그아웃 처리합니다.", jwt);
     }
 
     private boolean isContained(final String jwt) {
