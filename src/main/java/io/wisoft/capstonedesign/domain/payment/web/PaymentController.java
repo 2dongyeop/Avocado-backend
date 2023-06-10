@@ -12,13 +12,14 @@ import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.util.Collections;
@@ -31,7 +32,10 @@ import java.util.Map;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final RefundController refundController;
     private final AppointmentService appointmentService;
+    private final String CANCEL_REQUEST_URL = "https://api.iamport.kr/payments/cancel";
+
 
     @Value("${iamport.api-key}")
     private String API_KEY;
@@ -48,33 +52,38 @@ public class PaymentController {
     @PostMapping("/{id}")
     public ResponseEntity<?> savePayment(
             @RequestBody final Map<String, Object> model,
-            @PathVariable(value = "id") final Long id) {
+            @PathVariable(value = "id") final Long appointmentId) throws JSONException, IOException {
 
         //응답 header 생성
         final HttpHeaders responseHeaders = makeHttpHeader();
 
+        final String impUid = (String) model.get("imp_uid");
+        final String merchantUid = (String) model.get("merchant_uid");
+        final boolean success = (boolean) model.get("success");
+        final String errorMsg = (String) model.get("error_msg");
+
+        if (!success) {
+            log.error(errorMsg);
+            return new ResponseEntity<>(errorMsg, responseHeaders, HttpStatus.OK);
+        }
+
         try {
-
-            final String imp_uid = (String) model.get("imp_uid");
-            final String merchant_uid = (String) model.get("merchant_uid");
-            final boolean success = (boolean) model.get("success");
-            final String errorMsg = (String) model.get("error_msg");
-
-            if (!success) {
-                log.error(errorMsg);
-                return new ResponseEntity<>(errorMsg, responseHeaders, HttpStatus.OK);
-            }
-
-            validateAppointmentPayStatus(id);
-            printModel(imp_uid, merchant_uid, success);
+            validateAppointmentPayStatus(appointmentId);
 
             final var iamportClient = new IamportClient(API_KEY, API_SECRET);
-            final Payment payment = extractPayment(imp_uid, iamportClient);
+            final Payment payment = extractPayment(impUid, iamportClient);
 
-            return new ResponseEntity<>(paymentService.save(id, payment), responseHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(paymentService.save(appointmentId, payment), responseHeaders, HttpStatus.OK);
 
         } catch (IamportResponseException | IOException e) {
-            throw new RuntimeException(e);
+
+            log.error("{}", e);
+
+            //예외 발생시 결제를 취소
+            final String token = refundController.getToken().getBody();
+            refundController.refundWithToken(token, merchantUid, appointmentId);
+
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -91,18 +100,33 @@ public class PaymentController {
         }
     }
 
-    private void printModel(final String imp_uid, final String merchant_uid, final boolean success) {
-        log.info("-----payment callback received-----");
-        log.info("imp_uid = {}", imp_uid);
-        log.info("merchant_uid = {} ", merchant_uid);
-        log.info("success = {}", success);
-    }
-
     private HttpHeaders makeHttpHeader() {
         final HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
         responseHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         return responseHeaders;
+    }
+
+    @NotNull
+    private JSONObject getJsonObject(final String merchantUid) {
+        final JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("merchant_uid", merchantUid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    @NotNull
+    private ResponseEntity<String> sendCancelRequest(HttpHeaders headers, JSONObject jsonObject) {
+        final RestTemplate restTemplate = new RestTemplate();
+        final HttpEntity<String> entity = new HttpEntity<>(jsonObject.toString(), headers);
+        return restTemplate.exchange(
+                CANCEL_REQUEST_URL,
+                HttpMethod.POST,
+                entity,
+                String.class);
     }
 
 }

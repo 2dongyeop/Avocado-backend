@@ -60,36 +60,50 @@ public class RefundController {
 
 
     @PostMapping("/cancel/{id}")
-    public ResponseEntity<String> cancel(
+    public ResponseEntity<String> refund(
             final HttpServletRequest httpServletRequest,
             @RequestBody final String merchantUid,
             @PathVariable final Long appointmentId) {
 
         final String token = extractor.extract(httpServletRequest, "Bearer");
 
+        final ResponseEntity<String> response = executePaymentCancel(token, merchantUid, appointmentId);
+
+        return response;
+    }
+
+
+    public void refundWithToken(
+            final String token,
+            final String merchantUid,
+            final Long appointmentId) {
+
+        executePaymentCancel(token, merchantUid, appointmentId);
+    }
+
+    private ResponseEntity<String> executePaymentCancel(String token, String merchantUid, Long appointmentId) {
         final HttpHeaders headers = getHttpHeaders(token);
 
         final JSONObject jsonObject = getJsonObject(merchantUid);
 
         final ResponseEntity<String> response = sendCancelRequest(headers, jsonObject);
-        log.info("uid {} 의 예약이 취소되었습니다.", merchantUid);
+        log.info("uid : {} 의 예약이 취소되었습니다.", merchantUid);
 
         //취소 되었으니 Payment & Appointment의 상태를 다시 결제 전으로 바꾸기
         paymentService.refund(appointmentId);
-
         return response;
     }
 
+
     @NotNull
     private ResponseEntity<String> sendCancelRequest(HttpHeaders headers, JSONObject jsonObject) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> entity = new HttpEntity<>(jsonObject.toString(), headers);
-        ResponseEntity<String> response = restTemplate.exchange(
+        final RestTemplate restTemplate = new RestTemplate();
+        final HttpEntity<String> entity = new HttpEntity<>(jsonObject.toString(), headers);
+        return restTemplate.exchange(
                 CANCEL_REQUEST_URL,
                 HttpMethod.POST,
                 entity,
                 String.class);
-        return response;
     }
 
     @NotNull
