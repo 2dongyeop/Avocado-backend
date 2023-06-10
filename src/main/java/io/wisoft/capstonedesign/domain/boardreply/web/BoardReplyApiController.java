@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Tag(name = "게시판 댓글")
 @RestController
+@RequestMapping("/api/board-reply")
 @RequiredArgsConstructor
 public class BoardReplyApiController {
 
@@ -22,7 +23,7 @@ public class BoardReplyApiController {
 
     @SwaggerApi(summary = "게시판댓글 저장", implementation = CreateBoardReplyResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/board-reply")
+    @PostMapping
     public CreateBoardReplyResponse createBoardReply(
             @RequestBody @Valid final CreateBoardReplyRequest request) {
 
@@ -34,7 +35,7 @@ public class BoardReplyApiController {
 
     @SwaggerApi(summary = "게시판댓글 수정", implementation = UpdateBoardReplyResponse.class)
     @SwaggerApiFailWithAuth
-    @PatchMapping("/api/board-reply/{id}")
+    @PatchMapping("/{id}")
     public UpdateBoardReplyResponse updateBoardReply(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateBoardReplyRequest request) {
@@ -47,7 +48,7 @@ public class BoardReplyApiController {
 
     @SwaggerApi(summary = "게시판댓글 삭제", implementation = DeleteBoardReplyResponse.class)
     @SwaggerApiFailWithAuth
-    @DeleteMapping("/api/board-reply/{id}")
+    @DeleteMapping("/{id}")
     public DeleteBoardReplyResponse deleteBoardReply(@PathVariable("id") final Long id) {
         boardReplyService.deleteBoardReply(id);
         return new DeleteBoardReplyResponse(id);
@@ -56,7 +57,7 @@ public class BoardReplyApiController {
 
     @SwaggerApi(summary = "특정 게시판댓글 단건 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/board-reply/{id}/details")
+    @GetMapping("/{id}/details")
     public Result boardReply(@PathVariable("id") final Long id) {
         return new Result(new BoardReplyDto(boardReplyService.findDetailById(id)));
     }
@@ -64,9 +65,9 @@ public class BoardReplyApiController {
 
     @SwaggerApi(summary = "특정 게시글의 댓글 목록 오름차순 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/board-reply/board/{board-id}/create-asc")
+    @GetMapping("/board/{board-id}/create-asc")
     public Result boardReplyByBoardOrderByCreateAsc(@PathVariable("board-id") final Long id) {
-        return new Result(boardReplyService.findByBoardIdOrderByCreateAsc()
+        return new Result(boardReplyService.findByBoardIdOrderByCreateAsc(id)
                 .stream().map(BoardReplyDto::new)
                 .collect(Collectors.toList()));
     }
@@ -74,9 +75,9 @@ public class BoardReplyApiController {
 
     @SwaggerApi(summary = "특정 게시글의 댓글 목록 내림차순 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/board-reply/board/{board-id}/create-desc")
+    @GetMapping("/board/{board-id}/create-desc")
     public Result boardReplyByBoardOrderByCreateDesc(@PathVariable("board-id") final Long id) {
-        return new Result(boardReplyService.findByBoardIdOrderByCreateDesc()
+        return new Result(boardReplyService.findByBoardIdOrderByCreateDesc(id)
                 .stream().map(BoardReplyDto::new)
                 .collect(Collectors.toList()));
     }

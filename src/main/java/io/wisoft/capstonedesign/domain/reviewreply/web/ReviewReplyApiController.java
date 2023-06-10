@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Tag(name = "리뷰 댓글")
 @RestController
+@RequestMapping("/api/review-reply")
 @RequiredArgsConstructor
 public class ReviewReplyApiController {
 
@@ -23,7 +24,7 @@ public class ReviewReplyApiController {
 
     @SwaggerApi(summary = "리뷰댓글 저장", implementation = CreateReviewReplyResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/review-reply")
+    @PostMapping
     public CreateReviewReplyResponse createReviewReply(
             @RequestBody @Valid final CreateReviewReplyRequest request) {
 
@@ -35,7 +36,7 @@ public class ReviewReplyApiController {
 
     @SwaggerApi(summary = "리뷰댓글 삭제", implementation = DeleteReviewReplyResponse.class)
     @SwaggerApiFailWithAuth
-    @DeleteMapping("/api/review-reply/{id}")
+    @DeleteMapping("/{id}")
     public DeleteReviewReplyResponse deleteReviewReply(
             @PathVariable("id") final Long id) {
 
@@ -46,7 +47,7 @@ public class ReviewReplyApiController {
 
     @SwaggerApi(summary = "리뷰댓글 수정", implementation = UpdateReviewReplyResponse.class)
     @SwaggerApiFailWithAuth
-    @PatchMapping("/api/review-reply/{id}")
+    @PatchMapping("/{id}")
     public UpdateReviewReplyResponse updateReviewReply(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateReviewReplyRequest request) {
@@ -59,7 +60,7 @@ public class ReviewReplyApiController {
 
     @SwaggerApi(summary = "리뷰댓글 단건 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/review-reply/{id}/details")
+    @GetMapping("/{id}/details")
     public Result reviewReply(@PathVariable("id") final Long id) {
         return new Result(new ReviewReplyDto(reviewReplyService.findDetailById(id)));
     }
@@ -67,7 +68,7 @@ public class ReviewReplyApiController {
 
     @SwaggerApi(summary = "특정 리뷰의 댓글목록 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/review-reply/review/{review-id}")
+    @GetMapping("/review/{review-id}")
     public Result reviewReplyByReview(
             @PathVariable("review-id") final Long reviewId) {
 
@@ -80,7 +81,7 @@ public class ReviewReplyApiController {
     @SwaggerApi(summary = "특정 리뷰의 댓글목록 오름차순 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
 
-    @GetMapping("/api/review-reply/review/{review-id}/create-asc")
+    @GetMapping("/review/{review-id}/create-asc")
     public Result reviewReplyByReviewOrderByCreateAsc(
             @PathVariable("review-id") final Long reviewId) {
 
@@ -92,7 +93,7 @@ public class ReviewReplyApiController {
 
     @SwaggerApi(summary = "특정 리뷰의 댓글목록 내림차순 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/review-reply/review/{review-id}/create-desc")
+    @GetMapping("/review/{review-id}/create-desc")
     public Result reviewReplyByReviewOrderByCreateDesc(
             @PathVariable("review-id") final Long reviewId) {
 

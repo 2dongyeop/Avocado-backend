@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "찜하기")
 @RestController
+@RequestMapping("/api/picks")
 @RequiredArgsConstructor
 public class PickApiController {
 
@@ -19,7 +20,7 @@ public class PickApiController {
 
     @SwaggerApi(summary = "찜하기 생성", implementation = CreatePickResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/picks")
+    @PostMapping
     public CreatePickResponse createPick(@RequestBody @Valid final CreatePickRequest request) {
         return new CreatePickResponse(pickService.save(request));
     }
@@ -27,7 +28,7 @@ public class PickApiController {
 
     @SwaggerApi(summary = "찜하기 취소", implementation = DeletePickResponse.class)
     @SwaggerApiFailWithAuth
-    @DeleteMapping("/api/picks/{id}")
+    @DeleteMapping("/{id}")
     public DeletePickResponse deletePick(@PathVariable("id") final Long id) {
         pickService.cancelPick(id);
         return new DeletePickResponse(id);
@@ -36,7 +37,7 @@ public class PickApiController {
 
     @SwaggerApi(summary = "찜하기 단건 상세 조회", implementation = Result.class)
     @SwaggerApiFailWithAuth
-    @GetMapping("/api/picks/{id}/details")
+    @GetMapping("/{id}/details")
     public Result pick(@PathVariable("id") final Long id) {
         return new Result(new PickDto(pickService.findDetailById(id)));
     }

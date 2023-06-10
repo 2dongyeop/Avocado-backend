@@ -30,7 +30,7 @@ public class ChatGptController {
     public ChatGptResponse sendMessage(@RequestBody final ChatRequest chatRequest) {
         final CompletableFuture<ChatGptResponse> future = CompletableFuture.supplyAsync(
                 () -> chatGptService.askQuestion(chatRequest), executor)
-                .orTimeout(5, TimeUnit.SECONDS);
+                .orTimeout(10, TimeUnit.SECONDS);
 
         return future.join();
     }

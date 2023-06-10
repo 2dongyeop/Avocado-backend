@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Tag(name = "회원")
 @RestController
+@RequestMapping("/api/members")
 @RequiredArgsConstructor
 public class MemberApiController {
 
@@ -21,14 +22,14 @@ public class MemberApiController {
 
     @SwaggerApi(summary = "회원 단건 조회", implementation = Result.class)
     @SwaggerApiFailWithAuth
-    @GetMapping("/api/members/{id}/details")
+    @GetMapping("/{id}/details")
     public Result member(@PathVariable("id") final Long id) {
         return new Result(new MemberDto(memberService.findDetailById(id)));
     }
 
     @SwaggerApi(summary = "회원 목록 조회", implementation = Result.class)
     @SwaggerApiFailWithAuth
-    @GetMapping("/api/members")
+    @GetMapping
     public Result members() {
         return new Result(memberService.findAll().stream()
                 .map(MemberListDto::new)
@@ -38,7 +39,7 @@ public class MemberApiController {
 
     @SwaggerApi(summary = "회원 비밀번호 변경", implementation = UpdateMemberResponse.class)
     @SwaggerApiFailWithAuth
-    @PatchMapping("/api/members/{id}/password")
+    @PatchMapping("/{id}/password")
     public UpdateMemberResponse updateMemberPassword(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateMemberPasswordRequest request) {
@@ -52,7 +53,7 @@ public class MemberApiController {
 
     @SwaggerApi(summary = "회원 정보 수정", implementation = UpdateMemberResponse.class)
     @SwaggerApiFailWithAuth
-    @PatchMapping("/api/members/{id}")
+    @PatchMapping("/{id}")
     public UpdateMemberResponse updateMember(
             @PathVariable("id") final Long id,
             @RequestParam(value = "photoPath", required = false) final String photoPath,
@@ -68,7 +69,7 @@ public class MemberApiController {
 
     @SwaggerApi(summary = "회원 탈퇴", implementation = DeleteMemberResponse.class)
     @SwaggerApiFailWithAuth
-    @DeleteMapping("/api/members/{id}")
+    @DeleteMapping("/{id}")
     public DeleteMemberResponse deleteMember(@PathVariable("id") final Long id) {
         memberService.deleteMember(id);
         return new DeleteMemberResponse(id);

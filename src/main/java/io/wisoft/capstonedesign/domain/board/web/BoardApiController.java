@@ -18,6 +18,7 @@ import java.util.List;
 
 @Tag(name = "게시판")
 @RestController
+@RequestMapping("/api/boards")
 @RequiredArgsConstructor
 public class BoardApiController {
 
@@ -26,7 +27,7 @@ public class BoardApiController {
 
     @SwaggerApi(summary = "게시글 단건 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/boards/{id}/details")
+    @GetMapping("/{id}/details")
     public Result board(@PathVariable Long id) {
         return new Result(new BoardDto(boardService.findDetailById(id)));
     }
@@ -34,7 +35,7 @@ public class BoardApiController {
 
     @SwaggerApi(summary = "게시글 목록 조회 및 특정 병과 조회", implementation = Page.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/boards")
+    @GetMapping
     public Page<BoardListDto> boardsByDepartmentUsingPaging(
             @RequestParam(name = "dept", required = false) final List<String> deptNumberList, final Pageable pageable) {
 
@@ -48,7 +49,7 @@ public class BoardApiController {
 
     @SwaggerApi(summary = "게시글 작성", implementation = CreateBoardResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/boards")
+    @PostMapping
     public CreateBoardResponse createBoard(
             @RequestBody @Valid final CreateBoardRequest request) {
 
@@ -60,7 +61,7 @@ public class BoardApiController {
 
     @SwaggerApi(summary = "게시글 제목 및 본문 수정", implementation = UpdateBoardResponse.class)
     @SwaggerApiFailWithAuth
-    @PatchMapping("/api/boards/{id}")
+    @PatchMapping("/{id}")
     public UpdateBoardResponse updateBoardTitleBody(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateBoardRequest request) {
@@ -74,7 +75,7 @@ public class BoardApiController {
 
     @SwaggerApi(summary = "게시글 삭제", implementation = DeleteBoardResponse.class)
     @SwaggerApiFailWithAuth
-    @DeleteMapping("/api/boards/{id}")
+    @DeleteMapping("/{id}")
     public DeleteBoardResponse deleteBoard(@PathVariable("id") final Long id) {
 
         boardService.deleteBoard(id);

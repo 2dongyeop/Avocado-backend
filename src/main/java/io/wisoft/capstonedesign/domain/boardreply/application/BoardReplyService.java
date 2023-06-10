@@ -96,14 +96,14 @@ public class BoardReplyService {
     /**
      * 특정게시글의 댓글 목록 오름차순 조회
      */
-    public List<BoardReply> findByBoardIdOrderByCreateAsc() {
-        return boardReplyRepository.findByBoardIdOrderByCreateAsc();
+    public List<BoardReply> findByBoardIdOrderByCreateAsc(final Long id) {
+        return boardReplyRepository.findByBoardIdOrderByCreateAsc(id);
     }
 
     /**
      * 특정게시글의 댓글 목록 내림차순 조회
      */
-    public List<BoardReply> findByBoardIdOrderByCreateDesc() {
-        return boardReplyRepository.findByBoardIdOrderByCreateDesc();
+    public List<BoardReply> findByBoardIdOrderByCreateDesc(final Long id) {
+        return boardReplyRepository.findByBoardIdOrderByCreateDesc(id);
     }
 }

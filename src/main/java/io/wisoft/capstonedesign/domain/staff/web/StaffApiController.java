@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Tag(name = "의료진")
 @RestController
+@RequestMapping("/api/staff")
 @RequiredArgsConstructor
 public class StaffApiController {
 
@@ -21,14 +22,14 @@ public class StaffApiController {
 
     @SwaggerApi(summary = "의료진 단건 상세 조회", implementation = Result.class)
     @SwaggerApiFailWithAuth
-    @GetMapping("api/staff/{id}/details")
+    @GetMapping("/{id}/details")
     public Result staff(@PathVariable("id") final Long id) {
         return new Result(new StaffDto(staffService.findDetailById(id)));
     }
 
     @SwaggerApi(summary = "의료진 목록 조회", implementation = Result.class)
     @SwaggerApiFailWithAuth
-    @GetMapping("/api/staff")
+    @GetMapping
     public Result staffs() {
 
         return new Result(staffService.findAllByHospital().stream()
@@ -39,7 +40,7 @@ public class StaffApiController {
 
     @SwaggerApi(summary = "의료진 비밀번호 변경", implementation = UpdateStaffResponse.class)
     @SwaggerApiFailWithAuth
-    @PatchMapping("/api/staff/{id}/password")
+    @PatchMapping("/{id}/password")
     public UpdateStaffResponse updateStaffPassword(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateStaffPasswordRequest request) {
@@ -53,7 +54,7 @@ public class StaffApiController {
 
     @SwaggerApi(summary = "의료진 정보 수정", implementation = UpdateStaffResponse.class)
     @SwaggerApiFailWithAuth
-    @PatchMapping("/api/staff/{id}")
+    @PatchMapping("/{id}")
     public UpdateStaffResponse updateStaff(
             @PathVariable("id") final Long id,
             @RequestParam(value = "hospitalName", required = false) final String hospitalName,
@@ -68,7 +69,7 @@ public class StaffApiController {
 
     @SwaggerApi(summary = "의료진 탈퇴", implementation = DeleteStaffResponse.class)
     @SwaggerApiFailWithAuth
-    @DeleteMapping("api/staff/{id}")
+    @DeleteMapping("/{id}")
     public DeleteStaffResponse deleteStaff(@PathVariable("id") final Long id) {
 
         staffService.deleteStaff(id);

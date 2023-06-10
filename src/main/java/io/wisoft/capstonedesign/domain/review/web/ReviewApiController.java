@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "리뷰")
 @RestController
+@RequestMapping("/api/reviews")
 @RequiredArgsConstructor
 public class ReviewApiController {
 
@@ -23,7 +24,7 @@ public class ReviewApiController {
 
     @SwaggerApi(summary = "리뷰 단건 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/reviews/{id}/details")
+    @GetMapping("/{id}/details")
     public Result review(@PathVariable("id") final Long id) {
         return new Result(new ReviewDto(reviewService.findDetailById(id)));
     }
@@ -31,7 +32,7 @@ public class ReviewApiController {
 
     @SwaggerApi(summary = "리뷰 목록 페이징 조회", implementation = Page.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/reviews")
+    @GetMapping
     public Page<ReviewListDto> reviewsUsingPaging(final Pageable pageable) {
         return reviewService.findByUsingPaging(pageable).map(ReviewListDto::new);
     }
@@ -39,7 +40,7 @@ public class ReviewApiController {
 
     @SwaggerApi(summary = "특정 병원의 리뷰 목록 페이징 조회", implementation = Page.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/reviews/hospital")
+    @GetMapping("/hospital")
     public Page<ReviewListDto> reviewsByTargetHospital(
             @RequestBody @Valid final ReviewsByTargetHospitalRequest request,
             final Pageable pageable) {
@@ -51,7 +52,7 @@ public class ReviewApiController {
 
     @SwaggerApi(summary = "리뷰 저장", implementation = CreateReviewResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/reviews")
+    @PostMapping
     public CreateReviewResponse createReview(
             @RequestBody @Valid final CreateReviewRequest request) {
 
@@ -64,7 +65,7 @@ public class ReviewApiController {
 
     @SwaggerApi(summary = "리뷰 수정", implementation = UpdateReviewResponse.class)
     @SwaggerApiFailWithAuth
-    @PatchMapping("/api/reviews/{id}")
+    @PatchMapping("/{id}")
     public UpdateReviewResponse updateReview(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateReviewRequest request) {
@@ -78,7 +79,7 @@ public class ReviewApiController {
 
     @SwaggerApi(summary = "리뷰 삭제", implementation = DeleteReviewResponse.class)
     @SwaggerApiFailWithAuth
-    @DeleteMapping("/api/reviews/{id}")
+    @DeleteMapping("/{id}")
     public DeleteReviewResponse deleteReview(@PathVariable("id") final Long id) {
 
         reviewService.deleteReview(id);

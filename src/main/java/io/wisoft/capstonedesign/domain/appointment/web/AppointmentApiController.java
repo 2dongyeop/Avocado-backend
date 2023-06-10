@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "예약")
 @RestController
+@RequestMapping("/api/appointments")
 @RequiredArgsConstructor
 public class AppointmentApiController {
 
@@ -19,7 +20,7 @@ public class AppointmentApiController {
 
     @SwaggerApi(summary = "예약 저장", implementation = CreateAppointmentResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/appointments")
+    @PostMapping
     public CreateAppointmentResponse createAppointment(
             @RequestBody @Valid final CreateAppointmentRequest request) {
         return new CreateAppointmentResponse(appointmentService.save(request));
@@ -28,7 +29,7 @@ public class AppointmentApiController {
 
     @SwaggerApi(summary = "예약 삭제", implementation = DeleteAppointmentResponse.class)
     @SwaggerApiFailWithAuth
-    @DeleteMapping("/api/appointments/{id}")
+    @DeleteMapping("/{id}")
     public DeleteAppointmentResponse deleteAppointment(@PathVariable("id") final Long id) {
         appointmentService.deleteAppointment(id);
         return new DeleteAppointmentResponse(id);
@@ -37,7 +38,7 @@ public class AppointmentApiController {
 
     @SwaggerApi(summary = "예약 수정", implementation = UpdateAppointmentResponse.class)
     @SwaggerApiFailWithAuth
-    @PatchMapping("/api/appointments/{id}")
+    @PatchMapping("/{id}")
     public UpdateAppointmentResponse updateAppointment(
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateAppointmentRequest request) {
@@ -48,7 +49,7 @@ public class AppointmentApiController {
 
     @SwaggerApi(summary = "예약 조회", implementation = Result.class)
     @SwaggerApiFailWithAuth
-    @GetMapping("/api/appointments/{id}/details")
+    @GetMapping("/{id}/details")
     public Result appointment(@PathVariable("id") final Long id) {
         return new Result(new AppointmentDto(appointmentService.findDetailById(id)));
     }

@@ -17,25 +17,25 @@ public class ReadHospitalInfoController {
     public Map<String, Object> readHospitalInfo() {
         Map<String, Object> map = new HashMap<>();
 
-        String baseURL = "https://apis.data.go.kr/B551182/hospInfoServicev2/getHospBasisList";
+        final String baseURL = "https://apis.data.go.kr/B551182/hospInfoServicev2/getHospBasisList";
 
-        String secretKey = "?ServiceKey=" + OpenAPIConfig.OpenAPISecretKey;
+        final String secretKey = "?ServiceKey=" + OpenAPIConfig.OpenAPISecretKey;
 //        String pageNo = "&pageNo=1";
 //        String sidoCd = "&sidoCd=250000";
-        String apiURL = baseURL + secretKey;
+        final String apiURL = baseURL + secretKey;
 
         try {
 
-            RestTemplate restTemplate = new RestTemplate();
+            final RestTemplate restTemplate = new RestTemplate();
 
             //1. API를 호출하여 결과를 가져오기
-            String response = restTemplate.getForObject(apiURL, String.class);
+            final String response = restTemplate.getForObject(apiURL, String.class);
 
             //2. 가공된 데이터를 반환
             System.out.println(response);
 
             //3. DB에 저장
-            JSONObject jsonObject = new JSONObject(response.toString());
+            final JSONObject jsonObject = new JSONObject(response.toString());
 //            JSONObject jsonObject = new JSONObject(response);
 
             System.out.println(jsonObject);

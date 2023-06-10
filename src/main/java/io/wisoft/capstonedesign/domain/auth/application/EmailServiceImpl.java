@@ -59,9 +59,9 @@ public class EmailServiceImpl implements EmailService {
                 EXPIRED_TIME,
                 TimeUnit.SECONDS
         );
-        log.info("redis :  " + to + " 를 3분간 저장합니다.");
+        log.info("redis : {} 를 3분간 저장합니다.", to);
 
-        log.info(to + "으로 인증 코드를 발송합니다.");
+        log.info("{} 으로 인증 코드를 발송합니다.", to);
         return authenticateCode;
     }
 
@@ -119,7 +119,7 @@ public class EmailServiceImpl implements EmailService {
 
         member.updatePassword(encryptHelper.encrypt(temporaryPassword));
 
-        log.info(to + "으로 임시 비밀번호를 발급합니다.");
+        log.info("{}으로 임시 비밀번호를 발급합니다.", to);
     }
 
     @Async
@@ -130,7 +130,7 @@ public class EmailServiceImpl implements EmailService {
 
         staff.updatePassword(encryptHelper.encrypt(temporaryPassword));
 
-        log.info(to + "으로 임시 비밀번호를 발급합니다.");
+        log.info("{}으로 임시 비밀번호를 발급합니다.", to);
     }
 
     private String sendEmail(final String to, final String subject) {
@@ -162,7 +162,7 @@ public class EmailServiceImpl implements EmailService {
         final Random random = new Random();
 
         final String code = randomProcess(stringBuilder, random);
-        log.info("code : " + code);
+        log.info("code : {}", code);
         return code;
     }
 
