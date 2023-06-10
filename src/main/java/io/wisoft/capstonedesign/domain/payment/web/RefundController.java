@@ -1,17 +1,24 @@
 package io.wisoft.capstonedesign.domain.payment.web;
 
+import io.wisoft.capstonedesign.domain.payment.application.PaymentService;
+import io.wisoft.capstonedesign.global.jwt.AuthorizationExtractor;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
 
+@Slf4j
 @RestController
 @RequestMapping("/payment")
 @RequiredArgsConstructor
@@ -23,6 +30,9 @@ public class RefundController {
     @Value("${iamport.api-secret}")
     private String API_SECRET;
     private final String GET_TOKEN_URL = "https://api.iamport.kr/users/getToken";
+    private final String CANCEL_REQUEST_URL = "https://api.iamport.kr/payments/cancel";
+    private final AuthorizationExtractor extractor;
+    private final PaymentService paymentService;
 
 
     @GetMapping("/token")
@@ -47,6 +57,61 @@ public class RefundController {
         disconnect(conn, br);
         return ResponseEntity.ok(accessToken);
     }
+
+
+    @PostMapping("/cancel/{id}")
+    public ResponseEntity<String> cancel(
+            final HttpServletRequest httpServletRequest,
+            @RequestBody final String merchantUid,
+            @PathVariable final Long appointmentId) {
+
+        final String token = extractor.extract(httpServletRequest, "Bearer");
+
+        final HttpHeaders headers = getHttpHeaders(token);
+
+        final JSONObject jsonObject = getJsonObject(merchantUid);
+
+        final ResponseEntity<String> response = sendCancelRequest(headers, jsonObject);
+        log.info("uid {} 의 예약이 취소되었습니다.", merchantUid);
+
+        //취소 되었으니 Payment & Appointment의 상태를 다시 결제 전으로 바꾸기
+        paymentService.refund(appointmentId);
+
+        return response;
+    }
+
+    @NotNull
+    private ResponseEntity<String> sendCancelRequest(HttpHeaders headers, JSONObject jsonObject) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<String> entity = new HttpEntity<>(jsonObject.toString(), headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                CANCEL_REQUEST_URL,
+                HttpMethod.POST,
+                entity,
+                String.class);
+        return response;
+    }
+
+    @NotNull
+    private JSONObject getJsonObject(final String merchantUid) {
+        final JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("merchant_uid", merchantUid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    @NotNull
+    private HttpHeaders getHttpHeaders(final String token) {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.add("Authorization", token);
+        return headers;
+    }
+
 
     private void disconnect(final HttpURLConnection conn, final BufferedReader br) throws IOException {
         br.close();
