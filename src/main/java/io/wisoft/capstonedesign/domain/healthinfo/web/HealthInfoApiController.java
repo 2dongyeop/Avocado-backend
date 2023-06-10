@@ -18,6 +18,7 @@ import java.util.List;
 
 @Tag(name = "건강정보")
 @RestController
+@RequestMapping("/api/health-infos")
 @RequiredArgsConstructor
 public class HealthInfoApiController {
 
@@ -26,7 +27,7 @@ public class HealthInfoApiController {
 
     @SwaggerApi(summary = "건강 정보 등록", implementation = CreateHealthInfoResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/health-infos")
+    @PostMapping
     public CreateHealthInfoResponse createHealthInfo(
             @RequestBody @Valid final CreateHealthInfoRequest request) {
 
@@ -38,7 +39,7 @@ public class HealthInfoApiController {
 
     @SwaggerApi(summary = "건강 정보 삭제", implementation = DeleteHealthInfoResponse.class)
     @SwaggerApiFailWithAuth
-    @DeleteMapping("/api/health-infos/{id}")
+    @DeleteMapping("/{id}")
     public DeleteHealthInfoResponse deleteHealthInfo(@PathVariable("id") final Long id) {
         healthInfoService.delete(id);
         return new DeleteHealthInfoResponse(id);
@@ -47,7 +48,7 @@ public class HealthInfoApiController {
 
     @SwaggerApi(summary = "건강 정보 단건 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/health-infos/{id}/details")
+    @GetMapping("/{id}/details")
     public Result healthInfo(@PathVariable("id") final Long id) {
         return new Result(new HealthInfoDto(healthInfoService.findDetailById(id)));
     }
@@ -60,7 +61,7 @@ public class HealthInfoApiController {
      */
     @SwaggerApi(summary = "특정 병과의 건강 정보 목록 페이징 조회", implementation = Page.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/health-infos")
+    @GetMapping
     public Page<HealthInfoDto> healthInfosByDepartmentUsingPaging(
             @RequestParam(name = "dept", required = false) final List<String> deptNumberList, final Pageable pageable) {
 

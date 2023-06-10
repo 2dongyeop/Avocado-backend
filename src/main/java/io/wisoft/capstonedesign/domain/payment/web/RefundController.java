@@ -13,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @RestController
+@RequestMapping("/payment")
 @RequiredArgsConstructor
 public class RefundController {
 
@@ -24,7 +25,7 @@ public class RefundController {
     private final String GET_TOKEN_URL = "https://api.iamport.kr/users/getToken";
 
 
-    @GetMapping("/payment/token")
+    @GetMapping("/token")
     public ResponseEntity<String> getToken() throws IOException, JSONException {
 
         final HttpURLConnection conn = getTokenConnection();

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Tag(name = "셔틀버스")
 @RestController
+@RequestMapping("/api/bus-info")
 @RequiredArgsConstructor
 public class BusInfoApiController {
 
@@ -26,7 +27,7 @@ public class BusInfoApiController {
 
     @SwaggerApi(summary = "셔틀버스 정보 등록", implementation = CreateBusInfoResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/bus-info")
+    @PostMapping
     public CreateBusInfoResponse createBusInfo(
             @RequestBody @Valid final CreateBusInfoRequest request) {
         return new CreateBusInfoResponse(busInfoService.save(request));
@@ -35,7 +36,7 @@ public class BusInfoApiController {
 
     @SwaggerApi(summary = "셔틀 버스 단건 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/bus-info/{id}/details")
+    @GetMapping("/{id}/details")
     public Result busInfo(@PathVariable final Long id) {
         return new Result(new BusInfoDto(busInfoService.findById(id)));
     }
@@ -43,7 +44,7 @@ public class BusInfoApiController {
 
     @SwaggerApi(summary = "특정 지역 셔틀 버스 정보 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/bus-info/area/details")
+    @GetMapping("/area/details")
     public Result busInfoByArea(
             @RequestBody @Valid final BusInfoByAreaRequest request) {
 
@@ -70,7 +71,7 @@ public class BusInfoApiController {
 
     @SwaggerApi(summary = "셔틀 버스 정보 삭제", implementation = Result.class)
     @SwaggerApiFailWithAuth
-    @DeleteMapping("/api/bus-info/{id}")
+    @DeleteMapping("/{id}")
     public Result delete(@PathVariable final Long id) {
         busInfoService.delete(id);
         return new Result(new DeleteBusInfoResponse(id));

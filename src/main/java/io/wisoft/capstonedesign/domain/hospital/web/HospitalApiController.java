@@ -25,13 +25,14 @@ import java.util.stream.Collectors;
 
 @Tag(name = "병원정보")
 @RestController
+@RequestMapping("/api/hospitals")
 @RequiredArgsConstructor
 public class HospitalApiController {
 
     private final HospitalService hospitalService;
 
     /* 병원 저장 */
-    @PostMapping("/api/hospitals")
+    @PostMapping
     public CreateHospitalResponse createHospitalRequest(
             @RequestBody @Valid final CreateHospitalRequest request) {
 
@@ -42,7 +43,7 @@ public class HospitalApiController {
 
 
     /* 병원 단건 조회 */
-    @GetMapping("/api/hospitals/{id}/details")
+    @GetMapping("/{id}/details")
     public Result hospital(@PathVariable final Long id) {
         return new Result(new HospitalDto(hospitalService.findById(id)));
     }
@@ -50,7 +51,7 @@ public class HospitalApiController {
 
     @SwaggerApi(summary = "병원 목록 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/api/hospitals")
+    @GetMapping
     public Result hospitals() {
         return new Result(hospitalService.findAll()
                 .stream().map(HospitalDto::new)
@@ -60,7 +61,7 @@ public class HospitalApiController {
     /**
      *  Open API를 이용해 공공데이터 가져오기
      */
-    @GetMapping("/api/hospinfo")
+    @GetMapping("/hospinfo")
     public String getHospitalInfo() throws IOException {
 
         /**
@@ -69,31 +70,31 @@ public class HospitalApiController {
          * https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15001698
          */
 
-        String baseURL = "https://apis.data.go.kr/B551182/hospInfoServicev2/getHospBasisList";
+        final String baseURL = "https://apis.data.go.kr/B551182/hospInfoServicev2/getHospBasisList";
 
-        String secretKey = "?ServiceKey=" + OpenAPIConfig.OpenAPISecretKey;
+        final String secretKey = "?ServiceKey=" + OpenAPIConfig.OpenAPISecretKey;
 //        String pageNo = "&pageNo=1";
 //        String sidoCd = "&sidoCd=250000";
-        String apiURL = baseURL + secretKey;
+        final String apiURL = baseURL + secretKey;
 
         /**
          * GET방식으로 전송해서 파라미터 받아오기
          */
-        URL url = new URL(apiURL);
+        final URL url = new URL(apiURL);
 
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json");
 
 
-        BufferedReader rd;
+        final BufferedReader rd;
         if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
             rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         } else {
             rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
         }
 
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         String line;
 
         while ((line = rd.readLine()) != null) {

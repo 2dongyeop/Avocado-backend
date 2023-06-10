@@ -22,10 +22,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "인증")
 @RestController
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -36,7 +38,7 @@ public class AuthController {
 
     @SwaggerApi(summary = "회원 가입", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
-    @PostMapping("/api/auth/signup/members")
+    @PostMapping("/signup/members")
     public ResponseEntity<CreateMemberResponse> signupMember(@RequestBody @Valid final CreateMemberRequest request) {
 
         validatePassword(request.password1(), request.password2());
@@ -52,7 +54,7 @@ public class AuthController {
 
     @SwaggerApi(summary = "회원 로그인", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
-    @PostMapping("/api/auth/login/members")
+    @PostMapping("/login/members")
     public ResponseEntity<TokenResponse> loginMember(@RequestBody @Valid final LoginRequest request) {
         final String token = authService.loginMember(request);
         return ResponseEntity.ok(new TokenResponse(token, "bearer"));
@@ -61,7 +63,7 @@ public class AuthController {
 
     @SwaggerApi(summary = "로그아웃", implementation = ResponseEntity.class)
     @SwaggerApiFailWithAuth
-    @PostMapping("/api/auth/logout")
+    @PostMapping("/logout")
     public ResponseEntity<String> logoutMember(HttpServletRequest request) throws IllegalAccessException {
 
         final String token = authExtractor.extract(request, "Bearer");
@@ -73,7 +75,7 @@ public class AuthController {
 
     @SwaggerApi(summary = "의료진 가입", implementation = CreateStaffResponse.class)
     @SwaggerApiFailWithoutAuth
-    @PostMapping("/api/auth/signup/staff")
+    @PostMapping("/signup/staff")
     public CreateStaffResponse signupStaff(
             @RequestBody @Valid final CreateStaffRequest request) {
 
@@ -84,7 +86,7 @@ public class AuthController {
 
     @SwaggerApi(summary = "의료진 로그인", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
-    @PostMapping("/api/auth/login/staff")
+    @PostMapping("/login/staff")
     public ResponseEntity<TokenResponse> loginStaff(@RequestBody @Valid final LoginRequest request) {
         final String token = authService.loginStaff(request);
         return ResponseEntity.ok(new TokenResponse(token, "bearer"));

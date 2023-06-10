@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 @Tag(name = "이메일 인증")
 @RestController
+@RequestMapping("/mail")
 @RequiredArgsConstructor
 public class MailController {
 
@@ -28,7 +30,7 @@ public class MailController {
 
     @SwaggerApi(summary = "이메일 인증 코드 전송", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
-    @PostMapping("/mail/certification-code")
+    @PostMapping("/certification-code")
     public ResponseEntity<String> sendCertificationCode(@RequestBody final MailObject mailObject) {
         final CompletableFuture<String> future = CompletableFuture.supplyAsync(
                         () -> emailService.sendCertificationCode(mailObject.email()), executor)
@@ -41,7 +43,7 @@ public class MailController {
 
     @SwaggerApi(summary = "이메일 인증", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
-    @PostMapping("/mail/certification-email")
+    @PostMapping("/certification-email")
     public ResponseEntity<String> certificateEmail(@RequestBody final CertificateMailRequest request) {
         emailService.certificateEmail(request);
         return ResponseEntity.ok("success");
@@ -50,7 +52,7 @@ public class MailController {
 
     @SwaggerApi(summary = "회원 비밀번호 찾기", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
-    @PostMapping("/mail/member/password")
+    @PostMapping("/member/password")
     public ResponseEntity<String> resetMemberPassword(@RequestBody final MailObject mailObject) {
         emailService.sendResetMemberPassword(mailObject.email());
         return ResponseEntity.ok("success");
@@ -58,7 +60,7 @@ public class MailController {
 
     @SwaggerApi(summary = "의료진 비밀번호 찾기", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
-    @PostMapping("/mail/staff/password")
+    @PostMapping("/staff/password")
     public ResponseEntity<String> resetStaffPassword(@RequestBody final MailObject mailObject) {
         emailService.sendResetStaffPassword(mailObject.email());
         return ResponseEntity.ok("success");

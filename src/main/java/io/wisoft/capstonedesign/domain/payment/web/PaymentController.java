@@ -17,16 +17,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.util.Map;
 
 @Slf4j
 @Controller //TODO : 나중에 프론트와 연동시 RestController 로 바꿀것
+@RequestMapping("/payment")
 @RequiredArgsConstructor
 public class PaymentController {
 
@@ -39,13 +37,13 @@ public class PaymentController {
     @Value("${iamport.api-secret}")
     private String API_SECRET;
 
-    @GetMapping("/payment")
+    @GetMapping
     public String payment() {
         return "payment";
     }
 
 
-    @PostMapping("/payment/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<?> savePayment(
             @RequestBody final Map<String, Object> model,
             @PathVariable(value = "id") final Long id) {
