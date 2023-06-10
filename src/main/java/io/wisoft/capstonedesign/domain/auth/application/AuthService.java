@@ -65,7 +65,7 @@ public class AuthService {
             final var mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
             mailAuthenticationRepository.delete(mailAuthentication);
 
-            log.info(member.getNickname() + "님이 회원가입을 하셨습니다.");
+            log.info("{}님이 회원가입을 하셨습니다.", member.getNickname());
             return member.getId();
         } catch (DuplicateEmailException duplicateException) {
             duplicateException.printStackTrace();
@@ -89,14 +89,14 @@ public class AuthService {
             validatePassowrd(request, member.getPassword());
 
             token = jwtTokenProvider.createToken(member.getNickname());
-            log.info(member.getNickname() + "님이 로그인 하셨습니다.");
+            log.info("{}님이 로그인 하셨습니다.", member.getNickname());
 
             redisTemplate.opsForValue().set(
                     token, member.getNickname(),
                     LOGIN_EXPIRED_TIME,
                     TimeUnit.SECONDS
             );
-            log.info("redis : 토큰(" + token + ")을 1시간동안 저장합니다.");
+            log.info("redis : 토큰{}을 1시간동안 저장합니다.", token);
 
         } catch (IllegalValueException e) {
             e.printStackTrace();
@@ -124,7 +124,7 @@ public class AuthService {
         final var mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
         mailAuthenticationRepository.delete(mailAuthentication);
 
-        log.info(staff.getName() + "님이 가입 하셨습니다.");
+        log.info("{}님이 가입 하셨습니다.", staff.getName());
         return staff.getId();
     }
 
@@ -139,14 +139,14 @@ public class AuthService {
         validatePassowrd(request, staff.getPassword());
 
         final String token = jwtTokenProvider.createToken(staff.getName());
-        log.info(staff.getName() + "님이 로그인 하셨습니다.");
+        log.info("{}님이 로그인 하셨습니다.", staff.getName());
 
         redisTemplate.opsForValue().set(
                 token, staff.getName(),
                 LOGIN_EXPIRED_TIME,
                 TimeUnit.SECONDS
         );
-        log.info("redis : 토큰(" + token + ")을 1시간동안 저장합니다.");
+        log.info("redis : 토큰{}을 1시간동안 저장합니다.", token);
 
         return token;
     }

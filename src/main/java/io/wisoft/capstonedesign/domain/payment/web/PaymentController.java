@@ -93,9 +93,9 @@ public class PaymentController {
 
     private void printModel(final String imp_uid, final String merchant_uid, final boolean success) {
         log.info("-----payment callback received-----");
-        log.info("imp_uid = " + imp_uid);
-        log.info("merchant_uid = " + merchant_uid);
-        log.info("success = " + success);
+        log.info("imp_uid = {}", imp_uid);
+        log.info("merchant_uid = {} ", merchant_uid);
+        log.info("success = {}", success);
     }
 
     private HttpHeaders makeHttpHeader() {
