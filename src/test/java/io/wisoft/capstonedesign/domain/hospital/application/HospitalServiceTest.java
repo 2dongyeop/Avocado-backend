@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.domain.hospital.application;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalRequest;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateHospitalException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -53,7 +54,7 @@ public class HospitalServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullHospitalException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             hospitalService.findById(100L);
         });
     }

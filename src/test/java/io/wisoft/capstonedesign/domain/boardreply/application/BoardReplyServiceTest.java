@@ -8,6 +8,7 @@ import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -86,7 +87,7 @@ public class BoardReplyServiceTest extends ServiceTest {
         boardReplyService.deleteBoardReply(saveId);
 
         //then -- 검증
-        assertThrows(NullBoardReplyException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             boardReplyService.findById(saveId);
         });
     }
@@ -117,7 +118,7 @@ public class BoardReplyServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullBoardReplyException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             boardReplyService.findById(100L);
         });
     }
@@ -148,7 +149,7 @@ public class BoardReplyServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullBoardReplyException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             boardReplyService.deleteBoardReply(saveId);
             boardReplyService.deleteBoardReply(saveId);
         });

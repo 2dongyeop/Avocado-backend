@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.domain.businfo.application;
 
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfo;
 import io.wisoft.capstonedesign.domain.businfo.web.dto.CreateBusInfoRequest;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +44,7 @@ public class BusInfoServiceTest extends ServiceTest {
         busInfoService.delete(saveId);
 
         //then -- 검증
-        assertThrows(NullBusInfoException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             busInfoService.findById(saveId);
         });
     }
@@ -54,7 +55,7 @@ public class BusInfoServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullBusInfoException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             busInfoService.findById(100L);
         });
     }
@@ -68,7 +69,7 @@ public class BusInfoServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullBusInfoException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             busInfoService.delete(saveId);
             busInfoService.delete(saveId);
         });

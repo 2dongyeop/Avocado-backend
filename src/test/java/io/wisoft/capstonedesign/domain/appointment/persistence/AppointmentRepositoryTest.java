@@ -2,6 +2,7 @@ package io.wisoft.capstonedesign.domain.appointment.persistence;
 
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ public class AppointmentRepositoryTest {
 
         //when -- 동작
         final Appointment findAppointment = appointmentRepository.findDetailById(savedAppointment.getId())
-                .orElseThrow(NullAppointmentException::new);
+                .orElseThrow(NotFoundException::new);
 
         //then -- 검증
         Assertions.assertThat(findAppointment).isEqualTo(savedAppointment);
@@ -66,8 +67,8 @@ public class AppointmentRepositoryTest {
         appointmentRepository.save(appointment);
 
         //when -- 동작
-        assertThrows(NullAppointmentException.class, () -> {
-            appointmentRepository.findDetailById(100L).orElseThrow(NullAppointmentException::new);
+        assertThrows(NotFoundException.class, () -> {
+            appointmentRepository.findDetailById(100L).orElseThrow(NotFoundException::new);
         });
 
     }
@@ -92,7 +93,7 @@ public class AppointmentRepositoryTest {
 
         //when -- 동작
         final Appointment findAppointment = appointmentRepository.findDetailById(1L)
-                .orElseThrow(NullAppointmentException::new);
+                .orElseThrow(NotFoundException::new);
 
         //then
         Assertions.assertThat(findAppointment).isNotEqualTo(savedAppointment);

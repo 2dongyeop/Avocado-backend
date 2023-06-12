@@ -6,6 +6,7 @@ import io.wisoft.capstonedesign.domain.board.web.dto.UpdateBoardRequest;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.status.BoardStatus;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -55,7 +56,7 @@ public class BoardServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullMemberException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             boardService.save(request);
         });
     }
@@ -135,7 +136,7 @@ public class BoardServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullBoardException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             boardService.findById(11293218L);
         });
     }

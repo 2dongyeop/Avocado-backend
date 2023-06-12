@@ -106,27 +106,4 @@ public class PaymentController {
         responseHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         return responseHeaders;
     }
-
-    @NotNull
-    private JSONObject getJsonObject(final String merchantUid) {
-        final JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("merchant_uid", merchantUid);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jsonObject;
-    }
-
-    @NotNull
-    private ResponseEntity<String> sendCancelRequest(HttpHeaders headers, JSONObject jsonObject) {
-        final RestTemplate restTemplate = new RestTemplate();
-        final HttpEntity<String> entity = new HttpEntity<>(jsonObject.toString(), headers);
-        return restTemplate.exchange(
-                CANCEL_REQUEST_URL,
-                HttpMethod.POST,
-                entity,
-                String.class);
-    }
-
 }
