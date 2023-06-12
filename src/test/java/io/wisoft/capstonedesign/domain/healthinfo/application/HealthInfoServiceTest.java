@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.domain.healthinfo.application;
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import io.wisoft.capstonedesign.domain.healthinfo.web.dto.CreateHealthInfoRequest;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ public class HealthInfoServiceTest extends ServiceTest {
         healthInfoService.delete(saveId);
 
         //then -- 검증
-        assertThrows(NullHealthInfoException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             healthInfoService.findById(saveId);
         });
     }
@@ -59,7 +60,7 @@ public class HealthInfoServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullHealthInfoException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             healthInfoService.delete(saveId);
             healthInfoService.delete(saveId);
         });
@@ -73,7 +74,7 @@ public class HealthInfoServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullHealthInfoException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             healthInfoService.findById(100L);
         });
     }

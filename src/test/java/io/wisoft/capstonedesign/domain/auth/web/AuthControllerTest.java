@@ -4,6 +4,7 @@ import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationReposi
 import io.wisoft.capstonedesign.domain.auth.web.dto.*;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ public class AuthControllerTest {
         final CreateMemberRequest request = getCreateMemberRequest("test-email@naver.com", "password1");
 
         //when -- 동작
-        final CreateMemberResponse response = authController.signupMember(request);
+        final CreateMemberResponse response = authController.signupMember(request).getBody();
 
         //then -- 검증
         Assertions.assertThat(response.id()).isNotNull();
@@ -68,7 +69,7 @@ public class AuthControllerTest {
 
         final CreateMemberRequest request = getCreateMemberRequest(email, "password1");
 
-        final CreateMemberResponse response = authController.signupMember(request);
+        final CreateMemberResponse response = authController.signupMember(request).getBody();
 
         final LoginRequest loginRequest = new LoginRequest(email, "password1");
 
@@ -91,14 +92,14 @@ public class AuthControllerTest {
         final CreateMemberRequest request = getCreateMemberRequest(email, "password1");
 
         //회원가입
-        final CreateMemberResponse response = authController.signupMember(request);
+        final CreateMemberResponse response = authController.signupMember(request).getBody();
 
         //로그인 요청
         final LoginRequest loginRequest = new LoginRequest("fail-email@naver.com", "password1");
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullMemberException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             authController.loginMember(loginRequest);
         });
     }
@@ -142,7 +143,7 @@ public class AuthControllerTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullHospitalException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             authController.signupStaff(request);
         });
     }

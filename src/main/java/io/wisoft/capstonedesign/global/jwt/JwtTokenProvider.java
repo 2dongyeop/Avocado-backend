@@ -4,7 +4,9 @@ import io.jsonwebtoken.*;
 
 import io.wisoft.capstonedesign.global.exception.token.NotExistTokenException;
 import io.wisoft.capstonedesign.global.exception.token.NotValidTokenException;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -14,6 +16,7 @@ import java.util.Base64;
 import java.util.Date;
 
 @Slf4j
+@Log4j2
 @Component
 public class JwtTokenProvider {
 

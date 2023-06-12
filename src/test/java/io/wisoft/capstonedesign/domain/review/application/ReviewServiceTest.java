@@ -6,6 +6,7 @@ import io.wisoft.capstonedesign.domain.review.web.dto.CreateReviewRequest;
 import io.wisoft.capstonedesign.domain.review.web.dto.UpdateReviewRequest;
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewStatus;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -118,8 +119,8 @@ public class ReviewServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullReviewException.class, () -> {
-            Review review = reviewService.findById(100L);
+        assertThrows(NotFoundException.class, () -> {
+            reviewService.findById(100L);
         });
     }
 

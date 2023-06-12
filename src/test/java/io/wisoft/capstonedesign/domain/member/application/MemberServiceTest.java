@@ -8,6 +8,7 @@ import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberRequest;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.web.dto.UpdateMemberPasswordRequest;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -60,7 +61,7 @@ public class MemberServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullMemberException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             Member getMember = memberService.findById(100L);
         });
     }
@@ -155,8 +156,8 @@ public class MemberServiceTest extends ServiceTest {
         memberService.deleteMember(signUpId);
 
         //then -- 검증
-        assertThrows(NullMemberException.class, () -> {
-            Member member1 = memberService.findById(signUpId);
+        assertThrows(NotFoundException.class, () -> {
+            memberService.findById(signUpId);
         });
     }
 

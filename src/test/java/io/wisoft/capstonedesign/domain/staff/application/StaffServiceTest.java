@@ -9,6 +9,7 @@ import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.web.dto.UpdateStaffPasswordRequest;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -71,7 +72,7 @@ public class StaffServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullStaffException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             Staff staff = staffService.findById(100L);
         });
     }
@@ -189,7 +190,7 @@ public class StaffServiceTest extends ServiceTest {
         staffService.deleteStaff(signUpId);
 
         //then -- 검증
-        assertThrows(NullStaffException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             staffService.findById(signUpId);
         });
     }

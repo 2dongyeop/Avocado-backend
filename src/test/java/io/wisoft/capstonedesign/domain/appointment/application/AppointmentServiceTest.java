@@ -5,6 +5,7 @@ import io.wisoft.capstonedesign.domain.appointment.web.dto.CreateAppointmentRequ
 import io.wisoft.capstonedesign.domain.appointment.web.dto.UpdateAppointmentRequest;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
+import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.setting.common.ServiceTest;
 import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
@@ -67,7 +68,7 @@ public class AppointmentServiceTest extends ServiceTest {
         appointmentService.deleteAppointment(saveId);
 
         //then -- 검증
-        assertThrows(NullAppointmentException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             appointmentService.findById(saveId);
         });
     }
@@ -91,7 +92,7 @@ public class AppointmentServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullAppointmentException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             appointmentService.deleteAppointment(100L);
         });
     }
@@ -116,7 +117,7 @@ public class AppointmentServiceTest extends ServiceTest {
         //when -- 동작
         //then -- 검증
 
-        assertThrows(NullAppointmentException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             appointmentService.deleteAppointment(saveId);
             appointmentService.deleteAppointment(saveId);
         });
@@ -139,7 +140,7 @@ public class AppointmentServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(NullAppointmentException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             appointmentService.findById(100L);
         });
     }

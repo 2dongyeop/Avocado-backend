@@ -19,9 +19,10 @@ public class BoardReplyRepositoryTest {
     @Test
     public void findByBoardIdOrderByCreateAsc() throws Exception {
         //given -- 조건
+        final Long boardId = 1L;
 
         //when -- 동작
-        final List<BoardReply> list = boardReplyRepository.findByBoardIdOrderByCreateAsc();
+        final List<BoardReply> list = boardReplyRepository.findByBoardIdOrderByCreateAsc(boardId);
 
         //then -- 검증
         Assertions.assertThat(list.size()).isEqualTo(5);
