@@ -4,6 +4,9 @@ import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateEmailExcepti
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateHospitalException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateNicknameException;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
+import io.wisoft.capstonedesign.global.exception.token.ExpiredTokenException;
+import io.wisoft.capstonedesign.global.exception.token.InvalidTokenException;
+import io.wisoft.capstonedesign.global.exception.token.NotExistTokenException;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatusCode;
@@ -51,6 +54,39 @@ public class GlobalExceptionHandler {
 
         log.error("handleTimeoutException", exception);
         return getErrorResponseResponseEntity(ErrorCode.TIME_OUT);
+    }
+
+
+    /**
+     * JWT 토큰이 적재되지 않았을 경우
+     */
+    @ExceptionHandler(NotExistTokenException.class)
+    public ResponseEntity<ErrorResponse> handleNotExistTokenException(final NotExistTokenException exception) {
+
+        log.error("handleNotExistTokenException", exception);
+        return getErrorResponseResponseEntity(exception.getErrorCode());
+    }
+
+
+    /**
+     * JWT 토큰이 만료되었을 경우
+     */
+    @ExceptionHandler(ExpiredTokenException.class)
+    public ResponseEntity<ErrorResponse> handleExpiredTokenException(final ExpiredTokenException exception) {
+
+        log.error("handleExpiredTokenException", exception);
+        return getErrorResponseResponseEntity(exception.getErrorCode());
+    }
+
+
+    /**
+     * JWT 토큰이 유효하지 않을 경우
+     */
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidTokenException(final InvalidTokenException exception) {
+
+        log.error("handleInvalidTokenException", exception);
+        return getErrorResponseResponseEntity(exception.getErrorCode());
     }
 
 

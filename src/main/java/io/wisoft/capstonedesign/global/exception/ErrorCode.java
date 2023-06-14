@@ -28,7 +28,10 @@ public enum ErrorCode {
     ILLEGAL_CODE(400, "Illegal-Code-400", "CertificationCode is not match"),
     ILLEGAL_PARAM(400, "Illegal-Param-400", "Parameter is empty"),
     ILLEGAL_STATE(400, "Illegal-State-400", "State is something wrong"),
-    ILLEGAL_STAR_POINT(400, "Illegal-StarPoint-400", "StarPoint between 1 and 5");
+    ILLEGAL_STAR_POINT(400, "Illegal-StarPoint-400", "StarPoint between 1 and 5"),
+    INVALID_TOKEN(403, "Illegal-Invalid-Token-401", "Token is invalid"),
+    NOT_EXIST_TOKEN(401, "Illegal-Not-Exist-Token-401", "Token is not exist"),
+    EXPIRED_TOKEN(401, "Illegal-Expired-Token-401", "Token is expired");
 
 
     private int httpStatusCode;
