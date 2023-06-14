@@ -77,6 +77,7 @@ public class AuthService {
     /**
      * 로그인
      */
+    @Transactional
     public String loginMember(final LoginRequest request) {
 
         String token = null;
@@ -132,6 +133,7 @@ public class AuthService {
     /**
      * 의료진 로그인
      */
+    @Transactional
     public String loginStaff(final LoginRequest request) {
 
         final Staff staff = staffRepository.findStaffByEmail(request.email()).orElseThrow(NotFoundException::new);
