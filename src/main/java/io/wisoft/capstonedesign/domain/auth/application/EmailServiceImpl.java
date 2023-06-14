@@ -12,11 +12,11 @@ import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateEmailException;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
+import io.wisoft.capstonedesign.global.redis.RedisAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -35,17 +35,17 @@ public class EmailServiceImpl implements EmailService {
 
     @Value("${spring.mail.username}")
     private String AVOCADO_ADDRESS;
-    private final int EXPIRED_TIME = 3 * 60;
+    private final int MAIL_AUTH_EXPIRED_TIME = 3 * 60;
 
     private final JavaMailSender emailSender;
     private final EncryptHelper encryptHelper;
     private final StaffRepository staffRepository;
     private final MemberRepository memberRepository;
-    private final StringRedisTemplate redisTemplate;
+    private final RedisAdapter redisAdapter;
     private final MailAuthenticationRepository mailAuthenticationRepository;
 
-    private static final String EMAIL_CERTIFICATION_SUBJECT = "🥑 AVOCADO 이메일 인증 코드입니다.";
-    private static final String PASSWORD_RESET_SUBJECT = "🥑 AVOCADO 임시 비밀번호입니다.";
+    private final String EMAIL_CERTIFICATION_SUBJECT = "🥑 AVOCADO 이메일 인증 코드입니다.";
+    private final String PASSWORD_RESET_SUBJECT = "🥑 AVOCADO 임시 비밀번호입니다.";
 
     @Async
     public String sendCertificationCode(final String to) {
@@ -54,12 +54,7 @@ public class EmailServiceImpl implements EmailService {
         final String authenticateCode = createRandomCode();
         sendEmail(to, EMAIL_CERTIFICATION_SUBJECT, authenticateCode);
 
-        redisTemplate.opsForValue().set(
-                to,
-                authenticateCode,
-                EXPIRED_TIME,
-                TimeUnit.SECONDS
-        );
+        redisAdapter.setValue(to, authenticateCode, MAIL_AUTH_EXPIRED_TIME, TimeUnit.SECONDS);
         log.info("redis : {} 를 3분간 저장합니다.", to);
 
         return authenticateCode;
@@ -85,7 +80,7 @@ public class EmailServiceImpl implements EmailService {
         validateBeforeCertificateEmail(codeByRedis, request);
 
         //Redis에서 메일 정보 삭제
-        redisTemplate.delete(request.email());
+        redisAdapter.deleteValue(request.email());
 
         //인증된 이메일 목록으로 DB에 저장 - 회원가입 성공시 삭제
         mailAuthenticationRepository.save(
@@ -97,7 +92,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private String getRedisValue(final String key) {
-        final String code = redisTemplate.opsForValue().get(key);
+        final String code = redisAdapter.getValue(key);
 
         if (code == null) {
             throw new NotFoundException("해당 이메일에 대한 응답코드 송신 기록이 없습니다.");
