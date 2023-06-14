@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -51,7 +50,9 @@ public class EmailServiceImpl implements EmailService {
     @Async
     public String sendCertificationCode(final String to) {
         validateDuplicateMemberOrStaff(to);
-        final String authenticateCode = sendEmail(to, EMAIL_CERTIFICATION_SUBJECT);
+
+        final String authenticateCode = createRandomCode();
+        sendEmail(to, EMAIL_CERTIFICATION_SUBJECT, authenticateCode);
 
         redisTemplate.opsForValue().set(
                 to,
@@ -61,7 +62,6 @@ public class EmailServiceImpl implements EmailService {
         );
         log.info("redis : {} 를 3분간 저장합니다.", to);
 
-        log.info("{} 으로 인증 코드를 발송합니다.", to);
         return authenticateCode;
     }
 
@@ -115,9 +115,11 @@ public class EmailServiceImpl implements EmailService {
     @Transactional
     public void sendResetMemberPassword(final String to) {
         final Member member = memberRepository.findByEmail(to).orElseThrow(NotFoundException::new);
-        final String temporaryPassword = sendEmail(to, PASSWORD_RESET_SUBJECT);
 
-        member.updatePassword(encryptHelper.encrypt(temporaryPassword));
+        final String resetPassword = createRandomCode();
+        sendEmail(to, PASSWORD_RESET_SUBJECT, resetPassword);
+
+        member.updatePassword(encryptHelper.encrypt(resetPassword));
 
         log.info("{}으로 임시 비밀번호를 발급합니다.", to);
     }
@@ -126,25 +128,22 @@ public class EmailServiceImpl implements EmailService {
     @Transactional
     public void sendResetStaffPassword(final String to) {
         final Staff staff = staffRepository.findByEmail(to).orElseThrow(NotFoundException::new);
-        final String temporaryPassword = sendEmail(to, PASSWORD_RESET_SUBJECT);
 
-        staff.updatePassword(encryptHelper.encrypt(temporaryPassword));
+        final String resetPassword = createRandomCode();
+        sendEmail(to, PASSWORD_RESET_SUBJECT, resetPassword);
+
+        staff.updatePassword(encryptHelper.encrypt(resetPassword));
 
         log.info("{}으로 임시 비밀번호를 발급합니다.", to);
     }
 
-    private String sendEmail(final String to, final String subject) {
-        final String code = createCertificationCode();
 
-        try {
-            final SimpleMailMessage message = createMessage(to, subject, code);
+    private void sendEmail(final String to, final String subject, final String body) {
 
-            emailSender.send(message);
-        } catch (MailException exception) {
-            exception.printStackTrace();
-        }
+        final SimpleMailMessage message = createMessage(to, subject, body);
+        emailSender.send(message);
 
-        return code;
+        log.info("{} 으로 {}를 발송합니다.", to, body);
     }
 
     @NotNull
@@ -157,7 +156,7 @@ public class EmailServiceImpl implements EmailService {
         return message;
     }
 
-    private String createCertificationCode() {
+    private String createRandomCode() {
         final StringBuilder stringBuilder = new StringBuilder();
         final Random random = new Random();
 
