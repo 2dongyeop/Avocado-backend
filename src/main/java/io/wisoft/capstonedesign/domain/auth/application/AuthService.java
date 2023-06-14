@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.domain.auth.application;
 
 import io.wisoft.capstonedesign.domain.auth.persistence.DBMailAuthentication;
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
+import io.wisoft.capstonedesign.domain.auth.web.dto.TokenResponse;
 import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.LoginRequest;
@@ -15,14 +16,14 @@ import io.wisoft.capstonedesign.domain.staff.persistence.StaffRepository;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.ErrorCode;
-import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateEmailException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateNicknameException;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.global.jwt.JwtTokenProvider;
+import io.wisoft.capstonedesign.global.redis.RedisAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +36,11 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final int LOGIN_EXPIRED_TIME = 1 * 60 * 60; //1 hour
+    @Value("${security.jwt.token.refresh-expire-length}")
+    private long REFRESH_TOKEN_EXPIRE_SECOND;
+
+    @Value("${security.jwt.token.token-type}")
+    private String tokenType;
 
     private final MemberRepository memberRepository;
     private final StaffRepository staffRepository;
@@ -43,7 +48,7 @@ public class AuthService {
     private final EncryptHelper encryptHelper;
     private final JwtTokenProvider jwtTokenProvider;
     private final MailAuthenticationRepository mailAuthenticationRepository;
-    private final StringRedisTemplate redisTemplate;
+    private final RedisAdapter redisAdapter;
 
     /*
      * 회원가입
@@ -51,26 +56,20 @@ public class AuthService {
     @Transactional
     public Long signUpMember(final CreateMemberRequest request) {
 
-        try {
-            validateEmailVerified(request.email());
-            validateDuplicateNickname(request.nickname());
+        validateEmailVerified(request.email());
+        validateDuplicateNickname(request.nickname());
 
-            final Member member = createMember(request);
+        final Member member = createMember(request);
 
+        //회원 저장
+        memberRepository.save(member);
 
-            //회원 저장
-            memberRepository.save(member);
+        //인증을 위해 저장했던 이메일 삭제
+        final var mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
+        mailAuthenticationRepository.delete(mailAuthentication);
 
-            //인증을 위해 저장했던 이메일 삭제
-            final var mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
-            mailAuthenticationRepository.delete(mailAuthentication);
-
-            log.info("{}님이 회원가입을 하셨습니다.", member.getNickname());
-            return member.getId();
-        } catch (DuplicateEmailException duplicateException) {
-            duplicateException.printStackTrace();
-            return null;
-        }
+        log.info("{}님이 회원가입을 하셨습니다.", member.getNickname());
+        return member.getId();
     }
 
 
@@ -78,31 +77,20 @@ public class AuthService {
      * 로그인
      */
     @Transactional
-    public String loginMember(final LoginRequest request) {
+    public TokenResponse loginMember(final LoginRequest request) {
 
-        String token = null;
+        final Member member = memberRepository.findMemberByEmail(request.email())
+                .orElseThrow(NotFoundException::new);
 
-        try {
+        validatePassword(request, member.getPassword());
 
-            final Member member = memberRepository.findMemberByEmail(request.email())
-                    .orElseThrow(NotFoundException::new);
+        final String accessToken = jwtTokenProvider.createAccessToken(member.getEmail());
+        final String refreshToken = jwtTokenProvider.createRefreshToken(member.getEmail());
 
-            validatePassowrd(request, member.getPassword());
+        redisAdapter.setValue(member.getEmail(), refreshToken, REFRESH_TOKEN_EXPIRE_SECOND, TimeUnit.SECONDS);
 
-            token = jwtTokenProvider.createToken(member.getNickname());
-            log.info("{}님이 로그인 하셨습니다.", member.getNickname());
-
-            redisTemplate.opsForValue().set(
-                    token, member.getNickname(),
-                    LOGIN_EXPIRED_TIME,
-                    TimeUnit.SECONDS
-            );
-            log.info("redis : 토큰{}을 1시간동안 저장합니다.", token);
-
-        } catch (IllegalValueException e) {
-            e.printStackTrace();
-        }
-        return token;
+        log.info("redis : {}님의 리프레쉬 토큰{}을 1시간동안 저장합니다.", member.getEmail(), accessToken);
+        return new TokenResponse(tokenType, accessToken, refreshToken);
     }
 
 
@@ -134,23 +122,20 @@ public class AuthService {
      * 의료진 로그인
      */
     @Transactional
-    public String loginStaff(final LoginRequest request) {
+    public TokenResponse loginStaff(final LoginRequest request) {
 
-        final Staff staff = staffRepository.findStaffByEmail(request.email()).orElseThrow(NotFoundException::new);
+        final Staff staff = staffRepository.findStaffByEmail(request.email())
+                .orElseThrow(NotFoundException::new);
 
-        validatePassowrd(request, staff.getPassword());
+        validatePassword(request, staff.getPassword());
 
-        final String token = jwtTokenProvider.createToken(staff.getName());
-        log.info("{}님이 로그인 하셨습니다.", staff.getName());
+        final String accessToken = jwtTokenProvider.createAccessToken(staff.getEmail());
+        final String refreshToken = jwtTokenProvider.createRefreshToken(staff.getEmail());
 
-        redisTemplate.opsForValue().set(
-                token, staff.getName(),
-                LOGIN_EXPIRED_TIME,
-                TimeUnit.SECONDS
-        );
-        log.info("redis : 토큰{}을 1시간동안 저장합니다.", token);
+        redisAdapter.setValue(staff.getEmail(), refreshToken, REFRESH_TOKEN_EXPIRE_SECOND, TimeUnit.SECONDS);
 
-        return token;
+        log.info("redis : {}님의 리프레쉬 토큰{}을 1시간동안 저장합니다.", staff.getEmail(), accessToken);
+        return new TokenResponse(tokenType, accessToken, refreshToken);
     }
 
     private Member createMember(final CreateMemberRequest request) {
@@ -176,7 +161,7 @@ public class AuthService {
         }
     }
 
-    private void validatePassowrd(final LoginRequest request, final String member) throws IllegalValueException {
+    private void validatePassword(final LoginRequest request, final String member) throws IllegalValueException {
         if (!encryptHelper.isMatch(request.password(), member)) {
             log.error("비밀번호가 일치하지 않습니다.");
             throw new IllegalValueException("비밀번호가 일치하지 않습니다.", ErrorCode.ILLEGAL_PASSWORD);

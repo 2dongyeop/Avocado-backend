@@ -1,7 +1,6 @@
 package io.wisoft.capstonedesign.global.jwt;
 
 import io.wisoft.capstonedesign.global.exception.token.NotExistTokenException;
-import io.wisoft.capstonedesign.global.exception.token.NotValidTokenException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class JwtTokenProviderTest {
         String subject = "test-token-subject";
 
         //when -- 동작
-        String token = jwtTokenProvider.createToken(subject);
+        String token = jwtTokenProvider.createAccessToken(subject);
 
         //then -- 검증
         Assertions.assertThat(token).isNotNull();
@@ -35,7 +34,7 @@ public class JwtTokenProviderTest {
     public void getSubject_success() throws Exception {
         //given -- 조건
         String subject = "test-token-subject";
-        String token = jwtTokenProvider.createToken(subject);
+        String token = jwtTokenProvider.createAccessToken(subject);
 
         //when -- 동작
         String getSubject = jwtTokenProvider.getSubject(token);
@@ -48,7 +47,7 @@ public class JwtTokenProviderTest {
     public void validateToken_success() throws Exception {
         //given -- 조건
         String subject = "test-token-subject";
-        String token = jwtTokenProvider.createToken(subject);
+        String token = jwtTokenProvider.createAccessToken(subject);
 
         stringRedisTemplate.opsForValue().set(token, "123");
 
@@ -63,7 +62,7 @@ public class JwtTokenProviderTest {
     public void validateToken_fail() throws Exception {
         //given -- 조건
         String subject = "test-token-subject";
-        String token = jwtTokenProvider.createToken(subject);
+        String token = jwtTokenProvider.createAccessToken(subject);
 
         stringRedisTemplate.opsForValue().set(token, "123");
 
