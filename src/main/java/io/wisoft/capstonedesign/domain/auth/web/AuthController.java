@@ -56,8 +56,7 @@ public class AuthController {
     @SwaggerApiFailWithoutAuth
     @PostMapping("/login/members")
     public ResponseEntity<TokenResponse> loginMember(@RequestBody @Valid final LoginRequest request) {
-        final String token = authService.loginMember(request);
-        return ResponseEntity.ok(new TokenResponse(token, "bearer"));
+        return ResponseEntity.ok(authService.loginMember(request));
     }
 
 
@@ -88,8 +87,7 @@ public class AuthController {
     @SwaggerApiFailWithoutAuth
     @PostMapping("/login/staff")
     public ResponseEntity<TokenResponse> loginStaff(@RequestBody @Valid final LoginRequest request) {
-        final String token = authService.loginStaff(request);
-        return ResponseEntity.ok(new TokenResponse(token, "bearer"));
+        return ResponseEntity.ok(authService.loginStaff(request));
     }
 
     private static void validatePassword(final String password1, final String confirmPassword) throws IllegalValueException {
