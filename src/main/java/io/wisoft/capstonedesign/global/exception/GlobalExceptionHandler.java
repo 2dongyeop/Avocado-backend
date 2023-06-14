@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.concurrent.TimeoutException;
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -37,6 +39,18 @@ public class GlobalExceptionHandler {
 
         log.error("handleNotFoundException", exception);
         return getErrorResponseResponseEntity(exception.getErrorCode());
+    }
+
+
+    /**
+     * java.util.concurrent.TimeoutException
+     * 제한시간을 지나 타임아웃시 발생하는 예외
+     */
+    @ExceptionHandler(TimeoutException.class)
+    public ResponseEntity<ErrorResponse> handleTimeoutException(final TimeoutException exception) {
+
+        log.error("handleTimeoutException", exception);
+        return getErrorResponseResponseEntity(ErrorCode.TIME_OUT);
     }
 
 
@@ -68,8 +82,8 @@ public class GlobalExceptionHandler {
 
 
     @NotNull
-    private ResponseEntity<ErrorResponse> getErrorResponseResponseEntity(final ErrorCode exception) {
-        final ErrorResponse response = new ErrorResponse(exception);
-        return new ResponseEntity<>(response, HttpStatusCode.valueOf(exception.getHttpStatusCode()));
+    private ResponseEntity<ErrorResponse> getErrorResponseResponseEntity(final ErrorCode errorCode) {
+        final ErrorResponse response = new ErrorResponse(errorCode);
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(errorCode.getHttpStatusCode()));
     }
 }

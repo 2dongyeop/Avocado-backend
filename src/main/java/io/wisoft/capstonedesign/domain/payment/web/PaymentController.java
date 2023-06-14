@@ -12,14 +12,11 @@ import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.util.Collections;
@@ -34,7 +31,6 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final RefundController refundController;
     private final AppointmentService appointmentService;
-    private final String CANCEL_REQUEST_URL = "https://api.iamport.kr/payments/cancel";
 
 
     @Value("${iamport.api-key}")

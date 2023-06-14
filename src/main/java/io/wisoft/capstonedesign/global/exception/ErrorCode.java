@@ -12,6 +12,7 @@ public enum ErrorCode {
     //@Builder 사용으로 인한 Assert 검증시 발생
     ASSERT_INVALID_INPUT(400, "Common-Builder-400", "Builder가 요구하는 필수 파라미터가 요구되지 않았습니다."),
     NOT_FOUND(404, "Common-NotFound-404", "해당 엔티티를 찾을 수 없습니다."),
+    TIME_OUT(500, "Common-TimeOut-500", "Timeout 발생"),
 
 
     //DUPLICATE

@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -63,7 +64,10 @@ public class HealthInfoApiController {
     @SwaggerApiFailWithoutAuth
     @GetMapping
     public Page<HealthInfoDto> healthInfosByDepartmentUsingPaging(
-            @RequestParam(name = "dept", required = false) final List<String> deptNumberList, final Pageable pageable) {
+            @RequestParam(required = false) final MultiValueMap<String, String> paramMap,
+            final Pageable pageable) {
+
+        final List<String> deptNumberList = paramMap.get("dept");
 
         if (deptNumberList.isEmpty()) {
             return healthInfoService.findByUsingPaging(pageable).map(HealthInfoDto::new);
