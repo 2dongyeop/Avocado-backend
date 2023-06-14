@@ -37,10 +37,9 @@
 
 <br/>
 
-
 > ### *Sequence Diagram*
 
-<img src="https://github.com/HBNU-Avocado/Avocado-backend/blob/main/document/image/Sequence-diagram-v2.png" width = 800/>
+<img src="https://github.com/HBNU-Avocado/Avocado-backend/blob/main/document/image/Sequence-diagram-v3.png" width = 800/>
 
 
 <br/>
@@ -54,5 +53,10 @@
   - Java 17
 - Framework
   - org.springframework.boot `3.0.2`
+  - JUnit5
+  - Rest Assured
 - Datebase
-  - h2 `2.1.214`
+  - PostgreSQL
+  - Redis
+- Etc
+  - Docker
