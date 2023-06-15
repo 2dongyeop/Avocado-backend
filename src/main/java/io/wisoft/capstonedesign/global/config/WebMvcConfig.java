@@ -36,6 +36,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/search")
 
                 .addPathPatterns("/api/auth/logout")
+                .addPathPatterns("/jwt/re-issuance")
 
                 .addPathPatterns("/api/members")
                 .addPathPatterns("/api/members/**") //마이페이지가 여기에 같이 포함
@@ -72,6 +73,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/bus-info/**")
                 .excludePathPatterns("/api/bus-info/{id}/details")
                 .excludePathPatterns("/api/bus-info/area/{area}/details")
+
+                .addPathPatterns("/payment")
+                .addPathPatterns("/payment/**")
 
         ;
 

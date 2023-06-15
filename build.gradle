@@ -1,7 +1,7 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.0.2'
-	id 'io.spring.dependency-management' version '1.1.0'
+    id 'java'
+    id 'org.springframework.boot' version '3.0.2'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'io.wisoft'
@@ -9,74 +9,79 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	maven { url 'https://jitpack.io' }
-	mavenCentral()
+    maven { url 'https://jitpack.io' }
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-devtools'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
-	//jbcrypt
-	implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
+    //slack
+    implementation("com.slack.api:bolt:1.18.0")
+    implementation("com.slack.api:bolt-servlet:1.18.0")
+    implementation("com.slack.api:bolt-jetty:1.18.0")
 
-	//activation-api와 충돌을 피하기 위해 제거
-	implementation('javax.xml.bind:jaxb-api:2.3.1') {
-		exclude group: 'jakarta.activation', module: 'jakarta.activation-api'
-	}
+    //jbcrypt
+    implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
 
-	//jwt
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    //activation-api와 충돌을 피하기 위해 제거
+    implementation('javax.xml.bind:jaxb-api:2.3.1') {
+        exclude group: 'jakarta.activation', module: 'jakarta.activation-api'
+    }
 
-	//postgreSQL
-	implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.1'
+    //jwt
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
-	//java mail
-	implementation 'jakarta.activation:jakarta.activation-api'
-	implementation ('org.springframework.boot:spring-boot-starter-mail') {
-		exclude group: 'com.sun.activation', module: 'javax.activation'
-	}
+    //postgreSQL
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.1'
 
-	//swagger
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+    //java mail
+    implementation 'jakarta.activation:jakarta.activation-api'
+    implementation('org.springframework.boot:spring-boot-starter-mail') {
+        exclude group: 'com.sun.activation', module: 'javax.activation'
+    }
 
-	//JSONObject
-	implementation group: 'org.json', name: 'json', version: '20090211'
+    //swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
-	//Thymeleaf - 프론트 화면을 임시 대체
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    //JSONObject
+    implementation group: 'org.json', name: 'json', version: '20090211'
 
-	//iamport
-	implementation 'com.github.iamport:iamport-rest-client-java:0.2.22'
+    //Thymeleaf - 프론트 화면을 임시 대체
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-	//redis
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    //iamport
+    implementation 'com.github.iamport:iamport-rest-client-java:0.2.22'
 
-	//E2E test를 위한 의존성
-	testImplementation 'io.rest-assured:rest-assured'
+    //redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    //E2E test를 위한 의존성
+    testImplementation 'io.rest-assured:rest-assured'
 
 
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
 
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	//JUnit4 추가
-	testImplementation("org.junit.vintage:junit-vintage-engine") {
-		exclude group: "org.hamcrest", module: "hamcrest-core"
-	}
+    //JUnit4 추가
+    testImplementation("org.junit.vintage:junit-vintage-engine") {
+        exclude group: "org.hamcrest", module: "hamcrest-core"
+    }
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

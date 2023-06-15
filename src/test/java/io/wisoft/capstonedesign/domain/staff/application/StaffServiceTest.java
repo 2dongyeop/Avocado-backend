@@ -67,13 +67,13 @@ public class StaffServiceTest extends ServiceTest {
         //의료진 가입 요청
         final CreateStaffRequest request = getCreateStaffRequest(email, hospital);
 
-        final Long signUpId = authService.signUpStaff(request);
+        authService.signUpStaff(request);
 
 
         //when -- 동작
         //then -- 검증
         assertThrows(NotFoundException.class, () -> {
-            Staff staff = staffService.findById(100L);
+            staffService.findById(100L);
         });
     }
 

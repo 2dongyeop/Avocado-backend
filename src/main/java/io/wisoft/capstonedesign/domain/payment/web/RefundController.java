@@ -81,7 +81,7 @@ public class RefundController {
         executePaymentCancel(token, merchantUid, appointmentId);
     }
 
-    private ResponseEntity<String> executePaymentCancel(String token, String merchantUid, Long appointmentId) {
+    private ResponseEntity<String> executePaymentCancel(final String token, final String merchantUid, final Long appointmentId) {
         final HttpHeaders headers = getHttpHeaders(token);
 
         final JSONObject jsonObject = getJsonObject(merchantUid);
@@ -96,7 +96,7 @@ public class RefundController {
 
 
     @NotNull
-    private ResponseEntity<String> sendCancelRequest(HttpHeaders headers, JSONObject jsonObject) {
+    private ResponseEntity<String> sendCancelRequest(final HttpHeaders headers, final JSONObject jsonObject) {
         final RestTemplate restTemplate = new RestTemplate();
         final HttpEntity<String> entity = new HttpEntity<>(jsonObject.toString(), headers);
         return restTemplate.exchange(
