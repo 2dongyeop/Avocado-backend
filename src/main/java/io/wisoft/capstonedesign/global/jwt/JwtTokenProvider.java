@@ -23,15 +23,17 @@ public class JwtTokenProvider {
     private final String secretKey;
     private final long ACCESS_TOKEN_EXPIRE_SECOND;
     private final long REFRESH_TOKEN_EXPIRE_SECOND;
-    @Autowired private RedisAdapter redisSteps;
+    private final RedisAdapter redisAdapter;
 
     public JwtTokenProvider(
             @Value("${security.jwt.token.secret-key}") final String secretKey,
             @Value("${security.jwt.token.access-expire-length}") final long ACCESS_TOKEN_EXPIRE_SECOND,
-            @Value("${security.jwt.token.refresh-expire-length}") final long REFRESH_TOKEN_EXPIRE_SECOND) {
+            @Value("${security.jwt.token.refresh-expire-length}") final long REFRESH_TOKEN_EXPIRE_SECOND,
+            final RedisAdapter redisAdapter) {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
         this.ACCESS_TOKEN_EXPIRE_SECOND = ACCESS_TOKEN_EXPIRE_SECOND;
         this.REFRESH_TOKEN_EXPIRE_SECOND = REFRESH_TOKEN_EXPIRE_SECOND;
+        this.redisAdapter = redisAdapter;
     }
 
     public String createAccessToken(final String subject) {
@@ -68,9 +70,9 @@ public class JwtTokenProvider {
     /**
      * 토큰에서 값 추출
      */
-    public String getSubject(final String token) {
+    public String getSubject(final String key) {
         return Jwts.parser().setSigningKey(secretKey)
-                .parseClaimsJws(token)
+                .parseClaimsJws(key)
                 .getBody()
                 .getSubject();
     }
@@ -78,15 +80,15 @@ public class JwtTokenProvider {
     /**
      * 유효한 토큰인지 확인
      */
-    public boolean validateToken(final String token) {
+    public boolean validateToken(final String key) {
         try {
 
             /** 유효하지 않은 토큰일 경우 */
-            if (redisSteps.getValue(token) == null) {
+            if (redisAdapter.getValue(key) == null) {
                 throw new InvalidTokenException("유효하지 않은 토큰", ErrorCode.INVALID_TOKEN);
             }
 
-            final Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            final Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(key);
 
             /** 만료시간이 지났을 경우 */
             if (claims.getBody().getExpiration().before(new Date())) {
