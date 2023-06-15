@@ -25,6 +25,6 @@ public class BoardReplyRepositoryTest {
         final List<BoardReply> list = boardReplyRepository.findByBoardIdOrderByCreateAsc(boardId);
 
         //then -- 검증
-        Assertions.assertThat(list.size()).isEqualTo(5);
+        Assertions.assertThat(list.size()).isEqualTo(2);
     }
 }

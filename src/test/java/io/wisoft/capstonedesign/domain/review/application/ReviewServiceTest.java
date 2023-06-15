@@ -185,7 +185,7 @@ public class ReviewServiceTest extends ServiceTest {
 
         //when -- 동작
         //then -- 검증
-        assertThrows(IllegalValueException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             reviewService.findByTargetHospital("아보카두두병원", request);
         });
     }

@@ -137,7 +137,7 @@ public class ReviewReplyServiceTest extends ServiceTest {
 
         final CreateReviewReplyRequest request = getCreateReviewReplyRequest(member, review, "저도 가봐야겠네요");
 
-        final Long saveId = reviewReplyService.save(request);
+        reviewReplyService.save(request);
 
         //when -- 동작
         //then -- 검증

@@ -63,10 +63,11 @@ public class AuthServiceTest extends ServiceTest {
 
         //when -- 동작
         final LoginRequest loginRequest = new LoginRequest(request.email(), request.password1());
-        final String token = authService.loginMember(loginRequest);
+        final TokenResponse tokenResponse = authService.loginMember(loginRequest);
 
         //then -- 검증
-        Assertions.assertThat(token).isNotNull();
+        Assertions.assertThat(tokenResponse.accessToken()).isNotNull();
+        Assertions.assertThat(tokenResponse.refreshToken()).isNotNull();
     }
 
 
@@ -117,10 +118,11 @@ public class AuthServiceTest extends ServiceTest {
 
         //when -- 동작
         final LoginRequest loginRequest = new LoginRequest(request.email(), request.password1());
-        final String token = authService.loginStaff(loginRequest);
+        final TokenResponse tokenResponse = authService.loginStaff(loginRequest);
 
         //then -- 검증
-        Assertions.assertThat(token).isNotNull();
+        Assertions.assertThat(tokenResponse.accessToken()).isNotNull();
+        Assertions.assertThat(tokenResponse.refreshToken()).isNotNull();
     }
 
 
@@ -145,8 +147,8 @@ public class AuthServiceTest extends ServiceTest {
         //when -- 동작
         //then -- 검증
         assertThrows(IllegalValueException.class, () -> {
-            LoginRequest loginRequest = new LoginRequest(request.email(), "fail-password");
-            String token = authService.loginStaff(loginRequest);
+            final LoginRequest loginRequest = new LoginRequest(request.email(), "fail-password");
+            authService.loginStaff(loginRequest);
         });
     }
 

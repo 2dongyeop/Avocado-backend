@@ -10,6 +10,7 @@ public class ReviewTestData {
                 .title("good")
                 .body("good hospital")
                 .starPoint(5)
+                .reviewPhotoPath("default-path")
                 .target_hospital("아보카도")
                 .build();
     }

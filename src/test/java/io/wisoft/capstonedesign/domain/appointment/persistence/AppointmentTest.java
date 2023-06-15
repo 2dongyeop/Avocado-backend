@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.domain.appointment.persistence;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
+import io.wisoft.capstonedesign.global.enumeration.status.PayStatus;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -49,6 +50,7 @@ class AppointmentTest {
                 .comment("comment")
                 .appointName("appointmentName")
                 .appointPhonenumber("appointPhonenumber")
+                .payStatus(PayStatus.NONE)
                 .build();
     }
 
