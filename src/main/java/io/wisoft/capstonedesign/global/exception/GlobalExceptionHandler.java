@@ -3,23 +3,33 @@ package io.wisoft.capstonedesign.global.exception;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateEmailException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateHospitalException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateNicknameException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.global.exception.token.ExpiredTokenException;
 import io.wisoft.capstonedesign.global.exception.token.InvalidTokenException;
 import io.wisoft.capstonedesign.global.exception.token.NotExistTokenException;
+import io.wisoft.capstonedesign.global.slack.SlackConstant;
+import io.wisoft.capstonedesign.global.slack.SlackErrorMessage;
+import io.wisoft.capstonedesign.global.slack.SlackService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeoutException;
 
 @Slf4j
+@Component
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
+    private final SlackService slackService;
 
     /**
      * @Builder 사용으로 인해 요구된 파라미터 유효성 검사시
@@ -30,6 +40,8 @@ public class GlobalExceptionHandler {
 
         log.error("handleIllegalArgumentException", exception);
         final ErrorResponse response = new ErrorResponse(ErrorCode.ASSERT_INVALID_INPUT);
+
+        slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), response.getMessage()), SlackConstant.ERROR_CHANNEL);
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getHttpStatusCode()));
     }
 
@@ -91,6 +103,17 @@ public class GlobalExceptionHandler {
 
 
     /**
+     * 가장 흔히 발생하는 예외
+     */
+    @ExceptionHandler(IllegalValueException.class)
+    public ResponseEntity<ErrorResponse> handlerIllegalValueException(final IllegalValueException exception) {
+
+        log.error("handlerIllegalValueException", exception);
+        return getErrorResponseResponseEntity(exception.getErrorCode());
+    }
+
+
+    /**
      * 중복 예외
      */
     @ExceptionHandler(DuplicateEmailException.class)
@@ -120,6 +143,7 @@ public class GlobalExceptionHandler {
     @NotNull
     private ResponseEntity<ErrorResponse> getErrorResponseResponseEntity(final ErrorCode errorCode) {
         final ErrorResponse response = new ErrorResponse(errorCode);
+        slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), errorCode.getMessage()), SlackConstant.ERROR_CHANNEL);
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(errorCode.getHttpStatusCode()));
     }
 }
