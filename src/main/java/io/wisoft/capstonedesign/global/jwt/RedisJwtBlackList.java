@@ -16,17 +16,17 @@ public class RedisJwtBlackList {
     private final RedisAdapter redisAdapter;
     private final String LOGOUT_STATUS = "LOGOUT_STATUS";
 
-    public void addToBlackList(final String jwt) {
+    public void addToBlackList(final String email) {
 
-        if (isContained(jwt)) {
-            redisAdapter.deleteValue(jwt);
+        if (isContained(email)) {
+            redisAdapter.deleteValue(email);
         }
 
-        redisAdapter.setValue(jwt, LOGOUT_STATUS, TIME_OUT, TimeUnit.SECONDS);
-        log.info("redis : 토큰 {}을 로그아웃 처리합니다.", jwt);
+        redisAdapter.setValue(email, LOGOUT_STATUS, TIME_OUT, TimeUnit.SECONDS);
+        log.info("redis : {}을 로그아웃 처리합니다.", email);
     }
 
-    private boolean isContained(final String jwt) {
-        return redisAdapter.hasKey(jwt);
+    public boolean isContained(final String email) {
+        return redisAdapter.hasKey(email);
     }
 }

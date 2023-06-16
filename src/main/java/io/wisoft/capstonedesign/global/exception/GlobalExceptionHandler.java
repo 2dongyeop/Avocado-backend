@@ -1,10 +1,12 @@
 package io.wisoft.capstonedesign.global.exception;
 
+import io.jsonwebtoken.JwtException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateEmailException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateHospitalException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateNicknameException;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
+import io.wisoft.capstonedesign.global.exception.token.AlreadyLogoutException;
 import io.wisoft.capstonedesign.global.exception.token.ExpiredTokenException;
 import io.wisoft.capstonedesign.global.exception.token.InvalidTokenException;
 import io.wisoft.capstonedesign.global.exception.token.NotExistTokenException;
@@ -99,6 +101,28 @@ public class GlobalExceptionHandler {
 
         log.error("handleInvalidTokenException", exception);
         return getErrorResponseResponseEntity(exception.getErrorCode());
+    }
+
+
+    /**
+     * 로그아웃된 토큰으로 요청할 경우
+     */
+    @ExceptionHandler(AlreadyLogoutException.class)
+    public ResponseEntity<ErrorResponse> handleAlreadyLogoutException(final AlreadyLogoutException exception) {
+
+        log.error("handleAlreadyLogoutException", exception);
+        return getErrorResponseResponseEntity(exception.getErrorCode());
+    }
+
+
+    /**
+     * JWT exception
+     */
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ErrorResponse> handleJwtException(final JwtException exception) {
+
+        log.error("handleJwtException", exception);
+        return getErrorResponseResponseEntity(ErrorCode.JWT_EXCEPTION);
     }
 
 

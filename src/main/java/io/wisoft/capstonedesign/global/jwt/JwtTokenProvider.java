@@ -3,12 +3,12 @@ package io.wisoft.capstonedesign.global.jwt;
 import io.jsonwebtoken.*;
 
 import io.wisoft.capstonedesign.global.exception.ErrorCode;
+import io.wisoft.capstonedesign.global.exception.token.AlreadyLogoutException;
 import io.wisoft.capstonedesign.global.exception.token.InvalidTokenException;
 import io.wisoft.capstonedesign.global.exception.token.ExpiredTokenException;
 import io.wisoft.capstonedesign.global.redis.RedisAdapter;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -24,16 +24,19 @@ public class JwtTokenProvider {
     private final long ACCESS_TOKEN_EXPIRE_SECOND;
     private final long REFRESH_TOKEN_EXPIRE_SECOND;
     private final RedisAdapter redisAdapter;
+    private final RedisJwtBlackList redisJwtBlackList;
 
     public JwtTokenProvider(
             @Value("${security.jwt.token.secret-key}") final String secretKey,
             @Value("${security.jwt.token.access-expire-length}") final long ACCESS_TOKEN_EXPIRE_SECOND,
             @Value("${security.jwt.token.refresh-expire-length}") final long REFRESH_TOKEN_EXPIRE_SECOND,
-            final RedisAdapter redisAdapter) {
+            final RedisAdapter redisAdapter,
+            final RedisJwtBlackList redisJwtBlackList) {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
         this.ACCESS_TOKEN_EXPIRE_SECOND = ACCESS_TOKEN_EXPIRE_SECOND;
         this.REFRESH_TOKEN_EXPIRE_SECOND = REFRESH_TOKEN_EXPIRE_SECOND;
         this.redisAdapter = redisAdapter;
+        this.redisJwtBlackList = redisJwtBlackList;
     }
 
     public String createAccessToken(final String subject) {
@@ -70,35 +73,56 @@ public class JwtTokenProvider {
     /**
      * 토큰에서 값 추출
      */
-    public String getSubject(final String key) {
+    public String getSubject(final String token) {
         return Jwts.parser().setSigningKey(secretKey)
-                .parseClaimsJws(key)
+                .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
 
-    /**
-     * 유효한 토큰인지 확인
-     */
-    public boolean validateToken(final String key) {
+    public boolean validateToken(final String email) {
+
+        /** 유효하지 않은 토큰일 경우 */
+        isValidToken(email);
+
+        /** 로그아웃 처리된 토큰으로 요청할 경우 */
+        validIsAlreadyLogout(email);
+
         try {
-
-            /** 유효하지 않은 토큰일 경우 */
-            if (redisAdapter.getValue(key) == null) {
-                throw new InvalidTokenException("유효하지 않은 토큰", ErrorCode.INVALID_TOKEN);
-            }
-
-            final Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(key);
+            final Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(email);
 
             /** 만료시간이 지났을 경우 */
-            if (claims.getBody().getExpiration().before(new Date())) {
-                log.error("만료시간이 지난 토큰입니다.");
-                throw new ExpiredTokenException("만료시간이 지난 토큰입니다.", ErrorCode.EXPIRED_TOKEN);
-            }
+            isExpiredToken(claims);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             /* do nothing! */
             return false;
+        }
+    }
+
+    private void isValidToken(final String email) {
+
+        if (!redisAdapter.hasKey(email)) {
+            throw new InvalidTokenException("유효하지 않은 토큰입니다.", ErrorCode.INVALID_TOKEN);
+        }
+    }
+
+
+    private void isExpiredToken(final Jws<Claims> claims) {
+
+        if (claims.getBody().getExpiration().before(new Date())) {
+            throw new ExpiredTokenException("만료시간이 지난 토큰입니다.", ErrorCode.EXPIRED_TOKEN);
+        }
+    }
+
+
+    private void validIsAlreadyLogout(final String email) {
+
+        final String value = redisAdapter.getValue(email);
+        System.out.println("value = " + value);
+
+        if (value.equals("LOGOUT_STATUS")) {
+            throw new AlreadyLogoutException("로그아웃 처리된 토큰입니다.", ErrorCode.ALREADY_LOGOUT_TOKEN);
         }
     }
 }
