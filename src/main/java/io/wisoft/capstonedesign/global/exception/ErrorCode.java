@@ -31,7 +31,9 @@ public enum ErrorCode {
     ILLEGAL_STAR_POINT(400, "Illegal-StarPoint-400", "StarPoint between 1 and 5"),
     INVALID_TOKEN(403, "Illegal-Invalid-Token-401", "Token is invalid"),
     NOT_EXIST_TOKEN(401, "Illegal-Not-Exist-Token-401", "Token is not exist"),
-    EXPIRED_TOKEN(401, "Illegal-Expired-Token-401", "Token is expired");
+    EXPIRED_TOKEN(401, "Illegal-Expired-Token-401", "Token is expired"),
+    ALREADY_LOGOUT_TOKEN(403, "Token-403", "Already logout token"),
+    JWT_EXCEPTION(400, "Token-400", "JWT is invalid");
 
 
     private int httpStatusCode;
