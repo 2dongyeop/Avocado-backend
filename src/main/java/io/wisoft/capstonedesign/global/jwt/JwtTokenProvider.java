@@ -24,19 +24,16 @@ public class JwtTokenProvider {
     private final long ACCESS_TOKEN_EXPIRE_SECOND;
     private final long REFRESH_TOKEN_EXPIRE_SECOND;
     private final RedisAdapter redisAdapter;
-    private final RedisJwtBlackList redisJwtBlackList;
 
     public JwtTokenProvider(
             @Value("${security.jwt.token.secret-key}") final String secretKey,
             @Value("${security.jwt.token.access-expire-length}") final long ACCESS_TOKEN_EXPIRE_SECOND,
             @Value("${security.jwt.token.refresh-expire-length}") final long REFRESH_TOKEN_EXPIRE_SECOND,
-            final RedisAdapter redisAdapter,
-            final RedisJwtBlackList redisJwtBlackList) {
+            final RedisAdapter redisAdapter) {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
         this.ACCESS_TOKEN_EXPIRE_SECOND = ACCESS_TOKEN_EXPIRE_SECOND;
         this.REFRESH_TOKEN_EXPIRE_SECOND = REFRESH_TOKEN_EXPIRE_SECOND;
         this.redisAdapter = redisAdapter;
-        this.redisJwtBlackList = redisJwtBlackList;
     }
 
     public String createAccessToken(final String subject) {

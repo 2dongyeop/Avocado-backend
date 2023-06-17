@@ -16,8 +16,10 @@ import io.wisoft.capstonedesign.global.slack.SlackService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,6 +34,9 @@ import java.util.concurrent.TimeoutException;
 public class GlobalExceptionHandler {
 
     private final SlackService slackService;
+
+    @Qualifier("asyncExecutor")
+    private final ThreadPoolTaskExecutor executor;
 
     /**
      * @Builder 사용으로 인해 요구된 파라미터 유효성 검사시
@@ -167,7 +172,11 @@ public class GlobalExceptionHandler {
     @NotNull
     private ResponseEntity<ErrorResponse> getErrorResponseResponseEntity(final ErrorCode errorCode) {
         final ErrorResponse response = new ErrorResponse(errorCode);
-        slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), errorCode.getMessage()), SlackConstant.ERROR_CHANNEL);
+
+        executor.execute(() -> {
+            slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), errorCode.getMessage()), SlackConstant.ERROR_CHANNEL);
+        });
+
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(errorCode.getHttpStatusCode()));
     }
 }
