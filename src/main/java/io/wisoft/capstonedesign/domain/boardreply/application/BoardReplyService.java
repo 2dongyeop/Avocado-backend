@@ -83,14 +83,16 @@ public class BoardReplyService {
      * 게시글댓글 단건 조회
      */
     public BoardReply findById(final Long boardReplyId) {
-        return boardReplyRepository.findById(boardReplyId).orElseThrow(NotFoundException::new);
+        return boardReplyRepository.findById(boardReplyId)
+                .orElseThrow(() -> new NotFoundException("게시글 댓글 조회 실패"));
     }
 
     /**
      * 게시글댓글 단건 상세 조회
      */
     public BoardReply findDetailById(final Long boardReplyId) {
-        return boardReplyRepository.findDetailById(boardReplyId).orElseThrow(NotFoundException::new);
+        return boardReplyRepository.findDetailById(boardReplyId)
+                .orElseThrow(() -> new NotFoundException("게시글 댓글 조회 실패"));
     }
 
     /**

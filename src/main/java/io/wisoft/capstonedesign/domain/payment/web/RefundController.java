@@ -63,11 +63,11 @@ public class RefundController {
     public ResponseEntity<String> refund(
             final HttpServletRequest httpServletRequest,
             @RequestBody final String merchantUid,
-            @PathVariable final Long appointmentId) {
+            @PathVariable final Long id) {
 
         final String token = extractor.extract(httpServletRequest, "Bearer");
 
-        final ResponseEntity<String> response = executePaymentCancel(token, merchantUid, appointmentId);
+        final ResponseEntity<String> response = executePaymentCancel(token, merchantUid, id);
 
         return response;
     }

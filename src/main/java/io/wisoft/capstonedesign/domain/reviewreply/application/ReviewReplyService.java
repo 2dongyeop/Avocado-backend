@@ -85,14 +85,16 @@ public class ReviewReplyService {
      * 리뷰댓글 단건조회
      */
     public ReviewReply findById(final Long reviewReplyId) {
-        return reviewReplyRepository.findById(reviewReplyId).orElseThrow(NotFoundException::new);
+        return reviewReplyRepository.findById(reviewReplyId)
+                .orElseThrow(() -> new NotFoundException("리뷰 댓글 조회 실패"));
     }
 
     /**
      * 리뷰댓글 단건 상세조회
      */
     public ReviewReply findDetailById(final Long reviewReplyId) {
-        return reviewReplyRepository.findDetailById(reviewReplyId).orElseThrow(NotFoundException::new);
+        return reviewReplyRepository.findDetailById(reviewReplyId)
+                .orElseThrow(() -> new NotFoundException("리뷰 댓글 조회 실패"));
     }
 
 

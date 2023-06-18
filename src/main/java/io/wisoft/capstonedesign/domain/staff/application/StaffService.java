@@ -73,11 +73,13 @@ public class StaffService {
      * 상세 조회
      */
     public Staff findDetailById(final Long staffId) {
-        return staffRepository.findDetailById(staffId).orElseThrow(NotFoundException::new);
+        return staffRepository.findDetailById(staffId)
+                .orElseThrow(() -> new NotFoundException("의료진 조회 실패"));
     }
 
     public Staff findById(final Long staffId) {
-        return staffRepository.findById(staffId).orElseThrow(NotFoundException::new);
+        return staffRepository.findById(staffId)
+                .orElseThrow(() -> new NotFoundException("의료진 조회 실패"));
     }
 
     public List<Staff> findAll() {

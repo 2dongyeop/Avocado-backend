@@ -80,7 +80,7 @@ public class AuthService {
     public TokenResponse loginMember(final LoginRequest request) {
 
         final Member member = memberRepository.findMemberByEmail(request.email())
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("회원 조회 실패"));
 
         validatePassword(request, member.getPassword());
 
@@ -125,7 +125,7 @@ public class AuthService {
     public TokenResponse loginStaff(final LoginRequest request) {
 
         final Staff staff = staffRepository.findStaffByEmail(request.email())
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("의료진 조회 실패"));
 
         validatePassword(request, staff.getPassword());
 
@@ -154,7 +154,8 @@ public class AuthService {
     }
 
     private void validateEmailVerified(final String email) throws IllegalStateException {
-        final DBMailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(NotFoundException::new);
+        final DBMailAuthentication mail = mailAuthenticationRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("이메일 인증 정보 조회 실패"));
 
         if (!mail.isVerified()) {
             throw new IllegalValueException("이메일 인증을 완료해주세요.", ErrorCode.ILLEGAL_STATE);

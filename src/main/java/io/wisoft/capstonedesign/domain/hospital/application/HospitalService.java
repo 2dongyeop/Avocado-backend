@@ -51,7 +51,8 @@ public class HospitalService {
      * 병원 단건 조회
      */
     public Hospital findById(final Long hospitalId) {
-        return hospitalRepository.findById(hospitalId).orElseThrow(NotFoundException::new);
+        return hospitalRepository.findById(hospitalId)
+                .orElseThrow(() -> new NotFoundException("병원 조회 실패"));
     }
 
     /* 병원 이름으로 조회 */
