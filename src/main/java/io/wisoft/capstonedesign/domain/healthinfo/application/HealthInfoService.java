@@ -57,11 +57,13 @@ public class HealthInfoService {
 
     /* 조회 로직 */
     public HealthInfo findById(final Long healthInfoId) {
-        return healthInfoRepository.findById(healthInfoId).orElseThrow(NotFoundException::new);
+        return healthInfoRepository.findById(healthInfoId)
+                .orElseThrow(() -> new NotFoundException("건강정보 조회 실패"));
     }
 
     public HealthInfo findDetailById(final Long healthInfoId) {
-        return healthInfoRepository.findDetailById(healthInfoId).orElseThrow(NotFoundException::new);
+        return healthInfoRepository.findDetailById(healthInfoId)
+                .orElseThrow(() -> new NotFoundException("건강정보 조회 실패"));
     }
 
     public List<HealthInfo> findAll() {

@@ -119,11 +119,13 @@ public class AppointmentService {
     /* 조회 로직 */
 
     public Appointment findDetailById(final Long appointmentId) {
-        return appointmentRepository.findDetailById(appointmentId).orElseThrow(NotFoundException::new);
+        return appointmentRepository.findDetailById(appointmentId)
+                .orElseThrow(() -> new NotFoundException("appointment 조회 실패"));
     }
 
     public Appointment findById(final Long appointmentId) {
-        return appointmentRepository.findById(appointmentId).orElseThrow(NotFoundException::new);
+        return appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new NotFoundException("appointment 조회 실패"));
     }
 }
 

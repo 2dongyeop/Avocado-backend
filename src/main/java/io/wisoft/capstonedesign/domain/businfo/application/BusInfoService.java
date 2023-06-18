@@ -40,7 +40,8 @@ public class BusInfoService {
 
     /* 조회 로직 */
     public BusInfo findById(final Long busInfoId) {
-        return busInfoRepository.findById(busInfoId).orElseThrow(NotFoundException::new);
+        return busInfoRepository.findById(busInfoId)
+                .orElseThrow(() -> new NotFoundException("버스정보 조회 실패"));
     }
 
     public List<BusInfo> findAll() {

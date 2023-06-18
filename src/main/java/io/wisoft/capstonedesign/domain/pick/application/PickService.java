@@ -46,11 +46,13 @@ public class PickService {
 
     /* 조회 로직 */
     public Pick findById(final Long pickId) {
-        return pickRepository.findById(pickId).orElseThrow(NotFoundException::new);
+        return pickRepository.findById(pickId)
+                .orElseThrow(() -> new NotFoundException("찜하기 조회 실패"));
     }
 
     /** 상세조회 */
     public Pick findDetailById(final Long pickId) {
-        return pickRepository.findDetailById(pickId).orElseThrow(NotFoundException::new);
+        return pickRepository.findDetailById(pickId)
+                .orElseThrow(() -> new NotFoundException("찜하기 조회 실패"));
     }
 }

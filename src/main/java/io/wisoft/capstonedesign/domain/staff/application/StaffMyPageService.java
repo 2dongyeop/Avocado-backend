@@ -24,7 +24,7 @@ public class StaffMyPageService {
     public List<Review> findReviewByStaffHospitalName(final Long staffId) {
 
         final Staff staff = staffMyPageRepository.findById(staffId)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("의료진 조회 실패"));
 
         final String hospitalName = staff.getHospital().getName();
         return staffMyPageRepository.findReviewListByStaffHospitalName(hospitalName);

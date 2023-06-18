@@ -82,12 +82,14 @@ public class BoardService {
     /* 조회 로직 */
     /** 게시글 단건 상세 조회 */
     public Board findDetailById(final Long boardId) {
-        return boardRepository.findDetailById(boardId).orElseThrow(NotFoundException::new);
+        return boardRepository.findDetailById(boardId)
+                .orElseThrow(() -> new NotFoundException("게시글 조회 실패"));
     }
 
     /** 게시글 단건 조회 */
     public Board findById(final Long boardId) {
-        return boardRepository.findById(boardId).orElseThrow(NotFoundException::new);
+        return boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException("게시글 조회 실패"));
     }
 
     public List<Board> findAll() {

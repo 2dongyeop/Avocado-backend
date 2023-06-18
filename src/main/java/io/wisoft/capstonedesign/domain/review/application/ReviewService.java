@@ -97,14 +97,16 @@ public class ReviewService {
 
     /* 조회 로직 */
     public Review findById(final Long reviewId) {
-        return reviewRepository.findById(reviewId).orElseThrow(NotFoundException::new);
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new NotFoundException("리뷰 조회 실패"));
     }
 
     public List<Review> findAll() { return reviewRepository.findAll(); }
 
     /** 상세 조회 */
     public Review findDetailById(final Long reviewId) {
-        return reviewRepository.findDetailById(reviewId).orElseThrow(NotFoundException::new);
+        return reviewRepository.findDetailById(reviewId)
+                .orElseThrow(() -> new NotFoundException("리뷰 조회 실패"));
     }
 
     /** 리뷰 목록 페이징 조회 */

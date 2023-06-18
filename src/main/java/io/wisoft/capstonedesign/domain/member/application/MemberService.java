@@ -72,11 +72,13 @@ public class MemberService {
      * 회원 조회
      */
     public Member findById(final Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(NotFoundException::new);
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException("회원 조회 실패"));
     }
 
     public Member findDetailById(final Long memberId) {
-        return memberRepository.findDetailById(memberId).orElseThrow(NotFoundException::new);
+        return memberRepository.findDetailById(memberId)
+                .orElseThrow(() -> new NotFoundException("회원 조회 실패"));
     }
 
     public List<Member> findAll() {

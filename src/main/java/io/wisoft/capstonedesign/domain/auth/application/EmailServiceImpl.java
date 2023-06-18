@@ -109,7 +109,8 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Transactional
     public void sendResetMemberPassword(final String to) {
-        final Member member = memberRepository.findByEmail(to).orElseThrow(NotFoundException::new);
+        final Member member = memberRepository.findByEmail(to)
+                .orElseThrow(() -> new NotFoundException("회원 조회 실패"));
 
         final String resetPassword = createRandomCode();
         sendEmail(to, PASSWORD_RESET_SUBJECT, resetPassword);
@@ -122,7 +123,8 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Transactional
     public void sendResetStaffPassword(final String to) {
-        final Staff staff = staffRepository.findByEmail(to).orElseThrow(NotFoundException::new);
+        final Staff staff = staffRepository.findByEmail(to)
+                .orElseThrow(() -> new NotFoundException("의료진 조회 실패"));
 
         final String resetPassword = createRandomCode();
         sendEmail(to, PASSWORD_RESET_SUBJECT, resetPassword);
