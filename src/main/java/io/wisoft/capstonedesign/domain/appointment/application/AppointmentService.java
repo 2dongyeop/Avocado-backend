@@ -68,15 +68,10 @@ public class AppointmentService {
     @Transactional
     public void update(final Long appointmentId, final UpdateAppointmentRequest request) {
 
-        try {
-            validateDept(request.dept());
+        validateDept(request.dept());
 
-            final Appointment appointment = findById(appointmentId);
-            appointment.update(HospitalDept.valueOf(request.dept()), request.comment(), request.appointName(), request.appointPhonenumber());
-        } catch (IllegalDeptException e) {
-            log.error("일치하는 dept가 존재하지 않습니다.");
-            e.printStackTrace();
-        }
+        final Appointment appointment = findById(appointmentId);
+        appointment.update(HospitalDept.valueOf(request.dept()), request.comment(), request.appointName(), request.appointPhonenumber());
     }
 
     private void validateAppointmentDate(final LocalDateTime appointmentDate) {
