@@ -11,6 +11,8 @@ import io.wisoft.capstonedesign.global.exception.token.AlreadyLogoutException;
 import io.wisoft.capstonedesign.global.exception.token.ExpiredTokenException;
 import io.wisoft.capstonedesign.global.exception.token.InvalidTokenException;
 import io.wisoft.capstonedesign.global.exception.token.NotExistTokenException;
+import io.wisoft.capstonedesign.global.slack.SlackConstant;
+import io.wisoft.capstonedesign.global.slack.SlackErrorMessage;
 import io.wisoft.capstonedesign.global.slack.SlackService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeoutException;
 
 @Slf4j
@@ -45,7 +48,7 @@ public class GlobalExceptionHandler {
         log.error("handleIllegalArgumentException", exception);
         final ErrorResponse response = new ErrorResponse(ErrorCode.ASSERT_INVALID_INPUT);
 
-//        slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), response.getMessage()), SlackConstant.ERROR_CHANNEL);
+        slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), response.getMessage()), SlackConstant.ERROR_CHANNEL);
         return new ResponseEntity<>(response, response.getHttpStatusCode());
     }
 
@@ -56,7 +59,7 @@ public class GlobalExceptionHandler {
         log.error("handleIllegalArgumentException", exception);
         final ErrorResponse response = new ErrorResponse(ErrorCode.ILLEGAL_STATE);
 
-//        slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), response.getMessage()), SlackConstant.ERROR_CHANNEL);
+        slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), response.getMessage()), SlackConstant.ERROR_CHANNEL);
         return new ResponseEntity<>(response, response.getHttpStatusCode());
     }
 
@@ -193,7 +196,7 @@ public class GlobalExceptionHandler {
         final ErrorResponse response = new ErrorResponse(errorCode);
 
         executor.execute(() -> {
-//            slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), errorCode.getMessage()), SlackConstant.ERROR_CHANNEL);
+            slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), errorCode.getMessage()), SlackConstant.ERROR_CHANNEL);
         });
 
         return new ResponseEntity<>(response, errorCode.getHttpStatusCode());
