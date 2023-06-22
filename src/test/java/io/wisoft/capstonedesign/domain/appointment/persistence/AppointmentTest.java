@@ -7,7 +7,7 @@ import io.wisoft.capstonedesign.global.enumeration.status.PayStatus;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDateTime;
 
 class AppointmentTest {
 
@@ -50,9 +50,8 @@ class AppointmentTest {
                 .comment("comment")
                 .appointName("appointmentName")
                 .appointPhonenumber("appointPhonenumber")
+                .appointmentDate(LocalDateTime.now().plusMonths(1))
                 .payStatus(PayStatus.NONE)
                 .build();
     }
-
-
 }

@@ -4,6 +4,7 @@ import io.jsonwebtoken.JwtException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateEmailException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateHospitalException;
 import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateNicknameException;
+import io.wisoft.capstonedesign.global.exception.illegal.IllegalDeptException;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.global.exception.token.AlreadyLogoutException;
@@ -17,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
@@ -49,7 +49,18 @@ public class GlobalExceptionHandler {
         final ErrorResponse response = new ErrorResponse(ErrorCode.ASSERT_INVALID_INPUT);
 
         slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), response.getMessage()), SlackConstant.ERROR_CHANNEL);
-        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getHttpStatusCode()));
+        return new ResponseEntity<>(response, response.getHttpStatusCode());
+    }
+
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalStateException(final IllegalStateException exception) {
+
+        log.error("handleIllegalArgumentException", exception);
+        final ErrorResponse response = new ErrorResponse(ErrorCode.ILLEGAL_STATE);
+
+        slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), response.getMessage()), SlackConstant.ERROR_CHANNEL);
+        return new ResponseEntity<>(response, response.getHttpStatusCode());
     }
 
 
@@ -60,6 +71,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNotFoundException(final NotFoundException exception) {
 
         log.error("handleNotFoundException", exception);
+        return getErrorResponseResponseEntity(exception.getErrorCode());
+    }
+
+
+    /**
+     * Dept 불일치 예외
+     */
+    @ExceptionHandler(IllegalDeptException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalDept(final IllegalDeptException exception) {
+
+        log.error("일치하는 dept가 존재하지 않습니다.", exception);
         return getErrorResponseResponseEntity(exception.getErrorCode());
     }
 
@@ -177,6 +199,6 @@ public class GlobalExceptionHandler {
             slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), errorCode.getMessage()), SlackConstant.ERROR_CHANNEL);
         });
 
-        return new ResponseEntity<>(response, HttpStatusCode.valueOf(errorCode.getHttpStatusCode()));
+        return new ResponseEntity<>(response, errorCode.getHttpStatusCode());
     }
 }

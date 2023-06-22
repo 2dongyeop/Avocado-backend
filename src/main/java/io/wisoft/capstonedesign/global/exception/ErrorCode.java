@@ -19,6 +19,7 @@ public enum ErrorCode {
 
 
     //DUPLICATE
+    DUPLICATE_NICKNAME(BAD_REQUEST, "Duplicate-Nickname-400", "Nickname is Duplicated"),
     DUPLICATE_EMAIL(BAD_REQUEST, "Duplicate-Mail-400", "Email is Duplicated"),
     DUPLICATE_HOSPITAL(BAD_REQUEST, "Duplicate-Hospital-400", "HospitalName is Duplicated"),
 

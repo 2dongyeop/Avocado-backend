@@ -149,7 +149,7 @@ public class AuthService {
 
     private void validateDuplicateNickname(final String nickname) throws DuplicateNicknameException {
         if (memberRepository.findValidateMemberByNickname(nickname).size() > 0) {
-            throw new DuplicateNicknameException("닉네임 중복", ErrorCode.DUPLICATE_EMAIL);
+            throw new DuplicateNicknameException("닉네임 중복", ErrorCode.DUPLICATE_NICKNAME);
         }
     }
 

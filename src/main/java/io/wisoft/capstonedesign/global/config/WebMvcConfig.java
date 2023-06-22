@@ -1,8 +1,8 @@
 package io.wisoft.capstonedesign.global.config;
 
+import io.wisoft.capstonedesign.global.interceptor.BearerAuthInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.wisoft.capstonedesign.global.interceptor.BearerAuthInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
