@@ -12,6 +12,8 @@ import io.wisoft.capstonedesign.domain.auth.web.dto.LoginRequest;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.domain.hospital.persistence.HospitalRepository;
 import io.wisoft.capstonedesign.global.exception.ErrorCode;
+import io.wisoft.capstonedesign.global.jwt.JwtTokenProvider;
+import io.wisoft.capstonedesign.global.redis.RedisAdapter;
 import io.wisoft.capstonedesign.setting.common.ApiTest;
 import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +23,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+
+import java.util.concurrent.TimeUnit;
 
 public class AuthControllerTest extends ApiTest {
 
@@ -32,6 +36,43 @@ public class AuthControllerTest extends ApiTest {
 
     @Autowired
     private MailAuthenticationRepository mailAuthenticationRepository;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private RedisAdapter redisAdapter;
+
+
+    @Nested
+    @DisplayName("로그아웃")
+    public class Logout {
+
+        @Test
+        @DisplayName("로그아웃 요청시 해당 토큰이 레디스에 블랙리스트로 등록되어야 한다.")
+        public void 성공() throws Exception {
+
+            //given -- 조건
+            final String email = "로그아웃성공@email.com";
+            final String accessToken = jwtTokenProvider.createAccessToken(email);
+            redisAdapter.setValue(email, accessToken, 3600000, TimeUnit.SECONDS);
+
+            //when -- 동작
+            final var response = RestAssured
+                    .given()
+                    .log().all()
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .header("Authorization", "bearer " + accessToken)
+                    .when()
+                    .post("/api/auth/logout")
+                    .then()
+                    .log().all().extract();
+
+            //then -- 검증
+            Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+            Assertions.assertThat(redisAdapter.getValue(email)).isEqualTo("LOGOUT_STATUS");
+        }
+    }
 
 
     @Nested
@@ -606,7 +647,7 @@ public class AuthControllerTest extends ApiTest {
             Assertions.assertThat((String) response.jsonPath().get("message")).isEqualTo("해당 엔티티를 찾을 수 없습니다.");
         }
 
-        
+
         @Test
         @DisplayName("비밀번호가 일치하지 않을 경우, 로그인에 실패한다.")
         public void 실패4() throws Exception {
@@ -640,7 +681,7 @@ public class AuthControllerTest extends ApiTest {
             Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
             Assertions.assertThat((String) response.jsonPath().get("message")).isEqualTo("Password is not match");
         }
-        
+
 
         private CreateStaffResponse 의료진가입처리(final String password, final String nickname, final String email, final Long hospitalId) {
             return authController.signupStaff(new CreateStaffRequest(
