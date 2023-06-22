@@ -50,6 +50,17 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalStateException(final IllegalStateException exception) {
+
+        log.error("handleIllegalArgumentException", exception);
+        final ErrorResponse response = new ErrorResponse(ErrorCode.ILLEGAL_STATE);
+
+//        slackService.sendSlackMessage(new SlackErrorMessage(LocalDateTime.now(), response.getMessage()), SlackConstant.ERROR_CHANNEL);
+        return new ResponseEntity<>(response, response.getHttpStatusCode());
+    }
+
+
     /**
      * 조회 실패시 발생하는 예외
      */
