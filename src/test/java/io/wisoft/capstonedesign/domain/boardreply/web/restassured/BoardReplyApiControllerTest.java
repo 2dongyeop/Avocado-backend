@@ -308,7 +308,6 @@ class BoardReplyApiControllerTest extends ApiTest {
             //의료진이 다닐 병원 & 의료진 생성
             final Hospital hospital = 병원생성(hospitalName);
             final Staff staff = 의료진생성(nickname, email, password, hospital);
-
             final Long boardReplyId = 게시글댓글저장(board, staff);
 
             final var request = new CreateBoardReplyRequest(board.getId(), staff.getId(), "new-reply");
@@ -316,14 +315,14 @@ class BoardReplyApiControllerTest extends ApiTest {
             //when -- 동작
             final var response = RestAssured
                     .given()
-                    .log().all()
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .header("Authorization", "bearer " + accessToken)
-                    .body(request)
+                        .log().all()
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .header("Authorization", "bearer " + accessToken)
+                        .body(request)
                     .when()
-                    .patch("/api/board-reply/{id}", boardReplyId)
+                        .patch("/api/board-reply/{id}", boardReplyId)
                     .then()
-                    .log().all().extract();
+                        .log().all().extract();
 
             //then -- 검증
 

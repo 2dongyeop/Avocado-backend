@@ -33,7 +33,7 @@ public enum ErrorCode {
     ILLEGAL_PARAM(BAD_REQUEST, "Illegal-Param-400", "Parameter is empty"),
     ILLEGAL_STATE(BAD_REQUEST, "Illegal-State-400", "State is something wrong"),
     ILLEGAL_STAR_POINT(BAD_REQUEST, "Illegal-StarPoint-400", "StarPoint between 1 and 5"),
-    INVALID_TOKEN(FORBIDDEN, "Illegal-Invalid-Token-401", "Token is invalid"),
+    INVALID_TOKEN(UNAUTHORIZED, "Illegal-Invalid-Token-401", "Token is invalid"),
     NOT_EXIST_TOKEN(UNAUTHORIZED, "Illegal-Not-Exist-Token-401", "Token is not exist"),
     EXPIRED_TOKEN(UNAUTHORIZED, "Illegal-Expired-Token-401", "Token is expired"),
     ALREADY_LOGOUT_TOKEN(FORBIDDEN, "Token-403", "Already logout token"),

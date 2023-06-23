@@ -101,7 +101,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private void validateBeforeCertificateEmail(final String code, final CertificateMailRequest request) {
-        if (request.code() == (code)) {
+        if (!request.code().equals(code)) {
             throw new IllegalValueException("인증 코드가 달라 인증에 실패하였습니다.", ErrorCode.ILLEGAL_CODE);
         }
     }

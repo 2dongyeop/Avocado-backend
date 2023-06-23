@@ -43,7 +43,7 @@ public class BearerAuthInterceptor implements HandlerInterceptor {
         //토큰을 디코딩
         final String email = jwtTokenProvider.getSubject(accessToken);
 
-        jwtTokenProvider.validateToken(email);
+        jwtTokenProvider.validateToken(email, accessToken);
 
         //디코딩한 값으로 세팅
         request.setAttribute("email", email);
