@@ -1,7 +1,5 @@
 package io.wisoft.capstonedesign.global.jwt;
 
-import io.wisoft.capstonedesign.global.exception.token.InvalidTokenException;
-import io.wisoft.capstonedesign.global.exception.token.NotExistTokenException;
 import io.wisoft.capstonedesign.global.redis.RedisAdapter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -11,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -64,13 +60,13 @@ public class JwtTokenProviderTest {
     @Test
     public void validateToken_success() throws Exception {
         //given -- 조건
-        final String subject = "subject";
+        final String subject = "validateToken_success@naver.com";
         final String token = jwtTokenProvider.createAccessToken(subject);
 
         redisAdapter.setValue(subject, token, 1200000, TimeUnit.SECONDS);
 
         //when -- 동작
-        boolean result = jwtTokenProvider.validateToken(token);
+        boolean result = jwtTokenProvider.validateToken(subject, token);
 
         //then -- 검증
         Assertions.assertThat(result).isTrue();
@@ -86,9 +82,9 @@ public class JwtTokenProviderTest {
         redisAdapter.setValue(subject, refreshToken, 1200000, TimeUnit.SECONDS);
 
         //when -- 동작
+        boolean result = jwtTokenProvider.validateToken(subject, "Invalid-token");
+
         //then -- 검증
-        assertThrows(InvalidTokenException.class, () -> {
-            jwtTokenProvider.validateToken("Invalid-token");
-        });
+        Assertions.assertThat(result).isFalse();
     }
 }

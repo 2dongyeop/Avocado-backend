@@ -77,7 +77,7 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public boolean validateToken(final String email) {
+    public boolean validateToken(final String email, final String accessToken) {
 
         /** 유효하지 않은 토큰일 경우 */
         isValidToken(email);
@@ -86,7 +86,7 @@ public class JwtTokenProvider {
         validIsAlreadyLogout(email);
 
         try {
-            final Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(email);
+            final Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken);
 
             /** 만료시간이 지났을 경우 */
             isExpiredToken(claims);
