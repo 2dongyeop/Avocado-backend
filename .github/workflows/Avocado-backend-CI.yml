@@ -1,0 +1,248 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Avocado Backend CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'corretto'
+        
+        
+# redis with docker
+    - name: run docker-compose
+      run: |
+        touch ./docker-compose.yml
+        
+        echo "${{ secrets.DOCKER_COMPOSE }}" >> ./docker-compose.yml
+        
+        cat ./docker-compose.yml
+        
+        
+# main resources
+    - name: make application.properties
+      run: |
+        cd ./src/main/resources
+        
+        touch ./application.properties
+        
+        echo "${{ secrets.APPLICATION_PROPERTIRES }}" >> ./application.properties
+        
+        cat ./application.properties
+        
+    
+    - name: make application.yml
+      run: |
+        cd ./src/main/resources
+        
+        touch ./application.yml
+        
+        echo "${{ secrets.APPLICATION }}" >> ./application.yml
+        
+        cat ./application.yml
+    
+
+    - name: make application-chatgpt.yml
+      run: |
+        cd ./src/main/resources
+        
+        touch ./application-chatgpt.yml
+        
+        echo "${{ secrets.APPLICATION_CHATGPT }}" >> ./application-chatgpt.yml
+        
+        cat ./application-chatgpt.yml
+    
+    
+    - name: make application-iamport.yml
+      run: |
+        cd ./src/main/resources
+        
+        touch ./application-iamport.yml
+        
+        echo "${{ secrets.APPLICATION_IAMPORT }}" >> ./application-iamport.yml
+        
+        cat ./application-iamport.yml
+
+
+    - name: make application-jwt.yml
+      run: |
+        cd ./src/main/resources
+        
+        touch ./application-jwt.yml
+        
+        echo "${{ secrets.APPLICATION_JWT }}" >> ./application-jwt.yml
+        
+        cat ./application-jwt.yml
+
+
+    - name: make application-jwt.yml
+      run: |
+        cd ./src/main/resources
+        
+        touch ./application-jwt.yml
+        
+        echo "${{ secrets.APPLICATION_JWT }}" >> ./application-jwt.yml
+        
+        cat ./application-jwt.yml
+
+
+    - name: make application-oauth.yml
+      run: |
+        cd ./src/main/resources
+        
+        touch ./application-oauth.yml
+        
+        echo "${{ secrets.APPLICATION_OAUTH }}" >> ./application-oauth.yml
+        
+        cat ./application-oauth.yml
+
+
+    - name: make application-openai.yml
+      run: |
+        cd ./src/main/resources
+        
+        touch ./application-openai.yml
+        
+        echo "${{ secrets.APPLICATION_OPENAI }}" >> ./application-openai.yml
+        
+        cat ./application-openai.yml
+
+
+    - name: make application-redis.yml
+      run: |
+        cd ./src/main/resources
+        
+        touch ./application-redis.yml
+        
+        echo "${{ secrets.APPLICATION_REDIS }}" >> ./application-redis.yml
+        
+        cat ./application-redis.yml
+
+
+    - name: make application-slack.yml
+      run: |
+        cd ./src/main/resources
+        
+        touch ./application-slack.yml
+        
+        echo "${{ secrets.APPLICATION_SLACK }}" >> ./application-slack.yml
+        
+        cat ./application-slack.yml
+
+
+# test resources
+
+    - name: make application.properties
+      run: |
+        cd ./src/test
+        
+        mkdir resources
+        
+        cd resources
+        
+        touch ./application.properties
+        
+        echo "${{ secrets.TEST_APPLICATION_PROPERTIES }}" >> ./application.properties
+        
+        cat ./application.properties
+
+
+    - name: make application.yml
+      run: |
+        cd ./src/test/resources
+        
+        touch ./application.yml
+        
+        echo "${{ secrets.TEST_APPLICATION }}" >> ./application.yml
+        
+        cat ./application.yml
+
+
+    - name: make application-chatgpt.yml
+      run: |
+        cd ./src/test/resources
+        
+        touch ./application-chatgpt.yml
+        
+        echo "${{ secrets.TEST_APPLICATION_CHATGPT }}" >> ./application-chatgpt.yml
+        
+        cat ./application-chatgpt.yml
+
+
+    - name: make application-iamport.yml
+      run: |
+        cd ./src/test/resources
+        
+        touch ./application-iamport.yml
+        
+        echo "${{ secrets.TEST_APPLICATION_IAMPORT }}" >> ./application-iamport.yml
+        
+        cat ./application-iamport.yml
+
+
+    - name: make application-jwt.yml
+      run: |
+        cd ./src/test/resources
+        
+        touch ./application-jwt.yml
+        
+        echo "${{ secrets.TEST_APPLICATION_JWT }}" >> ./application-jwt.yml
+        
+        cat ./application-jwt.yml
+
+
+    - name: make application-redis.yml
+      run: |
+        cd ./src/test/resources
+        
+        touch ./application-redis.yml
+        
+        echo "${{ secrets.TEST_APPLICATION_REDIS }}" >> ./application-redis.yml
+        
+        cat ./application-redis.yml
+
+
+    - name: make application-slack.yml
+      run: |
+        cd ./src/test/resources
+        
+        touch ./application-slack.yml
+        
+        echo "${{ secrets.TEST_APPLICATION_SLACK }}" >> ./application-slack.yml
+        
+        cat ./application-slack.yml
+
+    
+      shell: bash
+      
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Build with Gradle 
+      run: ./gradlew build
+#       run: ./gradlew build -x test
+    
+    
+    
+    
