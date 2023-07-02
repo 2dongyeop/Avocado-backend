@@ -27,8 +27,7 @@ public class ChatGptConfig {
     @Value(value = "${chatgpt.top-p}")
     public static Double TOP_P;
 
-    @Value(value = "${chatgpt.media-type}")
-    public static String MEDIA_TYPE;
+    public static final String MEDIA_TYPE = "application/json; charset=UTF-8";
 
     @Value(value = "${chatgpt.url}")
     public static String URL;
