@@ -95,6 +95,7 @@ jacocoTestReport {
             fileTree(dir: it, exclude: [
                     "**/global/**",
                     "**/dto",
+                    "**/chatgpt",
                     "**/a_test_redis"
             ])
         }))
