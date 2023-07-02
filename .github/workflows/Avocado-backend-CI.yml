@@ -155,7 +155,7 @@ jobs:
 
     - name: make ChatGptConfig.yml
       run: |
-        cd ./src/main/java/io/wisoft/castonedesign/global/config
+        cd ./src/main/java/io/wisoft/capstonedesign/global/config
         
         touch ./ChatGptConfig.java
         
@@ -166,7 +166,7 @@ jobs:
 
     - name: make OpenAPIConfig.yml
       run: |
-        cd ./src/main/java/io/wisoft/castonedesign/global/config
+        cd ./src/main/java/io/wisoft/casptonedesign/global/config
         
         touch ./OpenAPIConfig.java
         
