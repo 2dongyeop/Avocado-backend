@@ -179,7 +179,11 @@ jobs:
 
     - name: make application.properties
       run: |
-        cd ./src/test/resources
+        cd ./src/test
+        
+        mkdir resources
+        
+        cd resources
         
         touch ./application.properties
         
