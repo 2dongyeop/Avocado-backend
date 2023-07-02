@@ -166,7 +166,7 @@ jobs:
 
     - name: make OpenAPIConfig.yml
       run: |
-        cd ./src/main/java/io/wisoft/casptonedesign/global/config
+        cd ./src/main/java/io/wisoft/capstonedesign/global/config
         
         touch ./OpenAPIConfig.java
         
