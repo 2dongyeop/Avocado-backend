@@ -151,30 +151,6 @@ jobs:
         cat ./application-slack.yml
 
 
-# Java Class
-
-    - name: make ChatGptConfig.yml
-      run: |
-        cd ./src/main/java/io/wisoft/capstonedesign/global/config
-        
-        touch ./ChatGptConfig.java
-        
-        echo "${{ secrets.CHATGPT_CONFIG_JAVA_FILE }}" >> ./ChatGptConfig.java
-        
-        cat ./ChatGptConfig.java
-
-
-    - name: make OpenAPIConfig.yml
-      run: |
-        cd ./src/main/java/io/wisoft/capstonedesign/global/config
-        
-        touch ./OpenAPIConfig.java
-        
-        echo "${{ secrets.OPENAPI_CONFIG_JAVA_FILE }}" >> ./OpenAPIConfig.java
-        
-        cat ./OpenAPIConfig.java
-
-
 # test resources
 
     - name: make application.properties
