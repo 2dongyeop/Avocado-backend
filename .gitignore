@@ -21,7 +21,6 @@ docker-compose.yml
 *a_test*
 *templates*
 *.sql*
-*ChatGptConfig*
 *OpenAPIConfig*
 
 ### STS ###

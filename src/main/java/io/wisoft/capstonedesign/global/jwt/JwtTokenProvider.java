@@ -1,13 +1,11 @@
 package io.wisoft.capstonedesign.global.jwt;
 
 import io.jsonwebtoken.*;
-
 import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.token.AlreadyLogoutException;
-import io.wisoft.capstonedesign.global.exception.token.InvalidTokenException;
 import io.wisoft.capstonedesign.global.exception.token.ExpiredTokenException;
+import io.wisoft.capstonedesign.global.exception.token.InvalidTokenException;
 import io.wisoft.capstonedesign.global.redis.RedisAdapter;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,7 +14,6 @@ import java.util.Base64;
 import java.util.Date;
 
 @Slf4j
-@Log4j2
 @Component
 public class JwtTokenProvider {
 
@@ -116,7 +113,6 @@ public class JwtTokenProvider {
     private void validIsAlreadyLogout(final String email) {
 
         final String value = redisAdapter.getValue(email);
-        System.out.println("value = " + value);
 
         if (value.equals("LOGOUT_STATUS")) {
             throw new AlreadyLogoutException("로그아웃 처리된 토큰입니다.", ErrorCode.ALREADY_LOGOUT_TOKEN);

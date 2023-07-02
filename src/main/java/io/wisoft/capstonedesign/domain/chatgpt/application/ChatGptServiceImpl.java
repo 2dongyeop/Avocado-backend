@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 public class ChatGptServiceImpl implements ChatGptService {
     private static final RestTemplate restTemplate = new RestTemplate();
 
+
     @Override
     public ChatGptResponse askQuestion(final ChatRequest chatRequest) {
         final ChatGptResponse response = this.getResponse(
@@ -38,7 +39,7 @@ public class ChatGptServiceImpl implements ChatGptService {
     private HttpEntity<ChatGptRequest> buildHttpEntity(final ChatGptRequest chatGptRequest) {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(ChatGptConfig.MEDIA_TYPE));
-        headers.add(ChatGptConfig.AUTHORIZATION, ChatGptConfig.BEARER + ChatGptConfig.API_KEY);
+        headers.add(ChatGptConfig.AUTHORIZATION, ChatGptConfig.TOKEN_TYPE + ChatGptConfig.API_KEY);
         return new HttpEntity<>(chatGptRequest, headers);
     }
 

@@ -1,9 +1,9 @@
 package io.wisoft.capstonedesign.domain.auth.web;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.wisoft.capstonedesign.domain.auth.application.EmailService;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CertificateMailRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.MailObject;
-import io.wisoft.capstonedesign.domain.auth.application.EmailService;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 @Tag(name = "이메일 인증")
 @RestController
@@ -33,8 +32,7 @@ public class MailController {
     @PostMapping("/certification-code")
     public ResponseEntity<String> sendCertificationCode(@RequestBody final MailObject mailObject) {
         final CompletableFuture<String> future = CompletableFuture.supplyAsync(
-                        () -> emailService.sendCertificationCode(mailObject.email()), executor)
-                .orTimeout(10, TimeUnit.SECONDS);
+                        () -> emailService.sendCertificationCode(mailObject.email()), executor);
 
         final String code = future.join();
         return ResponseEntity.ok(code);
