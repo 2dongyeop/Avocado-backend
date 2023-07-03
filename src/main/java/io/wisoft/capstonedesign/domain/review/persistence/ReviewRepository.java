@@ -1,5 +1,6 @@
 package io.wisoft.capstonedesign.domain.review.persistence;
 
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,6 +35,20 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                     " and r.status = 'WRITE'", countQuery = "select count(r) from Review r")
     Page<Review> findByTargetHospitalUsingPaging(
             @Param("targetHospital") final String targetHospital, final Pageable pageable);
+
+
+    /**
+     * 특정 병과의 리뷰 조회
+     */
+    @Query(value =
+            "select r" +
+                    " from Review r" +
+                    " where r.targetDept = :dept" +
+                    " order by r.starPoint desc ", countQuery = "select count(r) from Review r")
+    Page<Review> findByDeptUsingPaging(
+            @Param("dept") final HospitalDept dept, final Pageable pageable);
+
+
 
     /**
      * 상세 조회

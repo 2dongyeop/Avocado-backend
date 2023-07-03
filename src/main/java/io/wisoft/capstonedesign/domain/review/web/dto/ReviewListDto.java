@@ -13,6 +13,7 @@ public class ReviewListDto {
     private String title;
     private String status;
     private String targetHospital;
+    private String targetDept;
     private int starPoint;
 
     public ReviewListDto(final Review review) {
@@ -20,6 +21,7 @@ public class ReviewListDto {
         this.title = review.getTitle();
         this.status = review.getStatus().toString();
         this.targetHospital = review.getTargetHospital();
+        this.targetDept = review.getTargetDept().name();
         this.starPoint = review.getStarPoint();
     }
 }

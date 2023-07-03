@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.domain.review.persistence;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
 import io.wisoft.capstonedesign.global.BaseEntity;
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.enumeration.status.ReviewStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -38,6 +39,10 @@ public class Review extends BaseEntity {
     @Column(name = "target_hospital", nullable = false)
     private String targetHospital;
 
+    @Column(name = "target_dept")
+    @Enumerated(EnumType.STRING)
+    private HospitalDept targetDept;
+
     @Column(name = "review_status")
     @Enumerated(EnumType.STRING)
     private ReviewStatus status;
@@ -72,7 +77,8 @@ public class Review extends BaseEntity {
             final String body,
             final String reviewPhotoPath,
             final int starPoint,
-            final String target_hospital) {
+            final String target_hospital,
+            final HospitalDept targetDept) {
 
         validateParam(member, title, body, reviewPhotoPath, starPoint, target_hospital);
 
@@ -83,6 +89,7 @@ public class Review extends BaseEntity {
         review.targetHospital = target_hospital;
         review.starPoint = starPoint;
         review.reviewPhotoPath = reviewPhotoPath;
+        review.targetDept = targetDept;
 
         review.status = ReviewStatus.WRITE;
         review.createEntity();

@@ -11,6 +11,7 @@ import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
 import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReplyRepository;
 import io.wisoft.capstonedesign.domain.reviewreply.web.dto.CreateReviewReplyRequest;
 import io.wisoft.capstonedesign.domain.reviewreply.web.dto.UpdateReviewReplyRequest;
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.jwt.JwtTokenProvider;
 import io.wisoft.capstonedesign.global.redis.RedisAdapter;
 import io.wisoft.capstonedesign.setting.common.ApiTest;
@@ -349,7 +350,8 @@ class ReviewReplyApiControllerTest extends ApiTest {
                 "body",
                 "photo",
                 1,
-                hospitalName
+                hospitalName,
+                HospitalDept.DENTAL
         ));
     }
 

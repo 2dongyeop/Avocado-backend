@@ -197,6 +197,7 @@ public class ReviewServiceTest extends ServiceTest {
                 "자세히 진료해줘요",
                 starPoint,
                 hospitalName,
+                "DENTAL",
                 "사진_링크"
         );
     }

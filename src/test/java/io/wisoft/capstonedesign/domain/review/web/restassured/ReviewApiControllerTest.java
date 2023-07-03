@@ -9,6 +9,7 @@ import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.domain.review.persistence.ReviewRepository;
 import io.wisoft.capstonedesign.domain.review.web.dto.CreateReviewRequest;
 import io.wisoft.capstonedesign.domain.review.web.dto.UpdateReviewRequest;
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.jwt.JwtTokenProvider;
 import io.wisoft.capstonedesign.global.redis.RedisAdapter;
 import io.wisoft.capstonedesign.setting.common.ApiTest;
@@ -103,6 +104,7 @@ class ReviewApiControllerTest extends ApiTest {
                     "body",
                     6,
                     hospitalName,
+                    "DEANTAL",
                     "photopath"
             );
 
@@ -143,6 +145,7 @@ class ReviewApiControllerTest extends ApiTest {
                     "body",
                     6,
                     hospitalName,
+                    "DEANTAL",
                     "photopath"
             );
 
@@ -171,6 +174,7 @@ class ReviewApiControllerTest extends ApiTest {
                     "body",
                     5,
                     hospitalName,
+                    "DENTAL",
                     "photopath"
             );
         }
@@ -344,7 +348,8 @@ class ReviewApiControllerTest extends ApiTest {
                 "body",
                 "photo",
                 1,
-                hospitalName
+                hospitalName,
+                HospitalDept.DENTAL
         ));
     }
 
