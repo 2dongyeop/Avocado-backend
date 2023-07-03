@@ -6,10 +6,12 @@ import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.domain.review.persistence.ReviewRepository;
 import io.wisoft.capstonedesign.domain.review.web.dto.CreateReviewRequest;
 import io.wisoft.capstonedesign.domain.review.web.dto.UpdateReviewRequest;
+import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
+import io.wisoft.capstonedesign.global.mapper.DeptMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +48,7 @@ public class ReviewService {
                 .body(request.body())
                 .starPoint(request.starPoint())
                 .target_hospital(request.targetHospital())
+                .targetDept(HospitalDept.valueOf(request.targetDept()))
                 .reviewPhotoPath("path1")
                 .build();
 
@@ -118,6 +121,16 @@ public class ReviewService {
     public Page<Review> findByTargetHospital(final String targetHospital, final Pageable pageable) {
 
         final Page<Review> page = reviewRepository.findByTargetHospitalUsingPaging(targetHospital, pageable);
+
+        if (page.isEmpty()) {
+            throw new NotFoundException("해당 병원에 대한 리뷰는 존재하지 않습니다.");
+        }
+        return page;
+    }
+
+    public Page<Review> findByDeptUsingPaging(final String deptNum, final Pageable pageable) {
+
+        final Page<Review> page = reviewRepository.findByDeptUsingPaging(DeptMapper.numberToDept(deptNum), pageable);
 
         if (page.isEmpty()) {
             throw new NotFoundException("해당 병원에 대한 리뷰는 존재하지 않습니다.");

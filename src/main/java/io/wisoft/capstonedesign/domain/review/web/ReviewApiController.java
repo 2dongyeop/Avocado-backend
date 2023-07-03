@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -33,7 +34,14 @@ public class ReviewApiController {
     @SwaggerApi(summary = "리뷰 목록 페이징 조회", implementation = Page.class)
     @SwaggerApiFailWithoutAuth
     @GetMapping
-    public Page<ReviewListDto> reviewsUsingPaging(final Pageable pageable) {
+    public Page<ReviewListDto> reviewsUsingPaging(
+            final Pageable pageable,
+            @RequestParam(required = false) final String deptNum) {
+
+        if (StringUtils.hasText(deptNum)) {
+            return reviewService.findByDeptUsingPaging(deptNum, pageable).map(ReviewListDto::new);
+        }
+
         return reviewService.findByUsingPaging(pageable).map(ReviewListDto::new);
     }
 
