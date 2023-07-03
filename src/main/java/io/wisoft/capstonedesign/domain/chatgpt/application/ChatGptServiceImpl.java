@@ -16,6 +16,11 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ChatGptServiceImpl implements ChatGptService {
     private static final RestTemplate restTemplate = new RestTemplate();
+    private final ChatGptConfig ChatGptConfig;
+
+    public ChatGptServiceImpl(ChatGptConfig chatGptConfig) {
+        this.ChatGptConfig = chatGptConfig;
+    }
 
 
     @Override

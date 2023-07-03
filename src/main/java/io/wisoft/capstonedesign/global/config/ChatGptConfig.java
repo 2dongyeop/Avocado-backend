@@ -2,34 +2,37 @@ package io.wisoft.capstonedesign.global.config;
 
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+//@Configuration
+@Component
 public class ChatGptConfig {
-
+    //static 없애고 getter 만들기?
 
     @Value(value = "${chatgpt.authorization}")
-    public static String AUTHORIZATION;
+    public String AUTHORIZATION;
 
     @Value(value = "${chatgpt.token-type}")
-    public static String TOKEN_TYPE;
+    public String TOKEN_TYPE;
 
     @Value(value = "${chatgpt.api-key}")
-    public static String API_KEY;
+    public String API_KEY;
 
     @Value(value = "${chatgpt.model}")
-    public static String MODEL;
+    public String MODEL;
 
     @Value(value = "${chatgpt.max-token}")
-    public static Integer MAX_TOKEN;
+    public Integer MAX_TOKEN;
 
     @Value(value = "${chatgpt.temperature}")
-    public static Double TEMPERATURE;
+    public Double TEMPERATURE;
 
     @Value(value = "${chatgpt.top-p}")
-    public static Double TOP_P;
+    public Double TOP_P;
 
     public static final String MEDIA_TYPE = "application/json; charset=UTF-8";
 
     @Value(value = "${chatgpt.url}")
-    public static String URL;
+    public String URL;
 }
 
