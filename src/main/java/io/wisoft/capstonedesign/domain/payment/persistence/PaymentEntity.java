@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.Assert;
 
 @Entity
 @Getter
@@ -24,6 +23,9 @@ public class PaymentEntity {
     private String buyerName;
     private PayStatus payStatus;
 
+    @Version
+    private Integer version;
+
     @OneToOne
     @JoinColumn(name = "appt_id")
     private Appointment appointment;
@@ -35,8 +37,6 @@ public class PaymentEntity {
             final String buyerEmail,
             final String buyerName) {
 
-        validateParam(pg, paymentMethod, paymentName, buyerEmail, buyerName);
-
         final PaymentEntity payment = new PaymentEntity();
         payment.pg = pg;
         payment.paymentMethod = paymentMethod;
@@ -46,14 +46,6 @@ public class PaymentEntity {
         payment.payStatus = PayStatus.COMPLETED;
 
         return payment;
-    }
-
-    private static void validateParam(final String pg, final String paymentMethod, final String paymentName, final String buyerEmail, final String buyerName) {
-        Assert.hasText(pg, "pg는 필수입니다.");
-        Assert.hasText(paymentMethod, "paymentMethod는 필수입니다.");
-        Assert.hasText(paymentName, "paymentName은 필수입니다.");
-        Assert.hasText(buyerEmail, "buyerEmail은 필수입니다.");
-        Assert.hasText(buyerName, "buyerName은 필수입니다.");
     }
 
     public void refund() {
