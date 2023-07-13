@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.domain.chatgpt.web;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.wisoft.capstonedesign.domain.chatgpt.application.ChatGptService;
 import io.wisoft.capstonedesign.domain.chatgpt.web.dto.ChatGptResponse;
+import io.wisoft.capstonedesign.domain.chatgpt.web.dto.ChatGptResponseV2;
 import io.wisoft.capstonedesign.domain.chatgpt.web.dto.ChatRequest;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
@@ -27,9 +28,9 @@ public class ChatGptController {
     @SwaggerApi(summary = "OpenAI를 이용한 메인화면 검색", implementation = ChatGptResponse.class)
     @SwaggerApiFailWithAuth
     @PostMapping("/api/search")
-    public ChatGptResponse sendMessage(@RequestBody final ChatRequest chatRequest) {
-        final CompletableFuture<ChatGptResponse> future = CompletableFuture.supplyAsync(
-                () -> chatGptService.askQuestion(chatRequest), executor)
+    public ChatGptResponseV2 sendMessage(@RequestBody final ChatRequest chatRequest) {
+        final CompletableFuture<ChatGptResponseV2> future = CompletableFuture.supplyAsync(
+                () -> chatGptService.askQuestionV2(chatRequest), executor)
                 .orTimeout(10, TimeUnit.SECONDS);
 
         return future.join();
