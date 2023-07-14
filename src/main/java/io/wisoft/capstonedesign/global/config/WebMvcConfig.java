@@ -33,7 +33,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         logger.info("인터셉터 등록");
 
         registry.addInterceptor(bearerAuthInterceptor)
-                .addPathPatterns("/api/search")
 
                 .addPathPatterns("/api/auth/logout")
                 .addPathPatterns("/jwt/re-issuance")

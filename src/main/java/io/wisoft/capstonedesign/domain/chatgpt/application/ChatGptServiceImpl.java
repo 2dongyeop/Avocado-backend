@@ -31,12 +31,12 @@ public class ChatGptServiceImpl implements ChatGptService {
                 this.buildHttpEntity(
                         new ChatGptRequest(
                                 ChatGptConfig.MODEL,
-                                chatRequest.message(),
+                                chatRequest.symptom(),
                                 ChatGptConfig.MAX_TOKEN,
                                 ChatGptConfig.TEMPERATURE,
                                 ChatGptConfig.TOP_P)));
 
-        log.info("OpenAI 요청이 들어왔습니다 : {} ", chatRequest.message());
+        log.info("OpenAI 요청이 들어왔습니다 : {} ", chatRequest.symptom());
         log.info("답변 : {}", response.choices().get(0).text());
         return response;
     }
@@ -68,7 +68,7 @@ public class ChatGptServiceImpl implements ChatGptService {
 
     @NotNull
     private String getMessage(final ChatRequest chatRequest) {
-        return switch (chatRequest.message()) {
+        return switch (chatRequest.symptom()) {
 
             case "뼈가 부었어요" -> {
                 yield "주변 정형외과를 방문해보시길 바랍니다. 대전을 기준으로 리뷰가 많은 정형외과는 아래 3곳이 있습니다. 1. 대전센텀병원 2. 마라톤정형외과병원 3. S&K병원";
