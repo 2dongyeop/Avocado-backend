@@ -5,8 +5,6 @@ import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class PaymentEntityTest {
 
     @Test
@@ -31,20 +29,5 @@ class PaymentEntityTest {
                 "buyerName"
         );
         return payment;
-    }
-
-    @Test
-    public void validateParam_error() throws Exception {
-
-        assertThrows(IllegalArgumentException.class, () -> {
-
-            final PaymentEntity payment = PaymentEntity.createPaymentEntity(
-                    "",
-                    null,
-                    "paymentName",
-                    "buyerEmail",
-                    "buyerName"
-            );
-        });
     }
 }

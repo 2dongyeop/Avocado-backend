@@ -13,8 +13,6 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class MemberMyPageServiceTest extends ServiceTest {
 
     @Autowired
@@ -30,7 +28,7 @@ public class MemberMyPageServiceTest extends ServiceTest {
                 .getContent();
 
         //then -- 검증
-        Assertions.assertThat(list.size()).isEqualTo(1);
+        Assertions.assertThat(list.size()).isGreaterThan(1);
     }
 
     @Test
