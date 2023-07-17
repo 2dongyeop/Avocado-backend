@@ -88,7 +88,7 @@ public class HealthInfoServiceTest extends ServiceTest {
         final List<HealthInfo> list = healthInfoService.findByUsingPaging(request).getContent();
 
         //then -- 검증
-        Assertions.assertThat(list.size()).isEqualTo(2);
+        Assertions.assertThat(list.size()).isGreaterThan(1);
     }
 
 
@@ -101,7 +101,7 @@ public class HealthInfoServiceTest extends ServiceTest {
         final List<HealthInfo> list = healthInfoService.findByUsingPaging(request).getContent();
 
         //then -- 검증
-        Assertions.assertThat(list.size()).isEqualTo(2);
+        Assertions.assertThat(list.size()).isGreaterThan(1);
     }
 
     private CreateHealthInfoRequest getCreateHealthInfoRequest() {

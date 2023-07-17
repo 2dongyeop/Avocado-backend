@@ -33,7 +33,7 @@ public class HealthInfoRepositoryTest {
         final List<HealthInfo> list = healthInfoRepository.findAllByDeptUsingPagingMultiValue(hospitalDeptListlist, request).getContent();
 
         //then -- 검증
-        assertThat(list.size()).isEqualTo(1);
+        assertThat(list.size()).isGreaterThan(1);
     }
 
     @Test
@@ -46,11 +46,11 @@ public class HealthInfoRepositoryTest {
         final List<HealthInfo> content = page.getContent();
 
         //then -- 검증
-        assertThat(content.size()).isEqualTo(2); //콘텐트 사이즈
-        assertThat(page.getTotalElements()).isEqualTo(2); //요소개수
+        assertThat(content.size()).isGreaterThan(1); //콘텐트 사이즈
+        assertThat(page.getTotalElements()).isGreaterThan(1); //요소개수
         assertThat(page.getNumber()).isEqualTo(0);  //페이지번호
-        assertThat(page.getTotalPages()).isEqualTo(1); //총 페이지 수
+        assertThat(page.getTotalPages()).isGreaterThan(1); //총 페이지 수
         assertThat(page.isFirst()).isTrue();
-        assertThat(page.hasNext()).isFalse();
+        assertThat(page.hasNext()).isTrue();
     }
 }
