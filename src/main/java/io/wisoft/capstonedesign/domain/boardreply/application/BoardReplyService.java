@@ -33,7 +33,6 @@ public class BoardReplyService {
     @Transactional
     public Long save(final CreateBoardReplyRequest request) {
 
-        //엔티티 조회
         final Board board = boardService.findById(request.boardId());
         final Staff staff = staffService.findById(request.staffId());
 
@@ -57,7 +56,10 @@ public class BoardReplyService {
      */
     @Transactional
     public void deleteBoardReply(final Long boardReplyId) {
-        boardReplyRepository.delete(findById(boardReplyId));
+        final BoardReply boardReply = boardReplyRepository.findById(boardReplyId)
+                .orElseThrow(() -> new NotFoundException("게시글 댓글 조회 실패"));
+
+        boardReplyRepository.delete(boardReply);
     }
 
     /**
@@ -67,8 +69,9 @@ public class BoardReplyService {
     public void update(final Long boardReplyId, final UpdateBoardReplyRequest request) {
 
         validateParameter(request);
-        BoardReply boardReply = findById(boardReplyId);
 
+        final BoardReply boardReply = boardReplyRepository.findById(boardReplyId)
+                .orElseThrow(() -> new NotFoundException("게시글 댓글 조회 실패"));
         boardReply.update(request.reply());
     }
 
