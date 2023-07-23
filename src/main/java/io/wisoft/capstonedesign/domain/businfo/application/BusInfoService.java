@@ -34,7 +34,11 @@ public class BusInfoService {
      */
     @Transactional
     public void delete(final Long busInfoId) {
-        busInfoRepository.delete(findById(busInfoId));
+
+        final BusInfo busInfo = busInfoRepository.findById(busInfoId)
+                .orElseThrow(() -> new NotFoundException("버스정보 조회 실패"));
+
+        busInfoRepository.delete(busInfo);
     }
 
 
