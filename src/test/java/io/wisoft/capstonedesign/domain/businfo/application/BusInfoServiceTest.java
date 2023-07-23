@@ -13,13 +13,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BusInfoServiceTest extends ServiceTest {
+class BusInfoServiceTest extends ServiceTest {
 
     @Autowired
-    BusInfoService busInfoService;
+    private BusInfoService busInfoService;
 
     @Test
-    public void 버스정보_등록() throws Exception {
+    void 버스정보_등록() throws Exception {
         //given -- 조건
         final CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
 
@@ -34,7 +34,7 @@ public class BusInfoServiceTest extends ServiceTest {
     }
 
     @Test
-    public void 버스정보_삭제() throws Exception {
+    void 버스정보_삭제() throws Exception {
         //given -- 조건
 
         final CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
@@ -50,7 +50,7 @@ public class BusInfoServiceTest extends ServiceTest {
     }
 
     @Test
-    public void 버스정보_단건_조회_실패() throws Exception {
+    void 버스정보_단건_조회_실패() throws Exception {
         //given -- 조건
 
         //when -- 동작
@@ -61,7 +61,7 @@ public class BusInfoServiceTest extends ServiceTest {
     }
 
     @Test
-    public void 버스정보_삭제요청_중복() throws Exception {
+    void 버스정보_삭제요청_중복() throws Exception {
         //given -- 조건
 
         final CreateBusInfoRequest request = new CreateBusInfoRequest("버스정보경로", "DAEJEON");
@@ -76,7 +76,7 @@ public class BusInfoServiceTest extends ServiceTest {
     }
 
     @Test
-    public void findByArea() throws Exception {
+    void findByArea() throws Exception {
         //given -- 조건
 
         //when -- 동작
@@ -88,7 +88,7 @@ public class BusInfoServiceTest extends ServiceTest {
 
     @Test
     @DisplayName("Enum이 아닌 값을 넣어 찾을 수 없는 경우")
-    public void findByArea_fail_NotEnum() throws Exception {
+    void findByArea_fail_NotEnum() throws Exception {
         //given -- 조건
         final String area = "HANBAT";
 
