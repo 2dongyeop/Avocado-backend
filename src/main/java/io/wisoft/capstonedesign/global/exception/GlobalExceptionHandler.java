@@ -7,10 +7,7 @@ import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateNicknameExce
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalDeptException;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
-import io.wisoft.capstonedesign.global.exception.token.AlreadyLogoutException;
-import io.wisoft.capstonedesign.global.exception.token.ExpiredTokenException;
-import io.wisoft.capstonedesign.global.exception.token.InvalidTokenException;
-import io.wisoft.capstonedesign.global.exception.token.NotExistTokenException;
+import io.wisoft.capstonedesign.global.exception.token.*;
 import io.wisoft.capstonedesign.global.slack.SlackConstant;
 import io.wisoft.capstonedesign.global.slack.SlackErrorMessage;
 import io.wisoft.capstonedesign.global.slack.SlackService;
@@ -37,6 +34,18 @@ public class GlobalExceptionHandler {
 
     @Qualifier("asyncExecutor")
     private final ThreadPoolTaskExecutor executor;
+
+
+    /**
+     * 처리율 제한이 발생하 경우, 발생하는 예외
+     */
+    @ExceptionHandler(TooManyRequestException.class)
+    public ResponseEntity<ErrorResponse> handleTooManyRequestException(final TooManyRequestException exception) {
+
+        log.error("handleTooManyRequestException", exception);
+        return getErrorResponseResponseEntity(exception.getErrorCode());
+    }
+
 
     /**
      * @Builder 사용으로 인해 요구된 파라미터 유효성 검사시
