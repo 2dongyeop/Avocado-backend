@@ -37,7 +37,8 @@ public enum ErrorCode {
     NOT_EXIST_TOKEN(UNAUTHORIZED, "Illegal-Not-Exist-Token-401", "Token is not exist"),
     EXPIRED_TOKEN(UNAUTHORIZED, "Illegal-Expired-Token-401", "Token is expired"),
     ALREADY_LOGOUT_TOKEN(FORBIDDEN, "Token-403", "Already logout token"),
-    JWT_EXCEPTION(UNAUTHORIZED, "Token-400", "JWT is invalid");
+    JWT_EXCEPTION(UNAUTHORIZED, "Token-400", "JWT is invalid"),
+    TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "Token-429", "Too Many Request");
 
 
     private HttpStatus httpStatusCode;
