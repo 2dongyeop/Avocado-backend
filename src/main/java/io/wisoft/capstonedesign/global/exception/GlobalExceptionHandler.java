@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -37,13 +38,21 @@ public class GlobalExceptionHandler {
 
 
     /**
-     * 처리율 제한이 발생하 경우, 발생하는 예외
+     * 처리율 제한이 발생한 경우, 발생하는 예외
      */
     @ExceptionHandler(TooManyRequestException.class)
     public ResponseEntity<ErrorResponse> handleTooManyRequestException(final TooManyRequestException exception) {
 
         log.error("handleTooManyRequestException", exception);
-        return getErrorResponseResponseEntity(exception.getErrorCode());
+        return getErrorResponse(exception.getErrorCode());
+    }
+
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
+
+        log.error("handleIllegalMethodArgumentNotValidException", exception);
+        return getErrorResponse(ErrorCode.INVALID_ARGS);
     }
 
 
@@ -80,7 +89,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNotFoundException(final NotFoundException exception) {
 
         log.error("handleNotFoundException", exception);
-        return getErrorResponseResponseEntity(exception.getErrorCode());
+        return getErrorResponse(exception.getErrorCode());
     }
 
 
@@ -91,7 +100,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalDept(final IllegalDeptException exception) {
 
         log.error("일치하는 dept가 존재하지 않습니다.", exception);
-        return getErrorResponseResponseEntity(exception.getErrorCode());
+        return getErrorResponse(exception.getErrorCode());
     }
 
 
@@ -103,7 +112,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleTimeoutException(final TimeoutException exception) {
 
         log.error("handleTimeoutException", exception);
-        return getErrorResponseResponseEntity(ErrorCode.TIME_OUT);
+        return getErrorResponse(ErrorCode.TIME_OUT);
     }
 
 
@@ -114,7 +123,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNotExistTokenException(final NotExistTokenException exception) {
 
         log.error("handleNotExistTokenException", exception);
-        return getErrorResponseResponseEntity(exception.getErrorCode());
+        return getErrorResponse(exception.getErrorCode());
     }
 
 
@@ -125,7 +134,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleExpiredTokenException(final ExpiredTokenException exception) {
 
         log.error("handleExpiredTokenException", exception);
-        return getErrorResponseResponseEntity(exception.getErrorCode());
+        return getErrorResponse(exception.getErrorCode());
     }
 
 
@@ -136,7 +145,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleInvalidTokenException(final InvalidTokenException exception) {
 
         log.error("handleInvalidTokenException", exception);
-        return getErrorResponseResponseEntity(exception.getErrorCode());
+        return getErrorResponse(exception.getErrorCode());
     }
 
 
@@ -147,7 +156,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleAlreadyLogoutException(final AlreadyLogoutException exception) {
 
         log.error("handleAlreadyLogoutException", exception);
-        return getErrorResponseResponseEntity(exception.getErrorCode());
+        return getErrorResponse(exception.getErrorCode());
     }
 
 
@@ -158,7 +167,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleJwtException(final JwtException exception) {
 
         log.error("handleJwtException", exception);
-        return getErrorResponseResponseEntity(ErrorCode.JWT_EXCEPTION);
+        return getErrorResponse(ErrorCode.JWT_EXCEPTION);
     }
 
 
@@ -169,7 +178,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handlerIllegalValueException(final IllegalValueException exception) {
 
         log.error("handlerIllegalValueException", exception);
-        return getErrorResponseResponseEntity(exception.getErrorCode());
+        return getErrorResponse(exception.getErrorCode());
     }
 
 
@@ -180,7 +189,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handlerDuplicateEmailException(final DuplicateEmailException exception) {
 
         log.error("handlerDuplicateEmailException", exception);
-        return getErrorResponseResponseEntity(exception.getErrorCode());
+        return getErrorResponse(exception.getErrorCode());
     }
 
 
@@ -188,7 +197,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handlerDuplicateNicknameException(final DuplicateNicknameException exception) {
 
         log.error("handlerDuplicateNicknameException", exception);
-        return getErrorResponseResponseEntity(exception.getErrorCode());
+        return getErrorResponse(exception.getErrorCode());
     }
 
 
@@ -196,12 +205,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handlerDuplicateHospitalException(final DuplicateHospitalException exception) {
 
         log.error("handlerDuplicateHospitalException", exception);
-        return getErrorResponseResponseEntity(exception.getErrorCode());
+        return getErrorResponse(exception.getErrorCode());
     }
 
 
     @NotNull
-    private ResponseEntity<ErrorResponse> getErrorResponseResponseEntity(final ErrorCode errorCode) {
+    private ResponseEntity<ErrorResponse> getErrorResponse(final ErrorCode errorCode) {
         final ErrorResponse response = new ErrorResponse(errorCode);
 
         executor.execute(() -> {

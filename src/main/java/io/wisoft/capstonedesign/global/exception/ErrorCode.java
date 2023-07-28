@@ -16,6 +16,7 @@ public enum ErrorCode {
     ASSERT_INVALID_INPUT(BAD_REQUEST, "Common-Builder-400", "Builder가 요구하는 필수 파라미터가 요구되지 않았습니다."),
     NOT_FOUND(BAD_REQUEST, "Common-NotFound-404", "해당 엔티티를 찾을 수 없습니다."),
     TIME_OUT(REQUEST_TIMEOUT, "Common-TimeOut-408", "Timeout 발생"),
+    INVALID_ARGS(BAD_REQUEST, "Common-Args-400", "Argument 조건에 위배됩니다."),
 
 
     //DUPLICATE
