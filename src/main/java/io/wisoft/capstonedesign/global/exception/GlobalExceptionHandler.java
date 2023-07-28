@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException exception) {
 
         log.error("handleIllegalMethodArgumentNotValidException", exception);
         return getErrorResponse(ErrorCode.INVALID_ARGS);
