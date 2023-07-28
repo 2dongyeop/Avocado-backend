@@ -90,7 +90,7 @@ public class AuthService {
         redisAdapter.setValue(member.getEmail(), refreshToken, REFRESH_TOKEN_EXPIRE_SECOND, TimeUnit.SECONDS);
 
         log.info("redis : {}님의 리프레쉬 토큰{}을 1시간동안 저장합니다.", member.getEmail(), accessToken);
-        return new TokenResponse(tokenType, accessToken, refreshToken);
+        return new TokenResponse(member.getId(), tokenType, accessToken, refreshToken);
     }
 
 
@@ -135,7 +135,7 @@ public class AuthService {
         redisAdapter.setValue(staff.getEmail(), refreshToken, REFRESH_TOKEN_EXPIRE_SECOND, TimeUnit.SECONDS);
 
         log.info("redis : {}님의 리프레쉬 토큰{}을 1시간동안 저장합니다.", staff.getEmail(), accessToken);
-        return new TokenResponse(tokenType, accessToken, refreshToken);
+        return new TokenResponse(staff.getId(), tokenType, accessToken, refreshToken);
     }
 
     private Member createMember(final CreateMemberRequest request) {
