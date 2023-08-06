@@ -1,0 +1,12 @@
+logging:
+  file:
+    name: ./logs/avocado-dev.log
+
+  level:
+    org.hibernate.SQL: info
+    root: info
+
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 7
