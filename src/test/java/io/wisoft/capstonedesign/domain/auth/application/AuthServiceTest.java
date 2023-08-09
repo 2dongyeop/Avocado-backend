@@ -85,7 +85,7 @@ public class AuthServiceTest extends ServiceTest {
         em.persist(hospital);
 
         //의료진 가입 요청
-        final CreateStaffRequest request = getCreateStaffRequest(email, hospital);
+        final CreateStaffRequest request = getCreateStaffRequest(email);
 
         //when -- 동작
         final Long signUpId = authService.signUpStaff(request);
@@ -111,7 +111,7 @@ public class AuthServiceTest extends ServiceTest {
         em.persist(hospital);
 
         //의료진 가입 요청
-        final CreateStaffRequest request = getCreateStaffRequest(email, hospital);
+        final CreateStaffRequest request = getCreateStaffRequest(email);
 
         //when -- 동작
         final Long signUpId = authService.signUpStaff(request);
@@ -139,10 +139,10 @@ public class AuthServiceTest extends ServiceTest {
         em.persist(hospital);
 
         //의료진 가입 요청
-        final CreateStaffRequest request = getCreateStaffRequest(email, hospital);
+        final CreateStaffRequest request = getCreateStaffRequest(email);
 
         //when -- 동작
-        final Long signUpId = authService.signUpStaff(request);
+        authService.signUpStaff(request);
 
         //when -- 동작
         //then -- 검증
@@ -171,9 +171,9 @@ public class AuthServiceTest extends ServiceTest {
                 .build();
     }
 
-    private CreateStaffRequest getCreateStaffRequest(final String email, final Hospital hospital) {
+    private CreateStaffRequest getCreateStaffRequest(final String email) {
         return CreateStaffRequest.builder()
-                .hospitalId(hospital.getId())
+                .hospitalName("을지대학병원")
                 .name("staff1")
                 .email(email)
                 .password1("password")

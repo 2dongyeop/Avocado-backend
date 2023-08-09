@@ -1,6 +1,8 @@
 package io.wisoft.capstonedesign.domain.auth.web.restassured;
 
 import io.restassured.RestAssured;
+import io.wisoft.capstonedesign.domain.member.persistence.Member;
+import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.global.jwt.JwtTokenProvider;
 import io.wisoft.capstonedesign.global.redis.RedisAdapter;
 import io.wisoft.capstonedesign.setting.common.ApiTest;
@@ -22,6 +24,9 @@ class JwtReIssueControllerTest extends ApiTest {
     @Autowired
     private RedisAdapter redisAdapter;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     @Nested
     @DisplayName("엑세스토큰 재발급")
     public class ReIssue {
@@ -33,6 +38,13 @@ class JwtReIssueControllerTest extends ApiTest {
             //given -- 조건
             final String email = "재발급성공@email.com";
             final String refreshToken = jwtTokenProvider.createRefreshToken(email);
+
+            memberRepository.save(Member.newInstance(
+                    "재발급성공",
+                    email,
+                    "password12",
+                    "phoneNumber"
+            ));
 
             redisAdapter.setValue(email, refreshToken, 3600000, TimeUnit.SECONDS);
 

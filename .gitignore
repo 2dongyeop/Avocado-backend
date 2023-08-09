@@ -22,6 +22,7 @@ docker-compose.yml
 *templates*
 *.sql*
 *OpenAPIConfig*
+logs
 
 ### STS ###
 .apt_generated
