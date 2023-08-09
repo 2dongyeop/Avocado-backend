@@ -2,13 +2,12 @@ package io.wisoft.capstonedesign.domain.auth.web.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 
 @Builder
 public record CreateStaffRequest(
-        @NotNull Long hospitalId,
+        @NotBlank String hospitalName,
         @NotBlank String name,
         @NotBlank @Email(message = "이메일 형식에 맞지 않습니다.") String email,
         @Pattern(regexp="(?=.*[0-9])(?=.*[a-zA-Z])(?=\\S+$).{4,20}",

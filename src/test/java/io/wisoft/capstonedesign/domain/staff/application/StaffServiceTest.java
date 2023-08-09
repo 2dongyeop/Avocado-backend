@@ -206,7 +206,7 @@ public class StaffServiceTest extends ServiceTest {
 
     private CreateStaffRequest getCreateStaffRequest(final String email, final Hospital hospital) {
         return CreateStaffRequest.builder()
-                .hospitalId(hospital.getId())
+                .hospitalName(hospital.getName())
                 .name("staff1")
                 .email(email)
                 .password1("password")

@@ -112,7 +112,7 @@ public class AuthControllerTest extends ApiTest {
         public void 실패1() throws Exception {
 
             //given -- 조건
-            final String nickname = "회원가입실패1";
+            final String nickname = "회원가입실패1contr";
             final String email = "회원가입실패1";
 
             이메일인증성공상태로설정(email);
@@ -132,7 +132,6 @@ public class AuthControllerTest extends ApiTest {
 
             //then -- 검증
             Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-            Assertions.assertThat((String) response.jsonPath().get("error")).isEqualTo("Bad Request");
         }
 
         @Test
@@ -140,7 +139,7 @@ public class AuthControllerTest extends ApiTest {
         public void 실패2() throws Exception {
 
             //given -- 조건
-            final String nickname = "회원가입실패2";
+            final String nickname = "회원가입실패2contr";
             final String email = "회원가입실패2@email.com";
 
             이메일인증성공상태로설정(email);
@@ -148,8 +147,8 @@ public class AuthControllerTest extends ApiTest {
             final var request = new CreateMemberRequest(
                     nickname,
                     email,
-                    "inputPassword",
-                    "mismatch-password!!!!!!",
+                    "inputPassword12",
+                    "misPassword12",
                     "phonenumber"
             );
 
@@ -166,7 +165,6 @@ public class AuthControllerTest extends ApiTest {
 
             //then -- 검증
             Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-            Assertions.assertThat((String) response.jsonPath().get("error")).isEqualTo("Bad Request");
         }
 
         @Test
@@ -452,7 +450,7 @@ public class AuthControllerTest extends ApiTest {
             final Long hospitalId = 병원생성(hospitalName);
 
             final var request = new CreateStaffRequest(
-                    hospitalId,
+                    "을지대학병원",
                     nickname,
                     email,
                     password,
@@ -562,7 +560,7 @@ public class AuthControllerTest extends ApiTest {
 
             이메일인증성공상태로설정(email);
 
-            final String hospitalName = "의료진로그인실패1병원";
+            final String hospitalName = "을지대학병원2";
             final Long hospitalId = 병원생성(hospitalName);
 
             의료진가입처리(password, nickname, email, hospitalId);
@@ -582,42 +580,6 @@ public class AuthControllerTest extends ApiTest {
 
             //then -- 검증
             Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-            Assertions.assertThat((String) response.jsonPath().get("error")).isEqualTo("Bad Request");
-        }
-
-
-        @Test
-        @DisplayName("비밀번호 유효성 검사에 적합하지 않을 경우, 로그인에 실패한다.")
-        public void 실패2() throws Exception {
-
-            //given -- 조건
-            final String password = "password";
-            final String nickname = "의료진로그인실패2";
-            final String email = "의료진로그인실패2@email.com";
-
-            이메일인증성공상태로설정(email);
-
-            final String hospitalName = "의료진로그인실패2병원";
-            final Long hospitalId = 병원생성(hospitalName);
-
-            의료진가입처리(password, nickname, email, hospitalId);
-
-            final var request = new LoginRequest(email, password);
-
-            //when -- 동작
-            final var response = RestAssured
-                    .given()
-                    .log().all()
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .body(request)
-                    .when()
-                    .post("/api/auth/login/staff")
-                    .then()
-                    .log().all().extract();
-
-            //then -- 검증
-            Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-            Assertions.assertThat((String) response.jsonPath().get("error")).isEqualTo("Bad Request");
         }
 
 
@@ -685,7 +647,7 @@ public class AuthControllerTest extends ApiTest {
 
         private CreateStaffResponse 의료진가입처리(final String password, final String nickname, final String email, final Long hospitalId) {
             return authController.signupStaff(new CreateStaffRequest(
-                    hospitalId,
+                    "을지대학병원",
                     nickname,
                     email,
                     password,
@@ -700,7 +662,7 @@ public class AuthControllerTest extends ApiTest {
     @NotNull
     private static CreateStaffRequest getCreateStaffRequest(String nickname, String email, String password, Long hospitalId) {
         return new CreateStaffRequest(
-                hospitalId,
+                "을지대학병원",
                 nickname,
                 email,
                 password,

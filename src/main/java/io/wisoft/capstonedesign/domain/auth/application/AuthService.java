@@ -102,7 +102,7 @@ public class AuthService {
         validateEmailVerified(request.email());
 
         //엔티티 조회
-        final Hospital hospital = hospitalService.findById(request.hospitalId());
+        final Hospital hospital = hospitalService.findByHospitalName(request.hospitalName());
 
         final Staff staff = createStaff(request, hospital);
 
