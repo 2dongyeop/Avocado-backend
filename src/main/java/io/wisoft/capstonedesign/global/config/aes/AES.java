@@ -12,8 +12,8 @@ public class AES implements Crypto {
     private final SecretKey KEY;
 
     public AES(int keySize) throws Exception {
-        this.KEY = generateKey(keySize);
         ALGORITHM = "AES";
+        this.KEY = generateKey(keySize);
     }
 
     @Override

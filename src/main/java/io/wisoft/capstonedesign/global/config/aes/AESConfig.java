@@ -11,7 +11,7 @@ public class AESConfig {
     private int aesKeySize;
 
     @Bean
-    Crypto cryptoUtil() throws Exception {
+    Crypto crypto() throws Exception {
         return new AES(aesKeySize);
     }
 }
