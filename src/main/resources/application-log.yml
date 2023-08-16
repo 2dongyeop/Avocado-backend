@@ -5,6 +5,7 @@ logging:
   level:
     org.hibernate.SQL: info
     root: info
+    com.zaxxer.hikari.pool.HikariPool: debug
 
   logback:
     rollingpolicy:
