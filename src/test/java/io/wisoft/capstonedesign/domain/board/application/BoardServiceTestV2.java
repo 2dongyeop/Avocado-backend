@@ -37,6 +37,9 @@ class BoardServiceTestV2 {
     @Mock
     private MemberService memberService;
 
+    @Mock
+    private BoardImageService boardImageService;
+
     @Nested
     @DisplayName("게시글 작성")
     class CreateBoard {
@@ -57,8 +60,7 @@ class BoardServiceTestV2 {
                     member.getId(),
                     "title",
                     "body",
-                    "DENTAL",
-                    "photo"
+                    "DENTAL"
             );
 
             given(memberService.findById(any())).willReturn(member);

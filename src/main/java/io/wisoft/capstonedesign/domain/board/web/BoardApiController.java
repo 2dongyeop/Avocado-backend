@@ -1,8 +1,9 @@
 package io.wisoft.capstonedesign.domain.board.web;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.wisoft.capstonedesign.domain.board.persistence.Board;
+import io.wisoft.capstonedesign.domain.board.application.BoardImageService;
 import io.wisoft.capstonedesign.domain.board.application.BoardService;
+import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.board.web.dto.*;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
@@ -11,8 +12,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,7 +27,7 @@ import java.util.List;
 public class BoardApiController {
 
     private final BoardService boardService;
-
+    private final BoardImageService boardImageService;
 
     @SwaggerApi(summary = "게시글 단건 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
@@ -52,13 +55,18 @@ public class BoardApiController {
 
     @SwaggerApi(summary = "게시글 작성", implementation = CreateBoardResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public CreateBoardResponse createBoard(
-            @RequestBody @Valid final CreateBoardRequest request) {
+            @RequestParam Long memberId,
+            @RequestParam String title,
+            @RequestParam String body,
+            @RequestParam String dept,
+            @RequestParam(value = "image", required = false) final MultipartFile[] multipartFiles) {
 
-        final Long id = boardService.save(request);
-        final Board board = boardService.findById(id);
-        return new CreateBoardResponse(board.getId());
+        final CreateBoardRequest request = new CreateBoardRequest(memberId, title, body, dept);
+
+        final Long id = boardService.save(request, multipartFiles);
+        return new CreateBoardResponse(id);
     }
 
 

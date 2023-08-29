@@ -202,6 +202,6 @@ public class BoardServiceTest extends ServiceTest {
     }
 
     private CreateBoardRequest getCreateBoardRequest(final Long memberId) {
-        return CreateBoardRequest.builder().memberId(memberId).title("title").body("body").dept("OBSTETRICS").boardPhotoPath("path").build();
+        return CreateBoardRequest.builder().memberId(memberId).title("title").body("body").dept("OBSTETRICS").build();
     }
 }

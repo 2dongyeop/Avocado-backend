@@ -39,7 +39,8 @@ public enum ErrorCode {
     EXPIRED_TOKEN(UNAUTHORIZED, "Illegal-Expired-Token-401", "Token is expired"),
     ALREADY_LOGOUT_TOKEN(FORBIDDEN, "Token-403", "Already logout token"),
     JWT_EXCEPTION(UNAUTHORIZED, "Token-400", "JWT is invalid"),
-    TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "Token-429", "Too Many Request");
+    TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "Token-429", "Too Many Request"),
+    TOO_LARGE_FILE(BAD_REQUEST, "Illegal-File-Size-400", "File size exceeded");
 
 
     private HttpStatus httpStatusCode;

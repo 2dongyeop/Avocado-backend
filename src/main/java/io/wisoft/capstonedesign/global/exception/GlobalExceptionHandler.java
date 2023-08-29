@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeoutException;
@@ -36,6 +37,15 @@ public class GlobalExceptionHandler {
     @Qualifier("asyncExecutor")
     private final ThreadPoolTaskExecutor executor;
 
+    /**
+     * 파일 저장 요청시 크기 초과
+     */
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleMaxUploadSizeExceededException(final MaxUploadSizeExceededException exception) {
+
+        log.error("handleMaxUploadSizeExceededException", exception);
+        return getErrorResponse(ErrorCode.TOO_LARGE_FILE);
+    }
 
     /**
      * 처리율 제한이 발생한 경우, 발생하는 예외

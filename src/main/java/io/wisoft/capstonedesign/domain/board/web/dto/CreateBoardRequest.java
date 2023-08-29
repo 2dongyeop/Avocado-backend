@@ -9,6 +9,5 @@ public record CreateBoardRequest(
         @NotNull Long memberId,
         @NotBlank String title,
         @NotBlank String body,
-        @NotBlank String dept,
-        @NotBlank String boardPhotoPath
+        @NotBlank String dept
 ) { }
