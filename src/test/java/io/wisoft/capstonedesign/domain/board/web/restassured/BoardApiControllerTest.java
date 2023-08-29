@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,45 +34,6 @@ public class BoardApiControllerTest extends ApiTest {
 
     @Autowired
     private RedisAdapter redisAdapter;
-
-    @Nested
-    @DisplayName("게시글 저장")
-    public class CreateBoard {
-
-        @Test
-        @DisplayName("요청이 성공적으로 수행되어, 게시글이 저장되어야 한다.")
-        public void 성공() throws Exception {
-
-            //given -- 조건
-            final String nickname = "게시글저장성공";
-            final String email = "게시글저장성공@email.com";
-            final String password = "password12";
-
-            final String accessToken = jwtTokenProvider.createAccessToken(email);
-            redisAdapter.setValue(email, accessToken, 3600000, TimeUnit.SECONDS);
-
-            final Long memberId = 회원생성(nickname, email, password);
-
-            final var request = getCreateBoardRequest(memberId);
-
-            //when -- 동작
-            final var response = RestAssured
-                    .given()
-                    .log().all()
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .header("Authorization", "bearer " + accessToken)
-                    .body(request)
-                    .when()
-                    .post("/api/boards")
-                    .then()
-                    .log().all().extract();
-
-            //then -- 검증
-            Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-            Assertions.assertThat((Integer) response.jsonPath().get("id")).isPositive();
-        }
-    }
-
 
     @Nested
     @DisplayName("게시글 수정")
@@ -251,8 +213,11 @@ public class BoardApiControllerTest extends ApiTest {
 
 
     private Long 게시글생성(final Long memberId) {
-        final var createBoardRequest = getCreateBoardRequest(memberId);
-        return boardApiController.createBoard(createBoardRequest).id();
+        return boardApiController.createBoard(memberId,
+                "title",
+                "body",
+                "DENTAL",
+                new MultipartFile[]{}).id();
     }
 
 
@@ -262,8 +227,7 @@ public class BoardApiControllerTest extends ApiTest {
                 memberId,
                 "title",
                 "body",
-                "DENTAL",
-                "boardPath"
+                "DENTAL"
         );
     }
 

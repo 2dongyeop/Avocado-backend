@@ -31,9 +31,6 @@ public class Board extends BaseEntity {
     @Column(name = "board_body", nullable = false, columnDefinition = "TEXT")
     private String body;
 
-    @Column(name = "board_photo_path")
-    private String boardPhotoPath;
-
     @Column(name = "board_status")
     @Enumerated(EnumType.STRING)
     private BoardStatus status;

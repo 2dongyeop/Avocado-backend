@@ -4,11 +4,11 @@ import io.wisoft.capstonedesign.domain.board.persistence.Board;
 import io.wisoft.capstonedesign.domain.board.persistence.BoardRepository;
 import io.wisoft.capstonedesign.domain.board.web.dto.CreateBoardRequest;
 import io.wisoft.capstonedesign.domain.board.web.dto.UpdateBoardRequest;
+import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
-import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.global.mapper.DeptMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,19 +28,24 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberService memberService;
+    private final BoardImageService boardImageService;
 
     /**
      * 게시글 작성
      */
     @Transactional
-    public Long save(final CreateBoardRequest request) {
+    public Long save(final CreateBoardRequest request, final MultipartFile... multipartFiles) {
 
-        //엔티티 조회
+        // 회원 조회
         final Member member = memberService.findById(request.memberId());
 
+        // 게시글 생성
         final Board board = createBoard(request, member);
-
         boardRepository.save(board);
+
+        // 게시글 이미지 저장(로컬)
+        boardImageService.save(board.getId(), multipartFiles);
+
         return board.getId();
     }
 
@@ -80,13 +86,18 @@ public class BoardService {
     }
 
     /* 조회 로직 */
-    /** 게시글 단건 상세 조회 */
+
+    /**
+     * 게시글 단건 상세 조회
+     */
     public Board findDetailById(final Long boardId) {
         return boardRepository.findDetailById(boardId)
                 .orElseThrow(() -> new NotFoundException("게시글 조회 실패"));
     }
 
-    /** 게시글 단건 조회 */
+    /**
+     * 게시글 단건 조회
+     */
     public Board findById(final Long boardId) {
         return boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundException("게시글 조회 실패"));
@@ -97,12 +108,16 @@ public class BoardService {
     }
 
 
-    /** 게시글 목록을 페이징 조회 */
+    /**
+     * 게시글 목록을 페이징 조회
+     */
     public Page<Board> findAllUsingPaging(final Pageable pageable) {
         return boardRepository.findAllUsingPaging(pageable);
     }
 
-    /** 특정 병과의 게시글 목록 페이징 조회 */
+    /**
+     * 특정 병과의 게시글 목록 페이징 조회
+     */
     public Page<Board> findAllByDeptUsingPagingMultiValue(final List<String> deptList, final Pageable pageable) {
 
         final List<HospitalDept> list = deptList.stream()
