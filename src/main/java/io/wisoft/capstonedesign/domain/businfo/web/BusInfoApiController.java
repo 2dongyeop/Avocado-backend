@@ -11,6 +11,7 @@ import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -18,6 +19,7 @@ import java.util.Iterator;
 import java.util.stream.Collectors;
 
 @Tag(name = "셔틀버스")
+@Slf4j
 @RestController
 @RequestMapping("/api/bus-info")
 @RequiredArgsConstructor
@@ -30,6 +32,8 @@ public class BusInfoApiController {
     @PostMapping
     public CreateBusInfoResponse createBusInfo(
             @RequestBody @Valid final CreateBusInfoRequest request) {
+
+        log.debug("CreateBusInfoRequest[{}]", request);
         return new CreateBusInfoResponse(busInfoService.save(request));
     }
 
@@ -38,6 +42,8 @@ public class BusInfoApiController {
     @SwaggerApiFailWithoutAuth
     @GetMapping("/{id}/details")
     public Result busInfo(@PathVariable final Long id) {
+
+        log.debug("BusInfo Id[{}]", id);
         return new Result(new BusInfoDto(busInfoService.findById(id)));
     }
 
@@ -48,6 +54,7 @@ public class BusInfoApiController {
     public Result busInfoByArea(
             @RequestBody @Valid final BusInfoByAreaRequest request) {
 
+        log.debug("BusInfoByAreaRequest[{}]", request);
         validateArea(request.area());
 
         return new Result(busInfoService.findByArea(request.area())
@@ -73,6 +80,9 @@ public class BusInfoApiController {
     @SwaggerApiFailWithAuth
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable final Long id) {
+
+        log.debug("BusInfo Id[{}]", id);
+
         busInfoService.delete(id);
         return new Result(new DeleteBusInfoResponse(id));
     }

@@ -65,7 +65,7 @@ public class EmailServiceImpl implements EmailService {
         final Optional<Staff> staff = staffRepository.findByEmail(to);
 
         if (member.isPresent() || staff.isPresent()) {
-            log.error("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.");
+            log.debug("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.");
             throw new DuplicateEmailException("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.", ErrorCode.DUPLICATE_EMAIL);
         }
     }
@@ -117,7 +117,7 @@ public class EmailServiceImpl implements EmailService {
 
         member.updatePassword(encryptHelper.encrypt(resetPassword));
 
-        log.info("{}으로 임시 비밀번호를 발급합니다.", to);
+        log.debug("{}으로 임시 비밀번호를 발급합니다.", to);
     }
 
     @Async
@@ -131,7 +131,7 @@ public class EmailServiceImpl implements EmailService {
 
         staff.updatePassword(encryptHelper.encrypt(resetPassword));
 
-        log.info("{}으로 임시 비밀번호를 발급합니다.", to);
+        log.debug("{}으로 임시 비밀번호를 발급합니다.", to);
     }
 
 
@@ -140,7 +140,7 @@ public class EmailServiceImpl implements EmailService {
         final SimpleMailMessage message = createMessage(to, subject, body);
         emailSender.send(message);
 
-        log.info("{} 으로 {}를 발송합니다.", to, body);
+        log.debug("{} 으로 {}를 발송합니다.", to, body);
     }
 
     @NotNull
@@ -158,7 +158,7 @@ public class EmailServiceImpl implements EmailService {
         final Random random = new Random();
 
         final String code = randomProcess(stringBuilder, random);
-        log.info("code : {}", code);
+        log.debug("code : {}", code);
         return code;
     }
 

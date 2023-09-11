@@ -9,6 +9,7 @@ import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Tag(name = "리뷰")
+@Slf4j
 @RestController
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor
@@ -27,6 +29,8 @@ public class ReviewApiController {
     @SwaggerApiFailWithoutAuth
     @GetMapping("/{id}/details")
     public Result review(@PathVariable("id") final Long id) {
+
+        log.debug("review Id[{}]", id);
         return new Result(new ReviewDto(reviewService.findDetailById(id)));
     }
 
@@ -37,6 +41,8 @@ public class ReviewApiController {
     public Page<ReviewListDto> reviewsUsingPaging(
             final Pageable pageable,
             @RequestParam(required = false) final String deptNum) {
+
+        log.debug("deptNum[{}]", deptNum);
 
         if (StringUtils.hasText(deptNum)) {
             return reviewService.findByDeptUsingPaging(deptNum, pageable).map(ReviewListDto::new);
@@ -53,6 +59,8 @@ public class ReviewApiController {
             @RequestBody @Valid final ReviewsByTargetHospitalRequest request,
             final Pageable pageable) {
 
+        log.debug("ReviewsByTargetHospitalRequest[{}]", request);
+
         return reviewService.findByTargetHospital(request.targetHospital(), pageable)
                 .map(ReviewListDto::new);
     }
@@ -63,6 +71,8 @@ public class ReviewApiController {
     @PostMapping
     public CreateReviewResponse createReview(
             @RequestBody @Valid final CreateReviewRequest request) {
+
+        log.debug("CreateReviewRequest[{}]", request);
 
         final Long id = reviewService.save(request);
         final Review review = reviewService.findById(id);
@@ -78,6 +88,8 @@ public class ReviewApiController {
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateReviewRequest request) {
 
+        log.debug("review Id[{}], UpdateReviewRequest[{}]", id, request);
+
         reviewService.updateTitleBody(id, request);
         final Review review = reviewService.findById(id);
 
@@ -89,6 +101,8 @@ public class ReviewApiController {
     @SwaggerApiFailWithAuth
     @DeleteMapping("/{id}")
     public DeleteReviewResponse deleteReview(@PathVariable("id") final Long id) {
+
+        log.debug("review Id[{}]", id);
 
         reviewService.deleteReview(id);
         final Review review = reviewService.findById(id);

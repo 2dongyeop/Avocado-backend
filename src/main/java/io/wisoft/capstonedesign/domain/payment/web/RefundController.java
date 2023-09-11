@@ -53,6 +53,7 @@ public class RefundController {
         final BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
         final String accessToken = getResponse(br);
+        log.debug("accessToken[{}]", accessToken);
 
         disconnect(conn, br);
         return ResponseEntity.ok(accessToken);
@@ -67,9 +68,7 @@ public class RefundController {
 
         final String token = extractor.extract(httpServletRequest, "Bearer");
 
-        final ResponseEntity<String> response = executePaymentCancel(token, merchantUid, id);
-
-        return response;
+        return executePaymentCancel(token, merchantUid, id);
     }
 
 
@@ -87,7 +86,7 @@ public class RefundController {
         final JSONObject jsonObject = getJsonObject(merchantUid);
 
         final ResponseEntity<String> response = sendCancelRequest(headers, jsonObject);
-        log.info("uid : {} 의 예약이 취소되었습니다.", merchantUid);
+        log.debug("uid : {} 의 예약이 취소되었습니다.", merchantUid);
 
         //취소 되었으니 Payment & Appointment의 상태를 다시 결제 전으로 바꾸기
         paymentService.refund(appointmentId);
@@ -146,7 +145,7 @@ public class RefundController {
 
     private int getResponseCode(final HttpURLConnection conn) throws IOException {
         final int responseCode = conn.getResponseCode();
-        System.out.println("responseCode = " + responseCode);
+        log.debug("responseCode[{}]", responseCode);
 
         return responseCode;
     }

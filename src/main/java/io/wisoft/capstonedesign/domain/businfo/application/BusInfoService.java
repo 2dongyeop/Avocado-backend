@@ -56,7 +56,7 @@ public class BusInfoService {
 
         final List<BusInfo> busInfoList = busInfoRepository.findByArea(BusArea.valueOf(area));
 
-        if (busInfoList.size() == 0) {
+        if (busInfoList.isEmpty()) {
             throw new NotFoundException("해당 버스정보는 존재하지 않습니다.");
         }
         return busInfoList;

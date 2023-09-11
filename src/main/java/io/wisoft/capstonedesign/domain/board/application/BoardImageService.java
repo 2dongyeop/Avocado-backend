@@ -35,7 +35,7 @@ public class BoardImageService {
     public List<String> save(final Long boardId, final MultipartFile... multipartFiles) {
 
         if (ArrayUtils.isEmpty(multipartFiles)) {
-            log.info("Failed to store empty file.");
+            log.debug("Failed to store empty file.");
             return List.of();
         }
 
@@ -47,7 +47,7 @@ public class BoardImageService {
             final String originalName = file.getOriginalFilename();
             final String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
 
-            log.info("fileName: {}", fileName);
+            log.debug("fileName: {}", fileName);
 
             // 날짜별 폴더 생성
             final String folderPath = makeFolder();

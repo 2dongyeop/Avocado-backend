@@ -2,9 +2,11 @@ package io.wisoft.capstonedesign.domain.board.persistence;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class BoardImage {
 
     @Id

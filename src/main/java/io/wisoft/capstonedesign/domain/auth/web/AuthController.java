@@ -20,6 +20,7 @@ import io.wisoft.capstonedesign.global.jwt.RedisJwtBlackList;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "인증")
+@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -37,16 +39,18 @@ public class AuthController {
     private final AuthorizationExtractor authExtractor;
     private final RedisJwtBlackList redisJwtBlackList;
 
-
     @SwaggerApi(summary = "회원 가입", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
     @PostMapping("/signup/members")
     public ResponseEntity<CreateMemberResponse> signupMember(@RequestBody @Valid final CreateMemberRequest request) {
 
+        log.debug("CreateMemberRequest[{}]", request);
+
         validatePassword(request.password1(), request.password2());
         final Long id = authService.signUpMember(request);
 
         if (id == null) {
+            log.debug("login fail");
             return ResponseEntity.badRequest().build();
         }
 
@@ -58,6 +62,8 @@ public class AuthController {
     @SwaggerApiFailWithoutAuth
     @PostMapping("/login/members")
     public ResponseEntity<TokenResponse> loginMember(@RequestBody @Valid final LoginRequest request) {
+
+        log.debug("LoginRequest[{}]", request);
         return ResponseEntity.ok(authService.loginMember(request));
     }
 
@@ -69,6 +75,9 @@ public class AuthController {
 
         final String accessToken = authExtractor.extract(request, "Bearer");
         final String email = jwtTokenProvider.getSubject(accessToken);
+
+        log.debug("accessToken[{}], email[{}]", accessToken, email);
+
         redisJwtBlackList.addToBlackList(email);
 
         return ResponseEntity.ok("logout success");
@@ -80,6 +89,8 @@ public class AuthController {
     public CreateStaffResponse signupStaff(
             @RequestBody @Valid final CreateStaffRequest request) {
 
+        log.debug("CreateStaffRequest[{}]", request);
+
         validatePassword(request.password1(), request.password2());
         return new CreateStaffResponse(authService.signUpStaff(request));
     }
@@ -89,6 +100,8 @@ public class AuthController {
     @SwaggerApiFailWithoutAuth
     @PostMapping("/login/staff")
     public ResponseEntity<TokenResponse> loginStaff(@RequestBody @Valid final LoginRequest request) {
+
+        log.debug("LoginRequest[{}]", request);
         return ResponseEntity.ok(authService.loginStaff(request));
     }
 

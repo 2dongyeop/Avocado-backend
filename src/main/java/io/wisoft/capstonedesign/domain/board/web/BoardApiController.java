@@ -10,6 +10,7 @@ import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -21,6 +22,7 @@ import java.util.List;
 
 
 @Tag(name = "게시판")
+@Slf4j
 @RestController
 @RequestMapping("/api/boards")
 @RequiredArgsConstructor
@@ -32,7 +34,9 @@ public class BoardApiController {
     @SwaggerApi(summary = "게시글 단건 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
     @GetMapping("/{id}/details")
-    public Result board(@PathVariable Long id) {
+    public Result board(@PathVariable final Long id) {
+
+        log.debug("board Id[{}]", id);
         return new Result(new BoardDto(boardService.findDetailById(id)));
     }
 
@@ -57,12 +61,13 @@ public class BoardApiController {
     @SwaggerApiFailWithAuth
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public CreateBoardResponse createBoard(
-            @RequestParam Long memberId,
-            @RequestParam String title,
-            @RequestParam String body,
-            @RequestParam String dept,
+            @RequestParam final Long memberId,
+            @RequestParam final String title,
+            @RequestParam final String body,
+            @RequestParam final String dept,
             @RequestParam(value = "image", required = false) final MultipartFile[] multipartFiles) {
 
+        log.debug("memberId[{}], title[{}], body[{}], dept[{}]", memberId, title, body, dept);
         final CreateBoardRequest request = new CreateBoardRequest(memberId, title, body, dept);
 
         final Long id = boardService.save(request, multipartFiles);
@@ -77,6 +82,7 @@ public class BoardApiController {
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateBoardRequest request) {
 
+        log.debug("board Id[{}], UpdateBoardRequest[{}]", id, request);
         boardService.updateTitleBody(id, request);
 
         final Board board = boardService.findById(id);
@@ -88,6 +94,8 @@ public class BoardApiController {
     @SwaggerApiFailWithAuth
     @DeleteMapping("/{id}")
     public DeleteBoardResponse deleteBoard(@PathVariable("id") final Long id) {
+
+        log.debug("board Id[{}]", id);
 
         boardService.deleteBoard(id);
         final Board board = boardService.findById(id);

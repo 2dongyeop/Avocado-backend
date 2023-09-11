@@ -9,6 +9,7 @@ import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.MultiValueMap;
@@ -18,6 +19,7 @@ import java.util.List;
 
 
 @Tag(name = "건강정보")
+@Slf4j
 @RestController
 @RequestMapping("/api/health-infos")
 @RequiredArgsConstructor
@@ -32,6 +34,8 @@ public class HealthInfoApiController {
     public CreateHealthInfoResponse createHealthInfo(
             @RequestBody @Valid final CreateHealthInfoRequest request) {
 
+        log.debug("CreateHealthInfoRequest[{}]", request);
+
         final Long id = healthInfoService.save(request);
         final HealthInfo healthInfo = healthInfoService.findById(id);
         return new CreateHealthInfoResponse(healthInfo.getId());
@@ -42,6 +46,9 @@ public class HealthInfoApiController {
     @SwaggerApiFailWithAuth
     @DeleteMapping("/{id}")
     public DeleteHealthInfoResponse deleteHealthInfo(@PathVariable("id") final Long id) {
+
+        log.debug("HealthInfo Id[{}]", id);
+
         healthInfoService.delete(id);
         return new DeleteHealthInfoResponse(id);
     }
@@ -51,6 +58,8 @@ public class HealthInfoApiController {
     @SwaggerApiFailWithoutAuth
     @GetMapping("/{id}/details")
     public Result healthInfo(@PathVariable("id") final Long id) {
+
+        log.debug("HealthInfo Id[{}]", id);
         return new Result(new HealthInfoDto(healthInfoService.findDetailById(id)));
     }
 

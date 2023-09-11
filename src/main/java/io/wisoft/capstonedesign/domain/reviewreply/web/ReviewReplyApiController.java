@@ -9,11 +9,13 @@ import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
 @Tag(name = "리뷰 댓글")
+@Slf4j
 @RestController
 @RequestMapping("/api/review-reply")
 @RequiredArgsConstructor
@@ -21,12 +23,13 @@ public class ReviewReplyApiController {
 
     private final ReviewReplyService reviewReplyService;
 
-
     @SwaggerApi(summary = "리뷰댓글 저장", implementation = CreateReviewReplyResponse.class)
     @SwaggerApiFailWithAuth
     @PostMapping
     public CreateReviewReplyResponse createReviewReply(
             @RequestBody @Valid final CreateReviewReplyRequest request) {
+
+        log.debug("CreateReviewReplyRequest[{}]", request);
 
         final Long id = reviewReplyService.save(request);
         final ReviewReply reviewReply = reviewReplyService.findById(id);
@@ -40,6 +43,8 @@ public class ReviewReplyApiController {
     public DeleteReviewReplyResponse deleteReviewReply(
             @PathVariable("id") final Long id) {
 
+        log.debug("Review Reply Id[{}]", id);
+
         reviewReplyService.deleteReviewReply(id);
         return new DeleteReviewReplyResponse(id);
     }
@@ -52,6 +57,8 @@ public class ReviewReplyApiController {
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateReviewReplyRequest request) {
 
+        log.debug("Review Reply Id[{}], UpdateReviewReplyRequest[{}]", id, request);
+
         reviewReplyService.updateReply(id, request);
         final ReviewReply reviewReply = reviewReplyService.findById(id);
         return new UpdateReviewReplyResponse(reviewReply.getId());
@@ -62,6 +69,8 @@ public class ReviewReplyApiController {
     @SwaggerApiFailWithoutAuth
     @GetMapping("/{id}/details")
     public Result reviewReply(@PathVariable("id") final Long id) {
+
+        log.debug("Review Reply Id[{}]", id);
         return new Result(new ReviewReplyDto(reviewReplyService.findDetailById(id)));
     }
 
@@ -71,6 +80,8 @@ public class ReviewReplyApiController {
     @GetMapping("/review/{review-id}")
     public Result reviewReplyByReview(
             @PathVariable("review-id") final Long reviewId) {
+
+        log.debug("Review Reply Id[{}]", reviewId);
 
         return new Result(reviewReplyService.findByReviewId(reviewId)
                 .stream().map(ReviewReplyDto::new)
@@ -85,6 +96,8 @@ public class ReviewReplyApiController {
     public Result reviewReplyByReviewOrderByCreateAsc(
             @PathVariable("review-id") final Long reviewId) {
 
+        log.debug("Review Reply Id[{}]", reviewId);
+
         return new Result(reviewReplyService.findAllByReviewIdOrderByCreateAsc(reviewId)
                 .stream().map(ReviewReplyDto::new)
                 .collect(Collectors.toList()));
@@ -96,6 +109,8 @@ public class ReviewReplyApiController {
     @GetMapping("/review/{review-id}/create-desc")
     public Result reviewReplyByReviewOrderByCreateDesc(
             @PathVariable("review-id") final Long reviewId) {
+
+        log.debug("Review Reply Id[{}]", reviewId);
 
         return new Result(reviewReplyService.findAllByReviewIdOrderByCreateDesc(reviewId)
                 .stream().map(ReviewReplyDto::new)

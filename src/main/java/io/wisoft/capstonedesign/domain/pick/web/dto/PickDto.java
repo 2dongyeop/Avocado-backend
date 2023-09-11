@@ -4,8 +4,10 @@ import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PickDto {
     private String name;

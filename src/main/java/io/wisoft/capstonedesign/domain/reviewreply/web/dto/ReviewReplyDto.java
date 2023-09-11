@@ -4,8 +4,10 @@ import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewReplyDto {
     private String reviewTitle;

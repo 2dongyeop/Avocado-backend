@@ -7,10 +7,12 @@ import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 
 @Tag(name = "찜하기")
+@Slf4j
 @RestController
 @RequestMapping("/api/picks")
 @RequiredArgsConstructor
@@ -22,6 +24,8 @@ public class PickApiController {
     @SwaggerApiFailWithAuth
     @PostMapping
     public CreatePickResponse createPick(@RequestBody @Valid final CreatePickRequest request) {
+
+        log.debug("CreatePickRequest[{}]", request);
         return new CreatePickResponse(pickService.save(request));
     }
 
@@ -30,6 +34,9 @@ public class PickApiController {
     @SwaggerApiFailWithAuth
     @DeleteMapping("/{id}")
     public DeletePickResponse deletePick(@PathVariable("id") final Long id) {
+
+        log.debug("pick Id[{}]", id);
+
         pickService.cancelPick(id);
         return new DeletePickResponse(id);
     }
@@ -39,6 +46,9 @@ public class PickApiController {
     @SwaggerApiFailWithAuth
     @GetMapping("/{id}/details")
     public Result pick(@PathVariable("id") final Long id) {
+
+        log.debug("pick Id[{}]", id);
+
         return new Result(new PickDto(pickService.findDetailById(id)));
     }
 }

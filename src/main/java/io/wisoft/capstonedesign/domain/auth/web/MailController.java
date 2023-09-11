@@ -7,6 +7,7 @@ import io.wisoft.capstonedesign.domain.auth.web.dto.MailObject;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.CompletableFuture;
 
 @Tag(name = "이메일 인증")
+@Slf4j
 @RestController
 @RequestMapping("/mail")
 @RequiredArgsConstructor
@@ -31,6 +33,9 @@ public class MailController {
     @SwaggerApiFailWithoutAuth
     @PostMapping("/certification-code")
     public ResponseEntity<String> sendCertificationCode(@RequestBody final MailObject mailObject) {
+
+        log.debug("MailObject[{}]", mailObject);
+
         final CompletableFuture<String> future = CompletableFuture.supplyAsync(
                         () -> emailService.sendCertificationCode(mailObject.email()), executor);
 
@@ -43,6 +48,9 @@ public class MailController {
     @SwaggerApiFailWithoutAuth
     @PostMapping("/certification-email")
     public ResponseEntity<String> certificateEmail(@RequestBody final CertificateMailRequest request) {
+
+        log.debug("CertificateMailRequest[{}]", request);
+
         emailService.certificateEmail(request);
         return ResponseEntity.ok("success");
     }
@@ -52,6 +60,9 @@ public class MailController {
     @SwaggerApiFailWithoutAuth
     @PostMapping("/member/password")
     public ResponseEntity<String> resetMemberPassword(@RequestBody final MailObject mailObject) {
+
+        log.debug("MailObject[{}]", mailObject);
+
         emailService.sendResetMemberPassword(mailObject.email());
         return ResponseEntity.ok("success");
     }
@@ -60,6 +71,9 @@ public class MailController {
     @SwaggerApiFailWithoutAuth
     @PostMapping("/staff/password")
     public ResponseEntity<String> resetStaffPassword(@RequestBody final MailObject mailObject) {
+
+        log.debug("MailObject[{}]", mailObject);
+
         emailService.sendResetStaffPassword(mailObject.email());
         return ResponseEntity.ok("success");
     }
