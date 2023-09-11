@@ -4,10 +4,12 @@ import io.wisoft.capstonedesign.domain.appointment.persistence.Appointment;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AppointmentDto {
     private String hospital;

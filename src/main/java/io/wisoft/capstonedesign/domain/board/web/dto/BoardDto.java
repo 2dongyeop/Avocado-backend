@@ -5,12 +5,14 @@ import io.wisoft.capstonedesign.domain.boardreply.web.dto.BoardReplyDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BoardDto {
     private String title;

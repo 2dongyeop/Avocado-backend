@@ -100,7 +100,7 @@ public class AppointmentService {
         final Iterator<HospitalDept> iterator = Arrays.stream(values).iterator();
 
         while (iterator.hasNext()) {
-            HospitalDept hospitalDept = iterator.next();
+            final HospitalDept hospitalDept = iterator.next();
 
             if (hospitalDept.toString().equals(dept)) {
                 return;

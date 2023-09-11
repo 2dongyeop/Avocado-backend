@@ -8,11 +8,13 @@ import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
 @Tag(name = "의료진")
+@Slf4j
 @RestController
 @RequestMapping("/api/staff")
 @RequiredArgsConstructor
@@ -24,6 +26,8 @@ public class StaffApiController {
     @SwaggerApiFailWithAuth
     @GetMapping("/{id}/details")
     public Result staff(@PathVariable("id") final Long id) {
+
+        log.debug("Staff Id[{}]", id);
         return new Result(new StaffDto(staffService.findDetailById(id)));
     }
 
@@ -45,6 +49,8 @@ public class StaffApiController {
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateStaffPasswordRequest request) {
 
+        log.debug("Staff Id[{}], UpdateStaffPasswordRequest[{}]", id, request);
+
         staffService.updatePassword(id, request);
         final Staff staff = staffService.findById(id);
 
@@ -60,6 +66,8 @@ public class StaffApiController {
             @RequestParam(value = "hospitalName", required = false) final String hospitalName,
             @RequestParam(value = "photoPath", required = false) final String photoPath) {
 
+        log.debug("hospitalName[{}], photoPath[{}]", hospitalName, photoPath);
+
         staffService.updateStaff(id, hospitalName, photoPath);
         final Staff staff = staffService.findById(id);
 
@@ -71,6 +79,8 @@ public class StaffApiController {
     @SwaggerApiFailWithAuth
     @DeleteMapping("/{id}")
     public DeleteStaffResponse deleteStaff(@PathVariable("id") final Long id) {
+
+        log.debug("Staff Id[{}]", id);
 
         staffService.deleteStaff(id);
         return new DeleteStaffResponse(id);

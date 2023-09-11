@@ -11,11 +11,13 @@ import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithoutAuth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
 @Tag(name = "병원정보")
+@Slf4j
 @RestController
 @RequestMapping("/api/hospitals")
 @RequiredArgsConstructor
@@ -28,6 +30,8 @@ public class HospitalApiController {
     public CreateHospitalResponse createHospitalRequest(
             @RequestBody @Valid final CreateHospitalRequest request) {
 
+        log.debug("CreateHospitalRequest[{}]", request);
+
         final Long id = hospitalService.save(request);
         final Hospital getHospital = hospitalService.findById(id);
         return new CreateHospitalResponse(getHospital.getId());
@@ -37,6 +41,8 @@ public class HospitalApiController {
     /* 병원 단건 조회 */
     @GetMapping("/{id}/details")
     public Result hospital(@PathVariable final Long id) {
+
+        log.debug("Hospital Id[{}]", id);
         return new Result(new HospitalDto(hospitalService.findById(id)));
     }
 

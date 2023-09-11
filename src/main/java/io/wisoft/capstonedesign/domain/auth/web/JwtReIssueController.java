@@ -38,8 +38,10 @@ public class JwtReIssueController {
 
         final String refreshToken = extractor.extract(request, tokenType);
         final String email = jwtTokenProvider.getSubject(refreshToken);
+        log.debug("refreshToken[{}], email[{}]", refreshToken, email);
 
         final Long id = extractId(email);
+        log.debug("member Id[{}]", id);
 
         if (!redisAdapter.hasKey(email)) {
             throw new InvalidTokenException("유효하지 않은 토큰입니다", ErrorCode.INVALID_TOKEN);
@@ -47,7 +49,7 @@ public class JwtReIssueController {
 
         final String reIssuedAccessToken = jwtTokenProvider.createAccessToken(email);
 
-        log.info("{}님에게 accessToken {}을 재발급합니다.", email, reIssuedAccessToken);
+        log.debug("{}님에게 accessToken {}을 재발급합니다.", email, reIssuedAccessToken);
         return ResponseEntity.ok(new TokenResponse(id, tokenType, reIssuedAccessToken, refreshToken));
     }
 

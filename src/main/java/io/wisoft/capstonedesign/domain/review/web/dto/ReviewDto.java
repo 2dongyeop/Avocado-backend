@@ -5,11 +5,13 @@ import io.wisoft.capstonedesign.domain.reviewreply.web.dto.ReviewReplyDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewDto {
     private String writer;

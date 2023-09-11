@@ -68,7 +68,7 @@ public class AuthService {
         final var mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
         mailAuthenticationRepository.delete(mailAuthentication);
 
-        log.info("{}님이 회원가입을 하셨습니다.", member.getNickname());
+        log.debug("{}님이 회원가입을 하셨습니다.", member.getNickname());
         return member.getId();
     }
 
@@ -87,9 +87,10 @@ public class AuthService {
         final String accessToken = jwtTokenProvider.createAccessToken(member.getEmail());
         final String refreshToken = jwtTokenProvider.createRefreshToken(member.getEmail());
 
+        log.debug("accessToken[{}], refreshToken[{}]", accessToken, refreshToken);
+
         redisAdapter.setValue(member.getEmail(), refreshToken, REFRESH_TOKEN_EXPIRE_SECOND, TimeUnit.SECONDS);
 
-        log.info("redis : {}님의 리프레쉬 토큰{}을 1시간동안 저장합니다.", member.getEmail(), accessToken);
         return new TokenResponse(member.getId(), tokenType, accessToken, refreshToken);
     }
 
@@ -113,7 +114,6 @@ public class AuthService {
         final var mailAuthentication = mailAuthenticationRepository.findByEmail(request.email()).get();
         mailAuthenticationRepository.delete(mailAuthentication);
 
-        log.info("{}님이 가입 하셨습니다.", staff.getName());
         return staff.getId();
     }
 
@@ -132,9 +132,10 @@ public class AuthService {
         final String accessToken = jwtTokenProvider.createAccessToken(staff.getEmail());
         final String refreshToken = jwtTokenProvider.createRefreshToken(staff.getEmail());
 
+        log.debug("accessToken[{}], refreshToken[{}]", accessToken, refreshToken);
+
         redisAdapter.setValue(staff.getEmail(), refreshToken, REFRESH_TOKEN_EXPIRE_SECOND, TimeUnit.SECONDS);
 
-        log.info("redis : {}님의 리프레쉬 토큰{}을 1시간동안 저장합니다.", staff.getEmail(), accessToken);
         return new TokenResponse(staff.getId(), tokenType, accessToken, refreshToken);
     }
 

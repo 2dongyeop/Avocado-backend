@@ -11,6 +11,7 @@ import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth
 import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.token.TooManyRequestException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -22,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 @Tag(name = "메인화면 검색")
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ChatGptController {
@@ -35,8 +37,9 @@ public class ChatGptController {
     @PostMapping("/api/search")
     public ResponseEntity<ChatGptResponseV2> sendMessage(@RequestBody final ChatRequest chatRequest) {
 
-        if (bucket.tryConsume(1)) {
+        log.debug("ChatRequest[{}]", chatRequest);
 
+        if (bucket.tryConsume(1)) {
             final CompletableFuture<ChatGptResponseV2> future = CompletableFuture.supplyAsync(
                             () -> chatGptService.askQuestionV2(chatRequest), executor)
                     .orTimeout(10, TimeUnit.SECONDS);
