@@ -26,6 +26,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
+    // Jasypt를 이용해 yaml 파일에 있는 설정값들 암호화
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+
     //Hikari CP 사용하기 위함
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 
