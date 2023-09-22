@@ -20,6 +20,8 @@ public class ReviewDto {
     private int starPoint;
     private String targetHospital;
     private List<ReviewReplyDto> reviewReplyList;
+    private String targetDept;
+    private String photoPath;
 
     public ReviewDto(final Review review) {
         this.writer = review.getMember().getNickname();
@@ -30,5 +32,7 @@ public class ReviewDto {
         this.reviewReplyList = review.getReviewReplyList()
                 .stream().map(ReviewReplyDto::new)
                 .collect(Collectors.toList());
+        this.targetDept = String.valueOf(review.getTargetDept());
+        this.photoPath = review.getReviewPhotoPath();
     }
 }

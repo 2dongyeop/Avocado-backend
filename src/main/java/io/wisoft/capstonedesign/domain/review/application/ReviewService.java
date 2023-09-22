@@ -108,8 +108,7 @@ public class ReviewService {
 
     /** 상세 조회 */
     public Review findDetailById(final Long reviewId) {
-        return reviewRepository.findDetailById(reviewId)
-                .orElseThrow(() -> new NotFoundException("리뷰 조회 실패"));
+        return findById(reviewId);
     }
 
     /** 리뷰 목록 페이징 조회 */
