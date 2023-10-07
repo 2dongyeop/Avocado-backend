@@ -16,8 +16,7 @@ class AESTest {
         // given
 
         // when
-        final String encrypted = AES.encryptString("김민기");
-        System.out.println("encrypted = " + encrypted);
+        final String encrypted = AES.encryptString(plainText);
 
         // then
         assertThat(encrypted).isNotEqualTo(plainText);
