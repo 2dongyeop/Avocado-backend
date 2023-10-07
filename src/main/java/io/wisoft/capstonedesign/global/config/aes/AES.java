@@ -1,43 +1,90 @@
 package io.wisoft.capstonedesign.global.config.aes;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Hex;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.stereotype.Component;
+
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
-public class AES implements Crypto {
+@Slf4j
+@Component
+public final class AES {
 
-    private final String ALGORITHM;
-    private final SecretKey KEY;
+    private static final String KEY = "3aq1b922pi106o35fe8025947de7cd71"; // 32byte 암호화 키
+    private static final String ENCRYPTION_ALGORITHM = "AES";
 
-    public AES(int keySize) throws Exception {
-        ALGORITHM = "AES";
-        this.KEY = generateKey(keySize);
+    /**
+     * 16byte 키 생성 메서드
+     * 16byte 이상은 잘라서 다시 앞쪽부터 byte 단위로 XOR 연산 시행
+     *
+     * @param encryptionAlgorithm : 인코딩 방식
+     * @return : 암호화 키
+     */
+    public static SecretKeySpec generateMySqlAesKey(final String key, final String encryptionAlgorithm) {
+
+        try {
+            final byte[] finalKey = new byte[16];
+            int i = 0;
+
+            for (byte b : key.getBytes(encryptionAlgorithm)) {
+                finalKey[i++ % 16] ^= b;
+            }
+
+            return new SecretKeySpec(finalKey, ENCRYPTION_ALGORITHM);
+        } catch (UnsupportedEncodingException e) {
+            log.warn("encryptionAlgorithm:[{}] can not generate AES Key", encryptionAlgorithm);
+            throw new RuntimeException(e);
+        }
     }
 
-    @Override
-    public String encrypt(final String plainText) throws Exception {
-        final Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.ENCRYPT_MODE, KEY);
+    /**
+     * 평문을 AES 알고리즘으로 암호화
+     *
+     * @param plainText : 암호화할 평문
+     * @return String : 암호화된 문자
+     * @throws Exception : 발생하는 예외
+     */
+    public static String encryptString(final String plainText) {
 
-        byte[] encrypted = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
-        return new String(Base64.getEncoder().encode(encrypted));
+        try {
+            final Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, generateMySqlAesKey(KEY, StandardCharsets.UTF_8.toString()));
+
+            final byte[] encrypted = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
+
+            final String encryptedString = Hex.encodeHexString(encrypted);
+            return encryptedString;
+
+        } catch (Exception e) {
+            log.warn("plainText:[{}] can not be encrypt", plainText);
+        }
+        return Strings.EMPTY;
     }
 
-    @Override
-    public String decrypt(final String cipherText) throws Exception {
-        final Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.DECRYPT_MODE, KEY);
+    /**
+     * 암호화된 문자를 평문으로 복호화
+     *
+     * @param encryptedText : 복호화 할 암호문
+     * @return String : 복호화된 평문
+     */
+    public static String decryptString(final String encryptedText) {
 
-        byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(cipherText));
-        return new String(decrypted, StandardCharsets.UTF_8);
-    }
+        try {
+            final Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, generateMySqlAesKey(KEY, StandardCharsets.UTF_8.toString()));
 
-    private SecretKey generateKey(final int keySize) throws Exception {
-        final KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
-        keyGenerator.init(keySize);
+            final byte[] original = cipher.doFinal(Hex.decodeHex(encryptedText.toCharArray()));
 
-        return keyGenerator.generateKey();
+            final String originalString = new String(original, StandardCharsets.UTF_8);
+            return originalString;
+
+        } catch (Exception e) {
+            log.warn("encryptedText:[{}] can not be decrypt", encryptedText);
+        }
+        return Strings.EMPTY;
     }
 }

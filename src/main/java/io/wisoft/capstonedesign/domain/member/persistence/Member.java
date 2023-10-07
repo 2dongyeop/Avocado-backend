@@ -6,6 +6,7 @@ import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
 import io.wisoft.capstonedesign.domain.pick.persistence.Pick;
 import io.wisoft.capstonedesign.domain.review.persistence.Review;
 import io.wisoft.capstonedesign.global.BaseEntity;
+import io.wisoft.capstonedesign.global.config.aes.AESConverter;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -26,15 +27,18 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
+    @Convert(converter = AESConverter.class)
     @Column(name = "member_nickname", unique = true, nullable = false)
     private String nickname;
 
+    @Convert(converter = AESConverter.class)
     @Column(name = "member_email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "member_password", nullable = false)
     private String password;
 
+    @Convert(converter = AESConverter.class)
     @Column(name = "member_phonenumber", nullable = false)
     private String phoneNumber;
 

@@ -57,6 +57,9 @@ dependencies {
         exclude group: 'jakarta.activation', module: 'jakarta.activation-api'
     }
 
+    // commons-codec : Hex encoding
+    implementation 'commons-codec:commons-codec:1.16.0'
+
     //jwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 

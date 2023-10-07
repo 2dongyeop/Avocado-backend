@@ -1,74 +1,40 @@
 package io.wisoft.capstonedesign.global.config.aes;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import javax.crypto.*;
-import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class AESTest {
 
-    private final String ALGORITHM = "AES";
-    private Cipher encryptCipher;
-    private Cipher decryptCipher;
-    final String plainText = "test123";
-
-    @BeforeEach
-    void init() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
-        final SecretKey KEY = generateKey();
-
-        encryptCipher = Cipher.getInstance(ALGORITHM);
-        encryptCipher.init(Cipher.ENCRYPT_MODE, KEY);
-
-        decryptCipher = Cipher.getInstance(ALGORITHM);
-        decryptCipher.init(Cipher.DECRYPT_MODE, KEY);
-    }
-
+    private final String plainText = "plainText";
 
     @Test
-    @DisplayName("평문을 AES 알고리즘으로 암호화하면 끝이 ==로 끝나도록 암호화된다.")
-    void encrypt() throws IllegalBlockSizeException, BadPaddingException {
+    @DisplayName("평문을 암호화했을 때, AES128로 암호화된 결과값이 나와야 한다.")
+    void encryptString() {
 
         // given
 
-        // when - 암호화
-        final byte[] encrypted = encryptCipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
-        final String cipherText = new String(Base64.getEncoder().encode(encrypted));
+        // when
+        final String encrypted = AES.encryptString("김민기");
+        System.out.println("encrypted = " + encrypted);
 
         // then
-        Assertions.assertThat(cipherText).isNotEqualTo(plainText);
-        Assertions.assertThat(cipherText).endsWith("==");
+        assertThat(encrypted).isNotEqualTo(plainText);
     }
 
     @Test
-    @DisplayName("AES 알고리즘으로 암호화된 글자를 복호화하면 평문과 원문이 같아야 한다.")
-    void decrypt() throws IllegalBlockSizeException, BadPaddingException {
+    @DisplayName("암호문을 평문으로 복호화하면, 암호화 전의 문자열과 동일해야 한다.")
+    void decryptString() {
 
         // given
-
         // 암호화
-        final byte[] encrypted = encryptCipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
-        final String cipherText = new String(Base64.getEncoder().encode(encrypted));
+        final String encrypted = AES.encryptString(plainText);
 
-        // when - 복호화
-        byte[] decrypted = decryptCipher.doFinal(Base64.getDecoder().decode(cipherText));
-        final String decryptedText = new String(decrypted, StandardCharsets.UTF_8);
+        // when
+        final String decrypted = AES.decryptString(encrypted);
 
         // then
-        Assertions.assertThat(plainText).isEqualTo(decryptedText);
-    }
-
-    private SecretKey generateKey() throws NoSuchAlgorithmException {
-        final KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
-        keyGenerator.init(128);
-
-        return keyGenerator.generateKey();
+        assertThat(decrypted).isEqualTo(plainText);
     }
 }

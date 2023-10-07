@@ -3,6 +3,7 @@ package io.wisoft.capstonedesign.domain.staff.persistence;
 import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
 import io.wisoft.capstonedesign.domain.hospital.persistence.Hospital;
 import io.wisoft.capstonedesign.global.BaseEntity;
+import io.wisoft.capstonedesign.global.config.aes.AESConverter;
 import io.wisoft.capstonedesign.global.enumeration.HospitalDept;
 import io.wisoft.capstonedesign.domain.healthinfo.persistence.HealthInfo;
 import jakarta.persistence.*;
@@ -24,9 +25,11 @@ public class Staff extends BaseEntity {
     @Column(name = "staff_id")
     private Long id;
 
+    @Convert(converter = AESConverter.class)
     @Column(name = "staff_name", nullable = false)
     private String name;
 
+    @Convert(converter = AESConverter.class)
     @Column(name = "staff_email", unique = true, nullable = false)
     private String email;
 
