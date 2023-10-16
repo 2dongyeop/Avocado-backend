@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewListDto {
+    private Long id;
     private String writer;
     private String title;
     private String status;
@@ -19,6 +20,7 @@ public class ReviewListDto {
     private int starPoint;
 
     public ReviewListDto(final Review review) {
+        this.id = review.getId();
         this.writer = review.getMember().getNickname();
         this.title = review.getTitle();
         this.status = review.getStatus().toString();
