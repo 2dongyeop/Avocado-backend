@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewDto {
+    private Long id;
     private String writer;
     private String title;
     private String body;
@@ -24,6 +25,7 @@ public class ReviewDto {
     private String photoPath;
 
     public ReviewDto(final Review review) {
+        this.id = review.getId();
         this.writer = review.getMember().getNickname();
         this.title = review.getTitle();
         this.body = review.getBody();
