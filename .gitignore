@@ -17,6 +17,7 @@ h2
 *application-iamport.yml*
 *application-redis.yml*
 *application-slack.yml*
+*application-prometheus.yml*
 docker-compose.yml
 *a_test*
 *templates*
