@@ -57,7 +57,7 @@ public class MemberMyPageController {
         log.info("memberId[{}]", memberId);
         return memberMyPageService.findAppointmentsByMemberId(memberId).stream()
                 .map(AppointmentDto::new)
-                .toList());
+                .toList();
     }
 
 

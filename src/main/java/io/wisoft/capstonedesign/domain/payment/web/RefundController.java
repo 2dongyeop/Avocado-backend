@@ -112,7 +112,7 @@ public class RefundController {
         try {
             jsonObject.put("merchant_uid", merchantUid);
         } catch (JSONException e) {
-            log.warn(e);
+            log.warn("{}", e);
         }
         return jsonObject;
     }
