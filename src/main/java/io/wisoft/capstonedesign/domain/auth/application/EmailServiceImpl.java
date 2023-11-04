@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Service("EmailService")
@@ -49,10 +50,13 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     public String sendCertificationCode(final String to) {
+
+        log.info("to[{}]", to);
         validateDuplicateMemberOrStaff(to);
 
         final String authenticateCode = createRandomCode();
         sendEmail(to, EMAIL_CERTIFICATION_SUBJECT, authenticateCode);
+        log.info("authenticateCode[{}]", authenticateCode);
 
         redisAdapter.setValue(to, authenticateCode, MAIL_AUTH_EXPIRED_TIME, TimeUnit.SECONDS);
         log.info("redis : {} 를 3분간 저장합니다.", to);
@@ -65,7 +69,7 @@ public class EmailServiceImpl implements EmailService {
         final Optional<Staff> staff = staffRepository.findByEmail(to);
 
         if (member.isPresent() || staff.isPresent()) {
-            log.debug("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.");
+            log.info("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.");
             throw new DuplicateEmailException("일치하는 이메일이 존재해 이메일 인증에 실패하였습니다.", ErrorCode.DUPLICATE_EMAIL);
         }
     }
@@ -75,6 +79,7 @@ public class EmailServiceImpl implements EmailService {
 
         //메일 정보 조회
         final String codeByRedis = getRedisValue(request.email());
+        log.info("codeByRedis[{}]", codeByRedis);
 
         //메일 정보 검증
         validateBeforeCertificateEmail(codeByRedis, request);
@@ -92,9 +97,11 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private String getRedisValue(final String key) {
+        log.info("key[{}]", key);
         final String code = redisAdapter.getValue(key);
 
         if (code == null) {
+            log.info("key[{}] not found in redis", key);
             throw new NotFoundException("해당 이메일에 대한 응답코드 송신 기록이 없습니다.");
         }
         return code;
@@ -102,45 +109,52 @@ public class EmailServiceImpl implements EmailService {
 
     private void validateBeforeCertificateEmail(final String code, final CertificateMailRequest request) {
         if (!request.code().equals(code)) {
+            log.info("request code[{}] not valid", request.code());
             throw new IllegalValueException("인증 코드가 달라 인증에 실패하였습니다.", ErrorCode.ILLEGAL_CODE);
         }
     }
 
     @Async
     @Transactional
-    public void sendResetMemberPassword(final String to) {
-        final Member member = memberRepository.findByEmail(to)
-                .orElseThrow(() -> new NotFoundException("회원 조회 실패"));
+    public void sendResetMemberPassword(final String email) {
+        final Member member = memberRepository.findByEmail(email).orElseThrow(() -> {
+            log.info("email[{}] not found", email);
+            return new NotFoundException("회원 조회 실패");
+        });
 
         final String resetPassword = createRandomCode();
-        sendEmail(to, PASSWORD_RESET_SUBJECT, resetPassword);
+        sendEmail(email, PASSWORD_RESET_SUBJECT, resetPassword);
 
         member.updatePassword(encryptHelper.encrypt(resetPassword));
 
-        log.debug("{}으로 임시 비밀번호를 발급합니다.", to);
+        log.info("{}으로 임시 비밀번호를 발급합니다.", email);
     }
 
     @Async
     @Transactional
-    public void sendResetStaffPassword(final String to) {
-        final Staff staff = staffRepository.findByEmail(to)
-                .orElseThrow(() -> new NotFoundException("의료진 조회 실패"));
+    public void sendResetStaffPassword(final String email) {
+        final Staff staff = staffRepository.findByEmail(email).orElseThrow(() -> {
+            log.info("email[{}] not found", email);
+            return new NotFoundException("의료진 조회 실패");
+        });
 
         final String resetPassword = createRandomCode();
-        sendEmail(to, PASSWORD_RESET_SUBJECT, resetPassword);
+        sendEmail(email, PASSWORD_RESET_SUBJECT, resetPassword);
 
         staff.updatePassword(encryptHelper.encrypt(resetPassword));
 
-        log.debug("{}으로 임시 비밀번호를 발급합니다.", to);
+        log.info("{}으로 임시 비밀번호를 발급합니다.", email);
     }
 
 
     private void sendEmail(final String to, final String subject, final String body) {
 
+        log.info("to[{}], subject[{}], body[{}]", to, subject, body);
+
         final SimpleMailMessage message = createMessage(to, subject, body);
         emailSender.send(message);
 
-        log.debug("{} 으로 {}를 발송합니다.", to, body);
+        log.info("{} 으로 {}를 발송합니다.", to, body);
     }
 
     @NotNull
@@ -158,26 +172,27 @@ public class EmailServiceImpl implements EmailService {
         final Random random = new Random();
 
         final String code = randomProcess(stringBuilder, random);
-        log.debug("code : {}", code);
+        log.info("code : {}", code);
         return code;
     }
 
     @NotNull
     private String randomProcess(final StringBuilder stringBuilder, final Random random) {
-        for (int i = 0; i < 8; i++) { // 인증코드 8자리
-            final int index = random.nextInt(3); // 0~2 까지 랜덤
+        // 인증코드 8자리
+        // 0~2 까지 랜덤
+        IntStream.range(0, 8).map(i -> random.nextInt(3))
+                .forEach(index -> {
+                    switch (index) {
+                        //  a~z  (ex. 1+97=98 => (char)98 = 'b')
+                        case 0 -> stringBuilder.append((char) (random.nextInt(26) + 97));
 
-            switch (index) {
-                //  a~z  (ex. 1+97=98 => (char)98 = 'b')
-                case 0 -> stringBuilder.append((char) ((int) (random.nextInt(26)) + 97));
+                        //  A~Z
+                        case 1 -> stringBuilder.append((char) (random.nextInt(26) + 65));
 
-                //  A~Z
-                case 1 -> stringBuilder.append((char) ((int) (random.nextInt(26)) + 65));
-
-                // 0~9
-                case 2 -> stringBuilder.append((random.nextInt(10)));
-            }
-        }
+                        // 0~9
+                        case 2 -> stringBuilder.append((random.nextInt(10)));
+                    }
+                });
         final String code = stringBuilder.toString();
         return code;
     }

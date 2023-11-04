@@ -45,6 +45,7 @@ public class RefundController {
         sendRequest(conn, obj);
 
         final int responseCode = getResponseCode(conn);
+        log.info("resposneCode[{}]", responseCode);
 
         if (responseCode != 200) {
             return ResponseEntity.badRequest().build();
@@ -111,7 +112,7 @@ public class RefundController {
         try {
             jsonObject.put("merchant_uid", merchantUid);
         } catch (JSONException e) {
-            e.printStackTrace();
+            log.warn(e);
         }
         return jsonObject;
     }

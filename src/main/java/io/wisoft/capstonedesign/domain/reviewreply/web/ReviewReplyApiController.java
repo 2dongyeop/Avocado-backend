@@ -1,8 +1,8 @@
 package io.wisoft.capstonedesign.domain.reviewreply.web;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
 import io.wisoft.capstonedesign.domain.reviewreply.application.ReviewReplyService;
+import io.wisoft.capstonedesign.domain.reviewreply.persistence.ReviewReply;
 import io.wisoft.capstonedesign.domain.reviewreply.web.dto.*;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
@@ -11,8 +11,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @Tag(name = "리뷰 댓글")
 @Slf4j
@@ -29,7 +27,7 @@ public class ReviewReplyApiController {
     public CreateReviewReplyResponse createReviewReply(
             @RequestBody @Valid final CreateReviewReplyRequest request) {
 
-        log.debug("CreateReviewReplyRequest[{}]", request);
+        log.info("CreateReviewReplyRequest[{}]", request);
 
         final Long id = reviewReplyService.save(request);
         final ReviewReply reviewReply = reviewReplyService.findById(id);
@@ -40,10 +38,9 @@ public class ReviewReplyApiController {
     @SwaggerApi(summary = "리뷰댓글 삭제", implementation = DeleteReviewReplyResponse.class)
     @SwaggerApiFailWithAuth
     @DeleteMapping("/{id}")
-    public DeleteReviewReplyResponse deleteReviewReply(
-            @PathVariable("id") final Long id) {
+    public DeleteReviewReplyResponse deleteReviewReply(@PathVariable("id") final Long id) {
 
-        log.debug("Review Reply Id[{}]", id);
+        log.info("Review Reply Id[{}]", id);
 
         reviewReplyService.deleteReviewReply(id);
         return new DeleteReviewReplyResponse(id);
@@ -57,7 +54,7 @@ public class ReviewReplyApiController {
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateReviewReplyRequest request) {
 
-        log.debug("Review Reply Id[{}], UpdateReviewReplyRequest[{}]", id, request);
+        log.info("Review Reply Id[{}], UpdateReviewReplyRequest[{}]", id, request);
 
         reviewReplyService.updateReply(id, request);
         final ReviewReply reviewReply = reviewReplyService.findById(id);
@@ -70,7 +67,7 @@ public class ReviewReplyApiController {
     @GetMapping("/{id}/details")
     public Result reviewReply(@PathVariable("id") final Long id) {
 
-        log.debug("Review Reply Id[{}]", id);
+        log.info("Review Reply Id[{}]", id);
         return new Result(new ReviewReplyDto(reviewReplyService.findDetailById(id)));
     }
 
@@ -81,11 +78,11 @@ public class ReviewReplyApiController {
     public Result reviewReplyByReview(
             @PathVariable("review-id") final Long reviewId) {
 
-        log.debug("Review Reply Id[{}]", reviewId);
+        log.info("Review Reply Id[{}]", reviewId);
 
         return new Result(reviewReplyService.findByReviewId(reviewId)
                 .stream().map(ReviewReplyDto::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
 
@@ -96,11 +93,11 @@ public class ReviewReplyApiController {
     public Result reviewReplyByReviewOrderByCreateAsc(
             @PathVariable("review-id") final Long reviewId) {
 
-        log.debug("Review Reply Id[{}]", reviewId);
+        log.info("Review Reply Id[{}]", reviewId);
 
         return new Result(reviewReplyService.findAllByReviewIdOrderByCreateAsc(reviewId)
                 .stream().map(ReviewReplyDto::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
 
@@ -110,10 +107,10 @@ public class ReviewReplyApiController {
     public Result reviewReplyByReviewOrderByCreateDesc(
             @PathVariable("review-id") final Long reviewId) {
 
-        log.debug("Review Reply Id[{}]", reviewId);
+        log.info("Review Reply Id[{}]", reviewId);
 
         return new Result(reviewReplyService.findAllByReviewIdOrderByCreateDesc(reviewId)
                 .stream().map(ReviewReplyDto::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 }

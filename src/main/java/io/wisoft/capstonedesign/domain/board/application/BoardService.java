@@ -40,9 +40,11 @@ public class BoardService {
 
         // 회원 조회
         final Member member = memberService.findById(request.memberId());
+        log.info("member[{}]", member);
 
         // 게시글 생성
         final Board board = createBoard(request, member);
+        log.info("board[{}]", board);
         boardRepository.save(board);
 
         // 게시글 이미지 저장(로컬)
@@ -83,6 +85,7 @@ public class BoardService {
 
     private void validateUpdateParam(final UpdateBoardRequest request) {
         if (!StringUtils.hasText(request.newTitle()) || !StringUtils.hasText(request.newBody())) {
+            log.info("parameter is null");
             throw new IllegalValueException("파라미터가 비어있어 게시글을 수정할 수 없습니다.", ErrorCode.ILLEGAL_PARAM);
         }
     }
@@ -93,16 +96,20 @@ public class BoardService {
      * 게시글 단건 상세 조회
      */
     public Board findDetailById(final Long boardId) {
-        return boardRepository.findDetailById(boardId)
-                .orElseThrow(() -> new NotFoundException("게시글 조회 실패"));
+        return boardRepository.findDetailById(boardId).orElseThrow(() -> {
+            log.info("boardId[{}] not found", boardId);
+            return new NotFoundException("게시글 조회 실패");
+        });
     }
 
     /**
      * 게시글 단건 조회
      */
     public Board findById(final Long boardId) {
-        return boardRepository.findById(boardId)
-                .orElseThrow(() -> new NotFoundException("게시글 조회 실패"));
+        return boardRepository.findById(boardId).orElseThrow(() -> {
+            log.info("boardId[{}] not found", boardId);
+            return new NotFoundException("게시글 조회 실패");
+        });
     }
 
     public List<Board> findAll() {

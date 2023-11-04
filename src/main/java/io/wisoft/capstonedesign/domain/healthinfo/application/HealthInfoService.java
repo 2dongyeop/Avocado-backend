@@ -9,6 +9,7 @@ import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.global.mapper.DeptMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -31,8 +33,10 @@ public class HealthInfoService {
     public Long save(final CreateHealthInfoRequest request) {
 
         final Staff staff = staffService.findById(request.staffId());
+        log.info("staff[{}]", staff);
 
         final HealthInfo healthInfo = createHealthInfo(request, staff);
+        log.info("healthInfo[{}]", healthInfo);
 
         healthInfoRepository.save(healthInfo);
         return healthInfo.getId();
@@ -57,19 +61,22 @@ public class HealthInfoService {
 
     /* 조회 로직 */
     public HealthInfo findById(final Long healthInfoId) {
-        return healthInfoRepository.findById(healthInfoId)
-                .orElseThrow(() -> new NotFoundException("건강정보 조회 실패"));
+        return healthInfoRepository.findById(healthInfoId).orElseThrow(() -> {
+            log.info("healthInfoId[{}] not found", healthInfoId);
+            return new NotFoundException("건강정보 조회 실패");
+        });
     }
 
     public HealthInfo findDetailById(final Long healthInfoId) {
-        return healthInfoRepository.findDetailById(healthInfoId)
-                .orElseThrow(() -> new NotFoundException("건강정보 조회 실패"));
+        return healthInfoRepository.findDetailById(healthInfoId).orElseThrow(() -> {
+            log.info("healthInfoId[{}] not found", healthInfoId);
+            return new NotFoundException("건강정보 조회 실패");
+        });
     }
 
     public List<HealthInfo> findAll() {
         return healthInfoRepository.findAll();
     }
-
 
     /**
      * 특정 병과의 건강정보 목록을 페이지별로 조회하기

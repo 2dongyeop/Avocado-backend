@@ -12,12 +12,14 @@ import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -34,9 +36,13 @@ public class BoardReplyService {
     public Long save(final CreateBoardReplyRequest request) {
 
         final Board board = boardService.findById(request.boardId());
+        log.info("board[{}]", board);
+
         final Staff staff = staffService.findById(request.staffId());
+        log.info("staff[{}]", staff);
 
         final BoardReply boardReply = createBoardReply(request, board, staff);
+        log.info("boardReply[{}]", board);
 
         boardReplyRepository.save(boardReply);
         return boardReply.getId();
@@ -56,8 +62,10 @@ public class BoardReplyService {
      */
     @Transactional
     public void deleteBoardReply(final Long boardReplyId) {
-        final BoardReply boardReply = boardReplyRepository.findById(boardReplyId)
-                .orElseThrow(() -> new NotFoundException("게시글 댓글 조회 실패"));
+        final BoardReply boardReply = boardReplyRepository.findById(boardReplyId).orElseThrow(() -> {
+            log.info("boardReplyId[{}] not found", boardReplyId);
+            return new NotFoundException("게시글 댓글 조회 실패");
+        });
 
         boardReplyRepository.delete(boardReply);
     }
@@ -70,14 +78,17 @@ public class BoardReplyService {
 
         validateParameter(request);
 
-        final BoardReply boardReply = boardReplyRepository.findById(boardReplyId)
-                .orElseThrow(() -> new NotFoundException("게시글 댓글 조회 실패"));
+        final BoardReply boardReply = boardReplyRepository.findById(boardReplyId).orElseThrow(() -> {
+            log.info("boardReplyId[{}] not found", boardReplyId);
+            return new NotFoundException("게시글 댓글 조회 실패");
+        });
         boardReply.update(request.reply());
     }
 
     private void validateParameter(final UpdateBoardReplyRequest request) {
 
         if (!StringUtils.hasText(request.reply())) {
+            log.info("parameter is null");
             throw new IllegalValueException("수정할 내용이 비어있습니다.", ErrorCode.ILLEGAL_PARAM);
         }
     }
@@ -86,16 +97,20 @@ public class BoardReplyService {
      * 게시글댓글 단건 조회
      */
     public BoardReply findById(final Long boardReplyId) {
-        return boardReplyRepository.findById(boardReplyId)
-                .orElseThrow(() -> new NotFoundException("게시글 댓글 조회 실패"));
+        return boardReplyRepository.findById(boardReplyId).orElseThrow(() -> {
+            log.info("boardReplyId[{}] not found", boardReplyId);
+            return new NotFoundException("게시글 댓글 조회 실패");
+        });
     }
 
     /**
      * 게시글댓글 단건 상세 조회
      */
     public BoardReply findDetailById(final Long boardReplyId) {
-        return boardReplyRepository.findDetailById(boardReplyId)
-                .orElseThrow(() -> new NotFoundException("게시글 댓글 조회 실패"));
+        return boardReplyRepository.findDetailById(boardReplyId).orElseThrow(() -> {
+            log.info("boardReplyId[{}] not found", boardReplyId);;
+            return new NotFoundException("게시글 댓글 조회 실패");
+        });
     }
 
     /**

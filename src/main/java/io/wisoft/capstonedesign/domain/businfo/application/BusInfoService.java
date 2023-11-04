@@ -6,11 +6,13 @@ import io.wisoft.capstonedesign.global.enumeration.BusArea;
 import io.wisoft.capstonedesign.domain.businfo.persistence.BusInfoRepository;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -25,6 +27,8 @@ public class BusInfoService {
     public Long save(final CreateBusInfoRequest request) {
 
         final BusInfo busInfo = BusInfo.createBusInfo(request.busInfoPath(), BusArea.valueOf(request.area()));
+        log.info("busInfo[{}]", busInfo);
+
         busInfoRepository.save(busInfo);
         return busInfo.getId();
     }
@@ -35,8 +39,10 @@ public class BusInfoService {
     @Transactional
     public void delete(final Long busInfoId) {
 
-        final BusInfo busInfo = busInfoRepository.findById(busInfoId)
-                .orElseThrow(() -> new NotFoundException("버스정보 조회 실패"));
+        final BusInfo busInfo = busInfoRepository.findById(busInfoId).orElseThrow(() -> {
+            log.info("busInfoId[{}] not found", busInfoId);
+            return new NotFoundException("버스정보 조회 실패");
+        });
 
         busInfoRepository.delete(busInfo);
     }
@@ -44,8 +50,10 @@ public class BusInfoService {
 
     /* 조회 로직 */
     public BusInfo findById(final Long busInfoId) {
-        return busInfoRepository.findById(busInfoId)
-                .orElseThrow(() -> new NotFoundException("버스정보 조회 실패"));
+        return busInfoRepository.findById(busInfoId).orElseThrow(() -> {
+            log.info("busInfoId[{}] not found", busInfoId);
+            return new NotFoundException("버스정보 조회 실패");
+        });
     }
 
     public List<BusInfo> findAll() {

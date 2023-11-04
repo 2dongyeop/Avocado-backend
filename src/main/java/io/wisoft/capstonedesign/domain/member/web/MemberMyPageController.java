@@ -9,6 +9,7 @@ import io.wisoft.capstonedesign.domain.review.web.dto.ReviewListDto;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Slf4j
 @Tag(name = "회원 마이페이지")
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +32,8 @@ public class MemberMyPageController {
     public Page<ReviewListDto> reviewsByMemberId(
             @PathVariable("member-id") final Long id, final Pageable pageable) {
 
+        log.info("memberId[{}]", id);
+
         return memberMyPageService.findReviewsByMemberIdUsingPaging(id,pageable)
                 .map(ReviewListDto::new);
     }
@@ -41,6 +44,7 @@ public class MemberMyPageController {
     @GetMapping("/api/members/{member-id}/my-page/boards")
     public Page<BoardListDto> boardsByMemberUsingPaging(
             @PathVariable("member-id") final Long id, final Pageable pageable) {
+        log.info("memberId[{}]", id);
         return memberMyPageService.findBoardsByMemberIdUsingPaging(id, pageable).map(BoardListDto::new);
     }
 
@@ -49,9 +53,11 @@ public class MemberMyPageController {
     @SwaggerApiFailWithAuth
     @GetMapping("/api/members/{member-id}/my-page/appointments")
     public List<AppointmentDto> appointmentsByMemberId(@PathVariable("member-id") final Long memberId) {
+
+        log.info("memberId[{}]", memberId);
         return memberMyPageService.findAppointmentsByMemberId(memberId).stream()
                 .map(AppointmentDto::new)
-                .collect(Collectors.toList());
+                .toList());
     }
 
 
@@ -61,7 +67,7 @@ public class MemberMyPageController {
     public Page<PickDto> picksByMemberId(
             @PathVariable("member-id") final Long memberId, final Pageable pageable) {
 
-        return memberMyPageService.findPicksByMemberIdUsingPaging(memberId, pageable)
-                .map(PickDto::new);
+        log.info("memberId[{}]", memberId);
+        return memberMyPageService.findPicksByMemberIdUsingPaging(memberId, pageable).map(PickDto::new);
     }
 }

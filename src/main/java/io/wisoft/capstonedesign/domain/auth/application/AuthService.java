@@ -60,6 +60,7 @@ public class AuthService {
         validateDuplicateNickname(request.nickname());
 
         final Member member = createMember(request);
+        log.info("member[{}]", member);
 
         //회원 저장
         memberRepository.save(member);
@@ -106,6 +107,7 @@ public class AuthService {
         final Hospital hospital = hospitalService.findByHospitalName(request.hospitalName());
 
         final Staff staff = createStaff(request, hospital);
+        log.info("staff[{}]", staff);
 
         //의료진 저장
         staffRepository.save(staff);
@@ -149,23 +151,28 @@ public class AuthService {
     }
 
     private void validateDuplicateNickname(final String nickname) throws DuplicateNicknameException {
-        if (memberRepository.findValidateMemberByNickname(nickname).size() > 0) {
+        if (!memberRepository.findValidateMemberByNickname(nickname).isEmpty()) {
+            log.info("nickname[{}] is duplicated", nickname);
             throw new DuplicateNicknameException("닉네임 중복", ErrorCode.DUPLICATE_NICKNAME);
         }
     }
 
     private void validateEmailVerified(final String email) throws IllegalStateException {
-        final DBMailAuthentication mail = mailAuthenticationRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("이메일 인증 정보 조회 실패"));
+        final DBMailAuthentication mail = mailAuthenticationRepository.findByEmail(email).orElseThrow(() -> {
+
+            log.info("email[{}] not exist", email);
+            return new NotFoundException("이메일 인증 정보 조회 실패");
+        });
 
         if (!mail.isVerified()) {
+            log.info("email[{}] not verified", email);
             throw new IllegalValueException("이메일 인증을 완료해주세요.", ErrorCode.ILLEGAL_STATE);
         }
     }
 
     private void validatePassword(final LoginRequest request, final String member) throws IllegalValueException {
         if (!encryptHelper.isMatch(request.password(), member)) {
-            log.error("비밀번호가 일치하지 않습니다.");
+            log.info("비밀번호가 일치하지 않습니다.");
             throw new IllegalValueException("비밀번호가 일치하지 않습니다.", ErrorCode.ILLEGAL_PASSWORD);
         }
     }

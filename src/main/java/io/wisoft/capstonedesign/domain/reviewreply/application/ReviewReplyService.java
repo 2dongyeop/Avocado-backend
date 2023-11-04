@@ -12,12 +12,14 @@ import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -35,9 +37,13 @@ public class ReviewReplyService {
 
         //엔티티 조회
         final Member member = memberService.findById(request.memberId());
+        log.info("member[{}]", member);
+
         final Review review = reviewService.findById(request.reviewId());
+        log.info("review[{}]", review);
 
         final ReviewReply reviewReply = createReviewReply(request, member, review);
+        log.info("reviewReply[{}]", reviewReply);
 
         reviewReplyRepository.save(reviewReply);
         return reviewReply.getId();
@@ -69,6 +75,7 @@ public class ReviewReplyService {
 
         validateParameter(request);
         final ReviewReply reviewReply = findById(reviewReplyId);
+        log.info("reviewReply[{}]", reviewReply);
 
         reviewReply.updateReply(request.reply());
     }
@@ -76,6 +83,7 @@ public class ReviewReplyService {
     private void validateParameter(final UpdateReviewReplyRequest request) {
 
         if (!StringUtils.hasText(request.reply())) {
+            log.info("reply is empty");
             throw new IllegalValueException("reply가 비어있어 수정할 수 없습니다.", ErrorCode.ILLEGAL_PARAM);
         }
     }
@@ -85,16 +93,20 @@ public class ReviewReplyService {
      * 리뷰댓글 단건조회
      */
     public ReviewReply findById(final Long reviewReplyId) {
-        return reviewReplyRepository.findById(reviewReplyId)
-                .orElseThrow(() -> new NotFoundException("리뷰 댓글 조회 실패"));
+        return reviewReplyRepository.findById(reviewReplyId).orElseThrow(() -> {
+            log.info("reviewReplyId[{}] not found", reviewReplyId);
+            return new NotFoundException("리뷰 댓글 조회 실패");
+        });
     }
 
     /**
      * 리뷰댓글 단건 상세조회
      */
     public ReviewReply findDetailById(final Long reviewReplyId) {
-        return reviewReplyRepository.findDetailById(reviewReplyId)
-                .orElseThrow(() -> new NotFoundException("리뷰 댓글 조회 실패"));
+        return reviewReplyRepository.findDetailById(reviewReplyId).orElseThrow(() -> {
+            log.info("reviewReplyId[{}] not found", reviewReplyId);
+            return new NotFoundException("리뷰 댓글 조회 실패");
+        });
     }
 
 

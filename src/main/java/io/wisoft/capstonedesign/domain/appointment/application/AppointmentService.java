@@ -48,6 +48,7 @@ public class AppointmentService {
 
         //예약 정보 생성
         final Appointment appointment = createAppointment(request, member, hospital);
+        log.info("appointment[{}]", appointment);
 
         appointmentRepository.save(appointment);
         return appointment.getId();
@@ -76,6 +77,7 @@ public class AppointmentService {
 
     private void validateAppointmentDate(final LocalDateTime appointmentDate) {
         if (appointmentDate.isBefore(LocalDateTime.now())) {
+            log.info("appointmentDate[{}] is before than now", appointmentDate);
             throw new IllegalValueException("요청된 예약일자가 현재 날짜보다 이전 날짜입니다.", ErrorCode.ILLEGAL_DATE);
         }
     }
@@ -96,6 +98,8 @@ public class AppointmentService {
     }
 
     private void validateDept(final String dept) throws IllegalDeptException {
+
+        log.info("dept[{}]", dept);
         final HospitalDept[] values = HospitalDept.values();
         final Iterator<HospitalDept> iterator = Arrays.stream(values).iterator();
 
@@ -107,6 +111,7 @@ public class AppointmentService {
             }
         }
 
+        log.info("dept[{}] not exist", dept);
         throw new IllegalDeptException("일치하는 dept가 존재하지 않습니다.", ErrorCode.ILLEGAL_HOSPITAL_DEPT);
     }
 
@@ -114,13 +119,17 @@ public class AppointmentService {
     /* 조회 로직 */
 
     public Appointment findDetailById(final Long appointmentId) {
-        return appointmentRepository.findDetailById(appointmentId)
-                .orElseThrow(() -> new NotFoundException("appointment 조회 실패"));
+        return appointmentRepository.findDetailById(appointmentId).orElseThrow(() -> {
+            log.info("appointmentId[{}] not found", appointmentId);
+            return new NotFoundException("appointment 조회 실패");
+        });
     }
 
     public Appointment findById(final Long appointmentId) {
-        return appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> new NotFoundException("appointment 조회 실패"));
+        return appointmentRepository.findById(appointmentId).orElseThrow(() -> {
+            log.info("appointmentId[{}] not found", appointmentId);
+            return new NotFoundException("appointment 조회 실패");
+        });
     }
 }
 
