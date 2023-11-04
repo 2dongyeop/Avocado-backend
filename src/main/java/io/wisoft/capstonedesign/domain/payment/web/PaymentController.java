@@ -58,6 +58,8 @@ public class PaymentController {
         final boolean success = (boolean) model.get("success");
         final String errorMsg = (String) model.get("error_msg");
 
+        log.info("impUid[{}], merchantUid[{}], success[{}], errorMsg[{}]", impUid, merchantUid, success, errorMsg);
+
         if (!success) {
             log.error(errorMsg);
             return new ResponseEntity<>(errorMsg, responseHeaders, HttpStatus.OK);
@@ -68,11 +70,13 @@ public class PaymentController {
 
             final var iamportClient = new IamportClient(API_KEY, API_SECRET);
             final Payment payment = extractPayment(impUid, iamportClient);
+            log.info("payment[{}]", payment);
 
             return new ResponseEntity<>(paymentService.save(appointmentId, payment), responseHeaders, HttpStatus.OK);
 
         } catch (IamportResponseException | IOException e) {
 
+            log.info("error! in payment");
             log.error("{}", e);
 
             //예외 발생시 결제를 취소
@@ -90,8 +94,10 @@ public class PaymentController {
 
     private void validateAppointmentPayStatus(final Long appointmentId) {
         final Appointment appointment = appointmentService.findById(appointmentId);
+        log.info("appointment[{}]", appointment);
 
         if (appointment.getPayStatus() == PayStatus.COMPLETED) {
+            log.info("appointment[{}] is already pay", appointment);
             throw new IllegalValueException("이미 결제된 예약입니다.", ErrorCode.ILLEGAL_STATE);
         }
     }

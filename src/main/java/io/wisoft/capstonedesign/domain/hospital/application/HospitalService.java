@@ -7,11 +7,13 @@ import io.wisoft.capstonedesign.global.exception.duplicate.DuplicateHospitalExce
 import io.wisoft.capstonedesign.domain.hospital.web.dto.CreateHospitalRequest;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class HospitalService {
         validateDuplicateHospital(request);
 
         final Hospital hospital = createHospital(request);
+        log.info("hospital[{}]", hospital);
 
         hospitalRepository.save(hospital);
         return hospital.getId();
@@ -44,15 +47,20 @@ public class HospitalService {
 
     private void validateDuplicateHospital(final CreateHospitalRequest request) {
         final List<Hospital> hospitalList = hospitalRepository.findByName(request.name());
-        if (!hospitalList.isEmpty()) throw new DuplicateHospitalException("해당 이름을 가진 병원은 이미 등록되어 있습니다.", ErrorCode.DUPLICATE_HOSPITAL);
+        if (!hospitalList.isEmpty()) {
+            log.info("hospital name[{}] is duplicate", request.name());
+            throw new DuplicateHospitalException("해당 이름을 가진 병원은 이미 등록되어 있습니다.", ErrorCode.DUPLICATE_HOSPITAL);
+        }
     }
 
     /**
      * 병원 단건 조회
      */
     public Hospital findById(final Long hospitalId) {
-        return hospitalRepository.findById(hospitalId)
-                .orElseThrow(() -> new NotFoundException("병원 조회 실패"));
+        return hospitalRepository.findById(hospitalId).orElseThrow(() -> {
+            log.info("hospitalId[{}] not found", hospitalId);
+            return new NotFoundException("병원 조회 실패");
+        });
     }
 
     /* 병원 이름으로 조회 */
@@ -60,6 +68,7 @@ public class HospitalService {
         final List<Hospital> hospitalList = hospitalRepository.findByName(hospitalName);
 
         if (hospitalList.isEmpty()) {
+            log.info("hospitalName[{}] not found", hospitalName);
             throw new NotFoundException("해당 병원은 존재하지 않습니다.");
         }
         return hospitalList.get(0);

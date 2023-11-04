@@ -34,7 +34,7 @@ public class HealthInfoApiController {
     public CreateHealthInfoResponse createHealthInfo(
             @RequestBody @Valid final CreateHealthInfoRequest request) {
 
-        log.debug("CreateHealthInfoRequest[{}]", request);
+        log.info("CreateHealthInfoRequest[{}]", request);
 
         final Long id = healthInfoService.save(request);
         final HealthInfo healthInfo = healthInfoService.findById(id);
@@ -47,7 +47,7 @@ public class HealthInfoApiController {
     @DeleteMapping("/{id}")
     public DeleteHealthInfoResponse deleteHealthInfo(@PathVariable("id") final Long id) {
 
-        log.debug("HealthInfo Id[{}]", id);
+        log.info("HealthInfo Id[{}]", id);
 
         healthInfoService.delete(id);
         return new DeleteHealthInfoResponse(id);
@@ -59,7 +59,7 @@ public class HealthInfoApiController {
     @GetMapping("/{id}/details")
     public Result healthInfo(@PathVariable("id") final Long id) {
 
-        log.debug("HealthInfo Id[{}]", id);
+        log.info("HealthInfo Id[{}]", id);
         return new Result(new HealthInfoDto(healthInfoService.findDetailById(id)));
     }
 

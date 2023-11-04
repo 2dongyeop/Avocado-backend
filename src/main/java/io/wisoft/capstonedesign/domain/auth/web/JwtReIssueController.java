@@ -1,7 +1,6 @@
 package io.wisoft.capstonedesign.domain.auth.web;
 
 import io.wisoft.capstonedesign.domain.auth.web.dto.TokenResponse;
-import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
@@ -16,8 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 
 @Slf4j
@@ -38,12 +35,13 @@ public class JwtReIssueController {
 
         final String refreshToken = extractor.extract(request, tokenType);
         final String email = jwtTokenProvider.getSubject(refreshToken);
-        log.debug("refreshToken[{}], email[{}]", refreshToken, email);
+        log.info("refreshToken[{}], email[{}]", refreshToken, email);
 
         final Long id = extractId(email);
-        log.debug("member Id[{}]", id);
+        log.info("member Id[{}]", id);
 
         if (!redisAdapter.hasKey(email)) {
+            log.debug("email[{}] not exist in redis", email);
             throw new InvalidTokenException("유효하지 않은 토큰입니다", ErrorCode.INVALID_TOKEN);
         }
 
@@ -55,11 +53,11 @@ public class JwtReIssueController {
 
     private Long extractId(final String email) {
 
-        final Optional<Member> member = memberRepository.findByEmail(email);
-        if (member.isPresent()) {
-            return member.get().getId();
+        if (memberRepository.findByEmail(email).isPresent()) {
+            return memberRepository.findByEmail(email).get().getId();
         }
 
+        log.info("email[{}] not exist", email);
         throw new NotFoundException("이메일이 유효하지 않습니다.");
     }
 }

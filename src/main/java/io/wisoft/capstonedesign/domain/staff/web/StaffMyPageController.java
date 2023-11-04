@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.stream.Collectors;
-
 @Tag(name = "의료진 마이페이지")
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +25,7 @@ public class StaffMyPageController {
     public Result reviewListByStaffId(@PathVariable("staff-id") final Long id) {
         return new Result(staffMyPageService.findReviewByStaffHospitalName(id)
                 .stream().map(ReviewDto::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
 
@@ -37,6 +35,6 @@ public class StaffMyPageController {
     public Result boardListByStaffId(@PathVariable("staff-id") final Long id) {
         return new Result(staffMyPageService.findBoardListByStaffId(id).stream()
                 .map(BoardDto::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 }

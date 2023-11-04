@@ -1,8 +1,8 @@
 package io.wisoft.capstonedesign.domain.staff.web;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.application.StaffService;
+import io.wisoft.capstonedesign.domain.staff.persistence.Staff;
 import io.wisoft.capstonedesign.domain.staff.web.dto.*;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
@@ -10,8 +10,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @Tag(name = "의료진")
 @Slf4j
@@ -27,7 +25,7 @@ public class StaffApiController {
     @GetMapping("/{id}/details")
     public Result staff(@PathVariable("id") final Long id) {
 
-        log.debug("Staff Id[{}]", id);
+        log.info("Staff Id[{}]", id);
         return new Result(new StaffDto(staffService.findDetailById(id)));
     }
 
@@ -38,7 +36,7 @@ public class StaffApiController {
 
         return new Result(staffService.findAllByHospital().stream()
                 .map(StaffDto::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
 
@@ -49,7 +47,7 @@ public class StaffApiController {
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateStaffPasswordRequest request) {
 
-        log.debug("Staff Id[{}], UpdateStaffPasswordRequest[{}]", id, request);
+        log.info("Staff Id[{}], UpdateStaffPasswordRequest[{}]", id, request);
 
         staffService.updatePassword(id, request);
         final Staff staff = staffService.findById(id);
@@ -66,7 +64,7 @@ public class StaffApiController {
             @RequestParam(value = "hospitalName", required = false) final String hospitalName,
             @RequestParam(value = "photoPath", required = false) final String photoPath) {
 
-        log.debug("hospitalName[{}], photoPath[{}]", hospitalName, photoPath);
+        log.info("hospitalName[{}], photoPath[{}]", hospitalName, photoPath);
 
         staffService.updateStaff(id, hospitalName, photoPath);
         final Staff staff = staffService.findById(id);
@@ -80,7 +78,7 @@ public class StaffApiController {
     @DeleteMapping("/{id}")
     public DeleteStaffResponse deleteStaff(@PathVariable("id") final Long id) {
 
-        log.debug("Staff Id[{}]", id);
+        log.info("Staff Id[{}]", id);
 
         staffService.deleteStaff(id);
         return new DeleteStaffResponse(id);

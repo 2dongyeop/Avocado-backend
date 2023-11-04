@@ -34,7 +34,7 @@ public class MailController {
     @PostMapping("/certification-code")
     public ResponseEntity<String> sendCertificationCode(@RequestBody final MailObject mailObject) {
 
-        log.debug("MailObject[{}]", mailObject);
+        log.info("MailObject[{}]", mailObject);
 
         final CompletableFuture<String> future = CompletableFuture.supplyAsync(
                         () -> emailService.sendCertificationCode(mailObject.email()), executor);
@@ -49,7 +49,7 @@ public class MailController {
     @PostMapping("/certification-email")
     public ResponseEntity<String> certificateEmail(@RequestBody final CertificateMailRequest request) {
 
-        log.debug("CertificateMailRequest[{}]", request);
+        log.info("CertificateMailRequest[{}]", request);
 
         emailService.certificateEmail(request);
         return ResponseEntity.ok("success");
@@ -61,7 +61,7 @@ public class MailController {
     @PostMapping("/member/password")
     public ResponseEntity<String> resetMemberPassword(@RequestBody final MailObject mailObject) {
 
-        log.debug("MailObject[{}]", mailObject);
+        log.info("MailObject[{}]", mailObject);
 
         emailService.sendResetMemberPassword(mailObject.email());
         return ResponseEntity.ok("success");
@@ -72,7 +72,7 @@ public class MailController {
     @PostMapping("/staff/password")
     public ResponseEntity<String> resetStaffPassword(@RequestBody final MailObject mailObject) {
 
-        log.debug("MailObject[{}]", mailObject);
+        log.info("MailObject[{}]", mailObject);
 
         emailService.sendResetStaffPassword(mailObject.email());
         return ResponseEntity.ok("success");

@@ -30,7 +30,7 @@ public class ReviewApiController {
     @GetMapping("/{id}/details")
     public Result review(@PathVariable("id") final Long id) {
 
-        log.debug("review Id[{}]", id);
+        log.info("review Id[{}]", id);
         return new Result(new ReviewDto(reviewService.findDetailById(id)));
     }
 
@@ -39,10 +39,9 @@ public class ReviewApiController {
     @SwaggerApiFailWithoutAuth
     @GetMapping
     public Page<ReviewListDto> reviewsUsingPaging(
-            final Pageable pageable,
-            @RequestParam(required = false) final String deptNum) {
+            final Pageable pageable, @RequestParam(required = false) final String deptNum) {
 
-        log.debug("deptNum[{}]", deptNum);
+        log.info("deptNum[{}]", deptNum);
 
         if (StringUtils.hasText(deptNum)) {
             return reviewService.findByDeptUsingPaging(deptNum, pageable).map(ReviewListDto::new);
@@ -59,7 +58,7 @@ public class ReviewApiController {
             @RequestBody @Valid final ReviewsByTargetHospitalRequest request,
             final Pageable pageable) {
 
-        log.debug("ReviewsByTargetHospitalRequest[{}]", request);
+        log.info("ReviewsByTargetHospitalRequest[{}]", request);
 
         return reviewService.findByTargetHospital(request.targetHospital(), pageable)
                 .map(ReviewListDto::new);
@@ -72,7 +71,7 @@ public class ReviewApiController {
     public CreateReviewResponse createReview(
             @RequestBody @Valid final CreateReviewRequest request) {
 
-        log.debug("CreateReviewRequest[{}]", request);
+        log.info("CreateReviewRequest[{}]", request);
 
         final Long id = reviewService.save(request);
         final Review review = reviewService.findById(id);
@@ -88,7 +87,7 @@ public class ReviewApiController {
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateReviewRequest request) {
 
-        log.debug("review Id[{}], UpdateReviewRequest[{}]", id, request);
+        log.info("review Id[{}], UpdateReviewRequest[{}]", id, request);
 
         reviewService.updateTitleBody(id, request);
         final Review review = reviewService.findById(id);
@@ -102,7 +101,7 @@ public class ReviewApiController {
     @DeleteMapping("/{id}")
     public DeleteReviewResponse deleteReview(@PathVariable("id") final Long id) {
 
-        log.debug("review Id[{}]", id);
+        log.info("review Id[{}]", id);
 
         reviewService.deleteReview(id);
         final Review review = reviewService.findById(id);

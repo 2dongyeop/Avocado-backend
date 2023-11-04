@@ -14,10 +14,17 @@ import java.io.IOException;
 @Service
 public class SlackService {
 
+    @Value(value = "${slack.is-off}")
+    private String slackOff;
+
     @Value(value = "${slack.token}")
     private String slackToken;
 
     public void sendSlackMessage(final SlackErrorMessage message, final SlackConstant slackConstant) {
+
+        if (Boolean.parseBoolean(slackOff)) {
+            return;
+        }
 
         final String channel = slackConstant.getChannel();
 

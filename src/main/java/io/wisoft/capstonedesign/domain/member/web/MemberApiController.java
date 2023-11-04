@@ -1,17 +1,15 @@
 package io.wisoft.capstonedesign.domain.member.web;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.web.dto.*;
-import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @Tag(name = "회원")
 @Slf4j
@@ -27,7 +25,7 @@ public class MemberApiController {
     @GetMapping("/{id}/details")
     public Result member(@PathVariable("id") final Long id) {
 
-        log.debug("member Id[{}]", id);
+        log.info("member Id[{}]", id);
         return new Result(new MemberDto(memberService.findDetailById(id)));
     }
 
@@ -37,7 +35,7 @@ public class MemberApiController {
     public Result members() {
         return new Result(memberService.findAll().stream()
                 .map(MemberListDto::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
 
@@ -48,7 +46,7 @@ public class MemberApiController {
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateMemberPasswordRequest request) {
 
-        log.debug("member Id[{}], UpdateMemberPasswordRequest[{}]", id, request);
+        log.info("member Id[{}], UpdateMemberPasswordRequest[{}]", id, request);
 
         memberService.updatePassword(id, request);
         final Member member = memberService.findById(id);
@@ -65,7 +63,7 @@ public class MemberApiController {
             @RequestParam(value = "photoPath", required = false) final String photoPath,
             @RequestParam(value = "nickname", required = false) final String nickname) {
 
-        log.debug("photoPath[{}], nickname[{}]", photoPath, nickname);
+        log.info("photoPath[{}], nickname[{}]", photoPath, nickname);
 
         memberService.updateMember(id, photoPath, nickname);
         final Member member = memberService.findById(id);

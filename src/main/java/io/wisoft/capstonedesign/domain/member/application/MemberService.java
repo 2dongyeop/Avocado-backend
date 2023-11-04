@@ -8,12 +8,14 @@ import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.illegal.IllegalValueException;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -30,6 +32,8 @@ public class MemberService {
     public void updatePassword(final Long memberId, final UpdateMemberPasswordRequest request) {
 
         final Member member = findById(memberId);
+        log.info("member[{}]", member);
+
         validateMemberPassword(member, request);
 
         member.updatePassword(encryptHelper.encrypt(request.newPassword()));
@@ -39,6 +43,8 @@ public class MemberService {
     private void validateMemberPassword(final Member member, final UpdateMemberPasswordRequest request) {
 
         if (!encryptHelper.isMatch(request.oldPassword(), member.getPassword())) {
+
+            log.info("oldPassword[{}] not valid", request.oldPassword());
             throw new IllegalValueException("비밀번호가 일치하지 않아 변경할 수 없습니다.", ErrorCode.ILLEGAL_PASSWORD);
         }
     }
@@ -51,6 +57,7 @@ public class MemberService {
     public void updateMember(final Long memberId, final String photoPath, final String nickname) {
 
         final Member member = findById(memberId);
+        log.info("member[{}]", member);
 
         if (StringUtils.hasText(photoPath)) {
             member.uploadPhotoPath(photoPath);
@@ -65,6 +72,8 @@ public class MemberService {
     @Transactional
     public void deleteMember(final Long memberId) {
         final Member member = findById(memberId);
+        log.info("member[{}]", member);
+
         memberRepository.delete(member);
     }
 
@@ -72,13 +81,17 @@ public class MemberService {
      * 회원 조회
      */
     public Member findById(final Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException("회원 조회 실패"));
+        return memberRepository.findById(memberId).orElseThrow(() -> {
+            log.info("memberId[{}] not found", memberId);
+            return new NotFoundException("회원 조회 실패");
+        });
     }
 
     public Member findDetailById(final Long memberId) {
-        return memberRepository.findDetailById(memberId)
-                .orElseThrow(() -> new NotFoundException("회원 조회 실패"));
+        return memberRepository.findDetailById(memberId).orElseThrow(() -> {
+            log.info("memberId[{}] not found", memberId);
+            return new NotFoundException("회원 조회 실패");
+        });
     }
 
     public List<Member> findAll() {

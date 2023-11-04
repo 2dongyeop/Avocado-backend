@@ -47,6 +47,7 @@ public class ChatGptController {
             return ResponseEntity.ok(future.join());
         }
 
+        log.debug("too many request");
         throw new TooManyRequestException("너무 많은 요청을 보냈습니다!", ErrorCode.TOO_MANY_REQUESTS);
     }
 }

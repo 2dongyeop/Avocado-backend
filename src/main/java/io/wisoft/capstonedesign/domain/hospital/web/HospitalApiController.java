@@ -14,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.stream.Collectors;
-
 @Tag(name = "병원정보")
 @Slf4j
 @RestController
@@ -30,7 +28,7 @@ public class HospitalApiController {
     public CreateHospitalResponse createHospitalRequest(
             @RequestBody @Valid final CreateHospitalRequest request) {
 
-        log.debug("CreateHospitalRequest[{}]", request);
+        log.info("CreateHospitalRequest[{}]", request);
 
         final Long id = hospitalService.save(request);
         final Hospital getHospital = hospitalService.findById(id);
@@ -42,7 +40,7 @@ public class HospitalApiController {
     @GetMapping("/{id}/details")
     public Result hospital(@PathVariable final Long id) {
 
-        log.debug("Hospital Id[{}]", id);
+        log.info("Hospital Id[{}]", id);
         return new Result(new HospitalDto(hospitalService.findById(id)));
     }
 
@@ -53,6 +51,6 @@ public class HospitalApiController {
     public Result hospitals() {
         return new Result(hospitalService.findAll()
                 .stream().map(HospitalDto::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 }

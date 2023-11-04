@@ -36,7 +36,7 @@ public class BoardApiController {
     @GetMapping("/{id}/details")
     public Result board(@PathVariable final Long id) {
 
-        log.debug("board Id[{}]", id);
+        log.info("board Id[{}]", id);
         return new Result(new BoardDto(boardService.findDetailById(id)));
     }
 
@@ -48,6 +48,7 @@ public class BoardApiController {
             @RequestParam(required = false) final MultiValueMap<String, String> paramMap, final Pageable pageable) {
 
         final List<String> deptNumberList = paramMap.get("dept");
+        log.info("deptNumberList[{}]", deptNumberList);
 
         if (deptNumberList.isEmpty()) {
             return boardService.findAllUsingPaging(pageable).map(BoardListDto::new);
@@ -67,7 +68,7 @@ public class BoardApiController {
             @RequestParam final String dept,
             @RequestParam(value = "image", required = false) final MultipartFile[] multipartFiles) {
 
-        log.debug("memberId[{}], title[{}], body[{}], dept[{}]", memberId, title, body, dept);
+        log.info("memberId[{}], title[{}], body[{}], dept[{}]", memberId, title, body, dept);
         final CreateBoardRequest request = new CreateBoardRequest(memberId, title, body, dept);
 
         final Long id = boardService.save(request, multipartFiles);
@@ -82,7 +83,7 @@ public class BoardApiController {
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateBoardRequest request) {
 
-        log.debug("board Id[{}], UpdateBoardRequest[{}]", id, request);
+        log.info("board Id[{}], UpdateBoardRequest[{}]", id, request);
         boardService.updateTitleBody(id, request);
 
         final Board board = boardService.findById(id);
@@ -95,7 +96,7 @@ public class BoardApiController {
     @DeleteMapping("/{id}")
     public DeleteBoardResponse deleteBoard(@PathVariable("id") final Long id) {
 
-        log.debug("board Id[{}]", id);
+        log.info("board Id[{}]", id);
 
         boardService.deleteBoard(id);
         final Board board = boardService.findById(id);

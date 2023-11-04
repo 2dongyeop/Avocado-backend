@@ -25,7 +25,7 @@ public class AppointmentApiController {
     @PostMapping
     public CreateAppointmentResponse createAppointment(
             @RequestBody @Valid final CreateAppointmentRequest request) {
-        log.debug("CreateAppointmentRequest[{}]", request);
+        log.info("CreateAppointmentRequest[{}]", request);
         return new CreateAppointmentResponse(appointmentService.save(request));
     }
 
@@ -34,7 +34,7 @@ public class AppointmentApiController {
     @SwaggerApiFailWithAuth
     @DeleteMapping("/{id}")
     public DeleteAppointmentResponse deleteAppointment(@PathVariable("id") final Long id) {
-        log.debug("appointment Id[{}]", id);
+        log.info("appointment Id[{}]", id);
         appointmentService.deleteAppointment(id);
         return new DeleteAppointmentResponse(id);
     }
@@ -47,7 +47,7 @@ public class AppointmentApiController {
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateAppointmentRequest request) {
 
-        log.debug("appointment Id[{}], UpdateAppointmentRequest[{}]", id, request);
+        log.info("appointment Id[{}], UpdateAppointmentRequest[{}]", id, request);
         appointmentService.update(id, request);
         return new UpdateAppointmentResponse(id);
     }
@@ -56,7 +56,7 @@ public class AppointmentApiController {
     @SwaggerApiFailWithAuth
     @GetMapping("/{id}/details")
     public Result appointment(@PathVariable("id") final Long id) {
-        log.debug("appointment Id[{}]", id);
+        log.info("appointment Id[{}]", id);
         return new Result(new AppointmentDto(appointmentService.findDetailById(id)));
     }
 }

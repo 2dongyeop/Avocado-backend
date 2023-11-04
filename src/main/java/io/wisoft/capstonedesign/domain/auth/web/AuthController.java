@@ -44,13 +44,13 @@ public class AuthController {
     @PostMapping("/signup/members")
     public ResponseEntity<CreateMemberResponse> signupMember(@RequestBody @Valid final CreateMemberRequest request) {
 
-        log.debug("CreateMemberRequest[{}]", request);
+        log.info("CreateMemberRequest[{}]", request);
 
         validatePassword(request.password1(), request.password2());
         final Long id = authService.signUpMember(request);
 
         if (id == null) {
-            log.debug("login fail");
+            log.info("login fail");
             return ResponseEntity.badRequest().build();
         }
 
@@ -63,7 +63,7 @@ public class AuthController {
     @PostMapping("/login/members")
     public ResponseEntity<TokenResponse> loginMember(@RequestBody @Valid final LoginRequest request) {
 
-        log.debug("LoginRequest[{}]", request);
+        log.info("LoginRequest[{}]", request);
         return ResponseEntity.ok(authService.loginMember(request));
     }
 
@@ -76,7 +76,7 @@ public class AuthController {
         final String accessToken = authExtractor.extract(request, "Bearer");
         final String email = jwtTokenProvider.getSubject(accessToken);
 
-        log.debug("accessToken[{}], email[{}]", accessToken, email);
+        log.info("accessToken[{}], email[{}]", accessToken, email);
 
         redisJwtBlackList.addToBlackList(email);
 
@@ -89,7 +89,7 @@ public class AuthController {
     public CreateStaffResponse signupStaff(
             @RequestBody @Valid final CreateStaffRequest request) {
 
-        log.debug("CreateStaffRequest[{}]", request);
+        log.info("CreateStaffRequest[{}]", request);
 
         validatePassword(request.password1(), request.password2());
         return new CreateStaffResponse(authService.signUpStaff(request));
@@ -101,12 +101,13 @@ public class AuthController {
     @PostMapping("/login/staff")
     public ResponseEntity<TokenResponse> loginStaff(@RequestBody @Valid final LoginRequest request) {
 
-        log.debug("LoginRequest[{}]", request);
+        log.info("LoginRequest[{}]", request);
         return ResponseEntity.ok(authService.loginStaff(request));
     }
 
-    private static void validatePassword(final String password1, final String confirmPassword) throws IllegalValueException {
+    private void validatePassword(final String password1, final String confirmPassword) throws IllegalValueException {
         if (!password1.equals(confirmPassword)) {
+            log.info("password1[{}], confirmPassword[{}] not valid", password1, confirmPassword);
             throw new IllegalValueException("두 비밀번호 값이 일치하지 않습니다.", ErrorCode.ILLEGAL_PASSWORD);
         }
     }

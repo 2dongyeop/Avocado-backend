@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'io.wisoft'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = '17'
 
 configurations {
@@ -34,17 +34,13 @@ dependencies {
 
     //내장 WAS를 tomcat에서 undertow로 변경
     implementation('org.springframework.boot:spring-boot-starter-web')
-//    {
-//        exclude module: 'spring-boot-starter-tomcat'
-//    }
-//    implementation('org.springframework.boot:spring-boot-starter-undertow')
+    {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    implementation('org.springframework.boot:spring-boot-starter-undertow')
 
     //Bucket4j
     implementation 'com.bucket4j:bucket4j-core:8.3.0'
-
-    // 모니터링을 위한 프로메테우스 & 액츄에이터
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("io.micrometer:micrometer-registry-prometheus.yml")
 
     //autoparams
     testImplementation 'io.github.autoparams:autoparams:1.1.1'

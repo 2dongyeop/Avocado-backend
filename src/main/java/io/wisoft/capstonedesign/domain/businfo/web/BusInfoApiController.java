@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.stream.Collectors;
 
 @Tag(name = "셔틀버스")
 @Slf4j
@@ -33,7 +32,7 @@ public class BusInfoApiController {
     public CreateBusInfoResponse createBusInfo(
             @RequestBody @Valid final CreateBusInfoRequest request) {
 
-        log.debug("CreateBusInfoRequest[{}]", request);
+        log.info("CreateBusInfoRequest[{}]", request);
         return new CreateBusInfoResponse(busInfoService.save(request));
     }
 
@@ -43,7 +42,7 @@ public class BusInfoApiController {
     @GetMapping("/{id}/details")
     public Result busInfo(@PathVariable final Long id) {
 
-        log.debug("BusInfo Id[{}]", id);
+        log.info("BusInfo Id[{}]", id);
         return new Result(new BusInfoDto(busInfoService.findById(id)));
     }
 
@@ -54,12 +53,12 @@ public class BusInfoApiController {
     public Result busInfoByArea(
             @RequestBody @Valid final BusInfoByAreaRequest request) {
 
-        log.debug("BusInfoByAreaRequest[{}]", request);
+        log.info("BusInfoByAreaRequest[{}]", request);
         validateArea(request.area());
 
         return new Result(busInfoService.findByArea(request.area())
                 .stream().map(BusInfoDto::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     private void validateArea(final String area) {
@@ -67,12 +66,13 @@ public class BusInfoApiController {
         final Iterator<BusArea> iterator = Arrays.stream(BusArea.values()).iterator();
 
         while (iterator.hasNext()) {
-            BusArea busArea = iterator.next();
+            final BusArea busArea = iterator.next();
 
             if (busArea.getCode().equals(area.toUpperCase())) {
                 return;
             }
         }
+        log.info("area[{}] is not BusArea EnumType", area);
         throw new IllegalValueException("일치하는 BusArea가 없습니다.", ErrorCode.ILLEGAL_AREA);
     }
 
@@ -81,7 +81,7 @@ public class BusInfoApiController {
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable final Long id) {
 
-        log.debug("BusInfo Id[{}]", id);
+        log.info("BusInfo Id[{}]", id);
 
         busInfoService.delete(id);
         return new Result(new DeleteBusInfoResponse(id));

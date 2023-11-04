@@ -1,8 +1,8 @@
 package io.wisoft.capstonedesign.domain.boardreply.web;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
 import io.wisoft.capstonedesign.domain.boardreply.application.BoardReplyService;
+import io.wisoft.capstonedesign.domain.boardreply.persistence.BoardReply;
 import io.wisoft.capstonedesign.domain.boardreply.web.dto.*;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApiFailWithAuth;
@@ -11,8 +11,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @Tag(name = "게시판 댓글")
 @Slf4j
@@ -29,7 +27,7 @@ public class BoardReplyApiController {
     public CreateBoardReplyResponse createBoardReply(
             @RequestBody @Valid final CreateBoardReplyRequest request) {
 
-        log.debug("CreateBoardReplyRequest[{}]", request);
+        log.info("CreateBoardReplyRequest[{}]", request);
 
         final Long id = boardReplyService.save(request);
         final BoardReply boardReply = boardReplyService.findById(id);
@@ -44,7 +42,7 @@ public class BoardReplyApiController {
             @PathVariable("id") final Long id,
             @RequestBody @Valid final UpdateBoardReplyRequest request) {
 
-        log.debug("boardReply Id[{}], UpdateBoardReplyRequest[{}]", id, request);
+        log.info("boardReply Id[{}], UpdateBoardReplyRequest[{}]", id, request);
 
         boardReplyService.update(id, request);
         final BoardReply boardReply = boardReplyService.findById(id);
@@ -57,7 +55,7 @@ public class BoardReplyApiController {
     @DeleteMapping("/{id}")
     public DeleteBoardReplyResponse deleteBoardReply(@PathVariable("id") final Long id) {
 
-        log.debug("board Reply Id[{}]", id);
+        log.info("board Reply Id[{}]", id);
 
         boardReplyService.deleteBoardReply(id);
         return new DeleteBoardReplyResponse(id);
@@ -69,7 +67,7 @@ public class BoardReplyApiController {
     @GetMapping("/{id}/details")
     public Result boardReply(@PathVariable("id") final Long id) {
 
-        log.debug("board Reply Id[{}]", id);
+        log.info("board Reply Id[{}]", id);
         return new Result(new BoardReplyDto(boardReplyService.findDetailById(id)));
     }
 
@@ -79,11 +77,11 @@ public class BoardReplyApiController {
     @GetMapping("/board/{board-id}/create-asc")
     public Result boardReplyByBoardOrderByCreateAsc(@PathVariable("board-id") final Long id) {
 
-        log.debug("board Reply Id[{}]", id);
+        log.info("board Reply Id[{}]", id);
 
         return new Result(boardReplyService.findByBoardIdOrderByCreateAsc(id)
                 .stream().map(BoardReplyDto::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
 
@@ -92,10 +90,10 @@ public class BoardReplyApiController {
     @GetMapping("/board/{board-id}/create-desc")
     public Result boardReplyByBoardOrderByCreateDesc(@PathVariable("board-id") final Long id) {
 
-        log.debug("board Reply Id[{}]", id);
+        log.info("board Reply Id[{}]", id);
 
         return new Result(boardReplyService.findByBoardIdOrderByCreateDesc(id)
                 .stream().map(BoardReplyDto::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 }

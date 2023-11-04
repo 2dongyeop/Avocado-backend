@@ -25,7 +25,7 @@ public class PickApiController {
     @PostMapping
     public CreatePickResponse createPick(@RequestBody @Valid final CreatePickRequest request) {
 
-        log.debug("CreatePickRequest[{}]", request);
+        log.info("CreatePickRequest[{}]", request);
         return new CreatePickResponse(pickService.save(request));
     }
 
@@ -35,7 +35,7 @@ public class PickApiController {
     @DeleteMapping("/{id}")
     public DeletePickResponse deletePick(@PathVariable("id") final Long id) {
 
-        log.debug("pick Id[{}]", id);
+        log.info("pick Id[{}]", id);
 
         pickService.cancelPick(id);
         return new DeletePickResponse(id);
@@ -47,7 +47,7 @@ public class PickApiController {
     @GetMapping("/{id}/details")
     public Result pick(@PathVariable("id") final Long id) {
 
-        log.debug("pick Id[{}]", id);
+        log.info("pick Id[{}]", id);
 
         return new Result(new PickDto(pickService.findDetailById(id)));
     }

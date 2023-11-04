@@ -13,6 +13,7 @@ import io.wisoft.capstonedesign.domain.member.application.MemberService;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
 import io.wisoft.capstonedesign.global.mapper.DeptMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -41,6 +43,7 @@ public class ReviewService {
 
         //엔티티 조회
         final Member member = memberService.findById(request.memberId());
+        log.info("member[{}]", member);
 
         final Review review = Review.builder()
                 .member(member)
@@ -51,19 +54,22 @@ public class ReviewService {
                 .targetDept(HospitalDept.valueOf(request.targetDept()))
                 .reviewPhotoPath("path1")
                 .build();
+        log.info("review[{}]", review);
 
         reviewRepository.save(review);
         return review.getId();
     }
 
     private void validateExistHospital(final String targetHospital) {
-        if (hospitalRepository.findByName(targetHospital).size() == 0) {
+        if (hospitalRepository.findByName(targetHospital).isEmpty()) {
+            log.info("targetHospital[{}] not exist", targetHospital);
             throw new NotFoundException("존재하지 않는 병원입니다.");
         }
     }
 
     private void validateStarPoint(final int starPoint) {
         if (starPoint <= 0 || starPoint >= 6) {
+            log.info("startPoint[{}] not between 1 and 5", starPoint);
             throw new IllegalValueException("별점의 범위는 1~5 사이여야 합니다.", ErrorCode.ILLEGAL_STAR_POINT);
         }
     }
@@ -75,6 +81,8 @@ public class ReviewService {
     @Transactional
     public void deleteReview(final Long reviewId) {
         final Review review = findById(reviewId);
+        log.info("review[{}]", review);
+
         review.delete();
     }
 
@@ -86,6 +94,7 @@ public class ReviewService {
 
         validateTitleBody(request);
         final Review review = findById(reviewId);
+        log.info("review[{}]", review);
 
         review.updateTitleBody(request.newTitle(), request.newBody());
     }
@@ -93,6 +102,7 @@ public class ReviewService {
     private void validateTitleBody(final UpdateReviewRequest request) {
 
         if (!StringUtils.hasText(request.newTitle()) || !StringUtils.hasText(request.newBody())) {
+            log.info("request title or body is null");
             throw new IllegalValueException("제목이나 본문이 비어있습니다.", ErrorCode.ILLEGAL_PARAM);
         }
     }
@@ -100,28 +110,39 @@ public class ReviewService {
 
     /* 조회 로직 */
     public Review findById(final Long reviewId) {
-        return reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new NotFoundException("리뷰 조회 실패"));
+        return reviewRepository.findById(reviewId).orElseThrow(() -> {
+            log.info("reviewId[{}] not found", reviewId);
+            return new NotFoundException("리뷰 조회 실패");
+        });
     }
 
-    public List<Review> findAll() { return reviewRepository.findAll(); }
+    public List<Review> findAll() {
+        return reviewRepository.findAll();
+    }
 
-    /** 상세 조회 */
+    /**
+     * 상세 조회
+     */
     public Review findDetailById(final Long reviewId) {
         return findById(reviewId);
     }
 
-    /** 리뷰 목록 페이징 조회 */
+    /**
+     * 리뷰 목록 페이징 조회
+     */
     public Page<Review> findByUsingPaging(final Pageable pageable) {
         return reviewRepository.findByUsingPaging(pageable);
     }
 
-    /** 특정 병원의 리뷰 페이징 조회 */
+    /**
+     * 특정 병원의 리뷰 페이징 조회
+     */
     public Page<Review> findByTargetHospital(final String targetHospital, final Pageable pageable) {
 
         final Page<Review> page = reviewRepository.findByTargetHospitalUsingPaging(targetHospital, pageable);
 
         if (page.isEmpty()) {
+            log.info("targetHospital[{}]'s review emtpy", targetHospital);
             throw new NotFoundException("해당 병원에 대한 리뷰는 존재하지 않습니다.");
         }
         return page;
@@ -132,7 +153,8 @@ public class ReviewService {
         final Page<Review> page = reviewRepository.findByDeptUsingPaging(DeptMapper.numberToDept(deptNum), pageable);
 
         if (page.isEmpty()) {
-            throw new NotFoundException("해당 병원에 대한 리뷰는 존재하지 않습니다.");
+            log.info("deptNum[{}]'s review emtpy", deptNum);
+            throw new NotFoundException("해당 병과에 대한 리뷰는 존재하지 않습니다.");
         }
         return page;
     }
