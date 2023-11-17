@@ -63,11 +63,11 @@ public class AuthServiceTest extends ServiceTest {
 
         //when -- 동작
         final LoginRequest loginRequest = new LoginRequest(request.email(), request.password1());
-        final TokenResponse tokenResponse = authService.loginMember(loginRequest);
+        final LoginResponse loginResponse = authService.loginMember(loginRequest);
 
         //then -- 검증
-        Assertions.assertThat(tokenResponse.accessToken()).isNotNull();
-        Assertions.assertThat(tokenResponse.refreshToken()).isNotNull();
+        Assertions.assertThat(loginResponse.accessToken()).isNotNull();
+        Assertions.assertThat(loginResponse.refreshToken()).isNotNull();
     }
 
 
@@ -118,11 +118,11 @@ public class AuthServiceTest extends ServiceTest {
 
         //when -- 동작
         final LoginRequest loginRequest = new LoginRequest(request.email(), request.password1());
-        final TokenResponse tokenResponse = authService.loginStaff(loginRequest);
+        final LoginResponse loginResponse = authService.loginStaff(loginRequest);
 
         //then -- 검증
-        Assertions.assertThat(tokenResponse.accessToken()).isNotNull();
-        Assertions.assertThat(tokenResponse.refreshToken()).isNotNull();
+        Assertions.assertThat(loginResponse.accessToken()).isNotNull();
+        Assertions.assertThat(loginResponse.refreshToken()).isNotNull();
     }
 
 

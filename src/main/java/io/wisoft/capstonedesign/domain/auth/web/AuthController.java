@@ -6,7 +6,7 @@ import io.wisoft.capstonedesign.domain.auth.application.AuthService;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberResponse;
 import io.wisoft.capstonedesign.domain.auth.web.dto.LoginRequest;
-import io.wisoft.capstonedesign.domain.auth.web.dto.TokenResponse;
+import io.wisoft.capstonedesign.domain.auth.web.dto.LoginResponse;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateStaffResponse;
 import io.wisoft.capstonedesign.global.annotation.swagger.SwaggerApi;
@@ -61,7 +61,7 @@ public class AuthController {
     @SwaggerApi(summary = "회원 로그인", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
     @PostMapping("/login/members")
-    public ResponseEntity<TokenResponse> loginMember(@RequestBody @Valid final LoginRequest request) {
+    public ResponseEntity<LoginResponse> loginMember(@RequestBody @Valid final LoginRequest request) {
 
         log.info("LoginRequest[{}]", request);
         return ResponseEntity.ok(authService.loginMember(request));
@@ -99,7 +99,7 @@ public class AuthController {
     @SwaggerApi(summary = "의료진 로그인", implementation = ResponseEntity.class)
     @SwaggerApiFailWithoutAuth
     @PostMapping("/login/staff")
-    public ResponseEntity<TokenResponse> loginStaff(@RequestBody @Valid final LoginRequest request) {
+    public ResponseEntity<LoginResponse> loginStaff(@RequestBody @Valid final LoginRequest request) {
 
         log.info("LoginRequest[{}]", request);
         return ResponseEntity.ok(authService.loginStaff(request));
