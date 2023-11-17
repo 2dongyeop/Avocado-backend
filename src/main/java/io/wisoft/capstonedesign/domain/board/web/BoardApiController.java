@@ -62,14 +62,10 @@ public class BoardApiController {
     @SwaggerApiFailWithAuth
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public CreateBoardResponse createBoard(
-            @RequestParam final Long memberId,
-            @RequestParam final String title,
-            @RequestParam final String body,
-            @RequestParam final String dept,
+            @RequestBody final CreateBoardRequest request,
             @RequestParam(value = "image", required = false) final MultipartFile[] multipartFiles) {
 
-        log.info("memberId[{}], title[{}], body[{}], dept[{}]", memberId, title, body, dept);
-        final CreateBoardRequest request = new CreateBoardRequest(memberId, title, body, dept);
+        log.info("request[{}]", request);
 
         final Long id = boardService.save(request, multipartFiles);
         return new CreateBoardResponse(id);

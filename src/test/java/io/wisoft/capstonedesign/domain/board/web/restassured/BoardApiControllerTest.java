@@ -213,11 +213,10 @@ public class BoardApiControllerTest extends ApiTest {
 
 
     private Long 게시글생성(final Long memberId) {
-        return boardApiController.createBoard(memberId,
-                "title",
-                "body",
-                "DENTAL",
-                new MultipartFile[]{}).id();
+        return boardApiController.createBoard(
+                        new CreateBoardRequest(memberId, "title", "body", "DENTAL"),
+                        new MultipartFile[]{})
+                .id();
     }
 
 
