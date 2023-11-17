@@ -1,6 +1,7 @@
 package io.wisoft.capstonedesign.domain.auth.web;
 
-import io.wisoft.capstonedesign.domain.auth.web.dto.TokenResponse;
+import io.wisoft.capstonedesign.domain.auth.web.dto.LoginResponse;
+import io.wisoft.capstonedesign.domain.member.persistence.Member;
 import io.wisoft.capstonedesign.domain.member.persistence.MemberRepository;
 import io.wisoft.capstonedesign.global.exception.ErrorCode;
 import io.wisoft.capstonedesign.global.exception.notfound.NotFoundException;
@@ -31,14 +32,14 @@ public class JwtReIssueController {
     private final MemberRepository memberRepository;
 
     @GetMapping("/jwt/re-issuance")
-    public ResponseEntity<TokenResponse> reIssueAccessToken(final HttpServletRequest request) {
+    public ResponseEntity<LoginResponse> reIssueAccessToken(final HttpServletRequest request) {
 
         final String refreshToken = extractor.extract(request, tokenType);
         final String email = jwtTokenProvider.getSubject(refreshToken);
         log.info("refreshToken[{}], email[{}]", refreshToken, email);
 
-        final Long id = extractId(email);
-        log.info("member Id[{}]", id);
+        final Member member = extractMemberInfo(email);
+        log.info("member[{}]", member);
 
         if (!redisAdapter.hasKey(email)) {
             log.debug("email[{}] not exist in redis", email);
@@ -48,13 +49,13 @@ public class JwtReIssueController {
         final String reIssuedAccessToken = jwtTokenProvider.createAccessToken(email);
 
         log.debug("{}님에게 accessToken {}을 재발급합니다.", email, reIssuedAccessToken);
-        return ResponseEntity.ok(new TokenResponse(id, tokenType, reIssuedAccessToken, refreshToken));
+        return ResponseEntity.ok(new LoginResponse(member.getId(), tokenType, reIssuedAccessToken, refreshToken, member.getNickname()));
     }
 
-    private Long extractId(final String email) {
+    private Member extractMemberInfo(final String email) {
 
         if (memberRepository.findByEmail(email).isPresent()) {
-            return memberRepository.findByEmail(email).get().getId();
+            return memberRepository.findByEmail(email).get();
         }
 
         log.info("email[{}] not exist", email);

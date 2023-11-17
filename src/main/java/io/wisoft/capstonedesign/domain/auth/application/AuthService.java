@@ -3,7 +3,7 @@ package io.wisoft.capstonedesign.domain.auth.application;
 
 import io.wisoft.capstonedesign.domain.auth.persistence.DBMailAuthentication;
 import io.wisoft.capstonedesign.domain.auth.persistence.MailAuthenticationRepository;
-import io.wisoft.capstonedesign.domain.auth.web.dto.TokenResponse;
+import io.wisoft.capstonedesign.domain.auth.web.dto.LoginResponse;
 import io.wisoft.capstonedesign.global.config.bcrypt.EncryptHelper;
 import io.wisoft.capstonedesign.domain.auth.web.dto.CreateMemberRequest;
 import io.wisoft.capstonedesign.domain.auth.web.dto.LoginRequest;
@@ -78,7 +78,7 @@ public class AuthService {
      * 로그인
      */
     @Transactional
-    public TokenResponse loginMember(final LoginRequest request) {
+    public LoginResponse loginMember(final LoginRequest request) {
 
         final Member member = memberRepository.findMemberByEmail(request.email())
                 .orElseThrow(() -> new NotFoundException("회원 조회 실패"));
@@ -92,7 +92,7 @@ public class AuthService {
 
         redisAdapter.setValue(member.getEmail(), refreshToken, REFRESH_TOKEN_EXPIRE_SECOND, TimeUnit.SECONDS);
 
-        return new TokenResponse(member.getId(), tokenType, accessToken, refreshToken);
+        return new LoginResponse(member.getId(), tokenType, accessToken, refreshToken, member.getNickname());
     }
 
 
@@ -124,7 +124,7 @@ public class AuthService {
      * 의료진 로그인
      */
     @Transactional
-    public TokenResponse loginStaff(final LoginRequest request) {
+    public LoginResponse loginStaff(final LoginRequest request) {
 
         final Staff staff = staffRepository.findStaffByEmail(request.email())
                 .orElseThrow(() -> new NotFoundException("의료진 조회 실패"));
@@ -138,7 +138,7 @@ public class AuthService {
 
         redisAdapter.setValue(staff.getEmail(), refreshToken, REFRESH_TOKEN_EXPIRE_SECOND, TimeUnit.SECONDS);
 
-        return new TokenResponse(staff.getId(), tokenType, accessToken, refreshToken);
+        return new LoginResponse(staff.getId(), tokenType, accessToken, refreshToken, staff.getName());
     }
 
     private Member createMember(final CreateMemberRequest request) {
