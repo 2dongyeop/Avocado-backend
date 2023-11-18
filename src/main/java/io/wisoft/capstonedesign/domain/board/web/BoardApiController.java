@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,7 +59,7 @@ public class BoardApiController {
 
     @SwaggerApi(summary = "게시글 작성", implementation = CreateBoardResponse.class)
     @SwaggerApiFailWithAuth
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     public CreateBoardResponse createBoard(
             @RequestBody final CreateBoardRequest request,
             @RequestParam(value = "image", required = false) final MultipartFile[] multipartFiles) {
