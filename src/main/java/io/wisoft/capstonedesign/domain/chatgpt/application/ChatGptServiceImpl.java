@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import static io.wisoft.capstonedesign.global.config.ChatGptConfig.MEDIA_TYPE;
+
 @Slf4j
 @Service
 public class ChatGptServiceImpl implements ChatGptService {
@@ -50,7 +52,7 @@ public class ChatGptServiceImpl implements ChatGptService {
     //comment: Build headers
     private HttpEntity<ChatGptRequest> buildHttpEntity(final ChatGptRequest chatGptRequest) {
         final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(ChatGptConfig.MEDIA_TYPE));
+        headers.setContentType(MediaType.parseMediaType(MEDIA_TYPE));
         headers.add(ChatGptConfig.AUTHORIZATION, ChatGptConfig.TOKEN_TYPE + ChatGptConfig.API_KEY);
         return new HttpEntity<>(chatGptRequest, headers);
     }
@@ -96,7 +98,7 @@ public class ChatGptServiceImpl implements ChatGptService {
             case "유방함・유방 종괴" -> "유방외과";
             case "급격한 체중변화" -> "내분비내과";
             case "학습장애・집중력저하" -> "정신건강의학과";
-            default -> "다시 질문해주세요.";
+            default -> "질문 게시판을 활용해 보세요.";
         };
     }
 }

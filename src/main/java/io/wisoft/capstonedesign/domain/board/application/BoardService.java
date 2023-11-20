@@ -67,8 +67,7 @@ public class BoardService {
      */
     @Transactional
     public void deleteBoard(final Long boardId) {
-        final Board board = findById(boardId);
-        board.delete();
+        boardRepository.deleteById(boardId);
     }
 
     /**
@@ -96,7 +95,7 @@ public class BoardService {
      * 게시글 단건 상세 조회
      */
     public Board findDetailById(final Long boardId) {
-        return boardRepository.findDetailById(boardId).orElseThrow(() -> {
+        return boardRepository.findById(boardId).orElseThrow(() -> {
             log.info("boardId[{}] not found", boardId);
             return new NotFoundException("게시글 조회 실패");
         });

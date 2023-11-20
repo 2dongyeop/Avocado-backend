@@ -49,7 +49,7 @@ public class BoardApiController {
         final List<String> deptNumberList = paramMap.get("dept");
         log.info("deptNumberList[{}]", deptNumberList);
 
-        if (deptNumberList.isEmpty()) {
+        if (deptNumberList == null) {
             return boardService.findAllUsingPaging(pageable).map(BoardListDto::new);
         }
 

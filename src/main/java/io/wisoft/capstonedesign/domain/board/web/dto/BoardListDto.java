@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BoardListDto {
 
+    private Long id;
     private String title;
     private String body;
     private String dept;
@@ -22,6 +23,7 @@ public class BoardListDto {
     private LocalDateTime updateAt;
 
     public BoardListDto(Board board) {
+        this.id = board.getId();
         this.title = board.getTitle();
         this.body = board.getBody();
         this.dept = board.getDept().toString();
