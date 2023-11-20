@@ -21,7 +21,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("select b from Board b" +
             " join fetch b.member m" +
             " join b.boardReplyList br" +
-            " where b.id =:id")
+            " where b.id = :id")
+//    @Query(value = "SELECT * FROM board WHERE board_id = :id", nativeQuery = true)
     Optional<Board> findDetailById(@Param("id") final Long id);
 
 
