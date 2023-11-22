@@ -73,15 +73,12 @@ public class HealthInfoApiController {
     @SwaggerApiFailWithoutAuth
     @GetMapping
     public Page<HealthInfoDto> healthInfosByDepartmentUsingPaging(
-            @RequestParam(required = false) final MultiValueMap<String, String> paramMap,
-            final Pageable pageable) {
+            @RequestParam(required = false) final MultiValueMap<String, String> paramMap, final Pageable pageable) {
 
         final List<String> deptNumberList = paramMap.get("dept");
 
-        if (deptNumberList.isEmpty()) {
-            return healthInfoService.findByUsingPaging(pageable).map(HealthInfoDto::new);
-        }
-
-        return healthInfoService.findAllByDeptUsingPagingMultiValue(deptNumberList, pageable).map(HealthInfoDto::new);
+        return deptNumberList == null ?
+                healthInfoService.findByUsingPaging(pageable).map(HealthInfoDto::new)
+                : healthInfoService.findAllByDeptUsingPagingMultiValue(deptNumberList, pageable).map(HealthInfoDto::new);
     }
 }
