@@ -74,8 +74,8 @@ public class BoardReplyApiController {
 
     @SwaggerApi(summary = "특정 게시글의 댓글 목록 오름차순 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/board/{board-id}/create-asc")
-    public Result boardReplyByBoardOrderByCreateAsc(@PathVariable("board-id") final Long id) {
+    @GetMapping("/board/{boardId}/create-asc")
+    public Result boardReplyByBoardOrderByCreateAsc(@PathVariable("boardId") final Long id) {
 
         log.info("board Reply Id[{}]", id);
 
@@ -87,8 +87,8 @@ public class BoardReplyApiController {
 
     @SwaggerApi(summary = "특정 게시글의 댓글 목록 내림차순 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/board/{board-id}/create-desc")
-    public Result boardReplyByBoardOrderByCreateDesc(@PathVariable("board-id") final Long id) {
+    @GetMapping("/board/{boardId}/create-desc")
+    public Result boardReplyByBoardOrderByCreateDesc(@PathVariable("boardId") final Long id) {
 
         log.info("board Reply Id[{}]", id);
 
