@@ -54,13 +54,11 @@ public class ReviewApiController {
     @SwaggerApi(summary = "특정 병원의 리뷰 목록 페이징 조회", implementation = Page.class)
     @SwaggerApiFailWithoutAuth
     @GetMapping("/hospital")
-    public Page<ReviewListDto> reviewsByTargetHospital(
-            @RequestBody @Valid final ReviewsByTargetHospitalRequest request,
-            final Pageable pageable) {
+    public Page<ReviewListDto> reviewsByTargetHospital(@RequestParam final String targetHospital, final Pageable pageable) {
 
-        log.info("ReviewsByTargetHospitalRequest[{}]", request);
+        log.info("targetHospital[{}]", targetHospital);
 
-        return reviewService.findByTargetHospital(request.targetHospital(), pageable)
+        return reviewService.findByTargetHospital(targetHospital, pageable)
                 .map(ReviewListDto::new);
     }
 
@@ -68,8 +66,7 @@ public class ReviewApiController {
     @SwaggerApi(summary = "리뷰 저장", implementation = CreateReviewResponse.class)
     @SwaggerApiFailWithAuth
     @PostMapping
-    public CreateReviewResponse createReview(
-            @RequestBody @Valid final CreateReviewRequest request) {
+    public CreateReviewResponse createReview(@RequestBody @Valid final CreateReviewRequest request) {
 
         log.info("CreateReviewRequest[{}]", request);
 
