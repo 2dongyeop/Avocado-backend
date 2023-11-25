@@ -139,23 +139,17 @@ public class ReviewService {
      */
     public Page<Review> findByTargetHospital(final String targetHospital, final Pageable pageable) {
 
-        final Page<Review> page = reviewRepository.findByTargetHospitalUsingPaging(targetHospital, pageable);
+        final Page<Review> result = reviewRepository.findByTargetHospitalUsingPaging(targetHospital, pageable);
 
-        if (page.isEmpty()) {
-            log.info("targetHospital[{}]'s review emtpy", targetHospital);
-            throw new NotFoundException("해당 병원에 대한 리뷰는 존재하지 않습니다.");
-        }
-        return page;
+        log.info("result[{}]", result);
+        return result;
     }
 
     public Page<Review> findByDeptUsingPaging(final String deptNum, final Pageable pageable) {
 
-        final Page<Review> page = reviewRepository.findByDeptUsingPaging(DeptMapper.numberToDept(deptNum), pageable);
+        final Page<Review> result = reviewRepository.findByDeptUsingPaging(DeptMapper.numberToDept(deptNum), pageable);
 
-        if (page.isEmpty()) {
-            log.info("deptNum[{}]'s review emtpy", deptNum);
-            throw new NotFoundException("해당 병과에 대한 리뷰는 존재하지 않습니다.");
-        }
-        return page;
+        log.info("result[{}]", result);
+        return result;
     }
 }
