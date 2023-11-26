@@ -29,18 +29,18 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     /**
      * 게시글 목록을 페이징 조회
      */
-    @Query(value = "select b from Board b where b.status = 'WRITE'", countQuery = "select count(b) from Board b")
+    @Query(value = "select b from Board b where b.status = 'WRITE' order by b.createdAt desc", countQuery = "select count(b) from Board b")
     Page<Board> findAllUsingPaging(final Pageable pageable);
 
 
     /**
      * 특정 병과의 게시글 목록 페이징 조회
      */
-    @Query(value = "select b from Board b where b.dept in :list",
+    @Query(value = "select b from Board b where b.dept in :list order by b.createdAt desc",
             countQuery = "select count(b) from Board b")
     Page<Board> findAllUsingPagingMultiValue(@Param("list") final List<HospitalDept> list, final Pageable pageable);
 
 
-    @Query("select b from Board b join fetch b.member m")
+    @Query("select b from Board b join fetch b.member m order by b.createdAt desc")
     List<Board> findAllByMember();
 }

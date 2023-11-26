@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,7 @@ public class ReviewDto {
     private List<ReviewReplyDto> reviewReplyList;
     private String targetDept;
     private String photoPath;
+    private LocalDateTime createAt;
 
     public ReviewDto(final Review review) {
         this.id = review.getId();
@@ -36,5 +38,6 @@ public class ReviewDto {
                 .collect(Collectors.toList());
         this.targetDept = String.valueOf(review.getTargetDept());
         this.photoPath = review.getReviewPhotoPath();
+        this.createAt = review.getCreatedAt();
     }
 }
