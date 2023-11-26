@@ -21,7 +21,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "select r" +
                     " from Review r" +
                     " join fetch r.member m" +
-                    " where r.status = 'WRITE'", countQuery = "select count(r) from Review r")
+                    " where r.status = 'WRITE' order by r.createdAt desc", countQuery = "select count(r) from Review r")
     Page<Review> findByUsingPaging(final Pageable pageable);
 
 
@@ -32,7 +32,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "select r" +
                     " from Review r" +
                     " where r.targetHospital = :targetHospital" +
-                    " and r.status = 'WRITE'", countQuery = "select count(r) from Review r")
+                    " and r.status = 'WRITE' order by r.createdAt desc", countQuery = "select count(r) from Review r")
     Page<Review> findByTargetHospitalUsingPaging(
             @Param("targetHospital") final String targetHospital, final Pageable pageable);
 
@@ -44,7 +44,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "select r" +
                     " from Review r" +
                     " where r.targetDept = :dept" +
-                    " order by r.starPoint desc ", countQuery = "select count(r) from Review r")
+                    " order by r.starPoint desc, r.createdAt desc ", countQuery = "select count(r) from Review r")
     Page<Review> findByDeptUsingPaging(
             @Param("dept") final HospitalDept dept, final Pageable pageable);
 

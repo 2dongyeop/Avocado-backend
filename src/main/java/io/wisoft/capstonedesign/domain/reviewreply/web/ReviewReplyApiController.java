@@ -74,9 +74,9 @@ public class ReviewReplyApiController {
 
     @SwaggerApi(summary = "특정 리뷰의 댓글목록 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/review/{review-id}")
+    @GetMapping("/review/{reviewId}")
     public Result reviewReplyByReview(
-            @PathVariable("review-id") final Long reviewId) {
+            @PathVariable("reviewId") final Long reviewId) {
 
         log.info("Review Reply Id[{}]", reviewId);
 
@@ -89,9 +89,9 @@ public class ReviewReplyApiController {
     @SwaggerApi(summary = "특정 리뷰의 댓글목록 오름차순 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
 
-    @GetMapping("/review/{review-id}/create-asc")
+    @GetMapping("/review/{reviewId}/create-asc")
     public Result reviewReplyByReviewOrderByCreateAsc(
-            @PathVariable("review-id") final Long reviewId) {
+            @PathVariable("reviewId") final Long reviewId) {
 
         log.info("Review Reply Id[{}]", reviewId);
 
@@ -103,9 +103,9 @@ public class ReviewReplyApiController {
 
     @SwaggerApi(summary = "특정 리뷰의 댓글목록 내림차순 조회", implementation = Result.class)
     @SwaggerApiFailWithoutAuth
-    @GetMapping("/review/{review-id}/create-desc")
+    @GetMapping("/review/{reviewId}/create-desc")
     public Result reviewReplyByReviewOrderByCreateDesc(
-            @PathVariable("review-id") final Long reviewId) {
+            @PathVariable("reviewId") final Long reviewId) {
 
         log.info("Review Reply Id[{}]", reviewId);
 
