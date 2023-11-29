@@ -88,7 +88,7 @@ public class ChatGptServiceImpl implements ChatGptService {
             case "목 이물감", "코골이・무호흡" -> "이비인후과";
             case "미숙아성장부진", "소아천식・아토피", "잦은 감염・발육부진" -> "소아청소년과";
             case "복통・설사・혈변", "복부통증" -> "소화기내과";
-            case "배뇨장애・혈변" -> "비뇨의학과";
+            case "배뇨장애・혈뇨" -> "비뇨의학과";
             case "비만" -> "위장관외과";
             case "시력저하" -> "안과";
             case "손발톱변형", "안면홍조" -> "피부과";
@@ -96,6 +96,7 @@ public class ChatGptServiceImpl implements ChatGptService {
             case "옆구리통증・혈뇨・거품뇨" -> "신장내과";
             case "월경통・질출혈" -> "산부인과";
             case "유방함・유방 종괴" -> "유방외과";
+            case "입냄새", "코골이" -> "치과";
             case "급격한 체중변화" -> "내분비내과";
             case "학습장애・집중력저하" -> "정신건강의학과";
             default -> "질문 게시판을 활용해 보세요.";
