@@ -31,7 +31,18 @@
     - [트러블슈팅](https://www.notion.so/leedongyeop/0459864398e84439bfa679d2470aeb8e)
   - [프론트 웹 서버 레포](https://github.com/HBNU-Avocado/Avocado-frontend)
   - [백엔드 API 서버 레포](https://github.com/HBNU-Avocado/Avocado-backend)
-  
+
+<br/>
+
+<br/>
+
+> ### *Features*
+- [헥사고날 아키텍처 리팩토링 레포](https://github.com/HBNU-Avocado/Avocado-backend-with-hexagonal)
+- [이메일 송신 기능 성능 개선. 7초 -> 1.7초](https://velog.io/@dongvelop/CompletableFuture%EB%A1%9C-%EB%B9%84%EB%8F%99%EA%B8%B0-%EC%9E%91%EC%97%85-%EC%95%88%EC%A0%95%ED%99%94-%EB%B0%8F-%EC%84%B1%EB%8A%A5-%ED%85%8C%EC%8A%A4%ED%8A%B8)
+- [214개의 테스트 코드 작성](https://github.com/HBNU-Avocado/Avocado-backend/pull/174) 및 [테스트 커버리지 72% 유지](https://github.com/HBNU-Avocado/Avocado-backend/issues/175)
+- [악의적 외부 API 호출로 인한 과금을 막기 위한 처리율 제한 장치 구축](https://velog.io/@dongvelop/Spring-Boot-Bucket4j%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4-%EC%84%9C%EB%B2%84-%EC%B8%A1-%EC%B2%98%EB%A6%AC%EC%9C%A8-%EC%A0%9C%ED%95%9C-%EC%9E%A5%EC%B9%98-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0)
+- [결제 및 결제 취소 기능 구축](https://www.notion.so/leedongyeop/e12cf498c0d643a5947d284e19884e4e)
+- [Swagger 사용시 중복 코드 최소화하기](https://velog.io/@dongvelop/Swagger-%EB%8F%84%EC%9E%85%EC%9C%BC%EB%A1%9C-%EC%9D%B8%ED%95%9C-%EC%A4%91%EB%B3%B5-%EC%BD%94%EB%93%9C%EB%A5%BC-%EC%B6%94%EC%83%81%ED%99%94%ED%95%98%EA%B8%B0)
 
 <br/>
 
